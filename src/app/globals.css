@@ -1,26 +1,51 @@
+/** biome-ignore-all lint/suspicious/noUnknownAtRules: <explanation> */
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+	--background: #ffffff;
+	--foreground: #171717;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--font-sans: var(--font-geist-sans);
+	--font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+	:root {
+		--background: #0a0a0a;
+		--foreground: #ededed;
+	}
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+	background: var(--background);
+	color: var(--foreground);
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer base {
+	section {
+		@apply px-[12px] md:px-[100px] flex flex-col items-center w-full;
+	}
+	h1 {
+		@apply max-w-[850px] text-[70px] font-bold text-center leading-[1.15em] tracking-[-0.06em];
+	}
+	h2 {
+		@apply max-w-[600px] text-[50px] font-bold text-center leading-[1.15em] tracking-[-0.06em];
+	}
+	button {
+		@apply cursor-pointer;
+	}
+}
+
+@layer utilities {
+	.padding {
+		@apply px-[12px] md:px-[100px];
+	}
+	.max {
+		@apply max-w-[1500px];
+	}
 }
