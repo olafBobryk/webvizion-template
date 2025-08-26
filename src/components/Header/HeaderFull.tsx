@@ -61,7 +61,7 @@ export default function HeaderFull({
 							href={item.link}
 							key={item.name}
 							type="button"
-							className="text-base text-left leading-[1em] text-white hover:text-white/80 duration-300 transition-colors"
+							className="text-base text-left whitespace-nowrap leading-[1em] text-white hover:text-white/80 duration-300 transition-colors"
 						>
 							{item.name}
 						</Link>
