@@ -3,16 +3,19 @@ import { Geist } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header/Header";
+import { KEYWORDS } from "@/config/metadataConfig";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
 	subsets: ["latin"],
 });
 
+//Generate related files: https://favicon.io/favicon-converter/
+
 export const metadata: Metadata = {
 	title: "WebVizion Template",
 	description: "A template to make things easier to setup",
-	keywords: ["agency", "template"],
+	keywords: KEYWORDS,
 	icons: {
 		icon: "/favicon-32x32.png",
 		shortcut: "/favicon.ico",
