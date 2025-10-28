@@ -8,10 +8,14 @@
 		"start": "next start",
 		"lint": "biome check",
 		"format": "biome format --write",
-		"postinstall": "node scripts/pin-deps.mjs"
+		"postinstall": "node scripts/pin-deps.mjs",
+		"postbuild": "next-sitemap"
 	},
 	"dependencies": {
+		"clsx": "^2.1.1",
+		"motion": "^12.23.24",
 		"next": "latest",
+		"next-sitemap": "^4.2.3",
 		"react": "latest",
 		"react-dom": "latest",
 		"react-responsive": "latest"

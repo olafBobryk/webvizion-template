@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header/Header";
+import ToastClientMount from "@/components/Toast/ToastClientMount";
 import { KEYWORDS } from "@/config/metadataConfig";
 
 const geistSans = Geist({
@@ -43,6 +44,7 @@ export default function RootLayout({
 				<Header />
 				{children}
 				<Footer />
+				<ToastClientMount />
 			</body>
 		</html>
 	);
