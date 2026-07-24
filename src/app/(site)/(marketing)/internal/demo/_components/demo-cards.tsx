@@ -2,8 +2,9 @@
 
 import { Card } from "@/components/ui/primitives/Card";
 import { Text } from "@/components/ui/primitives/Text";
+import type { RelatedInfo } from "../content";
 
-export type RelatedInfo = { uses: string[]; usedIn: string[] };
+export type { RelatedInfo } from "../content";
 
 function formatRelated(items: string[]) {
 	if (!items.length) return "none";

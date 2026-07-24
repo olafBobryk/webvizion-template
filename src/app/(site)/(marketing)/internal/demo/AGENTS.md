@@ -1,10 +1,12 @@
 <INSTRUCTIONS>
 ## Purpose
-Centralize the demo catalog in a single source of truth and keep demo pages consistent, discoverable, and quick to extend.
+Keep the demo catalogue behind one canonical public aggregator while allowing each page family to own its fixtures and JSX.
 
 ## Source of Truth
-- All demo content lives in `src/app/(site)/(marketing)/internal/demo/content.tsx`.
-- The page renderer and nav read from this content map; do not hand‑edit multiple page files.
+- `src/app/(site)/(marketing)/internal/demo/content.tsx` is the stable public aggregator and the only import surface for consumers.
+- Canonical page objects live in private `_content/pages/<page-id>.tsx` modules. Types live in `_content/types.ts`; relationships live in `_content/relationships.ts`.
+- The page renderer and nav continue to read `demoPages` from `content.tsx`; consumers must not import private page modules.
+- Keep interactive fixtures with their owning page. Promote a helper only when multiple page modules consume it, and name the shared module after the responsibility it owns.
 
 ## Content Schema (Required Fields)
 Each entry in `demoPages` must include:
@@ -39,17 +41,18 @@ For `kind: "usage"`:
 - Provide `snippet` (string) for the CopyField.
 
 ## Adding a New Demo
-1. Add a new page or group in `demoPages`.
-2. Add items using the same card types.
-3. If needed, add new `relatedMap` entries to support “Uses / Used by”.
-4. Keep slug segments aligned with the source folder being documented, usually `src/components` and, where relevant, shared utilities like `src/lib`.
-5. For skeleton support, add a `skeleton` config and verify `/internal/demo/**/skeleton`.
-6. Use `visibility: "dev-only"` for playground pages such as `/internal/demo/test`; they stay routable but are hidden from overview and sidebar in production.
+1. Add or update the owning module under `_content/pages/`.
+2. Register a new page once in the ordered `demoPages` array in `content.tsx`.
+3. Add items using the same card types.
+4. If needed, add `relatedMap` entries in `_content/relationships.ts` to support “Uses / Used by”.
+5. Keep slug segments aligned with the source folder being documented, usually `src/components` and, where relevant, shared utilities like `src/lib`.
+6. For skeleton support, add a `skeleton` config and verify `/internal/demo/**/skeleton`.
+7. Use `visibility: "dev-only"` for playground pages such as `/internal/demo/test`; they stay routable but are hidden from overview and sidebar in production.
 
 ## Demo Requirement
-- New reusable features in `src/components` should normally add demo coverage in this file.
+- New reusable features in `src/components` should normally add coverage in the owning page module.
 - New reusable features in `src/lib` should add demo coverage here when they have a public API, interactive behavior, or are intended for reuse by agents.
-- A reusable feature is not considered documented until the demo content, usage snippet, and any required `relatedMap` entries are present together.
+- A reusable feature is not considered documented until its page-owned content, usage snippet, and any required relationship entries are present together.
 
 ## Naming + Slugs
 - `id`: kebab‑case.
