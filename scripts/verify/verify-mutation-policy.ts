@@ -83,7 +83,7 @@ assertIncludes(
 );
 
 for (const relativePath of [
-	"src/app/(site)/dashboard/_components/entities/record/RecordCollectionClient.tsx",
+	"src/app/(site)/dashboard/_components/entities/record/RecordCollectionImplementation.tsx",
 	"src/app/(site)/dashboard/_components/entities/record/RecordDetailActions.tsx",
 	"src/app/(site)/dashboard/_components/detail/DashboardMarkdownEditorModalButton.tsx",
 	"src/components/composites/markdown/MarkdownEditor.tsx",
@@ -98,7 +98,7 @@ for (const relativePath of [
 }
 
 const collection = read(
-	"src/app/(site)/dashboard/_components/entities/record/RecordCollectionClient.tsx",
+	"src/app/(site)/dashboard/_components/entities/record/RecordCollectionImplementation.tsx",
 );
 assertIncludes(
 	collection,

@@ -87,7 +87,7 @@ function MemberIdentityRoot({
 	);
 }
 
-function MemberIdentitySkeleton({
+export function MemberIdentitySkeleton({
 	avatarSize,
 	className,
 	displayLabel = "Example member",

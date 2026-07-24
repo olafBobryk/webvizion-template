@@ -265,7 +265,7 @@ type DashboardTablePanelSkeletonProps = {
 	viewMoreLabel?: ReactNode;
 };
 
-function DashboardTablePanelSkeleton({
+export function DashboardTablePanelSkeleton({
 	children,
 	className,
 	columns,

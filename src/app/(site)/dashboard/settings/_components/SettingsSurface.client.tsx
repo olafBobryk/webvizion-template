@@ -16,7 +16,44 @@ import {
 } from "./AccountSettingsSections";
 import { ProfileSettingsSection } from "./ProfileSettingsSection";
 
-export function DashboardSettingsLoadingView() {
+function SettingsFooter({ canManage }: { canManage: boolean }) {
+	return canManage ? (
+		<DashboardFooterNote>
+			Looking for administration?{" "}
+			<DashboardFooterNoteLink href="/dashboard/administration">
+				Open organization administration
+			</DashboardFooterNoteLink>
+			.
+		</DashboardFooterNote>
+	) : null;
+}
+
+export function SettingsSurfaceClient() {
+	const { sharedSections, dashboardSections } = useDashboardSettingsContext();
+	const { membership, user } = useDashboardAuth();
+	const canManage = Boolean(
+		user &&
+			getDashboardCapabilities(membership.role, user.platformRole).has(
+				"organization.manage",
+			),
+	);
+	const sections = [...dashboardSections, ...sharedSections];
+
+	return (
+		<DashboardSection
+			actions={<DashboardSettingsHeaderActions />}
+			contentClassName="flex flex-col gap-5"
+			title="Account settings"
+		>
+			{sections.map((section) => (
+				<React.Fragment key={section.id}>{section.content}</React.Fragment>
+			))}
+			<SettingsFooter canManage={canManage} />
+		</DashboardSection>
+	);
+}
+
+export function SettingsSurfaceSkeletonClient() {
 	const { settingsSnapshot, sharedSections } = useDashboardSettingsContext();
 	const { membership, user } = useDashboardAuth();
 	const canManage = Boolean(
@@ -44,15 +81,7 @@ export function DashboardSettingsLoadingView() {
 				{sharedSections.map((section) => (
 					<React.Fragment key={section.id}>{section.content}</React.Fragment>
 				))}
-				{canManage ? (
-					<DashboardFooterNote>
-						Looking for administration?{" "}
-						<DashboardFooterNoteLink href="/dashboard/administration">
-							Open organization administration
-						</DashboardFooterNoteLink>
-						.
-					</DashboardFooterNote>
-				) : null}
+				<SettingsFooter canManage={canManage} />
 			</DashboardSection>
 		</div>
 	);

@@ -21,7 +21,7 @@ for (const relativePath of [
 }
 
 const reference = [
-	"src/app/(site)/dashboard/reference/entities/page.tsx",
+	"src/app/(site)/dashboard/reference/entities/_components/EntityReferenceSurface.tsx",
 	"src/app/(site)/dashboard/reference/entities/EntitySkeletonReference.tsx",
 ]
 	.map((relativePath) => readFileSync(resolve(root, relativePath), "utf8"))
@@ -36,7 +36,7 @@ const tablePanel = readFileSync(
 const recordCollection = readFileSync(
 	resolve(
 		root,
-		"src/app/(site)/dashboard/_components/entities/record/RecordCollectionClient.tsx",
+		"src/app/(site)/dashboard/_components/entities/record/RecordCollectionImplementation.tsx",
 	),
 	"utf8",
 );

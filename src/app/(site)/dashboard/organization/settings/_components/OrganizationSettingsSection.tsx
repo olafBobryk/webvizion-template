@@ -180,7 +180,7 @@ function OrganizationSettingsSectionRoot({
 	);
 }
 
-function OrganizationSettingsSectionSkeleton() {
+export function OrganizationSettingsSectionSkeleton() {
 	const { membership, organization } = useDashboardAuth();
 	const rolePresentation = memberRolePresentation[membership.role];
 

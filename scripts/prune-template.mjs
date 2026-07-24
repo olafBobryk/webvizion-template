@@ -51,12 +51,14 @@ const SURFACES = {
 		],
 		markerFiles: [
 			"scripts/verify/verify-dashboard-surfaces.ts",
+			"scripts/verify/verify-dashboard-page-policy.ts",
 			"src/app/(site)/dashboard/page.tsx",
+			"src/app/(site)/dashboard/_components/OverviewSurface.tsx",
 			"src/app/(site)/dashboard/layout.tsx",
 			"src/app/(site)/dashboard/organization/page.tsx",
 			"src/app/(site)/dashboard/_components/debug/DashboardDebugMenu.tsx",
 			"src/app/(site)/dashboard/_components/layout/DashboardSidebarNav.tsx",
-			"src/app/(site)/dashboard/_components/loading/DashboardRouteLoadingViews.tsx",
+			"src/app/(site)/dashboard/_components/debug/DashboardForcedLoadingView.tsx",
 			"src/app/(site)/dashboard/_registry/surfaceRegistry.ts",
 			"src/app/api/debug/fixture/reset/route.ts",
 		],
@@ -85,6 +87,7 @@ const SURFACES = {
 		dependentSurfaces: ["auth"],
 		ownedPaths: [
 			"scripts/verify/verify-auth-organization.ts",
+			"scripts/verify/verify-dashboard-page-policy.ts",
 			"scripts/verify/verify-dashboard-surfaces.ts",
 			"scripts/verify/verify-platform-operations.ts",
 			"src/app/(site)/_components/organization",
@@ -128,7 +131,12 @@ const SURFACES = {
 			},
 		],
 		markerFiles: ["src/app/(site)/(marketing)/internal/intelligence/page.tsx"],
-		packageScripts: ["verify:auth", "verify:dashboard", "verify:platform"],
+		packageScripts: [
+			"verify:auth",
+			"verify:dashboard-pages",
+			"verify:dashboard",
+			"verify:platform",
+		],
 	},
 	demo: {
 		id: "demo",

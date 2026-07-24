@@ -18,7 +18,7 @@ Keep consumer imports stable while allowing cohesive component families to organ
 - Establish or confirm the public boundary before moving a large component family.
 - Preserve public export names while moving implementation files between ownership-based subfolders.
 - Update the barrel, family-internal imports, demos, scripts, manifests, verification paths, documentation, and Template Intelligence in the same structural change. Do not leave compatibility paths or stale deep imports behind.
-- Run the folder-size audit from the global `folder-structure-cleanup` skill before and after reorganizing a folder. A warning requires review and reporting, not an automatic split.
+- Run the applicable folder-size and file-size audits through the global `$code-clarity-cleanup` skill before and after structural changes. Size warnings require semantic review and reporting, never an automatic split.
 
 ## Profile Parity
 

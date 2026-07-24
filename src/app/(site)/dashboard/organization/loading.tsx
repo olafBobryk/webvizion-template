@@ -1,5 +1,5 @@
-import { DashboardOrganizationLoadingView } from "../_components/loading/DashboardRouteLoadingViews";
+import { OrganizationSurfaceSkeleton } from "./_components/OrganizationSurface";
 
 export default function DashboardOrganizationLoading() {
-	return <DashboardOrganizationLoadingView />;
+	return <OrganizationSurfaceSkeleton />;
 }

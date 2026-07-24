@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/primitives/Button";
 import type { DashboardDebugState } from "../../_registry/debug";
 import { DashboardStatusFrame } from "../layout/DashboardStatusFrame";
-import { DashboardForcedLoadingView } from "../loading/DashboardRouteLoadingViews";
+import { DashboardForcedLoadingView } from "./DashboardForcedLoadingView";
 
 export function DashboardDebugStateView({
 	pathname,

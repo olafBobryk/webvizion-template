@@ -51,7 +51,7 @@ function AccountIdentityRoot({
 	);
 }
 
-function AccountIdentitySkeleton({
+export function AccountIdentitySkeleton({
 	displayLabel = "Example account",
 	emailLabel = "account@example.com",
 	variant = "profile",

@@ -4,7 +4,7 @@ import { getOrganizationPresentation } from "../../_lib/entities/organization/pr
 import { listReferenceMembers } from "../../_lib/fixtures/reference-members.server";
 import { listReferenceRecords } from "../../_lib/fixtures/reference-records.server";
 import { requireDashboardCapability } from "../../_registry/access.server";
-import { DashboardSkeletonReferenceClient } from "./DashboardSkeletonReferenceClient";
+import { ReferenceSkeletonsSurface } from "./_components/ReferenceSkeletonsSurface";
 
 export default async function DashboardSkeletonReferencePage() {
 	const { capabilities, context } =
@@ -18,7 +18,7 @@ export default async function DashboardSkeletonReferencePage() {
 	);
 
 	return (
-		<DashboardSkeletonReferenceClient
+		<ReferenceSkeletonsSurface
 			canWrite={capabilities.has("records.write")}
 			member={members[0]}
 			members={members}

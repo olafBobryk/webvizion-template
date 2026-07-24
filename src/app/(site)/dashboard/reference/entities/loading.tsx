@@ -1,5 +1,5 @@
-import { DashboardEntityReferenceLoadingView } from "../../_components/loading/DashboardRouteLoadingViews";
+import { EntityReferenceSurfaceSkeleton } from "./_components/EntityReferenceSurface";
 
 export default function DashboardEntityReferenceLoading() {
-	return <DashboardEntityReferenceLoadingView />;
+	return <EntityReferenceSurfaceSkeleton />;
 }

@@ -23,7 +23,11 @@ function MemberRoleChipRoot({
 	return <Chip tone={chipTone[tone]}>{label}</Chip>;
 }
 
-function MemberRoleChipSkeleton({ label = "Member" }: { label?: string }) {
+export function MemberRoleChipSkeleton({
+	label = "Member",
+}: {
+	label?: string;
+}) {
 	return <Chip.Skeleton>{label}</Chip.Skeleton>;
 }
 

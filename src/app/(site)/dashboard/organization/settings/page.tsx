@@ -1,8 +1,7 @@
 import { applicationAdapters } from "@/lib/auth/server";
-import { DashboardSection } from "../../_components/layout/DashboardSection";
 import { isOrganizationInvitationPending } from "../../_lib/entities/invitation/presentation";
 import { requireDashboardCapability } from "../../_registry/access.server";
-import { OrganizationSettingsSection } from "./_components/OrganizationSettingsSection";
+import { OrganizationSettingsSurface } from "./_components/OrganizationSettingsSurface";
 
 export default async function DashboardOrganizationSettingsPage() {
 	const { context } = await requireDashboardCapability("organization.manage");
@@ -18,14 +17,9 @@ export default async function DashboardOrganizationSettingsPage() {
 	).length;
 
 	return (
-		<DashboardSection
-			contentClassName="grid gap-5"
-			title="Organization settings"
-		>
-			<OrganizationSettingsSection
-				activeMemberCount={members.length}
-				pendingInvitationCount={pendingInvitationCount}
-			/>
-		</DashboardSection>
+		<OrganizationSettingsSurface
+			activeMemberCount={members.length}
+			pendingInvitationCount={pendingInvitationCount}
+		/>
 	);
 }

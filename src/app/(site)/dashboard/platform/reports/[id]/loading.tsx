@@ -1,11 +1,5 @@
-import { PlatformDetailLoading } from "../../_components/PlatformRouteLoading";
+import { PlatformReportSurfaceSkeleton } from "./_components/PlatformReportSurface";
 
 export default function PlatformReportDetailLoading() {
-	return (
-		<PlatformDetailLoading
-			description="Loading captured route and browser context"
-			label="Loading product report"
-			title="Product report"
-		/>
-	);
+	return <PlatformReportSurfaceSkeleton />;
 }

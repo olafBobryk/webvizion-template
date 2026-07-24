@@ -95,6 +95,7 @@ const explicitRouteExemptions = new Map([
 		"[...catchAll]/page.tsx",
 		"structural catch-all owned by the dashboard shell",
 	],
+	["overview/page.tsx", "redirect-only compatibility route"],
 	["organization/members/page.tsx", "redirect-only compatibility route"],
 ]);
 

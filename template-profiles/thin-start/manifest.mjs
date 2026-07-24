@@ -63,6 +63,7 @@ export const thinStartProfile = {
 		"docs/frontend-entity-policy.md",
 		"scripts/scroll-performance",
 		"scripts/verify/verify-auth-organization.ts",
+		"scripts/verify/verify-dashboard-page-policy.ts",
 		"scripts/verify/verify-dashboard-surfaces.ts",
 		"scripts/verify/verify-platform-operations.ts",
 		"scripts/verify/verify-reference-entities.ts",
@@ -136,6 +137,7 @@ export const thinStartProfile = {
 		scripts: {
 			remove: [
 				"verify:auth",
+				"verify:dashboard-pages",
 				"verify:dashboard",
 				"verify:platform",
 				"verify:reference-entities",

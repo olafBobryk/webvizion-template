@@ -1,5 +1,5 @@
-import { DashboardOrganizationSwitchLoadingView } from "../../_components/loading/DashboardRouteLoadingViews";
+import { OrganizationSwitchSurfaceSkeleton } from "./_components/OrganizationSwitchSurface";
 
 export default function DashboardOrganizationSwitchLoading() {
-	return <DashboardOrganizationSwitchLoadingView />;
+	return <OrganizationSwitchSurfaceSkeleton />;
 }

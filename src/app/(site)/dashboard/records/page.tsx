@@ -1,6 +1,3 @@
-import { DashboardEntityCommands } from "../_components/commands/DashboardEntityCommands";
-import { RecordCollectionClient } from "../_components/entities/record/RecordCollectionClient";
-import { DashboardSection } from "../_components/layout/DashboardSection";
 import {
 	getMemberCommand,
 	getMemberPresentation,
@@ -12,6 +9,7 @@ import {
 import { listReferenceMembers } from "../_lib/fixtures/reference-members.server";
 import { listReferenceRecords } from "../_lib/fixtures/reference-records.server";
 import { requireDashboardCapability } from "../_registry/access.server";
+import { RecordsSurface } from "./_components/RecordsSurface";
 
 export default async function DashboardRecordsPage() {
 	const { capabilities, context } =
@@ -21,23 +19,15 @@ export default async function DashboardRecordsPage() {
 		getMemberPresentation,
 	);
 	return (
-		<DashboardSection
-			description={`Organization-scoped reference entities for ${context.organization.name}.`}
-			title="Records"
-		>
-			<DashboardEntityCommands
-				commands={[
-					...records.map(getRecordPresentation).map(getRecordCommand),
-					...members.map(getMemberCommand),
-				]}
-				ownerId="dashboard.records.entities"
-			/>
-			<RecordCollectionClient
-				canWrite={capabilities.has("records.write")}
-				initialRecords={records}
-				members={members}
-				organizationName={context.organization.name}
-			/>
-		</DashboardSection>
+		<RecordsSurface
+			commands={[
+				...records.map(getRecordPresentation).map(getRecordCommand),
+				...members.map(getMemberCommand),
+			]}
+			canWrite={capabilities.has("records.write")}
+			initialRecords={records}
+			members={members}
+			organizationName={context.organization.name}
+		/>
 	);
 }

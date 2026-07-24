@@ -1,5 +1,5 @@
-import { DashboardSettingsLoadingView } from "./_components/DashboardSettingsLoadingView";
+import { SettingsSurfaceSkeleton } from "./_components/SettingsSurface";
 
 export default function DashboardSettingsLoading() {
-	return <DashboardSettingsLoadingView />;
+	return <SettingsSurfaceSkeleton />;
 }

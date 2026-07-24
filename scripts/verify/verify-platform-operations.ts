@@ -81,10 +81,12 @@ for (const routeFile of [
 	assert.ok(existsSync(resolve(root, routeFile)), `Missing ${routeFile}`);
 }
 
-const platformPage = readFileSync(
-	resolve(root, "src/app/(site)/dashboard/platform/page.tsx"),
-	"utf8",
-);
+const platformPage = [
+	"src/app/(site)/dashboard/platform/page.tsx",
+	"src/app/(site)/dashboard/platform/_components/PlatformSurface.tsx",
+]
+	.map((relativePath) => readFileSync(resolve(root, relativePath), "utf8"))
+	.join("\n");
 assert.doesNotMatch(platformPage, /redirect\(/);
 assert.match(platformPage, /href="\/dashboard\/platform\/inbox"/);
 assert.match(platformPage, /href="\/dashboard\/platform\/reports"/);

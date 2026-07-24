@@ -10,7 +10,7 @@ function DashboardDetailFieldRoot(props: DashboardDetailFieldProps) {
 	return <DashboardDetailFieldClient {...props} />;
 }
 
-function DashboardDetailFieldSkeleton({
+export function DashboardDetailFieldSkeleton({
 	children,
 	className,
 	copyable: _copyable = false,

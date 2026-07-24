@@ -1,5 +1,5 @@
-import { PlatformOverviewLoading } from "./_components/PlatformRouteLoading";
+import { PlatformSurfaceSkeleton } from "./_components/PlatformSurface";
 
 export default function PlatformLoading() {
-	return <PlatformOverviewLoading />;
+	return <PlatformSurfaceSkeleton />;
 }

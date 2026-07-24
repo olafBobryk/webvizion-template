@@ -1,5 +1,5 @@
-import { DashboardOverviewLoadingView } from "./_components/loading/DashboardRouteLoadingViews";
+import { OverviewSurfaceSkeleton } from "./_components/OverviewSurface";
 
 export default function DashboardLoading() {
-	return <DashboardOverviewLoadingView />;
+	return <OverviewSurfaceSkeleton />;
 }

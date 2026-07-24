@@ -1,5 +1,5 @@
-import { DashboardRecordsLoadingView } from "../_components/loading/DashboardRouteLoadingViews";
+import { RecordsSurfaceSkeleton } from "./_components/RecordsSurface";
 
 export default function DashboardRecordsLoading() {
-	return <DashboardRecordsLoadingView />;
+	return <RecordsSurfaceSkeleton />;
 }

@@ -36,6 +36,11 @@ assert.equal(
 	"string",
 	"Dashboard instances must retain the focused verify:dashboard command.",
 );
+assert.equal(
+	typeof packageJson.scripts?.["verify:dashboard-pages"],
+	"string",
+	"Dashboard instances must retain the focused verify:dashboard-pages command.",
+);
 
 const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
 const result = spawnSync(npmCommand, ["run", "verify:dashboard"], {

@@ -66,7 +66,7 @@ assert.ok(!detailActions.includes('router.push("/dashboard/records")'));
 const collectionActions = readFileSync(
 	resolve(
 		process.cwd(),
-		"src/app/(site)/dashboard/_components/entities/record/RecordCollectionClient.tsx",
+		"src/app/(site)/dashboard/_components/entities/record/RecordCollectionImplementation.tsx",
 	),
 	"utf8",
 );

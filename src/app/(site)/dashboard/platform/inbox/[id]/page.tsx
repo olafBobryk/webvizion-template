@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { requirePlatformAdmin } from "@/app/(site)/dashboard/_lib/platform/access.server";
 import { getSupportRequest } from "@/app/(site)/dashboard/_lib/platform/fixtures.server";
-import { PlatformInboxDetailContent } from "./_components/PlatformInboxDetailContent";
+import { PlatformInboxRequestSurface } from "./_components/PlatformInboxRequestSurface";
 
 export default async function PlatformInboxDetailPage({
 	params,
@@ -12,5 +12,5 @@ export default async function PlatformInboxDetailPage({
 	const { id } = await params;
 	const supportRequest = getSupportRequest(id);
 	if (!supportRequest) notFound();
-	return <PlatformInboxDetailContent initialRequest={supportRequest} />;
+	return <PlatformInboxRequestSurface initialRequest={supportRequest} />;
 }

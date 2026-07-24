@@ -95,7 +95,7 @@ assert.ok(
 const forcedLoading = readFileSync(
 	resolve(
 		root,
-		"src/app/(site)/dashboard/_components/loading/DashboardRouteLoadingViews.tsx",
+		"src/app/(site)/dashboard/_components/debug/DashboardForcedLoadingView.tsx",
 	),
 	"utf8",
 );

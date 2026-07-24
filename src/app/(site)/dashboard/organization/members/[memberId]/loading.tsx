@@ -1,5 +1,5 @@
-import { DashboardMemberDetailLoadingView } from "../../../_components/loading/DashboardRouteLoadingViews";
+import { OrganizationMemberSurfaceSkeleton } from "./_components/OrganizationMemberSurface";
 
 export default function DashboardMemberDetailLoading() {
-	return <DashboardMemberDetailLoadingView />;
+	return <OrganizationMemberSurfaceSkeleton />;
 }
