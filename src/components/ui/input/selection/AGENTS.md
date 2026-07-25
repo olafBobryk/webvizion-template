@@ -13,3 +13,5 @@ Searchable, combobox, and compact button-based selection controls.
 
 - Preserve `Dropdown`, `Listbox`, portal, keyboard-navigation, active-option, and selection semantics.
 - Use the choice subsystem for checkbox-style indicators instead of duplicating them here.
+- `ComboboxMultiSelectInput` follows the normal `sm` input shell by default. Its query input keeps only a small text-relative minimum so one selected token does not force an avoidable wrap.
+- `ButtonMultiSelectInput` expresses selection only through the shared `Button` variants: `primary` when selected and `secondary` otherwise. Do not add choice indicators, per-button classes, size overrides, or configurable variants.

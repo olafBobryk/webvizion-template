@@ -43,7 +43,11 @@ export {
 } from "./ProfilePicture";
 export { ScrollBorders } from "./ScrollBorders";
 export { SegmentedControl } from "./SegmentedControl";
-export { Skeleton, type SkeletonProps } from "./Skeleton";
+export {
+	Skeleton,
+	type SkeletonProps,
+	type SkeletonRadius,
+} from "./Skeleton";
 export {
 	type SocialIconName,
 	type SocialLink,

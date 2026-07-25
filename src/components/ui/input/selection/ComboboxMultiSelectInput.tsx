@@ -145,7 +145,7 @@ function ComboboxMultiSelectInputRoot<T>({
 	matchOption = defaultMatch,
 	leadingIcon,
 	showSpinnerOnMismatch = false,
-	size = "md",
+	size = "sm",
 	iconSize = "md",
 	endText,
 	className,
@@ -440,7 +440,7 @@ function ComboboxMultiSelectInputRoot<T>({
 											required={required}
 											className={clsx(
 												inputClasses,
-												"!p-0 w-auto min-w-[120px] flex-1",
+												"!p-0 w-auto min-w-[4ch] flex-1",
 												inputClassName,
 											)}
 											value={query}
@@ -558,7 +558,7 @@ function ComboboxMultiSelectInputRoot<T>({
 											required={required}
 											className={clsx(
 												inputClasses,
-												"!p-0 w-auto min-w-[120px] flex-1",
+												"!p-0 w-auto min-w-[4ch] flex-1",
 												inputClassName,
 											)}
 											value={query}

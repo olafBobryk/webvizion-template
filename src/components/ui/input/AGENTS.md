@@ -38,7 +38,7 @@ Ready-made form controls composed from the primitives. This folder should be the
 	- Both inputs share one source-native calendar popover, UTC date model, keyboard navigation, and utility treatment.
 	- `DateRangeInput` is full-start-only; thin-start retains `DateInput` and the shared calendar core.
 - `src/components/ui/input/color/ColorInput.tsx` and `ColorSwatchInput.tsx`: full-start color entry and swatch selection controls.
-- `src/components/ui/input/SignatureInput.tsx`: canvas-based signature capture composed through `Field` and `InputFrame`.
+- `src/components/ui/input/SignatureInput.tsx`: canvas-based signature capture composed through `Field` and `InputFrame`. Its `height` is the total InputFrame height; the canvas fills the available inner area, and the Clear label uses caption typography so it does not enlarge the field header.
 - `src/components/ui/input/text/SpamProtectionFields.tsx`: hidden honeypot field for form submissions.
 - `src/components/ui/input/choice/RadioInput.tsx`: radio group built on the shared choice system.
 - `src/components/ui/input/choice/MultiselectInput.tsx`: checkbox group built on the shared choice system.
@@ -78,7 +78,7 @@ Ready-made form controls composed from the primitives. This folder should be the
 - **Sign-up form:** usually `EmailInput` plus `PasswordInput showStrength`.
 - **Profile or settings form:** start with `ProfilePictureInput`, `TextInput`, `EmailInput`, `PhoneInput`, `SelectInput`, and `ToggleInput` before creating bespoke controls.
 - **Filter bars and dashboards:** use `SelectInput`, `ComboboxTextInput`, `ComboboxMultiSelectInput`, and `DateRangeInput` before ad hoc filter UIs.
-- **Preference selection:** use `RadioInput`, `MultiselectInput`, `ButtonMultiSelectInput`, or `ToggleInput` so focus, semantics, and indicators stay consistent.
+- **Preference selection:** use `RadioInput`, `MultiselectInput`, `ButtonMultiSelectInput`, or `ToggleInput` so focus, semantics, and shared selection treatments stay consistent. `ButtonMultiSelectInput` uses plain primary/secondary Button variants without additional indicators or per-button styling.
 
 ## Submission And Feedback Pattern
 - Use `showToast.promise` for user-initiated async submissions such as save, apply, submit, retry, or manual refresh.

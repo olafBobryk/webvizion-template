@@ -83,6 +83,7 @@ import type {
 	MarkdownEditorMentionOption,
 } from "./MarkdownEditor";
 import { getMarkdownContentClassName } from "./markdownContent";
+import { useMarkdownToolbarCollapse } from "./markdownToolbarLayout";
 
 type MarkdownEditorClientProps = {
 	ariaLabel: string;
@@ -704,11 +705,17 @@ function MarkdownEditorToolbar({
 	parseable: boolean;
 }) {
 	const { openModal } = useModal();
-	const toolbarRef = React.useRef<HTMLDivElement>(null);
-	const commandRegionRef = React.useRef<HTMLDivElement>(null);
-	const trailingActionsRef = React.useRef<HTMLDivElement>(null);
-	const lastToolbarWidthRef = React.useRef<number | null>(null);
-	const [toolbarWidth, setToolbarWidth] = React.useState(0);
+	const {
+		commandRegionRef,
+		historyCollapsed,
+		mergeHistoryMenu,
+		mergeStructureMenu,
+		mergeTextMenu,
+		structureCollapsed,
+		textCollapsed,
+		toolbarRef,
+		trailingActionsRef,
+	} = useMarkdownToolbarCollapse();
 	const activeEditor = useCellValue(activeEditor$);
 	const rootEditor = useCellValue(rootEditor$);
 	const currentBlockType = useCellValue(currentBlockType$);
@@ -726,13 +733,6 @@ function MarkdownEditorToolbar({
 	const insertThematicBreak = usePublisher(insertThematicBreak$);
 	const openLinkDialog = usePublisher(openLinkEditDialog$);
 	const setViewMode = usePublisher(viewMode$);
-	const [collapseStage, setCollapseStage] = React.useState(0);
-	const structureCollapsed = collapseStage >= 1;
-	const textCollapsed = collapseStage >= 2;
-	const historyCollapsed = collapseStage >= 3;
-	const mergeStructureMenu = collapseStage >= 4;
-	const mergeTextMenu = collapseStage >= 5;
-	const mergeHistoryMenu = collapseStage >= 6;
 	const commandEditor = activeEditor ?? rootEditor;
 	const commandsDisabled = disabled || viewMode !== "rich-text";
 
@@ -781,44 +781,6 @@ function MarkdownEditorToolbar({
 		if (parseable || !markdownProcessingError || viewMode === "source") return;
 		setViewMode("source");
 	}, [markdownProcessingError, parseable, setViewMode, viewMode]);
-
-	React.useLayoutEffect(() => {
-		const toolbar = toolbarRef.current;
-		const toolbarShell = toolbar?.parentElement;
-		if (!toolbar || !toolbarShell) return;
-
-		function measureToolbarWidth() {
-			const width = Math.round(
-				toolbarRef.current?.getBoundingClientRect().width ?? 0,
-			);
-			if (lastToolbarWidthRef.current === width) return;
-
-			lastToolbarWidthRef.current = width;
-			setToolbarWidth(width);
-			setCollapseStage(0);
-		}
-
-		const resizeObserver = new ResizeObserver(measureToolbarWidth);
-		resizeObserver.observe(toolbarShell);
-		measureToolbarWidth();
-
-		return () => resizeObserver.disconnect();
-	}, []);
-
-	React.useLayoutEffect(() => {
-		const toolbar = toolbarRef.current;
-		const commandRegion = commandRegionRef.current;
-		const trailingActions = trailingActionsRef.current;
-		if (!toolbar || !commandRegion || !trailingActions || toolbarWidth === 0)
-			return;
-
-		const availableWidth = toolbar.clientWidth;
-		const requiredWidth =
-			commandRegion.scrollWidth + trailingActions.scrollWidth;
-		if (requiredWidth <= availableWidth + 1 || collapseStage >= 6) return;
-
-		setCollapseStage((current) => Math.min(6, current + 1));
-	}, [collapseStage, toolbarWidth]);
 
 	const blockOptions: ListboxOption<"h2" | "h3" | "paragraph" | "quote">[] = [
 		{ content: "Text", key: "paragraph", value: "paragraph" },

@@ -5,20 +5,6 @@ import { InternalPage, InternalPageHeader } from "../_components/InternalPage";
 
 const playgroundGroups = [
 	{
-		id: "quality-assurance",
-		title: "Quality assurance",
-		description:
-			"Runtime experiments for geometry, state parity, and other browser-level contracts.",
-		links: [
-			{
-				href: "/internal/playground/skeleton-overlap",
-				title: "Skeleton overlap",
-				description:
-					"Overlay a live TextInput and its skeleton, then inspect deterministic geometry evidence.",
-			},
-		],
-	},
-	{
 		id: "motion",
 		title: "Motion",
 		description: "Loose prototypes for reveal, scroll, and choreography ideas.",

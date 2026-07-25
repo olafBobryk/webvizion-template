@@ -2,7 +2,6 @@
 
 import clsx from "clsx";
 import * as React from "react";
-import { ChoiceIndicatorMulti } from "@/components/ui/input/choice/ChoiceIndicators";
 import { Button } from "@/components/ui/primitives/Button";
 import { Field } from "@/components/ui/primitives/Field";
 
@@ -26,10 +25,7 @@ export type ButtonMultiSelectInputProps<T extends string = string> = Omit<
 	onChange?: (value: T[]) => void;
 	options: ButtonMultiSelectOption<T>[];
 	required?: boolean;
-	selectedVariant?: React.ComponentProps<typeof Button>["variant"];
-	size?: React.ComponentProps<typeof Button>["size"];
 	tone?: "default" | "error" | "success";
-	unselectedVariant?: React.ComponentProps<typeof Button>["variant"];
 	value?: readonly T[];
 };
 
@@ -41,7 +37,6 @@ type ButtonMultiSelectInputSkeletonProps<T extends string = string> = Pick<
 	| "label"
 	| "options"
 	| "required"
-	| "size"
 >;
 
 function ButtonMultiSelectInputRoot<T extends string = string>({
@@ -57,10 +52,7 @@ function ButtonMultiSelectInputRoot<T extends string = string>({
 	onChange,
 	options,
 	required,
-	selectedVariant = "primary",
-	size = "sm",
 	tone = "default",
-	unselectedVariant = "secondary",
 	value,
 	...props
 }: ButtonMultiSelectInputProps<T>) {
@@ -142,22 +134,10 @@ function ButtonMultiSelectInputRoot<T extends string = string>({
 							key={option.value}
 							id={optionId}
 							type="button"
-							variant={selected ? selectedVariant : unselectedVariant}
-							size={size}
+							variant={selected ? "primary" : "secondary"}
 							aria-pressed={selected}
 							disabled={optionDisabled}
 							onClick={() => toggleValue(option.value)}
-							leadingIcon={
-								<ChoiceIndicatorMulti
-									checked={selected}
-									disabled={optionDisabled}
-									className="pointer-events-none -ml-1"
-								/>
-							}
-							className={clsx(
-								"min-h-[2.4375rem] rounded-[8px]",
-								selected ? undefined : "bg-background",
-							)}
 						>
 							{option.label}
 						</Button>
@@ -175,7 +155,6 @@ function ButtonMultiSelectInputSkeleton<T extends string = string>({
 	label,
 	options,
 	required,
-	size = "sm",
 }: ButtonMultiSelectInputSkeletonProps<T>) {
 	return (
 		<Field
@@ -189,7 +168,7 @@ function ButtonMultiSelectInputSkeleton<T extends string = string>({
 				className={clsx("flex min-w-0 flex-wrap items-start gap-2", className)}
 			>
 				{options.map((option) => (
-					<Button.Skeleton key={option.value} size={size} variant="secondary">
+					<Button.Skeleton key={option.value} variant="secondary">
 						{option.label}
 					</Button.Skeleton>
 				))}

@@ -99,8 +99,8 @@ function FieldRoot({
 			{disableMessage ? null : (
 				<div
 					className={[
-						"transition-all motion-micro -mt-2.5 overflow-hidden",
-						message ? "max-h-[26px]" : "max-h-0",
+						"transition-all motion-micro -mt-3 overflow-hidden",
+						message ? "max-h-7" : "max-h-0",
 					].join(" ")}
 					role={announceMessage ? "alert" : undefined}
 					aria-live={announceMessage ? "polite" : undefined}
@@ -111,7 +111,7 @@ function FieldRoot({
 						variant="caption"
 						tone="muted"
 						className={[
-							"transition-all motion-micro mt-2.5", // reserve one line
+							"transition-all motion-micro mt-3", // preserve the field gap only while visible
 							tone === "error"
 								? "!text-danger"
 								: tone === "success"

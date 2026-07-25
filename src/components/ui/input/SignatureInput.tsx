@@ -299,6 +299,7 @@ const SignatureInputRoot = React.forwardRef<
 					hitArea="touch"
 					onClick={clear}
 					size="none"
+					textVariant="caption"
 					type="button"
 					variant="ghost"
 				>
@@ -318,7 +319,10 @@ const SignatureInputRoot = React.forwardRef<
 				contentClassName="flex min-w-0 self-stretch"
 				disabled={disabled}
 				fullWidth
-				style={{ width: width ? `${width}px` : undefined }}
+				style={{
+					height: `${height}px`,
+					width: width ? `${width}px` : undefined,
+				}}
 				tone={error ? "error" : "default"}
 			>
 				<canvas
@@ -326,7 +330,7 @@ const SignatureInputRoot = React.forwardRef<
 					aria-invalid={Boolean(error)}
 					aria-label={typeof label === "string" ? label : "Signature"}
 					className={clsx(
-						"block w-full bg-transparent text-foreground outline-none",
+						"block h-full w-full bg-transparent text-foreground outline-none",
 						disabled
 							? "pointer-events-none cursor-not-allowed opacity-50"
 							: "cursor-crosshair",
@@ -338,7 +342,7 @@ const SignatureInputRoot = React.forwardRef<
 					onPointerMove={onPointerMove}
 					onPointerUp={onPointerUpOrCancel}
 					ref={canvasRef}
-					style={{ height: `${height}px`, touchAction: "none" }}
+					style={{ touchAction: "none" }}
 					tabIndex={disabled ? -1 : 0}
 				/>
 			</InputFrame>

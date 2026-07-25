@@ -46,6 +46,7 @@ Cross-cutting UI helpers and feedback components that do not belong to inputs, o
   - Skeleton components should mirror the live component's DOM structure, wrapper layout, spacing, and breakpoint classes.
   - Swap content nodes for skeleton nodes, not the surrounding layout containers.
   - Skeleton UIs must remain non-interactive and should not carry hover, click, focus, or blur behavior.
+  - Set placeholder shape through `Skeleton radius="none|sm|md|lg|xl|2xl|full"`. Do not put conflicting `rounded-*` utilities or important radius overrides in `className`; CVA owns the single emitted radius utility through this prop.
 
 ## How To Use It
 - Use plain `Accordion` for compact borderless disclosures. Use `Accordion.Card` when a structured Card header, content, actions, or footer must collapse without changing the expanded Card geometry.
@@ -53,7 +54,8 @@ Cross-cutting UI helpers and feedback components that do not belong to inputs, o
 - Use `CopyField` whenever the user copies a token, URL, or identifier.
 - Use `Chip` for compact source links, statuses, removable filters, and token-like actions.
   - Non-plain Chip tones inherit the nearest `--ui-surface-color` and pre-compose their fills against it. Containers with a distinct uniform surface should declare that variable instead of adding caller-local Chip backgrounds.
-  - Use `Chip.Skeleton` with children and explicit `leadingIcon` or `trailingIcon` flags when skeleton-loading a final chip so label width, icon space, height, transparent border geometry, and rounded-full shape match the loaded state.
+	- Use `Chip.Skeleton` with children and explicit `leadingIcon` or `trailingIcon` flags when skeleton-loading a final chip so label width, icon space, height, transparent border geometry, and rounded-full shape match the loaded state.
+	- Chip skeleton icon slots default to the same 12px geometry as the live Chip's shared small icons; use `iconSize` only when the loaded Chip intentionally overrides that size.
 - Use `Loader` inside asynchronous regions, but avoid duplicating loader behavior already built into `Button` or other components.
 - Use `Dropdown.Menu` for action-overflow menus instead of assembling a new icon-trigger dropdown.
   - Prefer `Dropdown.menuOptions` for standard open, edit, and delete actions so tone, icons, labels, ordering, and dividers remain consistent.

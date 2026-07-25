@@ -310,7 +310,7 @@ function ColorSwatchInputSkeleton({
 			<div className="flex flex-wrap items-center gap-2">
 				{Array.from({ length: count }, (_, index) => `swatch-${index + 1}`).map(
 					(key) => (
-						<Skeleton className="size-7 rounded-full" key={key} />
+						<Skeleton className="size-7" key={key} radius="full" />
 					),
 				)}
 			</div>

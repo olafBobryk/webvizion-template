@@ -45,7 +45,6 @@
 		"verify:mutation-policy": "tsx scripts/verify/verify-mutation-policy.ts",
 		"verify:entity-skeletons": "tsx scripts/verify/verify-entity-skeletons.ts",
 		"verify:component-skeletons": "tsx scripts/verify/verify-component-skeletons.ts",
-		"verify:skeleton-overlap": "tsx scripts/verify/verify-skeleton-overlap.ts",
 		"verify:route-skeletons": "tsx scripts/verify/verify-route-skeletons.ts",
 		"verify:frontend-entity-policy": "tsx scripts/verify/verify-frontend-entity-policy.ts",
 		"verify:frontend-entities": "npm run verify:reference-entities && npm run verify:entity-deletion && npm run verify:mutation-policy && npm run verify:entity-skeletons && npm run verify:route-skeletons && npm run verify:frontend-entity-policy",

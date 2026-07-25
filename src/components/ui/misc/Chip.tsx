@@ -292,7 +292,7 @@ function ChipSkeleton({
 	children,
 	leadingIcon = false,
 	trailingIcon = false,
-	iconSize = 14,
+	iconSize = 12,
 	className,
 	contentClassName,
 }: ChipSkeletonProps) {

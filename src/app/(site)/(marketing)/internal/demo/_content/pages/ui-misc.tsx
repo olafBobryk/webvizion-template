@@ -589,7 +589,10 @@ export const uiMiscDemoPage: DemoPage = {
 					Render() {
 						return (
 							<div className="flex flex-col gap-2">
-								<Skeleton className="h-6 w-32" />
+								<div className="flex items-center gap-2">
+									<Skeleton className="h-6 w-32" />
+									<Skeleton className="size-6" radius="full" />
+								</div>
 								<Text.Skeleton variant="body">Skeleton text</Text.Skeleton>
 							</div>
 						);

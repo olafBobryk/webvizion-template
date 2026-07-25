@@ -8,6 +8,7 @@ import { ModalForm } from "@/components/ui/overlays/modal/ModalForm";
 import { useModalSubmission } from "@/components/ui/overlays/modal/ModalShell";
 import { Button } from "@/components/ui/primitives/Button";
 import type { MarkdownContentDensity } from "./markdownContent";
+import { useMarkdownToolbarCollapse } from "./markdownToolbarLayout";
 
 const MarkdownEditorClient = dynamic(
 	() =>
@@ -78,26 +79,121 @@ function MarkdownEditorSkeleton({
 	className,
 	density = "default",
 }: Pick<MarkdownEditorProps, "className" | "density">) {
+	const isCompact = density === "compact";
+	const {
+		commandRegionRef,
+		historyCollapsed,
+		mergeHistoryMenu,
+		mergeStructureMenu,
+		mergeTextMenu,
+		structureCollapsed,
+		textCollapsed,
+		toolbarRef,
+		trailingActionsRef,
+	} = useMarkdownToolbarCollapse();
+
+	return (
+		<div aria-hidden className={clsx("min-w-0 w-full", className)}>
+			<div className="markdown-editor" data-density={density}>
+				<div
+					className={clsx(
+						"flex w-full items-center overflow-hidden rounded-md",
+						isCompact ? "h-9 px-1" : "h-10",
+					)}
+				>
+					<div
+						className="flex w-full min-w-0 items-center overflow-hidden"
+						data-slot="markdown-editor-toolbar-skeleton"
+						ref={toolbarRef}
+					>
+						<div
+							className="flex min-w-0 flex-1 items-center overflow-hidden"
+							ref={commandRegionRef}
+						>
+							<MarkdownToolbarSkeletonSection
+								collapsed={historyCollapsed}
+								controlCount={2}
+								merged={mergeHistoryMenu}
+							/>
+							<MarkdownToolbarSkeletonSection
+								collapsed={textCollapsed}
+								controlCount={7}
+								merged={mergeTextMenu}
+							/>
+							<MarkdownToolbarSkeletonSection
+								collapsed={structureCollapsed}
+								controlCount={4}
+								merged={mergeStructureMenu}
+							/>
+						</div>
+						<div
+							className="ml-auto flex shrink-0 items-center gap-1 pl-1.5"
+							ref={trailingActionsRef}
+						>
+							<MarkdownToolbarGhostSkeleton />
+							<span
+								aria-hidden
+								className="mx-0.5 h-5 border-border/70 border-l"
+							/>
+							<Button.Skeleton size="icon-sm" variant="secondary" />
+						</div>
+					</div>
+				</div>
+				<Skeleton
+					className={clsx(
+						"w-full border border-transparent",
+						isCompact ? "h-[98px]" : "h-[194px]",
+						isCompact ? "mt-1.5" : "mt-2",
+					)}
+					data-slot="markdown-editor-body-skeleton"
+					radius="md"
+				/>
+			</div>
+		</div>
+	);
+}
+
+const markdownToolbarSkeletonKeys = [
+	"first",
+	"second",
+	"third",
+	"fourth",
+	"fifth",
+	"sixth",
+	"seventh",
+] as const;
+
+function MarkdownToolbarSkeletonSection({
+	collapsed,
+	controlCount,
+	merged,
+}: {
+	collapsed: boolean;
+	controlCount: number;
+	merged: boolean;
+}) {
+	if (merged) return null;
+
 	return (
 		<div
-			aria-hidden
-			className={clsx(
-				"min-w-0 w-full overflow-hidden rounded-[12px] border border-border bg-card",
-				className,
-			)}
+			className={
+				collapsed
+					? "flex shrink-0 items-center"
+					: "flex shrink-0 items-center gap-1 border-border/70 border-r pr-1.5 last:border-r-0"
+			}
 		>
-			<div className="flex min-h-11 items-center gap-2 border-b border-border px-3">
-				<Skeleton className="h-7 w-20 rounded-[8px]" />
-				<Skeleton className="h-7 w-24 rounded-[8px]" />
-				<Skeleton className="h-7 w-16 rounded-[8px]" />
-			</div>
-			<Skeleton
-				className={clsx(
-					"m-4 w-[calc(100%-2rem)] rounded-[8px]",
-					density === "compact" ? "h-32" : "h-56",
-				)}
-			/>
+			{markdownToolbarSkeletonKeys
+				.slice(0, collapsed ? 1 : controlCount)
+				.map((key) => (
+					<MarkdownToolbarGhostSkeleton key={key} />
+				))}
 		</div>
+	);
+}
+
+function MarkdownToolbarGhostSkeleton() {
+	return (
+		<Button.Skeleton className="opacity-0" size="icon-sm" variant="ghost" />
 	);
 }
 
