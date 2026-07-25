@@ -234,11 +234,15 @@ const SURFACES = {
 		description:
 			"Remove the internal playground surface and playground search/nav references.",
 		dependentSurfaces: [],
-		ownedPaths: ["src/app/(site)/(marketing)/internal/playground"],
+		ownedPaths: [
+			"scripts/verify/verify-skeleton-overlap.ts",
+			"src/app/(site)/(marketing)/internal/playground",
+		],
 		routeIds: ["playground"],
 		routeBuilders: [],
 		navRouteIds: ["playground"],
 		searchSources: [],
+		packageScripts: ["verify:skeleton-overlap"],
 		postRemovalAssertions: [
 			{
 				label: "playground route ids and links",
