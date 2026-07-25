@@ -548,11 +548,7 @@ async function main() {
 
 	let server = null;
 	if (!baseUrl) {
-		server = await startLocalProductionServer({
-			env: {
-				TEMPLATE_INTERNAL_ROUTES: "1",
-			},
-		});
+		server = await startLocalProductionServer();
 	}
 
 	const resolvedBaseUrl = baseUrl ?? server.baseUrl;

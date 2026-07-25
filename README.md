@@ -2,9 +2,9 @@
 
 ![Averlo Next Template banner](public/averlo-next-template-banner.png)
 
-Clone the template, give an agent the setup prompt, choose the lightest content
-mode that fits the project, and build the project-specific design system on top
-of an existing Next.js App Router scaffold.
+Clone the template, choose the route profile and content mode that fit the
+project, then build the project-specific design system on the resulting Next.js
+App Router scaffold.
 
 Averlo Next Template is intentionally small at the live page layer: a marketing
 shell, typed section rendering, fallback content, shared primitives, motion
@@ -31,6 +31,19 @@ cd my-site
 npm install
 npm run dev
 ```
+
+Choose and materialize a route profile before project-specific implementation:
+
+```sh
+npm run create:project -- --profile full --output ../my-full-project
+npm run create:project -- --profile app-only --output ../my-dashboard-project
+npm run create:project -- --profile marketing-only --output ../my-site
+```
+
+`app-only` keeps authentication, dashboard, and local developer tools while
+removing marketing and Payload. `marketing-only` keeps the broad shared UI,
+marketing, local developer tools, and Payload-ready scaffold without auth or
+dashboard. `thin-start` remains the minimal marketing specialist profile.
 
 ### Already Cloned
 
@@ -64,7 +77,7 @@ adapters so the frontend continues to render a small page/section contract.
 - **Content modes:** static fallback content, Payload-ready scaffold, or
   Payload-powered Vercel setup.
 - **Agent workflows:** Template Intelligence with warm-optional Serena,
-  isolated agent dev server, template pruning, smoke checks,
+  isolated agent dev server, filesystem-backed route profiles, template pruning, smoke checks,
   page-target scroll-performance autoresearch harnesses, and
   optional thin-start activation.
 
@@ -251,10 +264,12 @@ instances should use the guarded `--in-place --confirm-instance` path. Read
 | `npm run verify:static` | Biome plus TypeScript checks. |
 | `npm run build` | Production Next.js build. |
 | `npm run verify:smoke` | Route smoke verification. |
+| `npm run verify:profiles` | Materialize every profile in a disposable temp matrix. Add `-- --integration` for installs and profile-owned checks. |
 | `npm run measure:scroll-performance` | Measure scroll performance on a real page path. |
 | `npm run setup:scroll-performance-autoresearch` | Create a disposable page-target scroll-performance worker worktree. |
 | `npm run score:scroll-performance` | Score the accepted baseline or one committed candidate in a scroll worker. |
 | `npm run prune:template` | Remove optional template surfaces in a clone. |
+| `npm run create:project` | Materialize `full`, `app-only`, `marketing-only`, or `thin-start`. |
 | `npm run create:thin-start` | Materialize the optional thin-start profile. |
 
 ## Deployment

@@ -1,5 +1,17 @@
 # Template Content Modes
 
+Route profiles and content modes are separate decisions. Select a route profile
+first with `npm run create:project -- --profile <id>`:
+
+- `full`: marketing, auth, dashboard, local developer tools, Payload-ready
+- `app-only`: auth, dashboard, local developer tools; no marketing or Payload
+- `marketing-only`: broad marketing, local developer tools, Payload-ready; no dashboard/auth
+- `thin-start`: minimal marketing specialist profile
+
+Developer routes under `/internal` are available only in local development.
+They are excluded from public marketing navigation and always return 404 in a
+production build.
+
 This template supports three content modes. Choose the lightest mode that matches
 the project, and keep the frontend rendering contract independent from the
 content source.
@@ -53,11 +65,10 @@ media objects, SEO fields, draft state, authors, taxonomies, localization, and
 redirect metadata. Resolve that richer data in adapters before it reaches the
 frontend renderer.
 
-## Lightweight Instances
+## Legacy Surface Pruning
 
-Use this path when a project should keep the normal Averlo template runtime
-but drop optional authoring/demo route families. Run the dry-run first in the
-target clone or renamed project instance:
+Use pruning for a project that has already been initialized and needs to remove
+individual optional surfaces. New projects should prefer `create:project`.
 
 ```bash
 npm run prune:template -- --dry-run --no-dashboard --no-demo --no-scroll-performance --no-dictionary --no-reference --no-playground

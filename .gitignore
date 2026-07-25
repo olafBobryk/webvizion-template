@@ -42,6 +42,7 @@ yarn-error.log*
 /.codex/*
 !/.codex/hooks.json
 /.worktrees/
+/.template-instances/
 /tmp/
 /.thin-start/
 /.template-intelligence/

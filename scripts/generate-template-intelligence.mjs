@@ -72,8 +72,8 @@ const CONCEPTS = [
 			"Shared primitives, composites, domain components, demos, and dictionary entries that should be reused before local UI is invented.",
 		matches: [
 			"src/components",
-			"src/app/(site)/(marketing)/internal/demo",
-			"src/app/(site)/(marketing)/internal/dictionary",
+			"src/app/(site)/(dev)/internal/demo",
+			"src/app/(site)/(dev)/internal/dictionary",
 		],
 		keywords: ["component", "primitive", "demo", "dictionary", "ui"],
 	},
@@ -84,10 +84,10 @@ const CONCEPTS = [
 			"Maintainer-facing docs, references, demos, and source notes that explain how the template is meant to be extended.",
 		matches: [
 			"docs",
-			"src/app/(site)/(marketing)/internal/demo",
-			"src/app/(site)/(marketing)/internal/dictionary",
-			"src/app/(site)/(marketing)/internal/reference",
-			"src/app/(site)/(marketing)/internal/playground",
+			"src/app/(site)/(dev)/internal/demo",
+			"src/app/(site)/(dev)/internal/dictionary",
+			"src/app/(site)/(dev)/internal/reference",
+			"src/app/(site)/(dev)/internal/playground",
 		],
 		keywords: ["docs", "reference", "demo", "dictionary", "playground"],
 	},
@@ -183,7 +183,7 @@ const AGENT_MAP = {
 			paths: [
 				"src/config/routes.ts",
 				"src/lib/routes.ts",
-				"src/app/(site)/(marketing)/internal/layout.tsx",
+				"src/app/(site)/(dev)/internal/layout.tsx",
 				"src/app/(site)/(marketing)/layout.tsx",
 				"src/lib/marketing-content/fallback.ts",
 				"src/lib/marketing-content/types.ts",
@@ -191,7 +191,7 @@ const AGENT_MAP = {
 				"scripts/prune-template.mjs",
 			],
 			notes:
-				"Route IDs live in appRoutes, hrefFor resolves them, internal routes inherit the production guard for client clones with canonical-template host and env opt-ins, and marketing layout/search/fallback consume lightweight link data.",
+				"Route IDs live in appRoutes, hrefFor resolves them, internal routes are standalone local-development surfaces that return 404 in production, and marketing layout/search/fallback consume lightweight public link data.",
 		},
 		{
 			id: "ui-primitives",
@@ -331,7 +331,7 @@ const AGENT_MAP = {
 				"scripts/clear-template-intelligence-benchmark.mjs",
 				"scripts/verify/verify-template-intelligence-benchmark.mjs",
 				"src/lib/template-intelligence/index.ts",
-				"src/app/(site)/(marketing)/internal/intelligence/page.tsx",
+				"src/app/(site)/(dev)/internal/intelligence/page.tsx",
 			],
 			notes:
 				"Trusted Codex hooks record privacy-safe session and turn metadata automatically in ignored local state. Curated legacy observations and visual fixtures remain separate and are never ranked as automatic comparative evidence.",
@@ -341,7 +341,7 @@ const AGENT_MAP = {
 			title: "New internal authoring surface placement",
 			aliases: ["internal-surface", "authoring-surface", "new-surface"],
 			paths: [
-				"src/app/(site)/(marketing)/internal/layout.tsx",
+				"src/app/(site)/(dev)/internal/layout.tsx",
 				"src/config/routes.ts",
 				"src/lib/routes.ts",
 				"src/lib/marketing-content/fallback.ts",

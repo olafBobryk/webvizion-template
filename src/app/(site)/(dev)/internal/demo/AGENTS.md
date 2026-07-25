@@ -3,7 +3,7 @@
 Keep the demo catalogue behind one canonical public aggregator while allowing each page family to own its fixtures and JSX.
 
 ## Source of Truth
-- `src/app/(site)/(marketing)/internal/demo/content.tsx` is the stable public aggregator and the only import surface for consumers.
+- `src/app/(site)/(dev)/internal/demo/content.tsx` is the stable public aggregator and the only import surface for consumers.
 - Canonical page objects live in private `_content/pages/<page-id>.tsx` modules. Types live in `_content/types.ts`; relationships live in `_content/relationships.ts`.
 - The page renderer and nav continue to read `demoPages` from `content.tsx`; consumers must not import private page modules.
 - Keep interactive fixtures with their owning page. Promote a helper only when multiple page modules consume it, and name the shared module after the responsibility it owns.

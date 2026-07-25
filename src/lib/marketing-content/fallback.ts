@@ -76,8 +76,8 @@ export const fallbackMarketingPages = {
 export const fallbackSiteLayout: SiteLayoutDocument = {
 	header: {
 		cta: {
-			label: "Login",
-			routeId: "login",
+			label: "Contact",
+			href: "/contact",
 		},
 		menuGroups: [
 			{
@@ -86,16 +86,6 @@ export const fallbackSiteLayout: SiteLayoutDocument = {
 				links: [
 					{ label: "Hero", href: "/#home-hero" },
 					{ label: "Settings", routeId: "settings" },
-				],
-			},
-			{
-				label: "Template",
-				links: [
-					{ label: "Demo", routeId: "demo" },
-					{ label: "Intelligence", routeId: "intelligence" },
-					{ label: "Playground", routeId: "playground" },
-					{ label: "Dictionary", routeId: "dictionary" },
-					{ label: "Reference", routeId: "reference" },
 				],
 			},
 		],
@@ -116,47 +106,7 @@ export const fallbackSiteLayout: SiteLayoutDocument = {
 					},
 				],
 			},
-			{
-				label: "Demo",
-				routeId: "demo",
-				sections: [
-					{
-						label: "Header",
-						href: "/internal/demo/layout/header",
-						description: "Responsive marketing header patterns.",
-					},
-					{
-						label: "Toast",
-						href: "/internal/demo/ui/overlays/toast",
-						description: "Transient feedback examples.",
-					},
-				],
-			},
-			{
-				label: "Intelligence",
-				routeId: "intelligence",
-				sections: [
-					{
-						label: "Concept map",
-						href: "/internal/intelligence",
-						description: "Generated template intelligence overview.",
-					},
-				],
-			},
-			{
-				label: "Playground",
-				routeId: "playground",
-				sections: [
-					{
-						label: "Motion QA",
-						href: "/internal/playground/motion",
-						description: "Motion system QA playground.",
-					},
-				],
-			},
 			{ label: "Settings", routeId: "settings" },
-			{ label: "Dictionary", routeId: "dictionary" },
-			{ label: "Reference", routeId: "reference" },
 		],
 		search: {
 			ariaLabel: "Search pages",
@@ -169,21 +119,9 @@ export const fallbackSiteLayout: SiteLayoutDocument = {
 				link: { label: "Home", routeId: "home" },
 				links: [{ label: "Hero", href: "/#home-hero" }],
 			},
-			{
-				label: "Template",
-				links: [
-					{ label: "Demo", routeId: "demo" },
-					{ label: "Intelligence", routeId: "intelligence" },
-					{ label: "Playground", routeId: "playground" },
-					{ label: "Dictionary", routeId: "dictionary" },
-					{ label: "Reference", routeId: "reference" },
-				],
-			},
 		],
 		topNavLinks: [
 			{ label: "Home", routeId: "home" },
-			{ label: "Demo", routeId: "demo" },
-			{ label: "Intelligence", routeId: "intelligence" },
 			{ label: "Settings", routeId: "settings" },
 		],
 	},
@@ -217,12 +155,7 @@ export const fallbackSiteLayout: SiteLayoutDocument = {
 	footer: {
 		navLinks: [
 			{ label: "Home", routeId: "home" },
-			{ label: "Demo", routeId: "demo" },
-			{ label: "Intelligence", routeId: "intelligence" },
-			{ label: "Playground", routeId: "playground" },
 			{ label: "Settings", routeId: "settings" },
-			{ label: "Dictionary", routeId: "dictionary" },
-			{ label: "Reference", routeId: "reference" },
 		],
 	},
 };

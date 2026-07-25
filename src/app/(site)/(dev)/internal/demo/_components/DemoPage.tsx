@@ -3,11 +3,11 @@
 import {
 	ComponentCard,
 	ComponentGroup,
-} from "@/app/(site)/(marketing)/internal/demo/_components/demo-cards";
+} from "@/app/(site)/(dev)/internal/demo/_components/demo-cards";
 import type {
 	DemoComponentItem,
 	DemoPage as DemoPageType,
-} from "@/app/(site)/(marketing)/internal/demo/content";
+} from "@/app/(site)/(dev)/internal/demo/content";
 import { Button } from "@/components/ui/primitives/Button";
 import { Card } from "@/components/ui/primitives/Card";
 import { Text } from "@/components/ui/primitives/Text";

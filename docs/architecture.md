@@ -1,6 +1,6 @@
 # Averlo Template Architecture
 
-Final accepted architecture for the Averlo full-start and thin-start profiles.
+Architecture for the Averlo full, app-only, marketing-only, and thin-start profiles.
 This document defines durable system boundaries and does not authorize or prescribe an implementation sequence.
 Reviewed against [the staging acceptance ledger](./architecture-staging.md) on 2026-07-20, including the pinned-source surface rescan and mutation-policy delta, with no unresolved or drifted decisions.
 
@@ -15,6 +15,16 @@ Reviewed against [the staging acceptance ledger](./architecture-staging.md) on 2
 
 ## Template profiles
 
+- `full` is the canonical broad source with marketing, auth, dashboard,
+  developer tools, and Payload-ready scaffolding.
+- `app-only` removes marketing and Payload, adds an explicit `/` to
+  `/dashboard` redirect, and retains auth, dashboard, and local developer tools.
+- `marketing-only` removes auth/dashboard while retaining the broad shared UI,
+  marketing, developer tools, and Payload-ready scaffolding.
+- `thin-start` remains the explicit minimal marketing profile.
+- Profiles compose surface-owned manifests through one materializer. The legacy
+  prune command consumes the same surface declarations.
+
 ### Shared-source invariant
 
 - Components present in both full start and thin start normally share one implementation and visual contract.
@@ -23,9 +33,11 @@ Reviewed against [the staging acceptance ledger](./architecture-staging.md) on 2
 - Thin start references canonical shared files through an authoritative profile manifest.
 - Genuine thin-specific replacements live as real source files outside the full-start import graph.
 
-### Authoritative profile manifest
+### Authoritative manifests
 
-- One manifest declares shared inclusions, file-backed overrides, removals, dependencies, retained routes and scripts, public API allowances, and required validation.
+- Surface manifests own paths, routes, dependencies, scripts, markers, and
+  removal assertions. Profile manifests compose surfaces and add only genuine
+  profile-specific file overrides and validation.
 - Generator reporting and API review derive from that manifest rather than parallel configuration lists.
 - Review allowlists validate output; they never contain component source definitions.
 
@@ -288,12 +300,15 @@ Reviewed against [the staging acceptance ledger](./architecture-staging.md) on 2
 - Activation selects the real authentication provider, persistence layer, organization-selection mechanism, content mode, and disposition of demo and debug infrastructure.
 - An instance does not preserve fixture, authentication, selection, or persistence scaffolding by default merely because it shipped in the template.
 - Demo-organization support, fixture mutations, debug menu, and forced-state routes remain installed as dormant guarded infrastructure unless the instance deliberately removes them.
-- Production access to retained demo and debug infrastructure remains disabled unless explicitly enabled through the appropriate guard and environment opt-in.
+- Retained demo and debug infrastructure is local-development only and always
+  returns 404 in production; there is no host or environment opt-in.
 
 ## Verification invariants
 
-- Architecture-significant shared-system changes are reviewed against full and thin previews produced from the same commit.
-- Both profiles receive type, build, smoke, public API-surface, and representative visual-route verification.
+- Architecture-significant shared-system changes are reviewed against the
+  materialized profile matrix produced from the same source revision.
+- Full, app-only, marketing-only, and thin-start receive structural
+  materialization, type/build, production smoke, and representative local-route verification.
 - Markdown verification covers renderer-editor round trips, lossless source fallback, responsive and keyboard-accessible toolbar behavior, and exclusion of mention parsing from code and links.
 - Button verification covers zero layout shift during loading and dimensional parity between every live variant and its skeleton.
 - Chip verification covers semantic, spectrum, custom, static, link, button, and skeleton states.

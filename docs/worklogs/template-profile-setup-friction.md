@@ -1,0 +1,21 @@
+# Template Profile Setup Friction
+
+Recorded while implementing and repeatedly materializing the `full`,
+`app-only`, `marketing-only`, and `thin-start` profiles in disposable instances.
+
+| ID | Profile/stage | Friction | Root cause | Repair | Result |
+| --- | --- | --- | --- | --- | --- |
+| PF-001 | marketing-only typecheck | Fallback navigation referenced the removed `login` route. | Marketing fallback content owned an application/auth route contract. | Made public marketing CTA/navigation auth-independent and removed local developer links from public navigation. | Closed; marketing-only typecheck and build pass. |
+| PF-002 | nested disposable builds | Next inferred the parent lockfile/workspace and emitted incorrect-root warnings. | Next config did not provide a stable config-relative Turbopack/tracing root. | Resolve the project root from `import.meta.url` and use it for Turbopack and output tracing in Payload and no-Payload configs. | Closed; all clean profile builds resolve their own dependencies. |
+| PF-003 | matrix rerun | A chained `npm ci` ran in the source worktree after rematerialization instead of the generated profile. | Verification commands did not bind each process to the output workspace. | Added the profile-matrix verifier with an explicit working directory for every install and profile-owned command. | Closed; disposable matrix materialization passes and cleanup is path-validated. |
+| PF-004 | sandboxed build verification | Fresh Next builds could not fetch Google Inter inside restricted network execution. | `next/font` performs a build-time external fetch when cache is cold. | Treat font access as a verification-environment gate and run clean builds with approved network access; no product fallback was introduced. | Closed for the verified matrix; documented as an external build prerequisite. |
+| PF-005 | worktree bootstrap | A sibling worktree was outside the writable workspace boundary. | The requested sibling path and managed filesystem scope differed. | Move the clean checkout into the repository’s ignored `.worktrees/template-profile-modes` path before edits. | Closed; branch and preview remain isolated. |
+| PF-006 | generated workspace lint | A materialized profile built successfully but failed the repository-wide formatting check. | Profile pruning generated central files without formatting them, and the profile receipt used a different JSON indentation style. | Run the source template's pinned Biome CLI over every materialized/in-place workspace and write receipts with repository-native indentation. | Closed; newly materialized profiles satisfy the same formatter contract as canonical source. |
+| PF-007 | marketing-only static verification | The shared static pipeline invoked a modal contract check that unconditionally opened a dashboard component. | A cross-surface verifier encoded optional dashboard and file-input consumers as mandatory. | Keep the shared modal primitive assertions mandatory and validate surface-owned consumers only when their files are installed. | Closed; the same static command now verifies full, application, marketing, and thin workspaces. |
+| PF-008 | prune regression | The pruning verifier failed after surface definitions moved out of the central prune script. | Its assertions inspected implementation text instead of the exported surface contract. | Assert the surface manifest values directly and add the application-only prune combination to dry-run coverage. | Closed; the verifier now follows decentralized ownership. |
+| PF-009 | app-only static verification | Dashboard contract checks failed with `listen EPERM` while creating a temporary `tsx` IPC socket. | The restricted verification sandbox blocks the local socket that `tsx` uses; application code was not involved. | Rerun that focused verifier with approved local IPC access and retain sandbox-safe checks for the remaining profiles. | Closed; app-only static, dashboard, and type checks pass. |
+
+Convergence: every profile materializes from canonical source; full,
+app-only, marketing-only, and thin-start typecheck/build; production smoke blocks
+`/internal`; local dev checks expose it; profile-specific absent routes return
+404; the temp materialization matrix passes and removes its validated temp root.

@@ -1,7 +1,11 @@
 import { networkInterfaces } from "node:os";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { withPayload } from "@payloadcms/next/withPayload";
 import type { NextConfig } from "next";
 import { PHASE_DEVELOPMENT_SERVER } from "next/constants";
+
+const PROJECT_ROOT = path.dirname(fileURLToPath(import.meta.url));
 
 const isPrivateIpv4 = (address: string) => {
 	const [first = "", second = ""] = address.split(".");
@@ -167,7 +171,9 @@ const createNextConfig = (phase: string): NextConfig => ({
 			},
 		],
 	},
+	outputFileTracingRoot: PROJECT_ROOT,
 	turbopack: {
+		root: PROJECT_ROOT,
 		rules: getCodeInspectorRules(phase),
 	},
 });

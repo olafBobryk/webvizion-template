@@ -1,14 +1,18 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 
 const read = (path) =>
 	readFileSync(new URL(`../../${path}`, import.meta.url), "utf8");
+const readIfPresent = (path) => {
+	const url = new URL(`../../${path}`, import.meta.url);
+	return existsSync(url) ? readFileSync(url, "utf8") : null;
+};
 
 const modalShell = read("src/components/ui/overlays/modal/ModalShell.tsx");
 const modalCard = read("src/components/ui/overlays/modal/ModalCard.tsx");
 const modalHost = read("src/components/ui/overlays/modal/ModalHost.tsx");
 const modalContract = read("src/lib/modal.ts");
-const commandSurface = read(
+const commandSurface = readIfPresent(
 	"src/app/(site)/dashboard/_components/commands/DashboardCommandProvider.tsx",
 );
 const confirmation = read(
@@ -17,8 +21,10 @@ const confirmation = read(
 const imageInspect = read(
 	"src/components/ui/overlays/modal/ImageInspectModal.tsx",
 );
-const fileInspect = read("src/components/ui/input/files/FileInspectModal.tsx");
-const thinShell = read(
+const fileInspect = readIfPresent(
+	"src/components/ui/input/files/FileInspectModal.tsx",
+);
+const thinShell = readIfPresent(
 	"template-profiles/thin-start/overrides/src/components/ui/overlays/modal/ModalShell.tsx",
 );
 
@@ -45,17 +51,22 @@ for (const removedEscapeHatch of [
 	assert.doesNotMatch(modalContract, new RegExp(removedEscapeHatch));
 }
 
-assert.match(commandSurface, /<ModalShell[\s\S]*?<ModalCard/);
-for (const resource of [confirmation, imageInspect, fileInspect]) {
+if (commandSurface)
+	assert.match(commandSurface, /<ModalShell[\s\S]*?<ModalCard/);
+for (const resource of [confirmation, imageInspect, fileInspect].filter(
+	Boolean,
+)) {
 	assert.match(resource, /<ModalHeader/);
 	assert.match(resource, /<ModalContent/);
 	assert.match(resource, /<ModalFooter/);
 }
 
-assert.doesNotMatch(thinShell, /<Panel\b/);
-assert.match(thinShell, /data-modal-shell=""/);
-assert.match(thinShell, /ModalHeader/);
-assert.match(thinShell, /ModalContent/);
-assert.match(thinShell, /ModalFooter/);
+if (thinShell) {
+	assert.doesNotMatch(thinShell, /<Panel\b/);
+	assert.match(thinShell, /data-modal-shell=""/);
+	assert.match(thinShell, /ModalHeader/);
+	assert.match(thinShell, /ModalContent/);
+	assert.match(thinShell, /ModalFooter/);
+}
 
 console.log("Modal system verification passed.");

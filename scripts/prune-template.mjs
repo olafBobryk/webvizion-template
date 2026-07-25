@@ -6,13 +6,11 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import process, { stdin as input, stdout as output } from "node:process";
 import { createInterface } from "node:readline/promises";
+import { templateSurfaces } from "../template-surfaces/index.mjs";
 
 const ROOT = process.cwd();
 const SRC_DIR = path.join(ROOT, "src");
-const INTERNAL_MARKETING_DIR = path.join(
-	ROOT,
-	"src/app/(site)/(marketing)/internal",
-);
+const INTERNAL_MARKETING_DIR = path.join(ROOT, "src/app/(site)/(dev)/internal");
 const PACKAGE_JSON_PATH = path.join(ROOT, "package.json");
 const TEMPLATE_SHAPE_FILES = [
 	"scripts/prune-template.mjs",
@@ -24,333 +22,13 @@ const TEMPLATE_SHAPE_FILES = [
 ];
 const TEMPLATE_SHAPE_SCRIPTS = ["build", "prune:template", "verify:smoke"];
 
-const SURFACES = {
-	dashboardReferenceEntities: {
-		id: "dashboard.reference-entities",
-		flag: "--no-dashboard-reference-entities",
-		description:
-			"Remove dashboard reference record/member routes, examples, policy, and focused verifiers while retaining dashboard and platform core presentation.",
-		dependentSurfaces: ["dashboard"],
-		ownedPaths: [
-			"docs/frontend-entity-policy.md",
-			"scripts/verify/verify-reference-entities.ts",
-			"scripts/verify/verify-entity-deletion.ts",
-			"scripts/verify/verify-mutation-policy.ts",
-			"scripts/verify/verify-entity-skeletons.ts",
-			"scripts/verify/verify-frontend-entity-policy.ts",
-			"scripts/verify/verify-profile-pruning.mjs",
-			"src/app/(site)/dashboard/records",
-			"src/app/(site)/dashboard/organization/members/[memberId]",
-			"src/app/(site)/dashboard/reference",
-			"src/app/(site)/dashboard/_components/commands/DashboardEntityCommands.tsx",
-			"src/app/(site)/dashboard/_components/entities/EntityDeletion.tsx",
-			"src/app/(site)/dashboard/_components/entities/record",
-			"src/app/(site)/dashboard/_lib/entities/record",
-			"src/app/(site)/dashboard/_lib/entity-lifecycle.ts",
-			"src/app/(site)/dashboard/_lib/fixtures",
-		],
-		markerFiles: [
-			"scripts/verify/verify-dashboard-surfaces.ts",
-			"scripts/verify/verify-dashboard-page-policy.ts",
-			"src/app/(site)/dashboard/page.tsx",
-			"src/app/(site)/dashboard/_components/OverviewSurface.tsx",
-			"src/app/(site)/dashboard/layout.tsx",
-			"src/app/(site)/dashboard/organization/page.tsx",
-			"src/app/(site)/dashboard/_components/debug/DashboardDebugMenu.tsx",
-			"src/app/(site)/dashboard/_components/layout/DashboardSidebarNav.tsx",
-			"src/app/(site)/dashboard/_components/debug/DashboardForcedLoadingView.tsx",
-			"src/app/(site)/dashboard/_registry/surfaceRegistry.ts",
-			"src/app/api/debug/fixture/reset/route.ts",
-		],
-		packageScripts: [
-			"verify:reference-entities",
-			"verify:entity-deletion",
-			"verify:mutation-policy",
-			"verify:entity-skeletons",
-			"verify:frontend-entity-policy",
-			"verify:frontend-entities",
-			"verify:profile-pruning",
-		],
-		postRemovalAssertions: [
-			{
-				label: "reference entity routes and imports",
-				pattern:
-					/(dashboard\.reference\.entities|dashboard\.records|dashboard\.record|dashboard\.organization\.members|dashboard\.organization\.member|\/dashboard\/records|\/dashboard\/reference\/entities|reference-records|reference-members)/,
-			},
-		],
-	},
-	dashboard: {
-		id: "dashboard",
-		flag: "--no-dashboard",
-		description:
-			"Remove the dashboard shell, login/auth routes, and dashboard-only auth helpers.",
-		dependentSurfaces: ["auth"],
-		ownedPaths: [
-			"scripts/verify/verify-auth-organization.ts",
-			"scripts/verify/verify-dashboard-page-policy.ts",
-			"scripts/verify/verify-dashboard-surfaces.ts",
-			"scripts/verify/verify-platform-operations.ts",
-			"src/app/(site)/_components/organization",
-			"src/app/(site)/dashboard",
-			"src/app/(site)/(auth)",
-			"src/app/api/auth",
-			"src/app/api/debug",
-			"src/app/api/feedback",
-			"src/app/api/platform",
-			"src/app/api/support",
-			"src/lib/api/auth.ts",
-			"src/lib/auth",
-			"src/proxy.ts",
-		],
-		routeIds: [
-			"login",
-			"signInOptions",
-			"forgotPassword",
-			"resetPassword",
-			"setPassword",
-			"invitation",
-			"selectOrganization",
-		],
-		routeBuilders: ["dashboardSubpage"],
-		navRouteIds: [],
-		searchSources: [],
-		postRemovalAssertions: [
-			{
-				label: "dashboard route ids",
-				pattern:
-					/(hrefFor\("login"\)|hrefFor\("signInOptions"\)|hrefFor\("forgotPassword"\)|hrefFor\("resetPassword"\)|hrefFor\("setPassword"\)|hrefFor\("invitation"\)|hrefFor\("selectOrganization"\)|routeId:\s*"login"|routeId:\s*"signInOptions"|routeId:\s*"forgotPassword"|routeId:\s*"resetPassword"|routeId:\s*"setPassword"|routeId:\s*"invitation"|routeId:\s*"selectOrganization")/,
-			},
-			{
-				label: "dashboard auth import",
-				pattern: /from\s+["']@\/lib\/api\/auth["']/,
-			},
-			{
-				label: "dashboard support and platform operations",
-				pattern:
-					/(\/dashboard\/(?:platform|support)|\/api\/(?:feedback|platform|support)|platformRole|Platform Inbox|ReportIssueModal)/,
-			},
-		],
-		markerFiles: ["src/app/(site)/(marketing)/internal/intelligence/page.tsx"],
-		packageScripts: [
-			"verify:auth",
-			"verify:dashboard-pages",
-			"verify:dashboard",
-			"verify:platform",
-		],
-	},
-	demo: {
-		id: "demo",
-		flag: "--no-demo",
-		description: "Remove the internal demo surface and demo search indexing.",
-		dependentSurfaces: [],
-		ownedPaths: ["src/app/(site)/(marketing)/internal/demo"],
-		routeIds: ["demo"],
-		routeBuilders: [],
-		navRouteIds: ["demo"],
-		searchSources: ["demoPages"],
-		postRemovalAssertions: [
-			{
-				label: "demo route ids",
-				pattern: /(hrefFor\("demo"\)|routeId:\s*"demo")/,
-			},
-			{
-				label: "demo content import",
-				pattern:
-					/from\s+["']@\/app\/\(site\)\/\(marketing\)\/internal\/demo\/content["']/,
-			},
-		],
-	},
-	intelligence: {
-		id: "intelligence",
-		flag: "--no-intelligence",
-		description:
-			"Remove the internal template intelligence surface, generated-index script, docs, and nav/search references.",
-		dependentSurfaces: [],
-		ownedPaths: [
-			".codex/hooks.json",
-			"src/app/(site)/dashboard/_components/intelligence",
-			"src/app/(site)/(marketing)/internal/intelligence",
-			"src/lib/template-intelligence",
-			"scripts/generate-template-intelligence.mjs",
-			"scripts/lib/codex-turn-recording.mjs",
-			"scripts/lib/template-intelligence-benchmark.mjs",
-			"scripts/record-codex-turn-event.mjs",
-			"scripts/record-template-intelligence-benchmark.mjs",
-			"scripts/clear-template-intelligence-benchmark.mjs",
-			"scripts/run-template-intelligence-benchmark.mjs",
-			"scripts/run-template-intelligence-hybrid.mjs",
-			"scripts/setup-template-intelligence-serena.mjs",
-			"scripts/verify/verify-template-intelligence-benchmark.mjs",
-			"scripts/verify/verify-codex-turn-recording.ts",
-			"docs/template-intelligence.md",
-			"docs/worklogs/template-intelligence-ledger.md",
-			"docs/worklogs/template-intelligence-handoff.md",
-			"docs/worklogs/template-intelligence-review-handoff.md",
-			"docs/worklogs/template-intelligence-benchmark.md",
-			"docs/worklogs/template-intelligence-benchmark-runs.jsonl",
-			"docs/worklogs/template-intelligence-benchmark-runs.example.jsonl",
-		],
-		routeIds: ["intelligence"],
-		routeBuilders: [],
-		navRouteIds: ["intelligence"],
-		searchSources: [],
-		postRemovalAssertions: [
-			{
-				label: "intelligence route ids and links",
-				pattern:
-					/(hrefFor\("intelligence"\)|routeId:\s*"intelligence"|\/internal\/intelligence|template-intelligence|Template Intelligence)/,
-			},
-			{
-				label: "template intelligence imports",
-				pattern: /from\s+["']@\/lib\/template-intelligence["']/,
-			},
-		],
-	},
-	scrollPerformance: {
-		id: "scrollPerformance",
-		flag: "--no-scroll-performance",
-		description:
-			"Remove page-target scroll-performance measurement/autoresearch scripts, benchmark docs, and Playwright dependency.",
-		dependentSurfaces: [],
-		ownedPaths: [
-			"scripts/scroll-performance",
-			"docs/worklogs/scroll-performance-benchmark.md",
-			"docs/worklogs/scroll-performance-runs.example.jsonl",
-		],
-		routeIds: [],
-		routeBuilders: [],
-		navRouteIds: [],
-		searchSources: [],
-		postRemovalAssertions: [
-			{
-				label: "scroll-performance source references",
-				pattern: /scroll-performance/,
-			},
-		],
-	},
-	playground: {
-		id: "playground",
-		flag: "--no-playground",
-		description:
-			"Remove the internal playground surface and playground search/nav references.",
-		dependentSurfaces: [],
-		ownedPaths: ["src/app/(site)/(marketing)/internal/playground"],
-		routeIds: ["playground"],
-		routeBuilders: [],
-		navRouteIds: ["playground"],
-		searchSources: [],
-		packageScripts: [],
-		postRemovalAssertions: [
-			{
-				label: "playground route ids and links",
-				pattern:
-					/(hrefFor\("playground"\)|routeId:\s*"playground"|\/internal\/playground)/,
-			},
-		],
-	},
-	dictionary: {
-		id: "dictionary",
-		flag: "--no-dictionary",
-		description:
-			"Remove the internal dictionary surface, its route ids, and dictionary search/nav references.",
-		dependentSurfaces: [],
-		ownedPaths: ["src/app/(site)/(marketing)/internal/dictionary"],
-		routeIds: [
-			"dictionary",
-			"dictionaryRiveLogoReveal",
-			"dictionarySpamProtectedForm",
-		],
-		routeBuilders: ["dictionaryEntry"],
-		navRouteIds: ["dictionary"],
-		searchSources: [],
-		postRemovalAssertions: [
-			{
-				label: "dictionary route ids",
-				pattern:
-					/(hrefFor\("dictionary"\)|hrefFor\("dictionaryRiveLogoReveal"\)|hrefFor\("dictionarySpamProtectedForm"\)|routeId:\s*"dictionary"|routeId:\s*"dictionaryRiveLogoReveal"|routeId:\s*"dictionarySpamProtectedForm")/,
-			},
-		],
-	},
-	reference: {
-		id: "reference",
-		flag: "--no-reference",
-		description: "Remove the internal reference/docs surface.",
-		dependentSurfaces: [],
-		ownedPaths: ["src/app/(site)/(marketing)/internal/reference"],
-		routeIds: [],
-		routeBuilders: [],
-		navRouteIds: [],
-		searchSources: [],
-		postRemovalAssertions: [],
-	},
-	payload: {
-		id: "payload",
-		flag: "--no-payload",
-		description:
-			"Remove the guarded Payload CMS scaffold, config references, and Payload packages.",
-		dependentSurfaces: [],
-		ownedPaths: [
-			"payload.config.ts",
-			"src/payload",
-			"src/app/(payload)",
-			"src/app/api/dev/payload-login",
-		],
-		routeIds: [],
-		routeBuilders: [],
-		navRouteIds: [],
-		searchSources: [],
-		postRemovalAssertions: [
-			{
-				label: "Payload imports",
-				pattern:
-					/(?:from\s+["'](?:@payloadcms|@payload-config|@\/payload)|import\s+["'](?:@payloadcms|@payload-config|@\/payload)|require\(["'](?:@payloadcms|@payload-config|@\/payload))/,
-			},
-		],
-	},
-};
+const SURFACES = templateSurfaces;
 
 const CENTRAL_FILES = [
 	"src/config/routes.ts",
 	"src/lib/routes.ts",
 	"src/lib/api/index.ts",
 ];
-
-const PAYLOAD_PACKAGE_DEPENDENCIES = [
-	"@payloadcms/db-postgres",
-	"@payloadcms/next",
-	"@payloadcms/richtext-lexical",
-	"@payloadcms/storage-vercel-blob",
-	"payload",
-	"sharp",
-];
-
-const INTELLIGENCE_PACKAGE_SCRIPTS = [
-	"intelligence:generate",
-	"intelligence:query",
-	"intelligence:benchmark",
-	"intelligence:record",
-	"intelligence:record:clear",
-	"intelligence:hybrid",
-	"intelligence:serena:debug",
-	"intelligence:serena:setup",
-	"verify:intelligence-benchmark",
-	"verify:intelligence-recording",
-	"predev",
-	"predev:user",
-	"predev:agent",
-	"prebuild",
-];
-
-const INTELLIGENCE_PACKAGE_DEPENDENCIES = [];
-
-const SCROLL_PERFORMANCE_PACKAGE_SCRIPTS = [
-	"measure:scroll-performance",
-	"record:scroll-performance",
-	"setup:scroll-performance-autoresearch",
-	"score:scroll-performance",
-];
-
-const SCROLL_PERFORMANCE_PACKAGE_DEPENDENCIES = ["playwright"];
 
 function printUsage() {
 	console.log(`Usage: npm run prune:template -- [flags]
@@ -366,6 +44,7 @@ Flags:
   --no-playground  Remove the internal playground surface
   --no-dictionary  Remove the internal dictionary surface
   --no-reference   Remove the internal reference surface
+  --no-marketing   Remove public marketing routes and marketing content
   --no-payload     Remove the guarded Payload CMS scaffold and dependencies
   --dry-run        Print the prune plan without changing files
   --yes            Skip the confirmation prompt
@@ -395,6 +74,7 @@ function parseArgs(argv) {
 		"--yes",
 		"--help",
 		"--confirm-template-root",
+		"--materialize-profile",
 		...Object.values(SURFACES).map((surface) => surface.flag),
 	]);
 
@@ -409,6 +89,7 @@ function parseArgs(argv) {
 		yes: flags.has("--yes"),
 		help: flags.has("--help"),
 		confirmTemplateRoot: flags.has("--confirm-template-root"),
+		materializeProfile: flags.has("--materialize-profile"),
 	};
 }
 
@@ -520,6 +201,7 @@ function buildState(surfaceIds) {
 	const removed = new Set(surfaceIds);
 
 	return {
+		hasMarketing: !removed.has("marketing"),
 		hasDashboard: !removed.has("dashboard"),
 		hasDashboardReferenceEntities:
 			!removed.has("dashboard") && !removed.has("dashboardReferenceEntities"),
@@ -561,8 +243,9 @@ async function collectPlan(surfaceIds) {
 			...(rewriteCentral
 				? [
 						...CENTRAL_FILES,
-						"src/lib/marketing-content/fallback.ts",
-						"scripts/verify/verify-smoke.mjs",
+						...(surfaceIds.includes("marketing")
+							? []
+							: ["src/lib/marketing-content/fallback.ts"]),
 					]
 				: []),
 			...(surfaceIds.includes("payload")
@@ -572,25 +255,13 @@ async function collectPlan(surfaceIds) {
 			...(surfaceIds.includes("scrollPerformance") ? ["package.json"] : []),
 		],
 		rewriteCentral,
-		packageDependencies: [
-			...(surfaceIds.includes("payload") ? PAYLOAD_PACKAGE_DEPENDENCIES : []),
-			...(surfaceIds.includes("intelligence")
-				? INTELLIGENCE_PACKAGE_DEPENDENCIES
-				: []),
-			...(surfaceIds.includes("scrollPerformance")
-				? SCROLL_PERFORMANCE_PACKAGE_DEPENDENCIES
-				: []),
-		],
+		packageDependencies: surfaceIds.flatMap(
+			(surfaceId) => SURFACES[surfaceId].packageDependencies ?? [],
+		),
 		packageScripts: [
 			...surfaceIds.flatMap(
 				(surfaceId) => SURFACES[surfaceId].packageScripts ?? [],
 			),
-			...(surfaceIds.includes("intelligence")
-				? INTELLIGENCE_PACKAGE_SCRIPTS
-				: []),
-			...(surfaceIds.includes("scrollPerformance")
-				? SCROLL_PERFORMANCE_PACKAGE_SCRIPTS
-				: []),
 		],
 		markerFiles: [
 			...new Set(
@@ -630,11 +301,11 @@ async function stripSurfaceMarkers(filePaths, surfaceIds) {
 }
 
 function renderRoutesFile(state) {
-	const lines = [
-		`export const appRoutes = {`,
-		`\thome: "/",`,
-		`\tcontact: "/contact",`,
-	];
+	const lines = [`export const appRoutes = {`, `\thome: "/",`];
+
+	if (state.hasMarketing) {
+		lines.push(`\tcontact: "/contact",`);
+	}
 
 	if (state.hasDemo) {
 		lines.push(`\tdemo: "/internal/demo",`);
@@ -648,7 +319,9 @@ function renderRoutesFile(state) {
 		lines.push(`\tplayground: "/internal/playground",`);
 	}
 
-	lines.push(`\tsettings: "/settings",`);
+	if (state.hasMarketing) {
+		lines.push(`\tsettings: "/settings",`);
+	}
 
 	if (state.hasDashboard) {
 		lines.push(`\tlogin: "/login",`);
@@ -1039,8 +712,12 @@ function renderNextConfigFile(state) {
 
 	return [
 		'import { networkInterfaces } from "node:os";',
+		'import path from "node:path";',
+		'import { fileURLToPath } from "node:url";',
 		'import type { NextConfig } from "next";',
 		'import { PHASE_DEVELOPMENT_SERVER } from "next/constants";',
+		"",
+		"const PROJECT_ROOT = path.dirname(fileURLToPath(import.meta.url));",
 		"",
 		"const isPrivateIpv4 = (address: string) => {",
 		'\tconst [first = "", second = ""] = address.split(".");',
@@ -1198,7 +875,9 @@ function renderNextConfigFile(state) {
 		"\t\t\t},",
 		"\t\t],",
 		"\t},",
+		"\toutputFileTracingRoot: PROJECT_ROOT,",
 		"\tturbopack: {",
+		"\t\troot: PROJECT_ROOT,",
 		"\t\trules: getCodeInspectorRules(phase),",
 		"\t},",
 		"});",
@@ -1297,112 +976,6 @@ function renderApiIndexFile(state) {
 	return lines.join("\n");
 }
 
-function getSmokeRoutes(state) {
-	const routes = ["/"];
-
-	if (state.hasIntelligence) {
-		routes.push("/internal/intelligence");
-	}
-
-	routes.push("/api/health");
-
-	return routes;
-}
-
-function renderVerifySmokeFile(state) {
-	const routes = JSON.stringify(getSmokeRoutes(state));
-
-	return [
-		"#!/usr/bin/env node",
-		"",
-		"import {",
-		"\tstartLocalProductionServer,",
-		"\tstopServer,",
-		'} from "./_lib/local-production-preview.mjs";',
-		"",
-		"const REQUEST_TIMEOUT_MS = 10_000;",
-		`const ROUTES = ${routes};`,
-		'const ROUTE_STATUS_OVERRIDES = new Map([["/api/health", new Set([200, 503])]]);',
-		"",
-		"const fetchWithTimeout = async (url) => {",
-		"\tconst controller = new AbortController();",
-		"\tconst timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);",
-		"",
-		"\ttry {",
-		"\t\treturn await fetch(url, {",
-		'\t\t\tredirect: "manual",',
-		"\t\t\tsignal: controller.signal,",
-		"\t\t});",
-		"\t} finally {",
-		"\t\tclearTimeout(timeout);",
-		"\t}",
-		"};",
-		"",
-		"const validateResponse = async (baseUrl, route) => {",
-		"\tconst url = new URL(route, baseUrl);",
-		"\tconst response = await fetchWithTimeout(url);",
-		"\tconst acceptedStatuses = ROUTE_STATUS_OVERRIDES.get(route);",
-		"\tconst statusIsOk = acceptedStatuses",
-		"\t\t? acceptedStatuses.has(response.status)",
-		"\t\t: response.status >= 200 && response.status < 400;",
-		"",
-		"\tif (!statusIsOk) {",
-		"\t\tthrow new Error(`${route} returned HTTP ${response.status}.`);",
-		"\t}",
-		"",
-		"\tif (response.status >= 300 && response.status < 400) {",
-		'\t\tconst location = response.headers.get("location");',
-		"\t\tif (!location) {",
-		"\t\t\tthrow new Error(`${route} redirected without a Location header.`);",
-		"\t\t}",
-		"",
-		"\t\tconsole.log(`ok ${route} ${response.status} -> ${location}`);",
-		"\t\treturn;",
-		"\t}",
-		"",
-		"\tconst body = await response.text();",
-		"\tif (body.trim().length === 0) {",
-		"\t\tthrow new Error(`${route} returned an empty response body.`);",
-		"\t}",
-		"",
-		'\tconst contentType = response.headers.get("content-type") ?? "";',
-		"\tif (",
-		'\t\tcontentType.includes("text/html") &&',
-		'\t\t!body.toLowerCase().includes("<html")',
-		"\t) {",
-		"\t\tthrow new Error(`${route} returned HTML without a document marker.`);",
-		"\t}",
-		"",
-		"\tconsole.log(`ok ${route} ${response.status}`);",
-		"};",
-		"",
-		"const start = async () => {",
-		"\tconst { baseUrl, child } = await startLocalProductionServer({",
-		"\t\tenv: {",
-		'\t\t\tTEMPLATE_INTERNAL_ROUTES: "enabled",',
-		"\t\t},",
-		"\t});",
-		"",
-		"\ttry {",
-		"\t\tconsole.log(`Starting smoke server at ${baseUrl}`);",
-		"\t\tfor (const route of ROUTES) {",
-		"\t\t\tawait validateResponse(baseUrl, route);",
-		"\t\t}",
-		"",
-		'\t\tconsole.log("Smoke verification passed.");',
-		"\t} finally {",
-		"\t\tawait stopServer(child);",
-		"\t}",
-		"};",
-		"",
-		"start().catch((error) => {",
-		"\tconsole.error(error instanceof Error ? error.message : error);",
-		"\tprocess.exit(1);",
-		"});",
-		"",
-	].join("\n");
-}
-
 function getRewriteTargets(state) {
 	const targets = [
 		{
@@ -1417,15 +990,14 @@ function getRewriteTargets(state) {
 			path: "src/lib/api/index.ts",
 			content: renderApiIndexFile(state),
 		},
-		{
+	];
+
+	if (state.hasMarketing) {
+		targets.push({
 			path: "src/lib/marketing-content/fallback.ts",
 			content: renderMarketingContentFallbackFile(state),
-		},
-		{
-			path: "scripts/verify/verify-smoke.mjs",
-			content: renderVerifySmokeFile(state),
-		},
-	];
+		});
+	}
 
 	const nextConfigContent = renderNextConfigFile(state);
 	if (nextConfigContent) {
@@ -1771,9 +1343,11 @@ async function main() {
 		refreshPackageLock();
 	}
 
-	await runFormatter([...plan.rewriteFiles, ...plan.markerFiles]);
-	await validateRemovedSurfaceReferences(parsed.surfaceIds);
-	runBuild();
+	if (!parsed.materializeProfile) {
+		await runFormatter([...plan.rewriteFiles, ...plan.markerFiles]);
+		await validateRemovedSurfaceReferences(parsed.surfaceIds);
+		runBuild();
+	}
 
 	console.log("\nTemplate prune completed successfully.");
 }

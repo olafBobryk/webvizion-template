@@ -1,6 +1,6 @@
 "use client";
 
-import { getVisibleDemoPages } from "@/app/(site)/(marketing)/internal/demo/content";
+import { getVisibleDemoPages } from "@/app/(site)/(dev)/internal/demo/content";
 import { Button } from "@/components/ui/primitives/Button";
 import { Card } from "@/components/ui/primitives/Card";
 import { Text } from "@/components/ui/primitives/Text";

@@ -18,7 +18,7 @@ Agents should assume that a matching component probably already exists and shoul
 For any new reusable UI-library feature:
 1. Implement the feature in its canonical source folder under `src/components`.
 2. Update exports, types, and related consumers only where needed to make the public surface coherent.
-3. Add a focused demo in `src/app/(site)/(marketing)/internal/demo/content.tsx` with at least one live example.
+3. Add a focused demo in `src/app/(site)/(dev)/internal/demo/content.tsx` with at least one live example.
 4. Add at least one usage snippet in the demo so adoption is copyable.
 5. Update the nearest folder `AGENTS.md` with what the feature is for, when to use it, and any new invariants.
 6. If the feature changes shared library conventions, also update this file so the workflow is visible at the top of the component tree.

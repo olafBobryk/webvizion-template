@@ -76,10 +76,7 @@ export const fallbackSiteLayout: SiteLayoutDocument = {
 				label: "Start",
 				icon: "dot",
 				link: { label: "Home", routeId: "home" },
-				links: [
-					{ label: "Hero", href: "/#home-hero" },
-					{ label: "Intelligence", routeId: "intelligence" },
-				],
+				links: [{ label: "Hero", href: "/#home-hero" }],
 			},
 			{
 				label: "Build",
@@ -107,17 +104,6 @@ export const fallbackSiteLayout: SiteLayoutDocument = {
 					},
 				],
 			},
-			{
-				label: "Intelligence",
-				routeId: "intelligence",
-				sections: [
-					{
-						label: "Concept map",
-						href: "/internal/intelligence",
-						description: "Generated template intelligence overview.",
-					},
-				],
-			},
 		],
 		search: {
 			ariaLabel: "Search pages",
@@ -131,21 +117,10 @@ export const fallbackSiteLayout: SiteLayoutDocument = {
 				link: { label: "Home", routeId: "home" },
 				links: [{ label: "Hero", href: "/#home-hero" }],
 			},
-			{
-				label: "Internal",
-				icon: "dot",
-				links: [{ label: "Intelligence", routeId: "intelligence" }],
-			},
 		],
-		topNavLinks: [
-			{ label: "Home", routeId: "home" },
-			{ label: "Intelligence", routeId: "intelligence" },
-		],
+		topNavLinks: [{ label: "Home", routeId: "home" }],
 	},
 	footer: {
-		navLinks: [
-			{ label: "Home", routeId: "home" },
-			{ label: "Intelligence", routeId: "intelligence" },
-		],
+		navLinks: [{ label: "Home", routeId: "home" }],
 	},
 };

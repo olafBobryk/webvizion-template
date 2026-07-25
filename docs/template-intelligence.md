@@ -173,15 +173,9 @@ unregistered pages, stale routes, invalid domain ownership, or ambiguous source
 roots, while intentionally dashboard-free profiles pass without retaining
 dashboard tooling.
 
-Like the rest of `/internal`, this page is guarded from client-clone
-production by the internal marketing layout. The canonical
-`averlo-next-template.vercel.app` deployment is allowed through by its request or
-Vercel production host, and other template/reference deployments can opt in
-with:
-
-```env
-TEMPLATE_INTERNAL_ROUTES=enabled
-```
+Like the rest of `/internal`, this page is a local developer surface. It is
+available through the isolated development server and always returns 404 in a
+production build.
 
 ## Understand-Anything Boundary
 
