@@ -7,7 +7,9 @@ import os from "node:os";
 import path from "node:path";
 import process, { stdin as input, stdout as output } from "node:process";
 import { createInterface } from "node:readline/promises";
+import { assembleTemplateProfile } from "../template-assembly/assembler.mjs";
 import {
+	getProfileVerificationCommands,
 	getTemplateProfile,
 	templateProfiles,
 } from "../template-profiles/index.mjs";
@@ -29,6 +31,7 @@ function parseArgs(argv) {
 	const options = {
 		confirmInstance: false,
 		dryRun: false,
+		engine: "prune",
 		force: false,
 		help: false,
 		inPlace: false,
@@ -45,6 +48,15 @@ function parseArgs(argv) {
 				throw new Error("--profile requires a profile id.");
 			}
 			options.profile = value;
+			index += 1;
+			continue;
+		}
+		if (arg === "--engine") {
+			const value = argv[index + 1];
+			if (!value || !["prune", "assemble"].includes(value)) {
+				throw new Error("--engine requires prune or assemble.");
+			}
+			options.engine = value;
 			index += 1;
 			continue;
 		}
@@ -82,6 +94,7 @@ ${activeProfile.defaultOutput}.
 
 Flags:
 	--profile <id>      Select the template profile (default: full)
+  --engine <engine>  Select prune or assemble (default: prune)
   --output <path>     Materialize at a custom directory
   --dry-run           Print the profile plan without changing files
   --force             Replace an existing verified template profile output/reference
@@ -135,7 +148,7 @@ async function readJson(filePath) {
 	return JSON.parse(await fs.readFile(filePath, "utf8"));
 }
 
-async function assertReplaceableOutput(outputRoot) {
+async function assertReplaceableOutput(outputRoot, engine) {
 	const markerPath = path.join(outputRoot, PROFILE_MARKER);
 	if (!(await pathExists(markerPath))) {
 		throw new Error(
@@ -148,9 +161,20 @@ async function assertReplaceableOutput(outputRoot) {
 			`Refusing to replace ${displayPath(outputRoot)} because its profile marker does not match ${activeProfile.id}.`,
 		);
 	}
+	const markerEngine = marker.engine ?? "prune";
+	if (markerEngine !== engine) {
+		throw new Error(
+			`Refusing to replace ${displayPath(outputRoot)} because its engine marker is ${markerEngine}, not ${engine}.`,
+		);
+	}
 }
 
 function assertInPlaceActivationAllowed(options) {
+	if (options.inPlace && options.engine === "assemble") {
+		throw new Error(
+			"Positive assembly only creates a new output workspace; --engine assemble cannot be used with --in-place.",
+		);
+	}
 	if (!options.inPlace || options.dryRun) return;
 	if (!options.confirmInstance) {
 		throw new Error(
@@ -244,12 +268,14 @@ async function parkComponentReference(options) {
 	);
 }
 
-async function applyFileRules(destinationRoot) {
-	for (const target of activeProfile.removals ?? []) {
-		await fs.rm(path.join(destinationRoot, target), {
-			recursive: true,
-			force: true,
-		});
+async function applyFileRules(destinationRoot, { removePaths = true } = {}) {
+	if (removePaths) {
+		for (const target of activeProfile.removals ?? []) {
+			await fs.rm(path.join(destinationRoot, target), {
+				recursive: true,
+				force: true,
+			});
+		}
 	}
 
 	const fileRules = [
@@ -328,6 +354,18 @@ function formatWorkspace(destinationRoot) {
 	});
 }
 
+function formatReceipt(destinationRoot) {
+	const biomeCli = require.resolve("@biomejs/biome/bin/biome");
+	execFileSync(
+		process.execPath,
+		[biomeCli, "format", "--write", PROFILE_MARKER],
+		{
+			cwd: destinationRoot,
+			stdio: "inherit",
+		},
+	);
+}
+
 async function walkFiles(targetDir) {
 	if (!(await pathExists(targetDir))) return [];
 	const entries = await fs.readdir(targetDir, { withFileTypes: true });
@@ -357,7 +395,7 @@ async function assertNoParkedImports(destinationRoot) {
 	}
 }
 
-async function validateProfile(destinationRoot) {
+async function validateProfile(destinationRoot, engine) {
 	for (const requiredFile of activeProfile.verification.requiredFiles) {
 		if (!(await pathExists(path.join(destinationRoot, requiredFile)))) {
 			throw new Error(
@@ -386,7 +424,13 @@ async function validateProfile(destinationRoot) {
 			throw new Error(`template profile forbidden package remains: ${name}`);
 		}
 	}
-	for (const name of activeProfile.packageChanges?.scripts?.retain ?? []) {
+	const retainedScripts =
+		engine === "assemble"
+			? getProfileVerificationCommands(activeProfile, engine)
+					.filter((command) => command.startsWith("npm run "))
+					.map((command) => command.split(/\s+/)[2])
+			: (activeProfile.packageChanges?.scripts?.retain ?? []);
+	for (const name of retainedScripts) {
 		if (typeof pkg.scripts?.[name] !== "string") {
 			throw new Error(`template profile retained script is missing: ${name}`);
 		}
@@ -430,14 +474,24 @@ function runProfilePrune(destinationRoot) {
 	}
 }
 
-async function writeReceipt(destinationRoot, mode) {
+async function writeReceipt(destinationRoot, mode, engine, assemblyResult) {
 	const receipt = {
 		schemaVersion: activeProfile.schemaVersion,
 		profile: activeProfile.id,
 		mode,
+		engine,
 		sourceCommit: currentCommit(),
 		sourceDirty: isSourceDirty(),
-		verification: activeProfile.verification.commands,
+		verification: getProfileVerificationCommands(activeProfile, engine),
+		...(assemblyResult
+			? {
+					assembly: {
+						includedFiles: assemblyResult.includedFiles,
+						omittedFiles: assemblyResult.omittedFiles,
+						surfaces: assemblyResult.selectedSurfaces,
+					},
+				}
+			: {}),
 	};
 	const receiptPath =
 		mode === "in-place" && activeProfile.id === "thin-start"
@@ -457,13 +511,20 @@ function printPlan(options, destinationRoot) {
 	console.log(
 		`- profile: ${activeProfile.id} (schema ${activeProfile.schemaVersion})`,
 	);
+	console.log(`- engine: ${options.engine}`);
 	console.log(
 		`- mode: ${options.inPlace ? "in-place" : "materialized workspace"}`,
 	);
 	console.log(`- destination: ${displayPath(destinationRoot)}`);
-	console.log(
-		`- prune flags: ${activeProfile.pruneFlags?.join(", ") || "none"}`,
-	);
+	if (options.engine === "prune") {
+		console.log(
+			`- prune flags: ${activeProfile.pruneFlags?.join(", ") || "none"}`,
+		);
+	} else {
+		console.log(
+			`- selected surfaces: ${activeProfile.assembly?.surfaces.join(", ") || "core only"}`,
+		);
+	}
 	console.log(`- shared files: ${activeProfile.sharedFiles?.length ?? 0}`);
 	console.log(
 		`- file-backed overrides: ${activeProfile.overrides?.length ?? 0}`,
@@ -484,17 +545,33 @@ async function materializeWorkspace(options, destinationRoot) {
 				`${displayPath(destinationRoot)} already exists. Re-run with --force to replace a verified template profile output.`,
 			);
 		}
-		await assertReplaceableOutput(destinationRoot);
+		await assertReplaceableOutput(destinationRoot, options.engine);
 		await fs.rm(destinationRoot, { recursive: true, force: true });
 	}
 	await fs.mkdir(destinationRoot, { recursive: true });
-	await copyTrackedWorkspace(destinationRoot);
-	runProfilePrune(destinationRoot);
-	await applyFileRules(destinationRoot);
-	await applyPackageChanges(destinationRoot);
+	let assemblyResult;
+	if (options.engine === "assemble") {
+		assemblyResult = await assembleTemplateProfile({
+			sourceRoot: TEMPLATE_ROOT,
+			destinationRoot,
+			profile: activeProfile,
+		});
+		await applyFileRules(destinationRoot, { removePaths: false });
+	} else {
+		await copyTrackedWorkspace(destinationRoot);
+		runProfilePrune(destinationRoot);
+		await applyFileRules(destinationRoot);
+		await applyPackageChanges(destinationRoot);
+	}
 	formatWorkspace(destinationRoot);
-	await validateProfile(destinationRoot);
-	await writeReceipt(destinationRoot, "materialized");
+	await validateProfile(destinationRoot, options.engine);
+	await writeReceipt(
+		destinationRoot,
+		"materialized",
+		options.engine,
+		assemblyResult,
+	);
+	formatReceipt(destinationRoot);
 }
 
 async function activateInPlace(options) {
@@ -505,8 +582,8 @@ async function activateInPlace(options) {
 	await applyFileRules(TEMPLATE_ROOT);
 	await applyPackageChanges(TEMPLATE_ROOT);
 	formatWorkspace(TEMPLATE_ROOT);
-	await validateProfile(TEMPLATE_ROOT);
-	await writeReceipt(TEMPLATE_ROOT, "in-place");
+	await validateProfile(TEMPLATE_ROOT, "prune");
+	await writeReceipt(TEMPLATE_ROOT, "in-place", "prune");
 }
 
 async function main() {

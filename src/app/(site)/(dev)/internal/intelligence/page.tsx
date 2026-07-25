@@ -7,7 +7,7 @@ import { Text } from "@/components/ui/primitives/Text";
 import {
 	DashboardDomainChips,
 	DashboardDomainOverview,
-} from "@/app/(site)/dashboard/_components/intelligence/DashboardDomainIntelligence";
+} from "@/lib/template-intelligence/dashboard-domain";
 // prune:dashboard:end
 import {
 	type CodexTurnRecordingReadResult,

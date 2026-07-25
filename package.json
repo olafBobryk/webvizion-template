@@ -50,6 +50,7 @@
 		"verify:frontend-entities": "npm run verify:reference-entities && npm run verify:entity-deletion && npm run verify:mutation-policy && npm run verify:entity-skeletons && npm run verify:route-skeletons && npm run verify:frontend-entity-policy",
 		"verify:profile-pruning": "node scripts/verify/verify-profile-pruning.mjs",
 		"verify:profiles": "node scripts/verify/verify-template-profiles.mjs",
+		"verify:assembly": "node scripts/verify/verify-template-profiles.mjs --engine both",
 		"measure:scroll-performance": "node scripts/scroll-performance/measure.mjs",
 		"record:scroll-performance": "node scripts/scroll-performance/record.mjs",
 		"setup:scroll-performance-autoresearch": "node scripts/scroll-performance/setup-autoresearch.mjs",

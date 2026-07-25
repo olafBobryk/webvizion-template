@@ -48,6 +48,15 @@ export const thinStartProfile = {
 	description:
 		"A complete, minimal Averlo workspace with the shared visual foundation and a filesystem-backed live surface.",
 	defaultOutput: ".thin-start/workspace",
+	assembly: {
+		surfaces: ["marketing", "intelligence", "payload"],
+		sourceInventory: "template-assembly/thin-start-src-files.json",
+		verificationCommands: [
+			"npm run verify:static",
+			"npm run build",
+			"npm run verify:smoke",
+		],
+	},
 	overridesRoot: "template-profiles/thin-start/overrides",
 	sharedFiles: [
 		"src/components/ui/primitives/Panel.tsx",

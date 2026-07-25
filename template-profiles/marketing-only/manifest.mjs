@@ -5,8 +5,26 @@ export const marketingOnlyProfile = {
 		"The broad marketing template with the full shared UI system, local developer tools, and the guarded Payload-ready scaffold, without authentication or dashboard routes.",
 	defaultOutput: ".template-instances/marketing-only",
 	pruneFlags: ["--no-dashboard"],
+	assembly: {
+		surfaces: [
+			"marketing",
+			"demo",
+			"intelligence",
+			"scrollPerformance",
+			"playground",
+			"dictionary",
+			"reference",
+			"payload",
+		],
+	},
 	sharedFiles: ["src/lib/marketing-content/fallback.ts"],
-	overrides: [],
+	overrides: [
+		{
+			source:
+				"template-profiles/marketing-only/overrides/src/lib/template-intelligence/dashboard-domain.tsx",
+			target: "src/lib/template-intelligence/dashboard-domain.tsx",
+		},
+	],
 	verification: {
 		requiredFiles: [
 			"src/app/(site)/(marketing)/(home)/page.tsx",

@@ -6,6 +6,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import process, { stdin as input, stdout as output } from "node:process";
 import { createInterface } from "node:readline/promises";
+import { pathToFileURL } from "node:url";
 import { templateSurfaces } from "../template-surfaces/index.mjs";
 
 const ROOT = process.cwd();
@@ -197,7 +198,7 @@ function warnCanonicalTemplateMainPrune(pkg, parsed) {
 	);
 }
 
-function buildState(surfaceIds) {
+export function buildState(surfaceIds) {
 	const removed = new Set(surfaceIds);
 
 	return {
@@ -240,14 +241,7 @@ async function collectPlan(surfaceIds) {
 		surfaces: surfaceIds.map((surfaceId) => SURFACES[surfaceId]),
 		deletedPaths: uniqueDeletedPaths,
 		rewriteFiles: [
-			...(rewriteCentral
-				? [
-						...CENTRAL_FILES,
-						...(surfaceIds.includes("marketing")
-							? []
-							: ["src/lib/marketing-content/fallback.ts"]),
-					]
-				: []),
+			...(rewriteCentral ? [...CENTRAL_FILES] : []),
 			...(surfaceIds.includes("payload")
 				? ["next.config.ts", "tsconfig.json", "package.json"]
 				: []),
@@ -300,7 +294,7 @@ async function stripSurfaceMarkers(filePaths, surfaceIds) {
 	}
 }
 
-function renderRoutesFile(state) {
+export function renderRoutesFile(state) {
 	const lines = [`export const appRoutes = {`, `\thome: "/",`];
 
 	if (state.hasMarketing) {
@@ -357,7 +351,7 @@ function renderRoutesFile(state) {
 	return lines.join("\n");
 }
 
-function renderLibRoutesFile(state) {
+export function renderLibRoutesFile(state) {
 	const builderLines = [];
 
 	if (state.hasDashboard) {
@@ -707,7 +701,7 @@ function renderMarketingContentFallbackFile(state) {
 	].join("\n");
 }
 
-function renderNextConfigFile(state) {
+export function renderNextConfigFile(state) {
 	if (state.hasPayload) return null;
 
 	return [
@@ -887,7 +881,7 @@ function renderNextConfigFile(state) {
 	].join("\n");
 }
 
-function renderTsconfigFile(state) {
+export function renderTsconfigFile(state) {
 	if (state.hasPayload) return null;
 
 	return [
@@ -928,7 +922,7 @@ function renderTsconfigFile(state) {
 	].join("\n");
 }
 
-function renderApiIndexFile(state) {
+export function renderApiIndexFile(state) {
 	const lines = [];
 
 	if (state.hasDashboard) {
@@ -991,13 +985,6 @@ function getRewriteTargets(state) {
 			content: renderApiIndexFile(state),
 		},
 	];
-
-	if (state.hasMarketing) {
-		targets.push({
-			path: "src/lib/marketing-content/fallback.ts",
-			content: renderMarketingContentFallbackFile(state),
-		});
-	}
 
 	const nextConfigContent = renderNextConfigFile(state);
 	if (nextConfigContent) {
@@ -1352,7 +1339,12 @@ async function main() {
 	console.log("\nTemplate prune completed successfully.");
 }
 
-main().catch((error) => {
-	console.error(`\n${error.message}`);
-	process.exit(1);
-});
+const isMain =
+	process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+
+if (isMain) {
+	main().catch((error) => {
+		console.error(`\n${error.message}`);
+		process.exit(1);
+	});
+}

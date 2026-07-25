@@ -38,12 +38,23 @@ Choose and materialize a route profile before project-specific implementation:
 npm run create:project -- --profile full --output ../my-full-project
 npm run create:project -- --profile app-only --output ../my-dashboard-project
 npm run create:project -- --profile marketing-only --output ../my-site
+npm run create:project -- --profile thin-start --output ../my-thin-site
 ```
 
 `app-only` keeps authentication, dashboard, and local developer tools while
 removing marketing and Payload. `marketing-only` keeps the broad shared UI,
 marketing, local developer tools, and Payload-ready scaffold without auth or
 dashboard. `thin-start` remains the minimal marketing specialist profile.
+
+Profile creation defaults to the established `prune` engine. The experimental
+positive-assembly path selects only explicitly owned core and surface files and
+produces a one-way project without profile, surface, assembly, or prune tooling:
+
+```sh
+npm run create:project -- --profile app-only --engine assemble --output ../my-dashboard-project
+```
+
+Use `npm run verify:assembly` to compare both engines across all four profiles.
 
 ### Already Cloned
 
@@ -264,12 +275,13 @@ instances should use the guarded `--in-place --confirm-instance` path. Read
 | `npm run verify:static` | Biome plus TypeScript checks. |
 | `npm run build` | Production Next.js build. |
 | `npm run verify:smoke` | Route smoke verification. |
-| `npm run verify:profiles` | Materialize every profile in a disposable temp matrix. Add `-- --integration` for installs and profile-owned checks. |
+| `npm run verify:profiles` | Materialize every profile with the default prune engine. Add `-- --integration` for installs and profile-owned checks. |
+| `npm run verify:assembly` | Compare prune and positive assembly for every profile. Add `-- --integration` for clean installs and profile-owned checks. |
 | `npm run measure:scroll-performance` | Measure scroll performance on a real page path. |
 | `npm run setup:scroll-performance-autoresearch` | Create a disposable page-target scroll-performance worker worktree. |
 | `npm run score:scroll-performance` | Score the accepted baseline or one committed candidate in a scroll worker. |
 | `npm run prune:template` | Remove optional template surfaces in a clone. |
-| `npm run create:project` | Materialize `full`, `app-only`, `marketing-only`, or `thin-start`. |
+| `npm run create:project` | Materialize any profile; `--engine prune` is the compatibility default and `--engine assemble` creates a one-way positive selection. |
 | `npm run create:thin-start` | Materialize the optional thin-start profile. |
 
 ## Deployment

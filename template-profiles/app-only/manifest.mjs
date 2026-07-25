@@ -7,6 +7,18 @@ export const appOnlyProfile = {
 		"The authentication and dashboard application template with local developer tools, without public marketing or Payload.",
 	defaultOutput: ".template-instances/app-only",
 	pruneFlags: ["--no-marketing", "--no-payload"],
+	assembly: {
+		surfaces: [
+			"dashboardReferenceEntities",
+			"dashboard",
+			"demo",
+			"intelligence",
+			"scrollPerformance",
+			"playground",
+			"dictionary",
+			"reference",
+		],
+	},
 	sharedFiles: [],
 	overrides: [
 		{

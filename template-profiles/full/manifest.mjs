@@ -5,6 +5,20 @@ export const fullProfile = {
 		"The complete Averlo template with marketing, authentication, dashboard, local developer tools, and the guarded Payload-ready scaffold.",
 	defaultOutput: ".template-instances/full",
 	pruneFlags: [],
+	assembly: {
+		surfaces: [
+			"dashboardReferenceEntities",
+			"dashboard",
+			"marketing",
+			"demo",
+			"intelligence",
+			"scrollPerformance",
+			"playground",
+			"dictionary",
+			"reference",
+			"payload",
+		],
+	},
 	sharedFiles: [],
 	overrides: [],
 	verification: {

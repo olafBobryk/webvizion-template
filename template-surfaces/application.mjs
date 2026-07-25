@@ -60,6 +60,8 @@ export const applicationSurfaces = {
 			"Remove the dashboard shell, login/auth routes, and dashboard-only auth helpers.",
 		dependentSurfaces: ["auth"],
 		ownedPaths: [
+			"docs/auth-organization-adapters.md",
+			"docs/dashboard-page-policy.md",
 			"scripts/verify/verify-auth-organization.ts",
 			"scripts/verify/verify-dashboard-page-policy.ts",
 			"scripts/verify/verify-dashboard-surfaces.ts",
@@ -74,6 +76,7 @@ export const applicationSurfaces = {
 			"src/app/api/support",
 			"src/lib/api/auth.ts",
 			"src/lib/auth",
+			"src/lib/template-intelligence/dashboard-domain.tsx",
 		],
 		routeIds: [
 			"login",

@@ -22,8 +22,9 @@ Reviewed against [the staging acceptance ledger](./architecture-staging.md) on 2
 - `marketing-only` removes auth/dashboard while retaining the broad shared UI,
   marketing, developer tools, and Payload-ready scaffolding.
 - `thin-start` remains the explicit minimal marketing profile.
-- Profiles compose surface-owned manifests through one materializer. The legacy
-  prune command consumes the same surface declarations.
+- Profiles compose surface-owned manifests through one command with two engines.
+  `prune` remains the compatibility default. `assemble` positively selects owned
+  core and surface files, then emits a one-way project without template tooling.
 
 ### Shared-source invariant
 
@@ -38,6 +39,12 @@ Reviewed against [the staging acceptance ledger](./architecture-staging.md) on 2
 - Surface manifests own paths, routes, dependencies, scripts, markers, and
   removal assertions. Profile manifests compose surfaces and add only genuine
   profile-specific file overrides and validation.
+- Package scripts and dependencies have explicit core or surface ownership. An
+  unclassified source path or package entry fails assembly instead of being
+  silently copied.
+- Thin-start additionally uses a checked-in positive source inventory. Its
+  inventory is generated from a verified materialized baseline, then reviewed
+  and versioned as the profile's explicit source boundary.
 - Generator reporting and API review derive from that manifest rather than parallel configuration lists.
 - Review allowlists validate output; they never contain component source definitions.
 

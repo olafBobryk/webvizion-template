@@ -8,6 +8,13 @@ first with `npm run create:project -- --profile <id>`:
 - `marketing-only`: broad marketing, local developer tools, Payload-ready; no dashboard/auth
 - `thin-start`: minimal marketing specialist profile
 
+The command defaults to `--engine prune` for compatibility. Add
+`--engine assemble` to create the same route contract from positive ownership.
+Assembled outputs are intentionally one-way project starts: they omit the
+template profile manifests, assembly inventory, and prune/materializer scripts.
+Keep the source template checkout if you may need to regenerate a different
+profile later.
+
 Developer routes under `/internal` are available only in local development.
 They are excluded from public marketing navigation and always return 404 in a
 production build.

@@ -6,6 +6,7 @@ export const payloadSurface = {
 			"Remove the guarded Payload CMS scaffold, config references, and Payload packages.",
 		dependentSurfaces: [],
 		ownedPaths: [
+			"docs/payload-vercel-neon-blob.md",
 			"payload.config.ts",
 			"src/payload",
 			"src/app/(payload)",
