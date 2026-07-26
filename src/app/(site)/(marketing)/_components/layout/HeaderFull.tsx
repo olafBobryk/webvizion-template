@@ -16,6 +16,7 @@ import type {
 	MarketingLink,
 	SiteLayoutDocument,
 } from "@/lib/marketing-content/types";
+import HeaderArchitectureDemo from "./HeaderArchitectureDemo";
 import {
 	getHeaderSearchGroups,
 	getMenuContentHeight,
@@ -163,6 +164,10 @@ export default function HeaderFull({
 				className,
 			)}
 		>
+			<HeaderArchitectureDemo
+				label="1 · desktop shell + shared gutter"
+				tone="shell"
+			/>
 			<motion.div
 				aria-hidden="true"
 				className="pointer-events-none absolute inset-0 border-b border-border bg-background"
@@ -172,13 +177,18 @@ export default function HeaderFull({
 			/>
 			<div className="relative mx-auto flex w-full max-w-section-max flex-col">
 				<motion.div
-					className="flex w-full items-center justify-between gap-6"
+					className="relative flex w-full items-center justify-between gap-6"
 					initial={false}
 					animate={{
 						height: isCompact ? HEADER_COMPACT_HEIGHT : HEADER_EXPANDED_HEIGHT,
 					}}
 					transition={headerTransition}
 				>
+					<HeaderArchitectureDemo
+						label="2 · desktop top row"
+						placement="bottomLeft"
+						tone="topBar"
+					/>
 					<div className="flex min-w-[220px] items-center">
 						<motion.div
 							className="origin-left"
@@ -190,9 +200,14 @@ export default function HeaderFull({
 						</motion.div>
 					</div>
 					<nav
-						className="pointer-events-auto flex items-center justify-center text-foreground"
+						className="pointer-events-auto relative flex items-center justify-center text-foreground"
 						aria-label="Primary navigation"
 					>
+						<HeaderArchitectureDemo
+							label="3 · nav + search + menu"
+							placement="topRight"
+							tone="search"
+						/>
 						<motion.div
 							className="flex items-center justify-center gap-10 overflow-hidden py-2"
 							initial={false}
@@ -282,8 +297,13 @@ export default function HeaderFull({
 							animate={{ height: "auto", opacity: 1 }}
 							exit={{ height: 0, opacity: 0 }}
 							transition={menuTransition}
-							className="pointer-events-auto overflow-hidden"
+							className="pointer-events-auto relative overflow-hidden"
 						>
+							<HeaderArchitectureDemo
+								label="4 · open desktop menu"
+								placement="bottomLeft"
+								tone="menu"
+							/>
 							<div
 								className="w-full border-t border-border"
 								style={{
@@ -297,6 +317,11 @@ export default function HeaderFull({
 									animate={{ height: menuContentHeight }}
 									transition={menuTransition}
 								>
+									<HeaderArchitectureDemo
+										label="5 · menu / search results"
+										placement="topRight"
+										tone="results"
+									/>
 									<div className="absolute inset-0">
 										{isSearchActive ? (
 											<HeaderSearchResults

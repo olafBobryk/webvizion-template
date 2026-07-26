@@ -19,8 +19,8 @@ const placementClasses = {
 
 type DemoPlacement = keyof typeof placementClasses;
 
-// Temporary visual-only aid for reviewing the compact-header gutter backport.
-export default function CompactHeaderArchitectureDemo({
+// Temporary visual-only aid for reviewing the responsive header architecture.
+export default function HeaderArchitectureDemo({
 	label,
 	placement = "topLeft",
 	tone,
@@ -36,7 +36,7 @@ export default function CompactHeaderArchitectureDemo({
 	return (
 		<div
 			aria-hidden="true"
-			data-compact-header-architecture-demo={tone}
+			data-header-architecture-demo={tone}
 			className={clsx(
 				"pointer-events-none absolute inset-0 z-40 border-2 border-dashed bg-transparent",
 				toneClasses[tone].split(" ")[0],

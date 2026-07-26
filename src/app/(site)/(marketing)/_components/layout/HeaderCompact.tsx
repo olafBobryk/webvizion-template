@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/primitives/Button";
 import { useMotionAllowed } from "@/hooks/useMotionAllowed";
 import { getMarketingLinkHref } from "@/lib/marketing-content/links";
 import type { SiteLayoutDocument } from "@/lib/marketing-content/types";
-import CompactHeaderArchitectureDemo from "./CompactHeaderArchitectureDemo";
+import HeaderArchitectureDemo from "./HeaderArchitectureDemo";
 import {
 	getHeaderSearchGroups,
 	HeaderMenuGroup,
@@ -99,7 +99,7 @@ export default function HeaderCompact({
 			transition={heightTransition}
 			className={clsx("fixed inset-x-0 top-0 z-50 h-[76px]", className)}
 		>
-			<CompactHeaderArchitectureDemo
+			<HeaderArchitectureDemo
 				label="1 · edge-to-edge shell"
 				placement="bottomRight"
 				tone="shell"
@@ -121,7 +121,7 @@ export default function HeaderCompact({
 					animate={{ paddingTop: isCondensed ? 8 : 16 }}
 					transition={headerTransition}
 				>
-					<CompactHeaderArchitectureDemo
+					<HeaderArchitectureDemo
 						label="2 · top bar owns gutter"
 						tone="topBar"
 					/>
@@ -160,7 +160,7 @@ export default function HeaderCompact({
 					</motion.div>
 				</motion.div>
 				<div className="relative w-full px-section-x">
-					<CompactHeaderArchitectureDemo
+					<HeaderArchitectureDemo
 						label="3 · menu owns gutter"
 						placement="topRight"
 						tone="menu"
@@ -177,7 +177,7 @@ export default function HeaderCompact({
 						>
 							<div className="flex min-h-0 min-w-0 flex-col overflow-hidden">
 								<div className="relative shrink-0 pb-6">
-									<CompactHeaderArchitectureDemo
+									<HeaderArchitectureDemo
 										label="4 · fixed search"
 										placement="bottomLeft"
 										tone="search"
@@ -193,7 +193,7 @@ export default function HeaderCompact({
 									/>
 								</div>
 								<div className="relative min-h-0 min-w-0 flex-1 overflow-hidden">
-									<CompactHeaderArchitectureDemo
+									<HeaderArchitectureDemo
 										label="5 · results · y-scroll"
 										tone="results"
 									/>
