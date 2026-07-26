@@ -160,12 +160,12 @@ export default function HeaderFull({
 			}
 			transition={headerTransition}
 			className={clsx(
-				"pointer-events-none fixed inset-x-0 top-0 z-50 overflow-hidden px-section-x",
+				"pointer-events-none fixed inset-x-0 top-0 z-50",
 				className,
 			)}
 		>
 			<HeaderArchitectureDemo
-				label="1 · desktop shell + shared gutter"
+				label="1 · edge-to-edge desktop shell"
 				tone="shell"
 			/>
 			<motion.div
@@ -175,120 +175,123 @@ export default function HeaderFull({
 				animate={{ opacity: showHeaderSurface ? 1 : 0 }}
 				transition={headerTransition}
 			/>
-			<div className="relative mx-auto flex w-full max-w-section-max flex-col">
-				<motion.div
-					className="relative flex w-full items-center justify-between gap-6"
-					initial={false}
-					animate={{
-						height: isCompact ? HEADER_COMPACT_HEIGHT : HEADER_EXPANDED_HEIGHT,
-					}}
-					transition={headerTransition}
-				>
+			<div className="relative flex w-full flex-col">
+				<div className="relative w-full px-section-x">
 					<HeaderArchitectureDemo
-						label="2 · desktop top row"
-						placement="bottomLeft"
+						label="2 · top bar owns gutter"
 						tone="topBar"
 					/>
-					<div className="flex min-w-[220px] items-center">
-						<motion.div
-							className="origin-left"
-							initial={false}
-							animate={{ scale: isCompact ? 0.88 : 1 }}
-							transition={headerTransition}
-						>
-							<Logo size="md" className="pointer-events-auto" />
-						</motion.div>
-					</div>
-					<nav
-						className="pointer-events-auto relative flex items-center justify-center text-foreground"
-						aria-label="Primary navigation"
+					<motion.div
+						className="relative mx-auto flex w-full max-w-section-max items-center justify-between gap-6"
+						initial={false}
+						animate={{
+							height: isCompact
+								? HEADER_COMPACT_HEIGHT
+								: HEADER_EXPANDED_HEIGHT,
+						}}
+						transition={headerTransition}
 					>
-						<HeaderArchitectureDemo
-							label="3 · nav + search + menu"
-							placement="topRight"
-							tone="search"
-						/>
-						<motion.div
-							className="flex items-center justify-center gap-10 overflow-hidden py-2"
-							initial={false}
-							animate={{
-								width: areTopNavLinksVisible ? "auto" : 0,
-								opacity: areTopNavLinksVisible ? 1 : 0,
-							}}
-							transition={headerTransition}
-							aria-hidden={!areTopNavLinksVisible}
+						<div className="flex min-w-[220px] items-center">
+							<motion.div
+								className="origin-left"
+								initial={false}
+								animate={{ scale: isCompact ? 0.88 : 1 }}
+								transition={headerTransition}
+							>
+								<Logo size="md" className="pointer-events-auto" />
+							</motion.div>
+						</div>
+						<nav
+							className="pointer-events-auto relative flex items-center justify-center text-foreground"
+							aria-label="Primary navigation"
 						>
-							{layout.topNavLinks.map((item, index) => (
-								<HeaderTopNavLink
-									key={`${item.label}-${getMarketingLinkHref(item)}`}
-									link={item}
-									focusable={areTopNavLinksVisible}
-									className={
-										index === layout.topNavLinks.length - 1
-											? "mr-10"
-											: undefined
-									}
-								/>
-							))}
-						</motion.div>
-						<HeaderSearchInput
-							value={searchQuery}
-							onValueChange={handleSearchQueryChange}
-							onClear={closeMenu}
-							ariaLabel={layout.search.ariaLabel}
-							clearLabel={layout.search.clearLabel}
-						/>
-						<Button
-							variant="ghost"
-							size="icon"
-							textTone="inherit"
-							className="text-foreground hover:!text-foreground active:!text-foreground"
-							aria-controls={menuId}
-							aria-expanded={isMenuOpen}
-							aria-label={
-								isMenuOpen
-									? layout.mobile.closeAriaLabel
-									: layout.mobile.openAriaLabel
-							}
-							onClick={toggleMenu}
-							leadingIcon={
-								<IconSwap
-									activeIndex={isMenuOpen ? 1 : 0}
-									size="lg"
-									items={[
-										{
-											icon: (
-												<Icon
-													name="menu"
-													className="size-full text-foreground"
-													style={{ width: "100%", height: "100%" }}
-												/>
-											),
-										},
-										{
-											icon: (
-												<Icon
-													name="close"
-													className="size-full text-foreground"
-													style={{ width: "100%", height: "100%" }}
-												/>
-											),
-										},
-									]}
-								/>
-							}
-						/>
-					</nav>
-					<div className="pointer-events-auto flex min-w-[220px] justify-end">
-						<Button
-							href={getMarketingLinkHref(layout.cta)}
-							variant="primary"
-							size="md"
-						>
-							{layout.cta.label}
-						</Button>
-					</div>
-				</motion.div>
+							<HeaderArchitectureDemo
+								label="3 · nav + search + menu"
+								placement="topRight"
+								tone="search"
+							/>
+							<motion.div
+								className="flex items-center justify-center gap-10 overflow-hidden py-2"
+								initial={false}
+								animate={{
+									width: areTopNavLinksVisible ? "auto" : 0,
+									opacity: areTopNavLinksVisible ? 1 : 0,
+								}}
+								transition={headerTransition}
+								aria-hidden={!areTopNavLinksVisible}
+							>
+								{layout.topNavLinks.map((item, index) => (
+									<HeaderTopNavLink
+										key={`${item.label}-${getMarketingLinkHref(item)}`}
+										link={item}
+										focusable={areTopNavLinksVisible}
+										className={
+											index === layout.topNavLinks.length - 1
+												? "mr-10"
+												: undefined
+										}
+									/>
+								))}
+							</motion.div>
+							<HeaderSearchInput
+								value={searchQuery}
+								onValueChange={handleSearchQueryChange}
+								onClear={closeMenu}
+								ariaLabel={layout.search.ariaLabel}
+								clearLabel={layout.search.clearLabel}
+							/>
+							<Button
+								variant="ghost"
+								size="icon"
+								textTone="inherit"
+								className="text-foreground hover:!text-foreground active:!text-foreground"
+								aria-controls={menuId}
+								aria-expanded={isMenuOpen}
+								aria-label={
+									isMenuOpen
+										? layout.mobile.closeAriaLabel
+										: layout.mobile.openAriaLabel
+								}
+								onClick={toggleMenu}
+								leadingIcon={
+									<IconSwap
+										activeIndex={isMenuOpen ? 1 : 0}
+										size="lg"
+										items={[
+											{
+												icon: (
+													<Icon
+														name="menu"
+														className="size-full text-foreground"
+														style={{ width: "100%", height: "100%" }}
+													/>
+												),
+											},
+											{
+												icon: (
+													<Icon
+														name="close"
+														className="size-full text-foreground"
+														style={{ width: "100%", height: "100%" }}
+													/>
+												),
+											},
+										]}
+									/>
+								}
+							/>
+						</nav>
+						<div className="pointer-events-auto flex min-w-[220px] justify-end">
+							<Button
+								href={getMarketingLinkHref(layout.cta)}
+								variant="primary"
+								size="md"
+							>
+								{layout.cta.label}
+							</Button>
+						</div>
+					</motion.div>
+				</div>
 				<AnimatePresence initial={false}>
 					{isMenuOpen ? (
 						<motion.div
@@ -297,22 +300,22 @@ export default function HeaderFull({
 							animate={{ height: "auto", opacity: 1 }}
 							exit={{ height: 0, opacity: 0 }}
 							transition={menuTransition}
-							className="pointer-events-auto relative overflow-hidden"
+							className="pointer-events-auto relative w-full overflow-hidden px-section-x"
 						>
 							<HeaderArchitectureDemo
-								label="4 · open desktop menu"
+								label="4 · open menu owns gutter"
 								placement="bottomLeft"
 								tone="menu"
 							/>
 							<div
-								className="w-full border-t border-border"
+								className="mx-auto w-full max-w-section-max border-t border-border"
 								style={{
 									paddingTop: HEADER_MENU_TOP_PADDING,
 									paddingBottom: HEADER_MENU_BOTTOM_PADDING,
 								}}
 							>
 								<motion.div
-									className="relative overflow-hidden"
+									className="relative"
 									initial={false}
 									animate={{ height: menuContentHeight }}
 									transition={menuTransition}
