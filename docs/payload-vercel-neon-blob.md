@@ -10,7 +10,9 @@ website on Vercel.
 ## When To Use This
 
 - Use **Static** mode when the site does not need a CMS. Run
-  `npm run prune:template -- --no-payload`.
+  `npm run prune:template -- --yes --no-payload` in a clone or prune-engine
+  output that retains the command. One-way assembly outputs do not support this
+  post-creation prune syntax.
 - Use **Payload-ready** mode when the CMS decision is not final. Keep this
   scaffold, keep admin/API disabled, and keep building sections from fallback
   render data.
@@ -113,6 +115,49 @@ The scaffolded Payload config uses `@payloadcms/storage-vercel-blob` for the
 `media` collection. When the token is missing, the Blob adapter is disabled and
 Payload falls back to local upload behavior.
 
+## Using `$cms-backfill` with this template
+
+After the fallback marketing frontend is complete, the optional
+`$cms-backfill` Codex skill can drive Payload activation, seeding, readback,
+publishing, and strict visual verification.
+
+Do not apply its generic starting assumption literally. This is not a site that
+still needs a frontend content model invented during CMS migration. The
+template already has:
+
+- `MarketingPageDocument` and `SiteLayoutDocument` view models;
+- a `layout` array of typed sections selected by `blockType`;
+- section renderers that consume lightweight props;
+- `getMarketingPage()` and `getSiteLayout()` resolver boundaries;
+- matching fallback page and site-layout data; and
+- a preliminary Payload `Pages`, `SiteLayout`, media, and user scaffold.
+
+Those frontend contracts are pinned inputs to the backfill. The skill should
+inventory and preserve them, then refine the Payload editorial schema and map
+its documents into the existing models. Its fixed-page guidance concerns what
+editors may add, remove, or reorder in Payload; it does not require replacing
+the frontend's section-based `layout` model. A fixed Payload global or named
+group can still normalize into that layout, while an explicitly reorderable
+page can use controlled Payload blocks.
+
+For this repository, reinterpret the skill's infrastructure/modeling stages as
+follows:
+
+1. Reuse and audit the installed Payload packages, config, collections,
+   globals, block definitions, and server resolver seam.
+2. Replace only the disabled admin/API stubs and preliminary schema details
+   needed by the accepted editorial contract.
+3. Keep the marketing components, layout model, section registry, DOM, styles,
+   motion, routes, and fallback data unchanged.
+4. Use the committed fallback as the exact seed and parity baseline.
+5. Add migrations, Neon, Blob, access controls, draft preview, snapshot
+   generation, and publish lifecycle behavior around that existing boundary.
+6. Cut over only after seed readback and strict visual parity pass.
+
+Start the skill's process note only for a concrete project activation; the
+template itself remains Payload-ready and does not pretend that a backfill has
+already occurred.
+
 ## Activation Checklist
 
 The current scaffold is Payload-ready, not Payload-powered. To activate Payload:
@@ -120,11 +165,12 @@ The current scaffold is Payload-ready, not Payload-powered. To activate Payload:
 1. Replace the `/admin` stub with Payload's real Next.js admin page.
 2. Replace the `/api/[...slug]` stub with Payload's real route handlers.
 3. Keep `payload.config.ts` wired through `@payload-config`.
-4. Add or update Payload collections, globals, and blocks for the site's CMS
-   needs.
+4. Refine the existing Payload collections, globals, and blocks for the site's
+   editorial contract without replacing the established frontend layout model.
 5. Update `getMarketingPage()` and `getSiteLayout()` to read via the Payload
    Local API on the server.
-6. Map Payload documents into the lightweight render contract used by the
+6. Map Payload documents into the existing `MarketingPageDocument`,
+   `SiteLayoutDocument`, and typed section render contracts used by the
    marketing frontend.
 7. Keep fallback documents for no-env, no-content, local clone, and preview
    safety.

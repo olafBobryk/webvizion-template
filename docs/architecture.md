@@ -25,6 +25,9 @@ Reviewed against [the staging acceptance ledger](./architecture-staging.md) on 2
 - Profiles compose surface-owned manifests through one command with two engines.
   `prune` remains the compatibility default. `assemble` positively selects owned
   core and surface files, then emits a one-way project without template tooling.
+- This dual-engine state is transitional. The accepted gates and removal path
+  for making positive assembly the sole creation model are recorded in
+  `docs/positive-assembly-transition.md`.
 
 ### Shared-source invariant
 

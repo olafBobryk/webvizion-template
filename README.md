@@ -55,6 +55,8 @@ npm run create:project -- --profile app-only --engine assemble --output ../my-da
 ```
 
 Use `npm run verify:assembly` to compare both engines across all four profiles.
+The intended migration from this temporary dual-engine state to positive-only
+project creation is tracked in `docs/positive-assembly-transition.md`.
 
 ### Already Cloned
 
