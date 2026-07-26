@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/primitives/Button";
 import { useMotionAllowed } from "@/hooks/useMotionAllowed";
 import { getMarketingLinkHref } from "@/lib/marketing-content/links";
 import type { SiteLayoutDocument } from "@/lib/marketing-content/types";
+import CompactHeaderArchitectureDemo from "./CompactHeaderArchitectureDemo";
 import {
 	getHeaderSearchGroups,
 	HeaderMenuGroup,
@@ -98,6 +99,11 @@ export default function HeaderCompact({
 			transition={heightTransition}
 			className={clsx("fixed inset-x-0 top-0 z-50 h-[76px]", className)}
 		>
+			<CompactHeaderArchitectureDemo
+				label="1 · edge-to-edge shell"
+				placement="bottomRight"
+				tone="shell"
+			/>
 			<motion.div
 				aria-hidden="true"
 				className="pointer-events-none absolute inset-0 border-b border-border bg-background"
@@ -110,11 +116,15 @@ export default function HeaderCompact({
 				initial={false}
 			>
 				<motion.div
-					className="w-full px-section-x"
+					className="relative w-full px-section-x"
 					initial={false}
 					animate={{ paddingTop: isCondensed ? 8 : 16 }}
 					transition={headerTransition}
 				>
+					<CompactHeaderArchitectureDemo
+						label="2 · top bar owns gutter"
+						tone="topBar"
+					/>
 					<motion.div
 						className="mx-auto flex w-full max-w-section-max items-center justify-between gap-3 px-3"
 						initial={false}
@@ -149,7 +159,12 @@ export default function HeaderCompact({
 						</Button>
 					</motion.div>
 				</motion.div>
-				<div className="w-full px-section-x">
+				<div className="relative w-full px-section-x">
+					<CompactHeaderArchitectureDemo
+						label="3 · menu owns gutter"
+						placement="topRight"
+						tone="menu"
+					/>
 					<div className="mx-auto w-full max-w-section-max">
 						<div
 							data-open={isMenuOpen}
@@ -161,7 +176,12 @@ export default function HeaderCompact({
 							}}
 						>
 							<div className="flex min-h-0 min-w-0 flex-col overflow-hidden">
-								<div className="shrink-0 pb-6">
+								<div className="relative shrink-0 pb-6">
+									<CompactHeaderArchitectureDemo
+										label="4 · fixed search"
+										placement="bottomLeft"
+										tone="search"
+									/>
 									<HeaderSearchInput
 										value={searchQuery}
 										onValueChange={setSearchQuery}
@@ -172,7 +192,11 @@ export default function HeaderCompact({
 										className="group/header-search w-full text-sm text-foreground"
 									/>
 								</div>
-								<div className="min-h-0 min-w-0 flex-1 overflow-hidden">
+								<div className="relative min-h-0 min-w-0 flex-1 overflow-hidden">
+									<CompactHeaderArchitectureDemo
+										label="5 · results · y-scroll"
+										tone="results"
+									/>
 									<ScrollBorders
 										showBackToTop={false}
 										className="h-full w-full min-w-0 overflow-x-hidden overflow-y-auto"
