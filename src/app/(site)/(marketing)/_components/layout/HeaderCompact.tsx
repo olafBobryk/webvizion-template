@@ -96,10 +96,7 @@ export default function HeaderCompact({
 				...entranceState,
 			}}
 			transition={heightTransition}
-			className={clsx(
-				"fixed inset-x-0 top-0 z-50 h-[76px] px-section-x",
-				className,
-			)}
+			className={clsx("fixed inset-x-0 top-0 z-50 h-[76px]", className)}
 		>
 			<motion.div
 				aria-hidden="true"
@@ -109,63 +106,62 @@ export default function HeaderCompact({
 				transition={headerTransition}
 			/>
 			<motion.div
-				className="relative mx-auto flex h-full w-full max-w-section-max flex-col gap-3"
+				className="relative flex h-full w-full flex-col gap-3"
 				initial={false}
-				animate={{ paddingTop: isCondensed ? 8 : 16 }}
-				transition={headerTransition}
 			>
 				<motion.div
-					className="flex items-center justify-between gap-3 px-3"
+					className="w-full px-section-x"
 					initial={false}
-					animate={{
-						paddingTop: isCondensed ? 8 : 12,
-						paddingBottom: isCondensed ? 8 : 12,
-					}}
+					animate={{ paddingTop: isCondensed ? 8 : 16 }}
 					transition={headerTransition}
 				>
 					<motion.div
-						className="origin-left"
+						className="mx-auto flex w-full max-w-section-max items-center justify-between gap-3 px-3"
 						initial={false}
-						animate={{ scale: isCondensed ? 0.9 : 1 }}
+						animate={{
+							paddingTop: isCondensed ? 8 : 12,
+							paddingBottom: isCondensed ? 8 : 12,
+						}}
 						transition={headerTransition}
 					>
-						<Logo size="sm" className="pointer-events-auto" />
+						<motion.div
+							className="origin-left"
+							initial={false}
+							animate={{ scale: isCondensed ? 0.9 : 1 }}
+							transition={headerTransition}
+						>
+							<Logo size="sm" className="pointer-events-auto" />
+						</motion.div>
+						<Button
+							variant="ghost"
+							size="sm"
+							align="center"
+							trailingIcon={isMenuOpen ? "minus" : "plus"}
+							onClick={toggleMenu}
+							aria-expanded={isMenuOpen}
+							aria-label={
+								isMenuOpen
+									? layout.mobile.closeAriaLabel
+									: layout.mobile.openAriaLabel
+							}
+						>
+							{layout.mobile.menuLabel}
+						</Button>
 					</motion.div>
-					<Button
-						variant="ghost"
-						size="sm"
-						align="center"
-						trailingIcon={isMenuOpen ? "minus" : "plus"}
-						onClick={toggleMenu}
-						aria-expanded={isMenuOpen}
-						aria-label={
-							isMenuOpen
-								? layout.mobile.closeAriaLabel
-								: layout.mobile.openAriaLabel
-						}
-					>
-						{layout.mobile.menuLabel}
-					</Button>
 				</motion.div>
-				<div
-					data-open={isMenuOpen}
-					className="grid min-h-0 transition-[grid-template-rows,opacity] motion-component data-[open=false]:grid-rows-[0fr] data-[open=false]:opacity-0 data-[open=true]:grid-rows-[1fr] data-[open=true]:opacity-100"
-					style={{
-						height: isMenuOpen
-							? `calc(100vh - ${COMPACT_OPEN_MENU_OFFSET}px)`
-							: undefined,
-					}}
-				>
-					<div className="overflow-hidden">
-						<ScrollBorders
-							showBackToTop={false}
-							className="overflow-scroll"
+				<div className="w-full px-section-x">
+					<div className="mx-auto w-full max-w-section-max">
+						<div
+							data-open={isMenuOpen}
+							className="grid min-h-0 transition-[grid-template-rows,opacity] motion-component data-[open=false]:grid-rows-[0fr] data-[open=false]:opacity-0 data-[open=true]:grid-rows-[1fr] data-[open=true]:opacity-100"
 							style={{
-								maxHeight: `calc(100vh - ${COMPACT_OPEN_SCROLL_AREA_OFFSET}px)`,
+								height: isMenuOpen
+									? `calc(100vh - ${COMPACT_OPEN_MENU_OFFSET}px)`
+									: undefined,
 							}}
 						>
-							<div className="flex min-h-full flex-col gap-3">
-								<div className="mb-6">
+							<div className="flex min-h-0 min-w-0 flex-col overflow-hidden">
+								<div className="shrink-0 pb-6">
 									<HeaderSearchInput
 										value={searchQuery}
 										onValueChange={setSearchQuery}
@@ -176,32 +172,47 @@ export default function HeaderCompact({
 										className="group/header-search w-full text-sm text-foreground"
 									/>
 								</div>
-								{activeMenuGroups.length > 0 ? (
-									<div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2">
-										{activeMenuGroups.map((group) => (
-											<div key={group.label} className="min-w-0">
-												<HeaderMenuGroup group={group} onNavigate={closeMenu} />
-											</div>
-										))}
-									</div>
-								) : (
-									<HeaderMenuNoResults
-										noResultsText={layout.search.noResultsText}
-									/>
-								)}
-								<div className="mt-auto flex flex-col gap-8 pt-5">
-									<Button
-										variant="primary"
-										href={getMarketingLinkHref(layout.cta)}
-										onClick={closeMenu}
-										className="w-full"
-										contentClassName="justify-center"
+								<div className="min-h-0 min-w-0 flex-1 overflow-hidden">
+									<ScrollBorders
+										showBackToTop={false}
+										className="h-full w-full min-w-0 overflow-x-hidden overflow-y-auto"
+										style={{
+											maxHeight: `calc(100vh - ${COMPACT_OPEN_SCROLL_AREA_OFFSET}px)`,
+										}}
 									>
-										{layout.cta.label}
-									</Button>
+										<div className="flex min-h-full flex-col gap-3">
+											{activeMenuGroups.length > 0 ? (
+												<div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2">
+													{activeMenuGroups.map((group) => (
+														<div key={group.label} className="min-w-0">
+															<HeaderMenuGroup
+																group={group}
+																onNavigate={closeMenu}
+															/>
+														</div>
+													))}
+												</div>
+											) : (
+												<HeaderMenuNoResults
+													noResultsText={layout.search.noResultsText}
+												/>
+											)}
+											<div className="mt-auto flex flex-col gap-8 pt-5">
+												<Button
+													variant="primary"
+													href={getMarketingLinkHref(layout.cta)}
+													onClick={closeMenu}
+													className="w-full"
+													contentClassName="justify-center"
+												>
+													{layout.cta.label}
+												</Button>
+											</div>
+										</div>
+									</ScrollBorders>
 								</div>
 							</div>
-						</ScrollBorders>
+						</div>
 					</div>
 				</div>
 			</motion.div>
