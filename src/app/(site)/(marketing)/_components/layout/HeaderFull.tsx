@@ -16,7 +16,6 @@ import type {
 	MarketingLink,
 	SiteLayoutDocument,
 } from "@/lib/marketing-content/types";
-import HeaderArchitectureDemo from "./HeaderArchitectureDemo";
 import {
 	getHeaderSearchGroups,
 	getMenuContentHeight,
@@ -164,10 +163,6 @@ export default function HeaderFull({
 				className,
 			)}
 		>
-			<HeaderArchitectureDemo
-				label="1 · edge-to-edge desktop shell"
-				tone="shell"
-			/>
 			<motion.div
 				aria-hidden="true"
 				className="pointer-events-none absolute inset-0 border-b border-border bg-background"
@@ -177,10 +172,6 @@ export default function HeaderFull({
 			/>
 			<div className="relative flex w-full flex-col">
 				<div className="relative w-full px-section-x">
-					<HeaderArchitectureDemo
-						label="2 · top bar owns gutter"
-						tone="topBar"
-					/>
 					<motion.div
 						className="relative mx-auto flex w-full max-w-section-max items-center justify-between gap-6"
 						initial={false}
@@ -205,11 +196,6 @@ export default function HeaderFull({
 							className="pointer-events-auto relative flex items-center justify-center text-foreground"
 							aria-label="Primary navigation"
 						>
-							<HeaderArchitectureDemo
-								label="3 · nav + search + menu"
-								placement="topRight"
-								tone="search"
-							/>
 							<motion.div
 								className="flex items-center justify-center gap-10 overflow-hidden py-2"
 								initial={false}
@@ -302,11 +288,6 @@ export default function HeaderFull({
 							transition={menuTransition}
 							className="pointer-events-auto relative w-full overflow-hidden px-section-x"
 						>
-							<HeaderArchitectureDemo
-								label="4 · open menu owns gutter"
-								placement="bottomLeft"
-								tone="menu"
-							/>
 							<div
 								className="mx-auto w-full max-w-section-max border-t border-border"
 								style={{
@@ -320,11 +301,6 @@ export default function HeaderFull({
 									animate={{ height: menuContentHeight }}
 									transition={menuTransition}
 								>
-									<HeaderArchitectureDemo
-										label="5 · menu / search results"
-										placement="topRight"
-										tone="results"
-									/>
 									<div className="absolute inset-0">
 										{isSearchActive ? (
 											<HeaderSearchResults
