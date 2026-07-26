@@ -85,8 +85,10 @@ export function assertAuthMethodAvailable(method: AuthMethod) {
 export async function selectCurrentOrganization(organizationId: string) {
 	const sessionId = await readSessionId();
 	if (!sessionId) throw new AuthDomainError("session-required");
-	return applicationAdapters.organizations.selectOrganization(
+	const resolution = await applicationAdapters.organizations.selectOrganization(
 		sessionId,
 		organizationId,
 	);
+	await writeSessionId(resolution.session.id);
+	return resolution;
 }

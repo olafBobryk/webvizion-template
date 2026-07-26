@@ -74,6 +74,7 @@ export type FixtureAuthState = {
 	organizations: Map<string, Organization>;
 	passwordRecoveries: Map<string, FixturePasswordRecovery>;
 	recoveryOutbox: FixtureRecoveryOutboxEntry[];
+	revokedSessionIds: Set<string>;
 	sessions: Map<string, AuthSession>;
 	users: Map<string, AuthUser>;
 };
@@ -181,8 +182,46 @@ function nowIso(now: Date) {
 	return now.toISOString();
 }
 
-function opaqueSessionId() {
-	return `${randomUUID()}.${randomBytes(24).toString("base64url")}`;
+const fixtureSessionPrefix = "fixture-session:";
+
+function fixtureSessionId(
+	userId: string,
+	issuedAt: number,
+	selectedOrganizationId: string | null,
+) {
+	return `${fixtureSessionPrefix}${encodeURIComponent(userId)}:${issuedAt}:${selectedOrganizationId ? encodeURIComponent(selectedOrganizationId) : ""}`;
+}
+
+function restoreFixtureSession(
+	state: FixtureAuthState,
+	sessionId: string,
+	now: Date,
+) {
+	const match = /^fixture-session:([^:]+):(\d+):([^:]*)$/.exec(sessionId);
+	if (!match) return null;
+
+	let userId: string;
+	let selectedOrganizationId: string | null;
+	try {
+		userId = decodeURIComponent(match[1]);
+		selectedOrganizationId = match[3] ? decodeURIComponent(match[3]) : null;
+	} catch {
+		return null;
+	}
+	const issuedAt = Number(match[2]);
+	if (!state.users.has(userId) || !Number.isSafeInteger(issuedAt)) return null;
+
+	const createdAt = new Date(issuedAt);
+	const expiresAt = new Date(issuedAt + sessionLifetimeMs);
+	if (Number.isNaN(createdAt.getTime()) || expiresAt <= now) return null;
+
+	return {
+		id: sessionId,
+		userId,
+		selectedOrganizationId,
+		createdAt: nowIso(createdAt),
+		expiresAt: nowIso(expiresAt),
+	};
 }
 
 export function createFixtureAuthState(now = new Date()): FixtureAuthState {
@@ -229,6 +268,7 @@ export function createFixtureAuthState(now = new Date()): FixtureAuthState {
 		),
 		passwordRecoveries: new Map(),
 		recoveryOutbox: [],
+		revokedSessionIds: new Set(),
 		sessions: new Map(),
 		users,
 	};
@@ -260,7 +300,7 @@ export function createFixtureSession(
 	}
 
 	const session: AuthSession = {
-		id: opaqueSessionId(),
+		id: fixtureSessionId(userId, now.getTime(), null),
 		userId,
 		selectedOrganizationId: null,
 		createdAt: nowIso(now),
@@ -275,13 +315,24 @@ export function getFixtureSession(
 	sessionId: string,
 	now = new Date(),
 ) {
-	const session = state.sessions.get(sessionId);
+	if (state.revokedSessionIds.has(sessionId)) return null;
+	const session =
+		state.sessions.get(sessionId) ??
+		restoreFixtureSession(state, sessionId, now);
 	if (!session) return null;
 	if (new Date(session.expiresAt).getTime() <= now.getTime()) {
-		state.sessions.delete(sessionId);
+		deleteFixtureSession(state, sessionId);
 		return null;
 	}
 	return { ...session };
+}
+
+export function deleteFixtureSession(
+	state: FixtureAuthState,
+	sessionId: string,
+) {
+	state.sessions.delete(sessionId);
+	state.revokedSessionIds.add(sessionId);
 }
 
 export function listActiveFixtureMemberships(
@@ -492,9 +543,18 @@ export function selectFixtureOrganization(
 		(candidate) => candidate.organizationId === organizationId,
 	);
 	if (!membership) throw new AuthDomainError("membership-required");
-	session.selectedOrganizationId = organizationId;
-	state.sessions.set(session.id, session);
-	return buildResolvedContext(state, session, membership);
+	const next = {
+		...session,
+		id: fixtureSessionId(
+			session.userId,
+			new Date(session.createdAt).getTime(),
+			organizationId,
+		),
+		selectedOrganizationId: organizationId,
+	};
+	state.sessions.delete(session.id);
+	state.sessions.set(next.id, next);
+	return buildResolvedContext(state, next, membership);
 }
 
 export function updateFixtureUser(
@@ -611,7 +671,9 @@ export function resetFixturePassword(
 	credential.password = input.password;
 	state.passwordRecoveries.delete(tokenHash);
 	for (const [sessionId, session] of state.sessions) {
-		if (session.userId === recovery.userId) state.sessions.delete(sessionId);
+		if (session.userId === recovery.userId) {
+			deleteFixtureSession(state, sessionId);
+		}
 	}
 }
 

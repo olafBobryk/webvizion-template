@@ -68,6 +68,30 @@ if (singletonResolution.status === "resolved") {
 	assert.equal(singletonResolution.session.selectedOrganizationId, "org-demo");
 }
 
+const redirectIssuedAt = new Date("2026-07-26T12:00:00Z");
+const redirectSessionState = createFixtureAuthState(redirectIssuedAt);
+const redirectSession = createFixtureSession(
+	redirectSessionState,
+	"user-template-owner",
+	redirectIssuedAt,
+);
+assert.equal(
+	resolveFixtureSession(
+		createFixtureAuthState(redirectIssuedAt),
+		redirectSession.id,
+		new Date("2026-07-26T12:01:00Z"),
+	).status,
+	"resolved",
+);
+assert.equal(
+	resolveFixtureSession(
+		createFixtureAuthState(redirectIssuedAt),
+		redirectSession.id,
+		new Date("2026-07-26T20:00:00Z"),
+	).status,
+	"anonymous",
+);
+
 const organizationUpdateState = createFixtureAuthState();
 const updatedOrganization = updateFixtureOrganization(
 	organizationUpdateState,
@@ -132,6 +156,14 @@ const selected = selectFixtureOrganization(
 	multiState,
 	multiSession.id,
 	"org-sandbox",
+);
+assert.equal(
+	resolveFixtureSession(
+		createFixtureAuthState(),
+		selected.session.id,
+		new Date(),
+	).status,
+	"resolved",
 );
 assert.equal(selected.organization.id, "org-sandbox");
 const selectedMembership = [...multiState.memberships.values()].find(

@@ -11,6 +11,7 @@ import {
 	createFixtureAuthState,
 	createFixtureInvitation,
 	createFixtureSession,
+	deleteFixtureSession,
 	type FixtureAuthState,
 	fixtureAuthMethods,
 	getFixtureSession,
@@ -63,7 +64,7 @@ export const fixtureAdapters: ApplicationAdapters = {
 			return getFixtureSession(getFixtureAuthState(), sessionId);
 		},
 		async deleteSession(sessionId) {
-			getFixtureAuthState().sessions.delete(sessionId);
+			deleteFixtureSession(getFixtureAuthState(), sessionId);
 		},
 		async updateUser(
 			userId,
