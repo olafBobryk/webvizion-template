@@ -26,7 +26,7 @@ const outerStyles = cva("w-full", {
 		},
 		height: {
 			auto: "h-auto",
-			hero: "min-h-svh max-h-[1000px] sm:h-svh sm:min-h-0",
+			hero: "flex min-h-[min(100svh,1000px)] flex-col",
 		},
 	},
 	defaultVariants: {
@@ -50,7 +50,7 @@ const innerStyles = cva("w-full flex flex-col", {
 		},
 		justify: {
 			start: "justify-start",
-			center: "justify-center",
+			center: "[justify-content:safe_center]",
 			end: "justify-end",
 		},
 		size: {
@@ -133,7 +133,7 @@ function SectionRoot<T extends ElementType = "section">({
 		.join(" ");
 	const innerClass = [
 		innerStyles({ maxWidth, align, justify, size }),
-		height === "hero" ? "min-h-svh sm:h-full sm:min-h-0" : undefined,
+		height === "hero" ? "flex-1" : undefined,
 		hasBackground ? "relative z-10" : undefined,
 		innerClassName,
 	]

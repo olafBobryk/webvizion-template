@@ -101,7 +101,7 @@ function ChoiceFieldRoot({
 				className="sr-only peer choice-field-input"
 			/>
 			{indicator}
-			<span className="flex flex-col items-start">
+			<span className="flex min-w-0 flex-col items-start">
 				{label ? (
 					<span
 						className={clsx(

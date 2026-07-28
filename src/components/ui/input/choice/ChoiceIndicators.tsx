@@ -87,11 +87,13 @@ export function ChoiceIndicatorToggle({
 	checked,
 	disabled,
 	className,
-}: ChoiceIndicatorBaseProps) {
+	size = "default",
+}: ChoiceIndicatorBaseProps & { size?: ChoiceIndicatorSize }) {
 	return (
 		<div
 			className={clsx(
-				"choice-field-indicator relative h-[26px] min-w-[42px] shrink-0 overflow-hidden rounded-full transition-colors motion-micro",
+				"choice-field-indicator relative shrink-0 overflow-hidden rounded-full transition-colors motion-micro",
+				size === "compact" ? "h-5 min-w-[34px]" : "h-[26px] min-w-[42px]",
 				focusRing.peerDefault,
 				focusRing.peerError,
 				disabled ? "opacity-60" : "opacity-100",
@@ -103,10 +105,15 @@ export function ChoiceIndicatorToggle({
 		>
 			<div
 				className={clsx(
-					"absolute left-1 top-1 h-[18px] w-[22px] rounded-full transition-[background-color,translate,box-shadow] motion-interactive",
+					size === "compact"
+						? "absolute left-0.5 rounded-full transition-[background-color,translate,box-shadow] motion-interactive"
+						: "absolute left-1 rounded-full transition-[background-color,translate,box-shadow] motion-interactive",
+					size === "compact" ? "top-0.5 size-4" : "top-1 h-[18px] w-[22px]",
 					checked
-						? "translate-x-3 bg-primary-foreground shadow-sm"
-						: "translate-x-0 bg-muted-foreground/55 dark:bg-muted-foreground",
+						? size === "compact"
+							? "translate-x-[calc(34px-1.25rem)] bg-primary-foreground shadow-sm"
+							: "translate-x-[calc(20px-0.5rem)] bg-primary-foreground shadow-sm"
+						: "translate-x-0 bg-white shadow-sm dark:bg-muted-foreground",
 				)}
 			/>
 		</div>

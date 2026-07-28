@@ -207,6 +207,39 @@ export const testDemoPage: DemoPage = {
 						);
 					},
 				},
+				{
+					id: "section-hero-safe-center",
+					kind: "component",
+					name: "Section",
+					label: "Tall hero safe centering",
+					related: relatedMap.Section,
+					Render() {
+						return (
+							<Section
+								id="section-hero-safe-center"
+								align="start"
+								background="surface"
+								height="hero"
+								justify="center"
+								padding="hero"
+							>
+								<Section.Background>
+									<div className="h-full w-full bg-linear-to-b from-primary/10 to-transparent" />
+								</Section.Background>
+								<div className="flex min-h-[70rem] max-w-lg flex-col gap-3">
+									<Text as="h3" variant="headingMd">
+										Tall hero content stays inside its owned inset
+									</Text>
+									<Text variant="body" tone="muted">
+										Hero sections have a preferred viewport minimum. When their
+										foreground is taller, they grow downward instead of
+										centering content above the hero padding boundary.
+									</Text>
+								</div>
+							</Section>
+						);
+					},
+				},
 			],
 		},
 	],

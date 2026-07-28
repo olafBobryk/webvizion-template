@@ -66,6 +66,7 @@ Lowest-level reusable building blocks. Agents should check this folder before wr
   - Labeled `Divider` rules must terminate at the label's padded box. Do not paint `bg-background` behind the label; the divider must remain neutral on Card, Panel, modal, and page surfaces.
 - Use `Section.Background` when a section needs image, gradient, or node-based background media behind its normal content flow.
 	- `padding="hero"` reserves the responsive site-header height plus one normal section-padding unit above the content, while retaining normal section padding horizontally and below.
+	- `height="hero"` provides a preferred `min(100svh, 1000px)` height rather than a fixed viewport height. It uses a flex inner area with safe centering: short content remains centered, while tall content expands downward without crossing the owned hero top padding.
 	- The background spans the full section, not the inner max-width container.
   - It is decorative by default; set `interactive` only when the background truly needs live controls.
 - When building transparent bordered cards, keep the wrapper transparent, keep the card background explicit, and align wrapper and card radii.

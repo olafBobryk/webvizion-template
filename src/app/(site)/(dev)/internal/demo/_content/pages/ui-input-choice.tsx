@@ -194,7 +194,12 @@ export const uiInputChoiceDemoPage: DemoPage = {
 					label: "Toggle indicator",
 					related: relatedMap.ChoiceIndicatorToggle,
 					Render() {
-						return <ChoiceIndicatorToggle checked />;
+						return (
+							<div className="flex items-center gap-3">
+								<ChoiceIndicatorToggle checked />
+								<ChoiceIndicatorToggle checked size="compact" />
+							</div>
+						);
 					},
 				},
 			],

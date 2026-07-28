@@ -29,8 +29,10 @@ Shared building blocks and complete radio, checkbox, and toggle-style inputs.
 - Keep the borderless choice geometry integer-aligned: radio and default
   checkbox are 22px with fixed 12px marks at 5px insets. The compact checkbox
   is 18px with the same 12px mark at a 3px inset and is reserved for dense
-  inline authored content such as Markdown task lists. The toggle is 42x26px
-  with a 22x18px thumb at 4px insets and a 12px selected translation.
+  inline authored content such as Markdown task lists. The default toggle is
+  42x26px with a 22x18px thumb at 4px insets; the compact toggle is 34x20px
+  with a 16px thumb at 2px insets. Both anchor the thumb at the closed left
+  inset and animate `translate` to preserve equal 4px or 2px gaps when active.
 - Radio and checkbox selection and hover states must not transform their marks
   or containers; use color and opacity so the centered artwork cannot drift from
   subpixel scaling.
