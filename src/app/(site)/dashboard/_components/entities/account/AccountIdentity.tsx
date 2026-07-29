@@ -14,13 +14,7 @@ function AccountIdentityRoot({
 }) {
 	const profile = variant === "profile";
 	return (
-		<div
-			className={clsx(
-				"flex min-w-0 items-center",
-				profile ? "gap-3.5" : "gap-3",
-				className,
-			)}
-		>
+		<div className={clsx("flex min-w-0 items-center", "gap-3.5", className)}>
 			<ProfilePicture
 				alt={presentation.avatarAlt}
 				fallback={presentation.initials}
@@ -29,9 +23,7 @@ function AccountIdentityRoot({
 				size={profile ? "xl" : "md"}
 				src={presentation.avatarUrl}
 			/>
-			<div
-				className={clsx("grid min-w-0 flex-1", profile ? "gap-0.5" : "gap-0")}
-			>
+			<div className="grid min-w-0 flex-1 gap-0.5">
 				{profile ? (
 					<Text as="h2" className="truncate" variant="support">
 						{presentation.displayLabel}
@@ -41,11 +33,7 @@ function AccountIdentityRoot({
 						{presentation.displayLabel}
 					</Text>
 				)}
-				<Text
-					className="truncate"
-					tone="muted"
-					variant={profile ? "support" : "caption"}
-				>
+				<Text className="truncate" tone="muted" variant="support">
 					{presentation.emailLabel}
 				</Text>
 			</div>
@@ -64,16 +52,9 @@ export function AccountIdentitySkeleton({
 }) {
 	const profile = variant === "profile";
 	return (
-		<div
-			className={clsx(
-				"flex min-w-0 items-center",
-				profile ? "gap-3.5" : "gap-3",
-			)}
-		>
+		<div className={clsx("flex min-w-0 items-center", "gap-3.5")}>
 			<ProfilePicture loading size={profile ? "xl" : "md"} />
-			<div
-				className={clsx("grid min-w-0 flex-1", profile ? "gap-0.5" : "gap-0")}
-			>
+			<div className="grid min-w-0 flex-1 gap-0.5">
 				<Text.Skeleton
 					as={profile ? "h2" : "span"}
 					className="max-w-48 truncate"
@@ -85,7 +66,7 @@ export function AccountIdentitySkeleton({
 					as="span"
 					className="max-w-56 truncate"
 					tone="muted"
-					variant={profile ? "support" : "caption"}
+					variant="support"
 				>
 					{emailLabel}
 				</Text.Skeleton>

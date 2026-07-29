@@ -45,16 +45,15 @@ function MemberIdentityRoot({
 		href && presentation.href ? (
 			<Link
 				className={clsx(
-					"truncate rounded-sm font-medium text-foreground outline-none",
+					"truncate rounded-sm text-sm font-normal leading-6 text-foreground outline-none",
 					focusRing.visibleDefault,
-					profile ? "text-base font-semibold" : "text-sm",
 				)}
 				href={presentation.href}
 			>
 				{presentation.displayLabel}
 			</Link>
 		) : profile ? (
-			<Text as="h2" className="truncate" variant="headingXs">
+			<Text as="h2" className="truncate" variant="support">
 				{presentation.displayLabel}
 			</Text>
 		) : (
@@ -63,22 +62,12 @@ function MemberIdentityRoot({
 			</Text>
 		);
 	return (
-		<div
-			className={clsx(
-				"flex min-w-0 items-center",
-				profile ? "gap-4" : "gap-3",
-				className,
-			)}
-		>
+		<div className={clsx("flex min-w-0 items-center", "gap-3.5", className)}>
 			{avatar}
-			<div className={clsx("grid min-w-0 flex-1", profile ? "gap-1" : "gap-0")}>
+			<div className="grid min-w-0 flex-1 gap-0.5">
 				{label}
 				{actor ? null : (
-					<Text
-						className="truncate"
-						tone="muted"
-						variant={profile ? "support" : "caption"}
-					>
+					<Text className="truncate" tone="muted" variant="support">
 						{presentation.emailLabel}
 					</Text>
 				)}
@@ -104,27 +93,21 @@ export function MemberIdentitySkeleton({
 }) {
 	const profile = variant === "profile";
 	return (
-		<div
-			className={clsx(
-				"flex min-w-0 items-center",
-				profile ? "gap-4" : "gap-3",
-				className,
-			)}
-		>
+		<div className={clsx("flex min-w-0 items-center", "gap-3.5", className)}>
 			<MemberAvatarSkeleton size={avatarSize ?? defaultAvatarSize[variant]} />
-			<div className={clsx("grid min-w-0 flex-1", profile ? "gap-1" : "gap-0")}>
+			<div className="grid min-w-0 flex-1 gap-0.5">
 				{profile ? (
 					<Text.Skeleton
 						as="h2"
 						className="max-w-48 truncate"
-						variant="headingXs"
+						variant="support"
 					>
 						{displayLabel}
 					</Text.Skeleton>
 				) : href ? (
 					<Text.Skeleton
 						as="span"
-						className="max-w-48 truncate text-sm font-medium leading-5 text-foreground"
+						className="max-w-48 truncate text-sm font-normal leading-6 text-foreground"
 						tone={null}
 						variant={null}
 					>
@@ -144,7 +127,7 @@ export function MemberIdentitySkeleton({
 						as="span"
 						className="max-w-56 truncate"
 						tone="muted"
-						variant={profile ? "support" : "caption"}
+						variant="support"
 					>
 						{emailLabel}
 					</Text.Skeleton>
