@@ -81,7 +81,7 @@ function ProfileSettingsSectionRoot() {
 				</Card.Action>
 			</Card.Header>
 			<Card.Content>
-				<div className="flex min-w-0 items-center gap-4">
+				<div className="flex min-w-0 items-center gap-3.5">
 					<ProfilePicture
 						alt={`${user.name || "User"} profile picture`}
 						name={user.name}
@@ -121,7 +121,7 @@ function ProfileSettingsSectionSkeleton() {
 				</Card.Action>
 			</Card.Header>
 			<Card.Content>
-				<div className="flex min-w-0 items-center gap-4">
+				<div className="flex min-w-0 items-center gap-3.5">
 					<ProfilePicture.Skeleton size="xl" />
 					<div className="grid min-w-0 flex-1 gap-1">
 						<Text.Skeleton as="h3" className="truncate" variant="headingXs">

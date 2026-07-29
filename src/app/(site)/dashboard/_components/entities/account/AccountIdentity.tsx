@@ -17,7 +17,7 @@ function AccountIdentityRoot({
 		<div
 			className={clsx(
 				"flex min-w-0 items-center",
-				profile ? "gap-4" : "gap-3",
+				profile ? "gap-3.5" : "gap-3",
 				className,
 			)}
 		>
@@ -63,7 +63,10 @@ export function AccountIdentitySkeleton({
 	const profile = variant === "profile";
 	return (
 		<div
-			className={clsx("flex min-w-0 items-center", profile ? "gap-4" : "gap-3")}
+			className={clsx(
+				"flex min-w-0 items-center",
+				profile ? "gap-3.5" : "gap-3",
+			)}
 		>
 			<ProfilePicture loading size={profile ? "xl" : "md"} />
 			<div className={clsx("grid min-w-0 flex-1", profile ? "gap-1" : "gap-0")}>
