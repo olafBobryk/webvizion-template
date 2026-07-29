@@ -18,7 +18,6 @@ function OverviewContent() {
 				label="Open organization"
 				title="Organization"
 			/>
-			{/* prune:dashboard.reference-entities:start */}
 			<OverviewCard
 				description="Browse and manage records for the active organization."
 				href="/dashboard/records"
@@ -26,7 +25,6 @@ function OverviewContent() {
 				label="Open records"
 				title="Records"
 			/>
-			{/* prune:dashboard.reference-entities:end */}
 			<OverviewCard
 				description="Manage your profile, security, and accessibility preferences."
 				href="/dashboard/settings"

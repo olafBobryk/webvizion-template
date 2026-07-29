@@ -9,10 +9,9 @@ website on Vercel.
 
 ## When To Use This
 
-- Use **Static** mode when the site does not need a CMS. Run
-  `npm run prune:template -- --yes --no-payload` in a clone or prune-engine
-  output that retains the command. One-way assembly outputs do not support this
-  post-creation prune syntax.
+- Use **Static** mode when the site does not need a CMS. Select
+  `--content static` when creating the project so Payload code and packages are
+  never included.
 - Use **Payload-ready** mode when the CMS decision is not final. Keep this
   scaffold, keep admin/API disabled, and keep building sections from fallback
   render data.

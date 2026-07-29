@@ -22,10 +22,8 @@ export const assemblyTemplateOnlyPaths = new Set([
 	"docs/worklogs/template-backport-handoff.md",
 	"docs/worklogs/template-profile-setup-friction.md",
 	"scripts/create-template-profile.mjs",
-	"scripts/create-thin-start.mjs",
 	"scripts/dev-thin.mjs",
 	"scripts/generate-template-assembly-inventory.mjs",
-	"scripts/prune-template.mjs",
 	"scripts/review-thin-start-api.mjs",
 	"scripts/verify/verify-template-profiles.mjs",
 ]);
@@ -52,9 +50,7 @@ export const assemblyCoreRoots = [
 
 export const assemblyTemplateOnlyScripts = new Set([
 	"create:project",
-	"create:thin-start",
 	"dev:thin",
-	"prune:template",
 	"review:thin-start-api",
 	"verify:profiles",
 ]);

@@ -1,32 +1,8 @@
 export const devToolSurfaces = {
 	demo: {
-		id: "demo",
-		flag: "--no-demo",
-		description: "Remove the internal demo surface and demo search indexing.",
-		dependentSurfaces: [],
 		ownedPaths: ["src/app/(site)/(dev)/internal/demo"],
-		routeIds: ["demo"],
-		routeBuilders: [],
-		navRouteIds: ["demo"],
-		searchSources: ["demoPages"],
-		postRemovalAssertions: [
-			{
-				label: "demo route ids",
-				pattern: /(hrefFor\("demo"\)|routeId:\s*"demo")/,
-			},
-			{
-				label: "demo content import",
-				pattern:
-					/from\s+["']@\/app\/\(site\)\/\(dev\)\/internal\/demo\/content["']/,
-			},
-		],
 	},
 	intelligence: {
-		id: "intelligence",
-		flag: "--no-intelligence",
-		description:
-			"Remove the internal template intelligence surface, generated-index script, docs, and nav/search references.",
-		dependentSurfaces: [],
 		ownedPaths: [
 			".codex/hooks.json",
 			"src/app/(site)/dashboard/_components/intelligence",
@@ -52,10 +28,6 @@ export const devToolSurfaces = {
 			"docs/worklogs/template-intelligence-benchmark-runs.jsonl",
 			"docs/worklogs/template-intelligence-benchmark-runs.example.jsonl",
 		],
-		routeIds: ["intelligence"],
-		routeBuilders: [],
-		navRouteIds: ["intelligence"],
-		searchSources: [],
 		packageScripts: [
 			"intelligence:generate",
 			"intelligence:ensure",
@@ -77,34 +49,13 @@ export const devToolSurfaces = {
 			"predev:agent",
 			"prebuild",
 		],
-		packageDependencies: [],
-		postRemovalAssertions: [
-			{
-				label: "intelligence route ids and links",
-				pattern:
-					/(hrefFor\("intelligence"\)|routeId:\s*"intelligence"|\/internal\/intelligence|template-intelligence|Template Intelligence)/,
-			},
-			{
-				label: "template intelligence imports",
-				pattern: /from\s+["']@\/lib\/template-intelligence["']/,
-			},
-		],
 	},
 	scrollPerformance: {
-		id: "scrollPerformance",
-		flag: "--no-scroll-performance",
-		description:
-			"Remove page-target scroll-performance measurement/autoresearch scripts, benchmark docs, and Playwright dependency.",
-		dependentSurfaces: [],
 		ownedPaths: [
 			"scripts/scroll-performance",
 			"docs/worklogs/scroll-performance-benchmark.md",
 			"docs/worklogs/scroll-performance-runs.example.jsonl",
 		],
-		routeIds: [],
-		routeBuilders: [],
-		navRouteIds: [],
-		searchSources: [],
 		packageScripts: [
 			"measure:scroll-performance",
 			"record:scroll-performance",
@@ -112,66 +63,14 @@ export const devToolSurfaces = {
 			"score:scroll-performance",
 		],
 		packageDependencies: ["playwright"],
-		postRemovalAssertions: [
-			{
-				label: "scroll-performance source references",
-				pattern: /scroll-performance/,
-			},
-		],
 	},
 	playground: {
-		id: "playground",
-		flag: "--no-playground",
-		description:
-			"Remove the internal playground surface and playground search/nav references.",
-		dependentSurfaces: [],
 		ownedPaths: ["src/app/(site)/(dev)/internal/playground"],
-		routeIds: ["playground"],
-		routeBuilders: [],
-		navRouteIds: ["playground"],
-		searchSources: [],
-		packageScripts: [],
-		postRemovalAssertions: [
-			{
-				label: "playground route ids and links",
-				pattern:
-					/(hrefFor\("playground"\)|routeId:\s*"playground"|\/internal\/playground)/,
-			},
-		],
 	},
 	dictionary: {
-		id: "dictionary",
-		flag: "--no-dictionary",
-		description:
-			"Remove the internal dictionary surface, its route ids, and dictionary search/nav references.",
-		dependentSurfaces: [],
 		ownedPaths: ["src/app/(site)/(dev)/internal/dictionary"],
-		routeIds: [
-			"dictionary",
-			"dictionaryRiveLogoReveal",
-			"dictionarySpamProtectedForm",
-		],
-		routeBuilders: ["dictionaryEntry"],
-		navRouteIds: ["dictionary"],
-		searchSources: [],
-		postRemovalAssertions: [
-			{
-				label: "dictionary route ids",
-				pattern:
-					/(hrefFor\("dictionary"\)|hrefFor\("dictionaryRiveLogoReveal"\)|hrefFor\("dictionarySpamProtectedForm"\)|routeId:\s*"dictionary"|routeId:\s*"dictionaryRiveLogoReveal"|routeId:\s*"dictionarySpamProtectedForm")/,
-			},
-		],
 	},
 	reference: {
-		id: "reference",
-		flag: "--no-reference",
-		description: "Remove the internal reference/docs surface.",
-		dependentSurfaces: [],
 		ownedPaths: ["src/app/(site)/(dev)/internal/reference"],
-		routeIds: [],
-		routeBuilders: [],
-		navRouteIds: [],
-		searchSources: [],
-		postRemovalAssertions: [],
 	},
 };

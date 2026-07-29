@@ -153,7 +153,6 @@ for (const areaId of [
 		`Missing dashboard domain area: ${areaId}`,
 	);
 }
-// prune:dashboard.reference-entities:start
 assert.ok(domainInventory.some((area) => area.id === "product"));
 assert.ok(domainInventory.some((area) => area.id === "reference"));
 assert.deepEqual(
@@ -164,7 +163,6 @@ assert.deepEqual(
 	]).map((area) => area.id),
 	["product", "platform"],
 );
-// prune:dashboard.reference-entities:end
 assert.deepEqual(
 	getDashboardDomainAreasForEditedPaths([
 		"src/app/(site)/dashboard/_registry/surfaceRegistry.ts",
@@ -215,7 +213,6 @@ assert.equal(
 	false,
 );
 
-// prune:dashboard.reference-entities:start
 assert.equal(
 	getDashboardSurface("/dashboard/records/north-star")?.id,
 	"dashboard.record",
@@ -230,7 +227,6 @@ assert.equal(
 	getDashboardSurface("/dashboard/reference/entities")?.id,
 	"dashboard.reference.entities",
 );
-// prune:dashboard.reference-entities:end
 assert.equal(getDashboardSurface("/dashboard/pages"), null);
 assert.equal(
 	getDashboardSurface("/dashboard/support")?.id,
@@ -260,9 +256,7 @@ assert.equal(
 const memberSidebarIds = getDashboardSidebarGroups(memberCapabilities)
 	.flatMap((group) => group.surfaces)
 	.map((surface) => surface.id);
-// prune:dashboard.reference-entities:start
 assert.ok(memberSidebarIds.includes("dashboard.records"));
-// prune:dashboard.reference-entities:end
 assert.ok(!memberSidebarIds.includes("dashboard.organization.settings"));
 assert.ok(!memberSidebarIds.includes("dashboard.profile"));
 assert.ok(!memberSidebarIds.includes("dashboard.administration"));
@@ -292,7 +286,6 @@ assert.ok(!memberCommandIds.includes("administration.invite"));
 assert.ok(adminCommandIds.includes("navigate.dashboard.profile"));
 assert.ok(adminCommandIds.includes("navigate.dashboard.administration"));
 assert.ok(adminCommandIds.includes("administration.invite"));
-// prune:dashboard.reference-entities:start
 assert.ok(!memberCommandIds.includes("records.create"));
 assert.ok(adminCommandIds.includes("records.create"));
 
@@ -317,7 +310,6 @@ assert.deepEqual(
 	).map((item) => item.label),
 	["Organization", "Organization settings", "Administration"],
 );
-// prune:dashboard.reference-entities:end
 
 assert.deepEqual(
 	getDashboardSurfaceTrail("/dashboard", memberCapabilities),
@@ -353,10 +345,8 @@ assert.equal(
 
 for (const routeFile of [
 	"src/app/(site)/dashboard/page.tsx",
-	// prune:dashboard.reference-entities:start
 	"src/app/(site)/dashboard/records/page.tsx",
 	"src/app/(site)/dashboard/records/[recordId]/page.tsx",
-	// prune:dashboard.reference-entities:end
 	"src/app/(site)/dashboard/settings/page.tsx",
 	"src/app/(site)/dashboard/profile/page.tsx",
 	"src/app/(site)/dashboard/profile/loading.tsx",
@@ -370,14 +360,10 @@ for (const routeFile of [
 	"src/app/(site)/dashboard/platform/reports/page.tsx",
 	"src/app/(site)/dashboard/platform/reports/[id]/page.tsx",
 	"src/app/(site)/dashboard/organization/page.tsx",
-	// prune:dashboard.reference-entities:start
 	"src/app/(site)/dashboard/organization/members/page.tsx",
 	"src/app/(site)/dashboard/organization/members/[memberId]/page.tsx",
-	// prune:dashboard.reference-entities:end
 	"src/app/(site)/dashboard/organization/settings/page.tsx",
-	// prune:dashboard.reference-entities:start
 	"src/app/(site)/dashboard/reference/entities/page.tsx",
-	// prune:dashboard.reference-entities:end
 ]) {
 	assert.ok(existsSync(resolve(root, routeFile)), `Missing ${routeFile}`);
 }

@@ -32,7 +32,7 @@ Equivalent shell-first setup:
 git clone https://github.com/olafBobryk/averlo-next-template.git averlo-template
 cd averlo-template
 npm install
-npm run create:project -- --profile <profile> --output ../my-project
+npm run create:project -- --profile <profile> --content <content> --output ../my-project
 ```
 
 Then work from the generated project:
@@ -46,17 +46,17 @@ npm run dev
 
 Profile selection is the main setup decision:
 
-| Profile | Included surfaces |
-| --- | --- |
-| `full` | Marketing, auth, dashboard, developer tools, and Payload-ready scaffolding. |
-| `app-only` | Auth, dashboard, and developer tools; no marketing or Payload. |
-| `marketing-only` | Marketing, developer tools, and Payload-ready scaffolding; no auth or dashboard. |
-| `thin-start` | Minimal marketing specialist profile with Payload-ready scaffolding. |
+| Profile | Included surfaces | Content choices | Default |
+| --- | --- | --- | --- |
+| `full` | Marketing, auth, dashboard, and developer tools. | `static`, `payload-ready` | `payload-ready` |
+| `app-only` | Auth, dashboard, and developer tools; no marketing. | `static` | `static` |
+| `marketing-only` | Marketing and developer tools; no auth or dashboard. | `static`, `payload-ready` | `payload-ready` |
+| `thin-start` | Minimal marketing specialist surface. | `static`, `payload-ready` | `payload-ready` |
 
 Generated projects are one-way starting points rather than alternate states of
-this checkout. Project creation currently uses prune compatibility internally;
-positive assembly is the intended replacement. The migration gates and rollback
-references live in
+this checkout. Positive assembly copies only selected, explicitly owned project
+code and omits template profiles, inventories, and creation machinery. The
+completed migration and legacy recovery references live in
 [`docs/positive-assembly-transition.md`](docs/positive-assembly-transition.md).
 
 ## How It Works
@@ -137,7 +137,7 @@ Serena is an optional warm semantic service, not a setup prerequisite. See
 ### Thin Start
 
 `thin-start` can also be reviewed as an isolated workspace before committing to
-that profile. The creation boundary and guarded in-place path are documented in
+that profile. Its positive creation and API-review boundary are documented in
 [`docs/thin-start-creation-boundary.md`](docs/thin-start-creation-boundary.md).
 
 ### Scroll Performance

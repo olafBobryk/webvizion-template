@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
-// prune:dashboard.reference-entities:start
 import { resetReferenceRecordFixtureState } from "@/app/(site)/dashboard/_lib/fixtures/reference-records.server";
-// prune:dashboard.reference-entities:end
 import { resetPlatformFixtureState } from "@/app/(site)/dashboard/_lib/platform/fixtures.server";
 import { dashboardDebugEnabled } from "@/app/(site)/dashboard/_registry/debug";
 import { resetFixtureAuthState } from "@/lib/auth/fixture-adapter";
@@ -13,9 +11,7 @@ export async function POST() {
 	}
 	resetFixtureAuthState();
 	resetPlatformFixtureState();
-	// prune:dashboard.reference-entities:start
 	resetReferenceRecordFixtureState();
-	// prune:dashboard.reference-entities:end
 	await clearSessionId();
 	return NextResponse.json({ message: "Fixture state reset." });
 }

@@ -43,7 +43,6 @@ export function DashboardDebugMenu({
 		router.replace(`${pathname}${params.size > 0 ? `?${params}` : ""}`);
 	}
 
-	// prune:dashboard.reference-entities:start
 	function toggleMutationFailure() {
 		const params = new URLSearchParams(searchParams.toString());
 		if (params.get("debug-mutation") === "fail") {
@@ -53,7 +52,6 @@ export function DashboardDebugMenu({
 		}
 		router.replace(`${pathname}${params.size > 0 ? `?${params}` : ""}`);
 	}
-	// prune:dashboard.reference-entities:end
 
 	async function enterFixture(email: string, destination: string) {
 		await showToast.promise(signInFixture(email), {
@@ -91,7 +89,6 @@ export function DashboardDebugMenu({
 				positionStrategy="fixed"
 				side="top"
 				options={[
-					// prune:dashboard.reference-entities:start
 					{
 						href: "/dashboard/reference/entities?motion=off&reveal=off",
 						id: "entity-reference",
@@ -113,7 +110,6 @@ export function DashboardDebugMenu({
 						leadingIcon: <Icon name="warning" size="sm" />,
 						onSelect: toggleMutationFailure,
 					},
-					// prune:dashboard.reference-entities:end
 					{
 						disabled: true,
 						id: "debug-context",

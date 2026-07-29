@@ -32,8 +32,8 @@
 
 ## Template Content Modes
 
-- This template supports static, Payload-ready, and Payload-powered Vercel modes. Read `docs/template-content-modes.md` before changing content architecture, Payload wiring, or prune behavior.
-- Static projects should remove Payload with `npm run prune:template -- --no-payload` and build from fallback TypeScript content.
+- This template supports static, Payload-ready, and Payload-powered Vercel modes. Read `docs/template-content-modes.md` before changing content architecture, Payload wiring, or assembly behavior.
+- Static projects should select `--content static` during `create:project` so Payload is never included, then build from fallback TypeScript content.
 - Payload-ready projects keep the guarded Payload scaffold but do not expose live admin/API routes until activation.
 - Payload-powered Vercel projects must follow `docs/payload-vercel-neon-blob.md` and use Neon Postgres, Vercel Blob, and real Payload admin/API routes.
 - Keep the frontend contract lightweight. Marketing components should render page, section, and site layout data; they should not depend on full Payload document shapes.

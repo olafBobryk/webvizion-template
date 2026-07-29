@@ -1,125 +1,80 @@
 # Positive Assembly Transition
 
-This note preserves the intended direction for project creation while the
-template temporarily supports both the prune and positive-assembly engines.
+## Status
 
-## Decision
+The transition completed on 2026-07-29. Positive assembly is the only project
+creation model on the current branch. Users choose a route profile and a
+supported content capability; there is no engine or post-creation prune choice.
 
-Positive assembly is the intended long-term project-creation model. Prune is an
-accepted compatibility path for now; it is not the desired permanent public
-setup language.
+The migration was preserved in independently verified commits:
 
-The current two-engine implementation was introduced in two recoverable steps:
+- `5b5a3d7`: final pre-migration prune oracle and code-clarity baseline;
+- `146bfc2`: assembly-owned project state and generated-file renderers;
+- `ab04dd1`: positive static versus Payload-ready selection; and
+- `315a5a1`: assembly-only project creation with schema-v2 receipts.
 
-- `96248e8` / `checkpoint/profile-prune-v1`: filesystem-backed profiles built
-  on decentralized prune surfaces.
-- `0bf79f4` / `baseline/positive-assembly-v1`: positive assembly added beside
-  prune and promoted to `main`.
+## Current contract
 
-The second commit did not remove prune. `create:project` still defaults to
-`prune`, accepts `--engine prune|assemble`, and retains `prune:template` in the
-source template. A one-way assembled output itself omits both assembly and
-prune machinery.
+1. `create:project` positively selects a route profile and content capability.
+2. Static output retains fallback content while never including Payload.
+3. Payload-ready output includes the guarded scaffold without exposing live CMS
+   routes until activation.
+4. Generated projects contain project code and an immutable receipt, not
+   template profiles, assembly inventories, or creation machinery.
+5. Path, documentation, package, script, surface, and generated-file ownership
+   fail closed when unclassified.
+6. Marketing components continue to consume source-neutral page, layout, and
+   section models.
 
-## Why prune remains temporarily
+## Verification evidence
 
-- Existing initialized projects can still remove optional surfaces in place.
-- The profile/prune checkpoint is proven across the four current profile
-  contracts.
-- Positive assembly does not yet express every content capability as a
-  creation-time positive choice. In particular, it has no independent
-  static-versus-Payload-ready selector.
-- Keeping both engines temporarily allows direct contract and integration
-  comparison while assembly matures in real projects.
+Every migration stage was compared against the immutable prune implementation
+at `5b5a3d754068671fffe001f08b55464e1e93433e` from a detached worktree.
 
-This is a migration period, not an endorsement of maintaining two setup models
-forever.
+The parity matrix covered:
 
-## Target state
+- full / Payload-ready;
+- full / static, compared with legacy full plus `--no-payload`;
+- app-only / static;
+- marketing-only / Payload-ready;
+- marketing-only / static, compared with legacy marketing-only plus
+  `--no-payload`;
+- thin-start / Payload-ready; and
+- thin-start / static, compared with legacy thin-start plus `--no-payload`.
 
-The eventual public workflow should have one project-creation model:
+The comparator checked runtime source inventory and content, dependencies,
+development dependencies, scripts, generated configuration, required paths,
+forbidden paths, and omission of template machinery.
 
-1. `create:project` positively selects a route profile and content
-   capabilities.
-2. A normal user does not choose an engine.
-3. Static versus Payload-ready is expressed as positive inclusion at creation,
-   not a later `--no-payload` deletion.
-4. Generated projects contain project code only; they do not contain template
-   profile, assembly, or prune machinery.
-5. Existing-project migrations use an explicitly named maintenance workflow,
-   not the primary creation instructions.
-6. The prune implementation remains recoverable from its checkpoint tag and
-   branch after it leaves `main`.
+All seven positive outputs passed materialization. The complete integration
+matrix additionally passed clean install, static verification, production
+build, strict thin-start API review where applicable, and route smoke checks.
 
-Possible final syntax is intentionally not locked here. The important contract
-is positive selection—for example, a content choice such as `static` or
-`payload-ready`—rather than another matrix of negative flags.
+Two durable ignored acceptance projects were also created without manual source
+recovery:
+
+- `.template-instances/acceptance-full-static`;
+- `.template-instances/acceptance-full-payload-ready`.
+
+Both schema-v2 receipts record profile `full` and their respective content
+mode. Both projects passed `npm ci`, `npm run verify:static`, `npm run build`,
+and `npm run verify:smoke` on 2026-07-29.
 
 ## Payload and fallback boundary
 
-The migration to positive assembly must not redesign the marketing content
-architecture. The template already provides:
+The transition did not redesign marketing content. Static and Payload-ready
+projects retain the existing `MarketingPageDocument`, `SiteLayoutDocument`,
+section layout, resolver, renderer, and fallback contracts. Payload activation
+must normalize CMS data into those contracts and keep fallback content until
+migration and readback are proven.
 
-- source-neutral `MarketingPageDocument` and `SiteLayoutDocument` view models;
-- a typed section `layout` selected by `blockType`;
-- marketing layout and section renderers that consume those models;
-- `getMarketingPage()` and `getSiteLayout()` server resolver boundaries;
-- committed fallback page and site-layout data; and
-- a guarded Payload-ready scaffold for profiles that include Payload.
+## Legacy recovery
 
-Static assembly should omit the Payload capability while retaining the same
-fallback and render contracts. Payload-ready assembly should include the
-guarded scaffold without changing those contracts.
+Prune remains recoverable from the immutable
+`checkpoint/profile-prune-v1` tag and the matching remote
+`origin/codex/template-profile-modes` branch, both resolving to
+`96248e8a4a1ddbfe3dcb17ffad82322af220ad26`.
 
-After a fallback site is complete, the optional `$cms-backfill` skill may
-activate Payload. Its generic assumption that a hard-coded site still needs a
-CMS-neutral layout model is false here. It must treat the existing page, layout,
-section, resolver, and fallback models as pinned inputs; refine the Payload
-editorial schema around them; seed the exact fallback; and prove normalized
-readback and visual parity before cutover.
-
-## Exit gates for removing prune from `main`
-
-Do not remove the compatibility engine until all of these are true:
-
-- Positive assembly can create every accepted route profile.
-- Payload-ready versus static content capability is positively selectable.
-- Package, script, path, route, documentation, and verifier ownership all fail
-  closed when unclassified.
-- Full, app-only, marketing-only, and thin-start outputs pass clean install,
-  static verification, production build, and route smoke checks.
-- At least one real static project and one Payload-ready project have been
-  created through assembly without manual source recovery.
-- The project documentation no longer requires negative prune flags for normal
-  creation.
-- A focused maintenance path is documented for already-initialized legacy
-  projects.
-- The prune checkpoint tag and remote fallback branch are verified before
-  removal.
-
-## Removal sequence
-
-When the gates pass:
-
-1. Make positive assembly the only `create:project` implementation.
-2. Remove the public `--engine` decision.
-3. Remove `pruneFlags`, marker rewrites, negative removal plans, and prune-only
-   verification from profile creation.
-4. Remove `prune:template` and its implementation from `main`.
-5. Rename assembly-oriented verification to the normal profile verification
-   path.
-6. Rewrite setup documentation around profile and content capability selection.
-7. Verify the checkpoint tag and fallback branch remain reachable.
-
-Until then, documentation must label `--no-payload` and similar flags as
-compatibility prune syntax and must not imply that assembled outputs can run
-post-creation pruning.
-
-## Non-goals
-
-- Do not delete fallback content when Payload is activated.
-- Do not make marketing components consume Payload document shapes.
-- Do not turn fixed marketing pages into unrestricted editor-controlled page
-  builders.
-- Do not multiply route profiles merely to encode every content-source choice.
-- Do not rewrite shared Git history to hide the compatibility period.
+Existing initialized projects that retained prune may maintain it at their
+pinned revision. Current project creation and documentation must not restore
+negative prune flags or mix legacy manifests into positive assembly.

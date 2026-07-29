@@ -95,6 +95,11 @@ function selectedProfileSurfaces(profile, content) {
 	}
 	const selected = new Set(profile.assembly?.surfaces ?? []);
 	if (content === "static") selected.delete("payload");
+	for (const surfaceKey of selected) {
+		if (!templateSurfaces[surfaceKey]) {
+			throw new Error(`Unknown assembly surface: ${surfaceKey}`);
+		}
+	}
 	return selected;
 }
 
@@ -226,7 +231,7 @@ function selectRecord(source, selectedNames) {
 	return sortedRecord(selected);
 }
 
-function assertPackageOwnership(pkg) {
+export function assertPackageOwnership(pkg) {
 	const surfaceScripts = new Set(
 		Object.values(templateSurfaces).flatMap(
 			(surface) => surface.packageScripts ?? [],

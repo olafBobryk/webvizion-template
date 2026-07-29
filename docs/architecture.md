@@ -189,7 +189,7 @@ Reviewed against [the staging acceptance ledger](./architecture-staging.md) on 2
 ### Entity presentation
 
 - Entity presentation is a full-start dashboard capability rather than a shared primitive, thin-start dependency, or application-wide global registry.
-- Entity-presentation source lives beneath `src/app/(site)/dashboard` so dashboard ownership and prune behavior remain physically visible.
+- Entity-presentation source lives beneath `src/app/(site)/dashboard` so dashboard assembly ownership remains physically visible.
 - Non-React contracts and factories live beneath dashboard `_lib`, with generic presentation contracts separated from entity-owned domain inputs and presentation definitions. React renderers live beneath dashboard `_components`, with generic presentation components separated from entity-owned components.
 - Surface adapters remain with their route or surface until repeated consumers justify promoting a reusable entity-owned adapter.
 - The profile manifest exposes `dashboard.reference-entities` as the independently pruneable child surface. The small presentation foundation remains dashboard core; dashboard removal removes both, while reference-entity pruning removes its examples, integrations, demonstrations, and policy hooks.

@@ -9,9 +9,3 @@ export const templateSurfaces = {
 	...devToolSurfaces,
 	...payloadSurface,
 };
-
-export function getTemplateSurface(id) {
-	const surface = templateSurfaces[id];
-	if (!surface) throw new Error(`Unknown template surface: ${id}`);
-	return surface;
-}

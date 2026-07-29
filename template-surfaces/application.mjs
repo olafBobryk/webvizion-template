@@ -1,10 +1,5 @@
 export const applicationSurfaces = {
 	dashboardReferenceEntities: {
-		id: "dashboard.reference-entities",
-		flag: "--no-dashboard-reference-entities",
-		description:
-			"Remove dashboard reference record/member routes, examples, policy, and focused verifiers while retaining dashboard and platform core presentation.",
-		dependentSurfaces: ["dashboard"],
 		ownedPaths: [
 			"docs/frontend-entity-policy.md",
 			"scripts/verify/verify-reference-entities.ts",
@@ -12,7 +7,6 @@ export const applicationSurfaces = {
 			"scripts/verify/verify-mutation-policy.ts",
 			"scripts/verify/verify-entity-skeletons.ts",
 			"scripts/verify/verify-frontend-entity-policy.ts",
-			"scripts/verify/verify-profile-pruning.mjs",
 			"src/app/(site)/dashboard/records",
 			"src/app/(site)/dashboard/organization/members/[memberId]",
 			"src/app/(site)/dashboard/reference",
@@ -23,19 +17,6 @@ export const applicationSurfaces = {
 			"src/app/(site)/dashboard/_lib/entity-lifecycle.ts",
 			"src/app/(site)/dashboard/_lib/fixtures",
 		],
-		markerFiles: [
-			"scripts/verify/verify-dashboard-surfaces.ts",
-			"scripts/verify/verify-dashboard-page-policy.ts",
-			"src/app/(site)/dashboard/page.tsx",
-			"src/app/(site)/dashboard/_components/OverviewSurface.tsx",
-			"src/app/(site)/dashboard/layout.tsx",
-			"src/app/(site)/dashboard/organization/page.tsx",
-			"src/app/(site)/dashboard/_components/debug/DashboardDebugMenu.tsx",
-			"src/app/(site)/dashboard/_components/layout/DashboardSidebarNav.tsx",
-			"src/app/(site)/dashboard/_components/debug/DashboardForcedLoadingView.tsx",
-			"src/app/(site)/dashboard/_registry/surfaceRegistry.ts",
-			"src/app/api/debug/fixture/reset/route.ts",
-		],
 		packageScripts: [
 			"verify:reference-entities",
 			"verify:entity-deletion",
@@ -44,20 +25,8 @@ export const applicationSurfaces = {
 			"verify:frontend-entity-policy",
 			"verify:frontend-entities",
 		],
-		postRemovalAssertions: [
-			{
-				label: "reference entity routes and imports",
-				pattern:
-					/(dashboard\.reference\.entities|dashboard\.records|dashboard\.record|dashboard\.organization\.members|dashboard\.organization\.member|\/dashboard\/records|\/dashboard\/reference\/entities|reference-records|reference-members)/,
-			},
-		],
 	},
 	dashboard: {
-		id: "dashboard",
-		flag: "--no-dashboard",
-		description:
-			"Remove the dashboard shell, login/auth routes, and dashboard-only auth helpers.",
-		dependentSurfaces: ["auth"],
 		ownedPaths: [
 			"docs/auth-organization-adapters.md",
 			"docs/dashboard-page-policy.md",
@@ -77,35 +46,6 @@ export const applicationSurfaces = {
 			"src/lib/auth",
 			"src/lib/template-intelligence/dashboard-domain.tsx",
 		],
-		routeIds: [
-			"login",
-			"signInOptions",
-			"forgotPassword",
-			"resetPassword",
-			"setPassword",
-			"invitation",
-			"selectOrganization",
-		],
-		routeBuilders: ["dashboardSubpage"],
-		navRouteIds: [],
-		searchSources: [],
-		postRemovalAssertions: [
-			{
-				label: "dashboard route ids",
-				pattern:
-					/(hrefFor\("login"\)|hrefFor\("signInOptions"\)|hrefFor\("forgotPassword"\)|hrefFor\("resetPassword"\)|hrefFor\("setPassword"\)|hrefFor\("invitation"\)|hrefFor\("selectOrganization"\)|routeId:\s*"login"|routeId:\s*"signInOptions"|routeId:\s*"forgotPassword"|routeId:\s*"resetPassword"|routeId:\s*"setPassword"|routeId:\s*"invitation"|routeId:\s*"selectOrganization")/,
-			},
-			{
-				label: "dashboard auth import",
-				pattern: /from\s+["']@\/lib\/api\/auth["']/,
-			},
-			{
-				label: "dashboard support and platform operations",
-				pattern:
-					/(\/dashboard\/(?:platform|support)|\/api\/(?:feedback|platform|support)|platformRole|Platform Inbox|ReportIssueModal)/,
-			},
-		],
-		markerFiles: ["src/app/(site)/(dev)/internal/intelligence/page.tsx"],
 		packageScripts: [
 			"verify:auth",
 			"verify:dashboard-pages",

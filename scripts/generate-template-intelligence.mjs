@@ -39,9 +39,9 @@ const INCLUDED_ROOTS = [
 	"README.md",
 	"docs",
 	"payload.config.ts",
+	"scripts/create-template-profile.mjs",
 	"scripts/dev-server.mjs",
 	"scripts/generate-template-intelligence.mjs",
-	"scripts/prune-template.mjs",
 	"scripts/verify/AGENTS.md",
 	"src/app/(payload)",
 	"src/app/(site)/(marketing)",
@@ -118,25 +118,28 @@ const CONCEPTS = [
 		keywords: ["payload", "cms", "admin", "collection", "media"],
 	},
 	{
-		id: "template-pruning",
-		title: "Template Pruning",
+		id: "template-assembly",
+		title: "Template Assembly",
 		summary:
-			"Optional surfaces and rewrite logic that keep cloned projects buildable after unused template areas are removed.",
+			"Positive profiles, content capabilities, and ownership rules that assemble clean project workspaces.",
 		matches: [
-			"scripts/prune-template.mjs",
+			"scripts/create-template-profile.mjs",
 			"scripts/verify/verify-smoke.mjs",
+			"template-assembly",
+			"template-profiles",
+			"template-surfaces",
 			"README.md",
 			"docs/template-content-modes.md",
 			"src/config/routes.ts",
 			"src/lib/marketing-content/fallback.ts",
 		],
-		keywords: ["prune", "optional", "surface", "template", "clone"],
+		keywords: ["assemble", "profile", "content", "surface", "template"],
 	},
 	{
 		id: "dashboard-reference-entities",
 		title: "Dashboard Reference Entities",
 		summary:
-			"Dashboard-owned member and record presentation examples with fetch-free factories, live/skeleton parity, fixture CRUD, and child pruning.",
+			"Dashboard-owned member and record presentation examples with fetch-free factories, live/skeleton parity, fixture CRUD, and explicit assembly ownership.",
 		matches: [
 			"docs/frontend-entity-policy.md",
 			"src/app/(site)/dashboard/_lib/entities",
@@ -189,7 +192,7 @@ const AGENT_MAP = {
 				"src/lib/marketing-content/fallback.ts",
 				"src/lib/marketing-content/types.ts",
 				"src/lib/marketing-content/resolvers.ts",
-				"scripts/prune-template.mjs",
+				"template-assembly/project-files.mjs",
 			],
 			notes:
 				"Route IDs live in appRoutes, hrefFor resolves them, internal routes are standalone local-development surfaces that return 404 in production, and marketing layout/search/fallback consume lightweight public link data.",
@@ -238,15 +241,21 @@ const AGENT_MAP = {
 				"Application and feature consumers use curated family entrypoints while family internals and lower-level dependency edges import direct owners. Full and thin profiles maintain deliberate barrel parity without exposing removed capabilities.",
 		},
 		{
-			id: "prune-behavior",
-			title: "Prune behavior and optional surface ownership",
-			aliases: ["prune", "optional-surfaces", "template-pruning"],
+			id: "assembly-behavior",
+			title: "Positive assembly and surface ownership",
+			aliases: [
+				"assembly",
+				"profiles",
+				"optional-surfaces",
+				"template-pruning",
+			],
 			paths: [
-				"scripts/prune-template.mjs",
+				"scripts/create-template-profile.mjs",
 				"scripts/verify/AGENTS.md",
-				"scripts/verify/verify-profile-pruning.mjs",
+				"scripts/verify/verify-template-profiles.mjs",
+				"template-assembly/assembler.mjs",
+				"template-assembly/project-files.mjs",
 				"template-profiles/thin-start/manifest.mjs",
-				"scripts/create-thin-start.mjs",
 				"scripts/review-thin-start-api.mjs",
 				"README.md",
 				"docs/template-content-modes.md",
@@ -257,7 +266,7 @@ const AGENT_MAP = {
 				"src/lib/marketing-content/fallback.ts",
 			],
 			notes:
-				"SURFACES owns normal prune flags, paths, routes, nav/search references, smoke-route rewrites, package changes, and post-removal assertions. dashboard.reference-entities is a dashboard child surface: --no-dashboard-reference-entities removes the reference verticals while retaining dashboard core, and --no-dashboard removes both. Lightweight instances should dry-run then apply their selected flags. Add --no-payload only for static instances. Thin-start is a separate explicit instance activation path; dry-run first, then activate with --in-place --confirm-instance and require strict API review.",
+				"Profiles positively select owned route and developer surfaces, then choose static or Payload-ready content where supported. Generated projects omit all template machinery. Ownership for paths, docs, scripts, dependencies, and generated configuration fails closed when unclassified.",
 		},
 		{
 			id: "frontend-entity-system",
@@ -293,7 +302,7 @@ const AGENT_MAP = {
 				"src/payload/isPayloadConfigured.ts",
 				"src/app/(payload)/api/[...slug]/route.ts",
 				"src/app/(payload)/admin/[[...segments]]/page.tsx",
-				"scripts/prune-template.mjs",
+				"template-assembly/project-files.mjs",
 			],
 			notes:
 				"Frontend contracts stay lightweight; Payload-specific fields should be resolved server-side before section rendering.",
@@ -308,7 +317,7 @@ const AGENT_MAP = {
 				"scripts/dev-server.mjs",
 				"next.config.ts",
 				".gitignore",
-				"scripts/prune-template.mjs",
+				"template-assembly/assembler.mjs",
 			],
 			notes:
 				"Use npm run dev for isolated prewarmed previews. dev:agent and dev:user remain compatibility aliases; use the automation URL query flags for automated traversal.",
@@ -346,11 +355,11 @@ const AGENT_MAP = {
 				"src/config/routes.ts",
 				"src/lib/routes.ts",
 				"src/lib/marketing-content/fallback.ts",
-				"scripts/prune-template.mjs",
+				"template-surfaces/index.mjs",
 				"README.md",
 			],
 			notes:
-				"Add template-maintainer tools under /internal so they inherit noindex and the client-clone production guard; add prune ownership if clones should remove them.",
+				"Add template-maintainer tools under /internal so they inherit noindex and the client-project production guard; classify their positive assembly ownership and package requirements before adding them to a profile.",
 		},
 	],
 };

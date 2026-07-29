@@ -7,12 +7,9 @@ keep `/internal/*` dev-only in production by default, while the canonical
 template production deployment may expose those routes as live reference
 material.
 
-The feature is optional template infrastructure. Client clones can remove it
-with:
-
-```bash
-npm run prune:template -- --no-intelligence
-```
+The feature is template-owned infrastructure. Profiles include it explicitly
+through positive surface ownership; generated projects contain only the
+intelligence files selected by their profile.
 
 ## Generated Index
 
@@ -34,8 +31,8 @@ that produced it and should not be committed.
 
 The generator is deterministic and local-only. It scans known template source
 areas such as `AGENTS.md`, `README.md`, `docs`, `src/components`, `src/lib`,
-internal marketing surfaces, route config, prune tooling, and guarded Payload
-scaffold markers. It excludes dependency folders, build output, worktrees,
+internal marketing surfaces, route config, assembly tooling, and guarded
+Payload scaffold boundaries. It excludes dependency folders, build output, worktrees,
 generated TypeScript configs, environment files, `.understand-anything`, and
 other local artifacts.
 

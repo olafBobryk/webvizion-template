@@ -3,12 +3,10 @@ import { Button } from "@/components/ui/primitives/Button";
 import { Card } from "@/components/ui/primitives/Card";
 import { StatusMessage } from "@/components/ui/primitives/StatusMessage";
 import { Text } from "@/components/ui/primitives/Text";
-// prune:dashboard:start
 import {
 	DashboardDomainChips,
 	DashboardDomainOverview,
 } from "@/lib/template-intelligence/dashboard-domain";
-// prune:dashboard:end
 import {
 	type CodexTurnRecordingReadResult,
 	type CodexTurnSummary,
@@ -126,9 +124,7 @@ function TurnCard({ turn }: { turn: CodexTurnSummary }) {
 						<Text variant="body">{turn.model ?? "Unknown"}</Text>
 					</div>
 				</div>
-				{/* prune:dashboard:start */}
 				<DashboardDomainChips editedPaths={turn.editedPaths} />
-				{/* prune:dashboard:end */}
 				{turn.editedPaths.length > 0 ? (
 					<div className="grid gap-1">
 						<Text variant="caption" tone="muted">
@@ -367,9 +363,7 @@ function BenchmarkState({
 						Tool totals include only local paths observed by Codex hooks. Hosted
 						tools outside those hooks are excluded.
 					</Text>
-					{/* prune:dashboard:start */}
 					<DashboardDomainOverview turns={recording.turns} />
-					{/* prune:dashboard:end */}
 
 					{recording.status === "missing" || recording.turns.length === 0 ? (
 						<Card>

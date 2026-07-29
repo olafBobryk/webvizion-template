@@ -73,10 +73,8 @@ export type DashboardSurface = {
 
 export type DashboardSurfaceId =
 	| "dashboard.overview"
-	// prune:dashboard.reference-entities:start
 	| "dashboard.records"
 	| "dashboard.record"
-	// prune:dashboard.reference-entities:end
 	| "dashboard.settings"
 	| "dashboard.profile"
 	| "dashboard.administration"
@@ -88,14 +86,10 @@ export type DashboardSurfaceId =
 	| "dashboard.platform.report"
 	| "dashboard.organization"
 	| "dashboard.organization.switch"
-	// prune:dashboard.reference-entities:start
 	| "dashboard.organization.member"
-	// prune:dashboard.reference-entities:end
 	| "dashboard.organization.settings"
-	// prune:dashboard.reference-entities:start
 	| "dashboard.reference.entities"
 	| "dashboard.reference.skeletons"
-	// prune:dashboard.reference-entities:end
 	| never;
 
 type DashboardSurfaceTrailItem = {
@@ -117,7 +111,6 @@ export const dashboardSurfaceRegistry: readonly DashboardSurface[] = [
 		sidebar: true,
 		sidebarTier: "primary",
 	},
-	// prune:dashboard.reference-entities:start
 	{
 		capability: "records.read",
 		commands: [
@@ -162,7 +155,6 @@ export const dashboardSurfaceRegistry: readonly DashboardSurface[] = [
 		sidebar: false,
 		sidebarTier: "primary",
 	},
-	// prune:dashboard.reference-entities:end
 	{
 		commands: [],
 		description: "Manage the current account and application preferences.",
@@ -354,7 +346,6 @@ export const dashboardSurfaceRegistry: readonly DashboardSurface[] = [
 		sidebar: false,
 		sidebarTier: "secondary",
 	},
-	// prune:dashboard.reference-entities:start
 	{
 		capability: "organization.read",
 		commands: [],
@@ -370,7 +361,6 @@ export const dashboardSurfaceRegistry: readonly DashboardSurface[] = [
 		sidebar: false,
 		sidebarTier: "secondary",
 	},
-	// prune:dashboard.reference-entities:end
 	{
 		capability: "organization.manage",
 		commands: [],
@@ -386,7 +376,6 @@ export const dashboardSurfaceRegistry: readonly DashboardSurface[] = [
 		sidebar: true,
 		sidebarTier: "secondary",
 	},
-	// prune:dashboard.reference-entities:start
 	{
 		capability: "debug.use",
 		commands: [],
@@ -417,7 +406,6 @@ export const dashboardSurfaceRegistry: readonly DashboardSurface[] = [
 		sidebar: false,
 		sidebarTier: "utility",
 	},
-	// prune:dashboard.reference-entities:end
 ] as const;
 
 export type DashboardDomainAreaInventoryItem = {
@@ -537,14 +525,12 @@ export function hasDashboardCapability(
 
 function matchesSurface(pathname: string, surface: DashboardSurface) {
 	if (surface.match === "exact") return pathname === surface.href;
-	// prune:dashboard.reference-entities:start
 	if (surface.match === "record-detail") {
 		return /^\/dashboard\/records\/[^/]+$/.test(pathname);
 	}
 	if (surface.match === "member-detail") {
 		return /^\/dashboard\/organization\/members\/[^/]+$/.test(pathname);
 	}
-	// prune:dashboard.reference-entities:end
 	if (surface.match === "platform-inbox-detail") {
 		return /^\/dashboard\/platform\/inbox\/[^/]+$/.test(pathname);
 	}
