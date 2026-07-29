@@ -128,9 +128,21 @@ export function EntityReferenceSurface({
 							profile-picture and plain-icon modes.
 						</Card.Description>
 					</Card.Header>
-					<Card.Content className="grid gap-4">
-						<OrganizationIdentity presentation={organization} />
-						<OrganizationIdentity presentation={organization} visual="icon" />
+					<Card.Content className="grid gap-5">
+						<OrganizationIdentity
+							avatarSize="xl"
+							presentation={organization}
+							variant="profile"
+						/>
+						<OrganizationIdentity
+							presentation={organization}
+							variant="compact"
+						/>
+						<OrganizationIdentity
+							presentation={organization}
+							variant="compact"
+							visual="icon"
+						/>
 					</Card.Content>
 				</Card>
 				<OrganizationSkeletonReferenceCard />

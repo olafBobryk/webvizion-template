@@ -281,8 +281,12 @@ export function DashboardSkeletonReferenceClient({
 						</Comparison>
 					) : null}
 					<Comparison title="OrganizationIdentity">
-						<OrganizationIdentity presentation={organization} />
-						<OrganizationIdentity.Skeleton />
+						<OrganizationIdentity
+							avatarSize="xl"
+							presentation={organization}
+							variant="profile"
+						/>
+						<OrganizationIdentity.Skeleton avatarSize="xl" variant="profile" />
 					</Comparison>
 					<Comparison title="DashboardDetailField">
 						<DashboardDetailField

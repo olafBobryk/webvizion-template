@@ -1,8 +1,5 @@
-import clsx from "clsx";
-import Link from "next/link";
-import { focusRing } from "@/components/ui/foundations/focus";
-import { Text } from "@/components/ui/primitives/Text";
 import type { MemberIdentityPresentation } from "../../../_lib/entities/member/presentation";
+import { EntityIdentity } from "../EntityIdentity";
 import {
 	MemberAvatar,
 	type MemberAvatarSize,
@@ -41,38 +38,16 @@ function MemberIdentityRoot({
 			size={avatarSize ?? defaultAvatarSize[variant]}
 		/>
 	);
-	const label =
-		href && presentation.href ? (
-			<Link
-				className={clsx(
-					"truncate rounded-sm text-sm font-normal leading-6 text-foreground outline-none",
-					focusRing.visibleDefault,
-				)}
-				href={presentation.href}
-			>
-				{presentation.displayLabel}
-			</Link>
-		) : profile ? (
-			<Text as="h2" className="truncate" variant="support">
-				{presentation.displayLabel}
-			</Text>
-		) : (
-			<Text as="span" className="truncate" variant="support">
-				{presentation.displayLabel}
-			</Text>
-		);
 	return (
-		<div className={clsx("flex min-w-0 items-center", "gap-3.5", className)}>
-			{avatar}
-			<div className="grid min-w-0 flex-1 gap-0.5">
-				{label}
-				{actor ? null : (
-					<Text className="truncate" tone="muted" variant="support">
-						{presentation.emailLabel}
-					</Text>
-				)}
-			</div>
-		</div>
+		<EntityIdentity
+			avatar={avatar}
+			className={className}
+			primaryAs={profile ? "h2" : "span"}
+			primaryHref={href ? presentation.href : undefined}
+			primaryLabel={presentation.displayLabel}
+			secondaryLabel={actor ? undefined : presentation.emailLabel}
+			variant={variant}
+		/>
 	);
 }
 
@@ -81,7 +56,6 @@ export function MemberIdentitySkeleton({
 	className,
 	displayLabel = "Example member",
 	emailLabel = "member@example.com",
-	href = false,
 	variant = "profile",
 }: {
 	avatarSize?: MemberAvatarSize;
@@ -93,47 +67,16 @@ export function MemberIdentitySkeleton({
 }) {
 	const profile = variant === "profile";
 	return (
-		<div className={clsx("flex min-w-0 items-center", "gap-3.5", className)}>
-			<MemberAvatarSkeleton size={avatarSize ?? defaultAvatarSize[variant]} />
-			<div className="grid min-w-0 flex-1 gap-0.5">
-				{profile ? (
-					<Text.Skeleton
-						as="h2"
-						className="max-w-48 truncate"
-						variant="support"
-					>
-						{displayLabel}
-					</Text.Skeleton>
-				) : href ? (
-					<Text.Skeleton
-						as="span"
-						className="max-w-48 truncate text-sm font-normal leading-6 text-foreground"
-						tone={null}
-						variant={null}
-					>
-						{displayLabel}
-					</Text.Skeleton>
-				) : (
-					<Text.Skeleton
-						as="span"
-						className="max-w-48 truncate"
-						variant="support"
-					>
-						{displayLabel}
-					</Text.Skeleton>
-				)}
-				{variant === "actor" ? null : (
-					<Text.Skeleton
-						as="span"
-						className="max-w-56 truncate"
-						tone="muted"
-						variant="support"
-					>
-						{emailLabel}
-					</Text.Skeleton>
-				)}
-			</div>
-		</div>
+		<EntityIdentity.Skeleton
+			avatar={
+				<MemberAvatarSkeleton size={avatarSize ?? defaultAvatarSize[variant]} />
+			}
+			className={className}
+			primaryAs={profile ? "h2" : "span"}
+			primaryLabel={displayLabel}
+			secondaryLabel={variant === "actor" ? undefined : emailLabel}
+			variant={variant}
+		/>
 	);
 }
 

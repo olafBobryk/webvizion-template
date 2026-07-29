@@ -68,8 +68,9 @@ export function OrganizationSkeletonReferenceCard() {
 					geometry.
 				</Card.Description>
 			</Card.Header>
-			<Card.Content>
-				<OrganizationIdentity.Skeleton />
+			<Card.Content className="grid gap-5">
+				<OrganizationIdentity.Skeleton avatarSize="xl" variant="profile" />
+				<OrganizationIdentity.Skeleton variant="compact" />
 			</Card.Content>
 		</Card>
 	);
@@ -313,14 +314,22 @@ export function DashboardEntityReferenceLoadingComposition() {
 							profile-picture and plain-icon modes.
 						</Card.Description>
 					</Card.Header>
-					<Card.Content className="grid gap-4">
+					<Card.Content className="grid gap-5">
 						<OrganizationIdentity.Skeleton
+							avatarSize="xl"
 							displayLabel="Demo organization"
 							secondaryLabel="demo · Owner"
+							variant="profile"
 						/>
 						<OrganizationIdentity.Skeleton
 							displayLabel="Demo organization"
 							secondaryLabel="demo · Owner"
+							variant="compact"
+						/>
+						<OrganizationIdentity.Skeleton
+							displayLabel="Demo organization"
+							secondaryLabel="demo · Owner"
+							variant="compact"
 							visual="icon"
 						/>
 					</Card.Content>

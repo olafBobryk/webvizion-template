@@ -97,6 +97,7 @@ export function DashboardOrganizationSwitcher({
 					mobileExpanded ? "max-lg:grid" : "max-lg:hidden",
 					collapsed ? "lg:hidden" : "lg:grid",
 				)}
+				variant="compact"
 			/>
 		);
 	}
@@ -131,6 +132,7 @@ export function DashboardOrganizationSwitcher({
 					<OrganizationIdentity
 						className="w-full"
 						presentation={choice.presentation}
+						variant="compact"
 					/>
 				),
 				key: choice.id,

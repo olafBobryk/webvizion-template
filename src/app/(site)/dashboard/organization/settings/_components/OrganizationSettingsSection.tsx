@@ -113,7 +113,11 @@ function OrganizationSettingsSectionRoot({
 					</Card.Action>
 				</Card.Header>
 				<Card.Content className="grid gap-5">
-					<OrganizationIdentity avatarSize="xl" presentation={presentation} />
+					<OrganizationIdentity
+						avatarSize="xl"
+						presentation={presentation}
+						variant="profile"
+					/>
 					<dl className="grid gap-4 sm:grid-cols-2">
 						<DashboardDetailField
 							icon={<Icon name="building" size="sm" />}
@@ -202,7 +206,7 @@ export function OrganizationSettingsSectionSkeleton() {
 					</Card.Action>
 				</Card.Header>
 				<Card.Content className="grid gap-5">
-					<OrganizationIdentity.Skeleton avatarSize="xl" />
+					<OrganizationIdentity.Skeleton avatarSize="xl" variant="profile" />
 					<dl className="grid gap-4 sm:grid-cols-2">
 						<DashboardDetailField.Skeleton
 							icon={<Icon name="building" size="sm" />}
