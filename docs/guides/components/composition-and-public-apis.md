@@ -10,7 +10,7 @@ component only when extending an existing owner would harm its coherence.
 | --- | --- |
 | Complete form control | `@/components/ui/input` |
 | Common loading, state, copy, disclosure, or display helper | `@/components/ui/misc` |
-| Portal-backed modal or toast behavior | `@/components/ui/overlays` and its documented APIs |
+| Portal-backed modal or toast behavior | The documented modal, toast, or portal owner under `src/components/ui/overlays/` |
 | Reusable above-primitive composition | `src/components/composites/` |
 | Custom arrangement with standard behavior | `src/components/ui/primitives/` |
 | Focus, settings, motion, or surface tokens | `src/components/ui/foundations/` |
@@ -24,7 +24,7 @@ labels, dropdowns, dialogs, feedback surfaces, or layout widgets.
 | --- | --- | --- |
 | Independent owner | Standalone export | `Button`, `SelectInput` |
 | Cohesive peer family | ES-module namespace | `Markdown.Editor`, `Markdown.Render` |
-| Structurally owned slot | Runtime compound | `Card.Header`, `Reveal.Item` |
+| Structurally owned slot | Runtime compound | `Card.Header`, `Modal.StepForm` |
 | Subordinate representation | Component-owned companion | `Button.Skeleton` |
 
 - ES-module namespaces are ordinary named exports consumed with
@@ -35,6 +35,12 @@ labels, dropdowns, dialogs, feedback surfaces, or layout widgets.
 - External consumers use the documented family entrypoint. Family internals and
   lower-level dependencies import direct owners when a barrel would invert the
   dependency graph or create a cycle.
+- A source-level `export` used for cross-file composition does not by itself make
+  that symbol public. Supported consumer APIs are defined by documented family
+  entrypoints or documented standalone owners.
+- Complete controls remain the default for page work. Public composition
+  primitives such as `ChoiceField` and the choice indicators exist for building
+  reusable controls that preserve the family's semantics and focus behavior.
 - Reduced profiles expose deliberate subsets of the same family and omit
   unavailable members rather than stubbing them.
 

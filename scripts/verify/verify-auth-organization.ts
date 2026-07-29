@@ -27,7 +27,7 @@ import {
 	updateFixtureMembershipRole,
 	updateFixtureOrganization,
 	validateFixturePasswordRecoveryToken,
-} from "../../src/lib/auth/fixture-core";
+} from "../../src/lib/auth/fixture";
 import { privateFilePolicy } from "../../src/lib/auth/private-files";
 
 function expectCode(action: () => unknown, code: string) {

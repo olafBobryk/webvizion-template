@@ -26,9 +26,6 @@ its guide:
 - Typography, actions, cards, panels, sections, and surface ownership:
   `docs/guides/components/surfaces-and-presentation.md`
 
-Sections marked **Review decision** record unresolved policy. Do not silently
-treat a proposed direction in those sections as an established rule.
-
 ## Default Workflow
 
 1. Identify the UX pattern before page-specific styling.
@@ -71,7 +68,8 @@ For a new reusable library feature:
 
 - `branding/`: brand identity primitives.
 - `composites/`: reusable above-primitive compositions.
-- `domain/`: reusable domain-level widgets.
+- `domain/`: reserved extension point for reusable domain-level widgets added by
+  assembled template instances; the source template need not contain it yet.
 - `mount/`: client-only modal, toast, and loading hosts.
 - `ui/foundations/`: focus, motion, settings, and shared CSS tokens.
 - `ui/helpers/`: small component helpers.

@@ -5,8 +5,8 @@ Lowest-level reusable building blocks. Agents should check this folder before wr
 
 Cross-cutting selection rules live in
 `docs/guides/components/surfaces-and-presentation.md`; form ownership lives in
-`docs/guides/components/forms-and-submission.md`; and the unresolved
-`StatusMessage` boundary is recorded in
+`docs/guides/components/forms-and-submission.md`; and the narrow
+`StatusMessage` ownership boundary is recorded in
 `docs/guides/components/feedback-and-status.md`.
 
 ## Use This Folder When
@@ -25,7 +25,7 @@ Cross-cutting selection rules live in
 - `src/components/ui/primitives/Card.tsx`: structured card built on `Panel`, with owned header, action, content, and footer slots.
 - `src/components/ui/primitives/Section.tsx`: page section wrapper.
 - `src/components/ui/primitives/Divider.tsx`: horizontal or vertical separator with optional horizontal label.
-- `src/components/ui/primitives/StatusMessage.tsx`: current semantic inline status surface for information, success, warning, and danger copy. Its narrower usage boundary remains a documented review decision.
+- `src/components/ui/primitives/StatusMessage.tsx`: persistent contextual notice surface with a client-only `StatusMessage.Presence` member for controlled appearance and removal.
 - `src/components/ui/primitives/accent.ts`: the closed semantic accent contract shared by Panel, Card, and compact status surfaces.
 - `src/components/ui/primitives/dropdownStyles.ts`: shared dropdown classnames.
 
@@ -40,6 +40,10 @@ Cross-cutting selection rules live in
   - Ghost interaction is opacity-only and never paints a hover surface. Use it for navigation-style actions such as header search results and footer links.
 - `InputFrame` should own the visual shell for text-like controls.
 - `Field` should own labels, descriptions, required markers, and inline status messages.
+- `StatusMessage` is not a form-result banner. Use it only for persistent
+  context independent of the latest action. `StatusMessage.Presence` owns its
+  animated height and separating gap; compose it in a gapless grouping and do
+  not add a second parent gap.
 - `Dropdown` and `Listbox` should own menu positioning and accessible option-list behavior rather than page-local popover logic.
 	- Use `Dropdown.Menu` for action menus, `Dropdown.Listbox` for selectable entity menus, and low-level `Dropdown` only for editable or otherwise specialized triggers.
 	- Use `Dropdown.Panel` for independently controlled anchored date, color, and swatch surfaces.

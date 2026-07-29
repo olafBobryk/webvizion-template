@@ -1,42 +1,15 @@
-import clsx from "clsx";
-import type * as React from "react";
-import {
-	type AccentTone,
-	getAccentClassName,
-	getAccentForegroundClassName,
-	getAccentStyle,
-} from "./accent";
+import { StatusMessagePresence } from "./StatusMessagePresence";
+import { StatusMessageSurface } from "./StatusMessageSurface";
 
-export type StatusMessageTone = Exclude<AccentTone, "neutral">;
+export type {
+	StatusMessagePresenceGap,
+	StatusMessagePresenceProps,
+} from "./StatusMessagePresence";
+export type {
+	StatusMessageProps,
+	StatusMessageTone,
+} from "./StatusMessageSurface";
 
-export type StatusMessageProps = React.HTMLAttributes<HTMLParagraphElement> & {
-	tone?: StatusMessageTone;
-};
-
-export function StatusMessage({
-	children,
-	className,
-	style,
-	tone = "info",
-	...rest
-}: StatusMessageProps) {
-	return (
-		<p
-			className={clsx(
-				"rounded-lg border px-3 py-2 text-sm leading-6",
-				getAccentClassName(tone, "surface", { solidBackground: true }),
-				getAccentForegroundClassName(tone),
-				className,
-			)}
-			data-accent={tone}
-			data-solid-accent-background
-			style={{
-				...getAccentStyle(tone, "surface", { solidBackground: true }),
-				...style,
-			}}
-			{...rest}
-		>
-			{children}
-		</p>
-	);
-}
+export const StatusMessage = Object.assign(StatusMessageSurface, {
+	Presence: StatusMessagePresence,
+});

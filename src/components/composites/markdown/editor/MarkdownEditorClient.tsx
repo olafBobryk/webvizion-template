@@ -43,15 +43,19 @@ function isMarkdownSyntaxParseable(markdown: string) {
 }
 
 export function MarkdownEditorClient({
+	ariaDescribedBy,
 	ariaLabel,
 	density,
 	disabled,
+	invalid = false,
 	markdown,
 	mentions = [],
 	onChange,
 	placeholder,
 }: MarkdownEditorClientProps) {
 	const editorRef = React.useRef<MDXEditorMethods>(null);
+	const editorRootRef = React.useRef<HTMLDivElement>(null);
+	const syntaxErrorId = React.useId();
 	const onChangeRef = React.useRef(onChange);
 	const pendingInitialChangeRef = React.useRef<string | null>(null);
 	const mountedRef = React.useRef(false);
@@ -59,7 +63,51 @@ export function MarkdownEditorClient({
 		() => isMarkdownSyntaxParseable(markdown),
 		[markdown],
 	);
+	const describedBy = [
+		ariaDescribedBy,
+		markdownSyntaxIsParseable ? undefined : syntaxErrorId,
+	]
+		.filter(Boolean)
+		.join(" ");
 	onChangeRef.current = onChange;
+
+	React.useLayoutEffect(() => {
+		const editorRoot = editorRootRef.current;
+		if (!editorRoot) return;
+
+		function syncAccessibleEditorAttributes() {
+			const richTextSurface = editorRoot?.querySelector<HTMLElement>(
+				'.markdown-editor-content[contenteditable="true"]',
+			);
+			const sourceSurface = richTextSurface
+				? null
+				: editorRoot?.querySelector<HTMLElement>(
+						'.cm-editor [role="textbox"], textarea',
+					);
+			const editableSurface = richTextSurface ?? sourceSurface;
+			if (!editableSurface) return;
+
+			editableSurface.setAttribute("aria-label", ariaLabel);
+
+			if (describedBy) {
+				editableSurface.setAttribute("aria-describedby", describedBy);
+			} else {
+				editableSurface.removeAttribute("aria-describedby");
+			}
+
+			if (invalid || !markdownSyntaxIsParseable) {
+				editableSurface.setAttribute("aria-invalid", "true");
+			} else {
+				editableSurface.removeAttribute("aria-invalid");
+			}
+		}
+
+		syncAccessibleEditorAttributes();
+		const observer = new MutationObserver(syncAccessibleEditorAttributes);
+		observer.observe(editorRoot, { childList: true, subtree: true });
+
+		return () => observer.disconnect();
+	}, [ariaLabel, describedBy, invalid, markdownSyntaxIsParseable]);
 
 	function handleEditorChange(
 		nextMarkdown: string,
@@ -97,10 +145,10 @@ export function MarkdownEditorClient({
 			className="markdown-editor"
 			data-density={density}
 			data-disabled={disabled || undefined}
-			data-invalid={!markdownSyntaxIsParseable || undefined}
+			data-invalid={invalid || !markdownSyntaxIsParseable || undefined}
+			ref={editorRootRef}
 		>
 			<MDXEditor
-				aria-label={ariaLabel}
 				contentEditableClassName={`${getMarkdownContentClassName(density)} markdown-editor-content`}
 				markdown={markdown}
 				onChange={handleEditorChange}
@@ -145,6 +193,7 @@ export function MarkdownEditorClient({
 				<Text
 					aria-live="polite"
 					className="mt-2 block text-danger"
+					id={syntaxErrorId}
 					theme="inherit"
 					variant="caption"
 				>

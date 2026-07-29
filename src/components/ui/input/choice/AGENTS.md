@@ -15,6 +15,9 @@ Shared building blocks and complete radio, checkbox, and toggle-style inputs.
 
 ## Public Surface
 - External consumers import choice fields, indicators, and complete choice inputs from `@/components/ui/input`.
+- `ChoiceField` and the choice indicators are public composition primitives for
+  reusable custom choice controls. Page forms still begin with the complete
+  `RadioInput`, `MultiselectInput`, and `ToggleInput` controls.
 - Files inside this family import `ChoiceField` and `ChoiceIndicators` directly.
 
 ## Invariants

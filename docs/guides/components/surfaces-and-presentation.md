@@ -15,7 +15,7 @@ feature code.
 | Page section and optional background media | `Section` |
 | Horizontal or vertical separation | `Divider` |
 | Compact label, source, filter, or status pill | `Chip` |
-| Semantic contextual message | Currently `StatusMessage`; review its boundary in the feedback guide |
+| Persistent semantic context independent of the latest action | `StatusMessage` or `StatusMessage.Presence` |
 
 ## Surface Ownership
 

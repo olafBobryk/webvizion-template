@@ -2,13 +2,14 @@
 
 import * as React from "react";
 import { EmailInput } from "@/components/ui/input";
+import { StateIndicator } from "@/components/ui/misc";
 import { Button } from "@/components/ui/primitives/Button";
-import { StatusMessage } from "@/components/ui/primitives/StatusMessage";
 import { requestPasswordRecovery } from "@/lib/api/auth";
+import { showToast } from "@/lib/feedback";
 
 function PasswordRecoveryRequestFormRoot() {
 	const [email, setEmail] = React.useState("");
-	const [error, setError] = React.useState<string>();
+	const [emailError, setEmailError] = React.useState<string>();
 	const [pending, setPending] = React.useState(false);
 	const [previewUrl, setPreviewUrl] = React.useState<string>();
 	const [success, setSuccess] = React.useState<string>();
@@ -17,18 +18,18 @@ function PasswordRecoveryRequestFormRoot() {
 		event.preventDefault();
 		if (pending) return;
 		if (!email.trim()) {
-			setError("Enter your email.");
+			setEmailError("Enter your email.");
 			return;
 		}
 		setPending(true);
-		setError(undefined);
+		setEmailError(undefined);
 		setPreviewUrl(undefined);
 		try {
 			const result = await requestPasswordRecovery(email);
 			setSuccess(result.message);
 			setPreviewUrl(result.previewUrl);
 		} catch (nextError) {
-			setError(
+			showToast.error(
 				nextError instanceof Error
 					? nextError.message
 					: "Unable to request a password reset.",
@@ -38,26 +39,38 @@ function PasswordRecoveryRequestFormRoot() {
 		}
 	}
 
+	if (success) {
+		return (
+			<StateIndicator
+				action={
+					previewUrl ? (
+						<Button href={previewUrl} size="sm" variant="secondary">
+							Open fixture reset link
+						</Button>
+					) : null
+				}
+				description={success}
+				iconName="mail"
+				layout="stacked"
+				title="Check your email"
+			/>
+		);
+	}
+
 	return (
 		<form className="grid gap-4" noValidate onSubmit={handleSubmit}>
 			<EmailInput
 				disabled={pending}
-				error={error}
+				error={emailError}
 				label="Email"
 				name="email"
 				onChange={(value) => {
 					setEmail(value);
-					setError(undefined);
+					setEmailError(undefined);
 				}}
 				required
 				value={email}
 			/>
-			{success ? <StatusMessage tone="success">{success}</StatusMessage> : null}
-			{previewUrl ? (
-				<StatusMessage tone="info">
-					Fixture-only delivery: <a href={previewUrl}>open the reset link</a>.
-				</StatusMessage>
-			) : null}
 			<Button
 				className="w-full"
 				loading={pending}

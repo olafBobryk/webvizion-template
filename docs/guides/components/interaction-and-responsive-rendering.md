@@ -44,13 +44,15 @@ component-local JavaScript.
 - CSS is the default for micro-interactions; use `motion/react` for genuine
   layout, reveal, or staged motion.
 - Use shared timing and spring tokens rather than hardcoded durations.
-- Marketing pages already provide a route-level `Reveal.Root`; add a scoped
-  root only for isolated or non-marketing surfaces.
-- Use `MotionScene` for choreography across multiple dependencies rather than
-  page-local booleans and callback chains.
-- Use `Reveal.Image` for image reveal and stage ownership. Its default ignores
-  load state; select `loadStrategy="wait-for-load"` only when image readiness
-  must gate reveal or later content.
+- `StatusMessage.Presence` uses the shared disclosure transition for height,
+  owned gap, opacity, and scale. Initially visible context does not animate.
+- `MotionProvider` owns the application reveal scheduler; callers never mount
+  a page-local scheduler.
+- Use `Reveal.Sequence` for structural entrance choreography. Conditional
+  content remains caller-owned rather than encoded as scheduler readiness props.
+- Use `Reveal.Image` for image reveal. Its default ignores load state; select
+  `loadStrategy="wait-for-load"` only when image readiness should delay that
+  participant.
 - Automation can disable motion through `?motion=off` and `?reveal=off`.
 
 ## Rendering Details

@@ -1,58 +1,31 @@
-import { RevealHighlightText } from "./RevealHighlightText";
-import { RevealImage } from "./RevealImage";
-import { RevealItem } from "./RevealItem";
-import { RevealList } from "./RevealList";
-import { NumericReveal } from "./RevealNumeric";
-import { RevealRoot } from "./RevealRoot";
-import { RevealScene } from "./RevealScene";
-import { ScrambleReveal } from "./RevealScramble";
-import { RevealText } from "./RevealText";
-
-export { RevealHighlightText } from "./RevealHighlightText";
 export {
-	getCornerClipRevealVariants,
-	RevealImage,
-	type RevealImageClipRevealOrigin,
-	type RevealImageClipRevealTransition,
-	type RevealImageProps,
+	RevealHighlightText as Highlight,
+	type RevealHighlightTextProps as HighlightProps,
+} from "./RevealHighlightText";
+export {
+	RevealImage as Image,
+	type RevealImageClipRevealOrigin as ImageClipOrigin,
+	type RevealImageClipRevealTransition as ImageClipTransition,
+	type RevealImageProps as ImageProps,
 } from "./RevealImage";
 export {
-	RevealGroupItem,
-	type RevealGroupItemProps,
-	RevealItem,
-	type RevealItemProps,
-	RootScheduledRevealItem,
-	type RootScheduledRevealItemProps,
+	RevealItem as Item,
+	type RevealItemProps as ItemProps,
 } from "./RevealItem";
 export {
-	RevealGroup,
-	type RevealGroupProps,
-	RevealList,
-	type RevealListProps,
-} from "./RevealList";
-export {
-	NumericReveal,
-	type NumericRevealAnimation,
-	type NumericRevealProps,
+	NumericReveal as Number,
+	type NumericRevealAnimation as NumberAnimation,
+	type NumericRevealProps as NumberProps,
 } from "./RevealNumeric";
 export {
-	RevealRoot,
-	type RevealRootProps,
-	useRevealAnimationsDisabled,
-} from "./RevealRoot";
-export { RevealScene } from "./RevealScene";
-export { ScrambleReveal } from "./RevealScramble";
-export { RevealText } from "./RevealText";
-export type { RevealStageAliasProps } from "./types";
-
-export const Reveal = {
-	Root: RevealRoot,
-	Scene: RevealScene,
-	List: RevealList,
-	Item: RevealItem,
-	Image: RevealImage,
-	HighlightText: RevealHighlightText,
-	Text: RevealText,
-	Scramble: ScrambleReveal,
-	Numeric: NumericReveal,
-};
+	ScrambleReveal as Scramble,
+	type ScrambleRevealProps as ScrambleProps,
+} from "./RevealScramble";
+export {
+	RevealSequence as Sequence,
+	type RevealSequenceProps as SequenceProps,
+} from "./RevealSequence";
+export {
+	RevealText as Text,
+	type RevealTextProps as TextProps,
+} from "./RevealText";

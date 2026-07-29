@@ -2,8 +2,7 @@
 
 import clsx from "clsx";
 import Logo from "@/components/branding/Logo";
-import { Reveal } from "@/components/ui/motion";
-import { MotionScene } from "@/components/ui/motion/MotionScene";
+import * as Reveal from "@/components/ui/motion/reveal";
 import { Text } from "@/components/ui/primitives/Text";
 
 type StatusContentProps = {
@@ -31,30 +30,28 @@ export function StatusContent({
 			)}
 		>
 			{enableRevealMotion ? (
-				<MotionScene>
-					<Reveal.List className="flex w-full flex-col items-center justify-center gap-3">
+				<Reveal.Sequence className="flex w-full flex-col items-center justify-center gap-3">
+					<Reveal.Item>
+						<Logo size="md" variant="mark" />
+					</Reveal.Item>
+					<Reveal.Item>
+						<Text as="h1" variant="headingXl">
+							{heading}
+						</Text>
+					</Reveal.Item>
+					<Reveal.Item>
+						<Text variant="body" tone="muted">
+							{body}
+						</Text>
+					</Reveal.Item>
+					{actions ? (
 						<Reveal.Item>
-							<Logo size="md" variant="mark" />
+							<div className="mt-2 flex flex-wrap items-center justify-center gap-3">
+								{actions}
+							</div>
 						</Reveal.Item>
-						<Reveal.Item>
-							<Text as="h1" variant="headingXl">
-								{heading}
-							</Text>
-						</Reveal.Item>
-						<Reveal.Item>
-							<Text variant="body" tone="muted">
-								{body}
-							</Text>
-						</Reveal.Item>
-						{actions ? (
-							<Reveal.Item>
-								<div className="mt-2 flex flex-wrap items-center justify-center gap-3">
-									{actions}
-								</div>
-							</Reveal.Item>
-						) : null}
-					</Reveal.List>
-				</MotionScene>
+					) : null}
+				</Reveal.Sequence>
 			) : (
 				<>
 					<Logo size="md" variant="mark" />

@@ -10,7 +10,7 @@ Reusable markdown rendering surfaces that compose design-system primitives into 
 
 ## Current Contract
 - `Markdown.Render` accepts markdown, `default` or `compact` density, optional class styling, an optional generic mention resolver, and a semantic `contained` or `result` variant. `contained` is the default shared rounded editor-matching surface; `result` is shell-free and must sit beneath a clear caller-owned label. Default density belongs to site/document content; dashboard cards and modals opt into compact density.
-- `Markdown.Editor` is the controlled full-start authoring surface. It uses MDXEditor only as the document engine while application `Button`, `Icon`, `Dropdown`, `Listbox`, input, Panel, and modal primitives own the visible UI. It includes a width-aware toolbar, rich/source modes with in-place syntax repair, links, lists, tables, images, code, dividers, the generic button directive, and optional mention insertion.
+- `Markdown.Editor` is the controlled full-start authoring surface. It uses MDXEditor only as the document engine while application `Button`, `Icon`, `Dropdown`, `Listbox`, input, Panel, and modal primitives own the visible UI. It includes a width-aware toolbar, rich/source modes with in-place syntax repair, links, lists, tables, images, code, dividers, the generic button directive, optional mention insertion, and a field-owned `error` contract.
 - `Markdown.EditorModalForm` is the dashboard-ready modal composition. Keep editor-specific dialogs on the shared Card-owned modal host rather than introducing package or feature-local overlays.
 - Metadata, route titles, and page chrome do not belong in this renderer.
 - Supported custom directive:
@@ -23,6 +23,9 @@ Reusable markdown rendering surfaces that compose design-system primitives into 
 
 ## Invariants
 - Keep markdown output grounded in design-system primitives.
+- Route value-specific save failures through `Markdown.Editor error`. The editor
+  owns the `Field` message plus `aria-invalid` and `aria-describedby`; callers
+  must not add a sibling status banner for the same error.
 - Keep renderer and editor authored content on the shared `.markdown-content` contract. A selected editor density must match the renderer density used for the same content context.
 - Render task lists with the real compact `ChoiceIndicatorMulti` in `Markdown.Render`. The hidden input remains disabled because rendered Markdown is noninteractive, but do not pass that disabled state into the visual indicator or fade authored task status. Lexical retains its native inline `li[role="checkbox"]` marker and editing behavior; CSS may mirror the shared indicator geometry and tokens but must not mount portals or extra DOM into Lexical-owned content. Keep both representations on the same 18px indicator, use the density-owned optical offset that centers it against the first text line in each surface, and preserve the 12px mark at a 3px inset and 6px gap. Calculate task indentation from that geometry so task labels remain aligned to the ordinary-list text column while the indicator lands exactly on the list's left boundary.
 - Suppress list markers only on task items so ordinary bullets remain visible in mixed lists.

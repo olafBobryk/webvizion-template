@@ -15,6 +15,9 @@ Reusable state indicators for empty, idle, and error presentations.
 
 ## Invariants
 - Use `StateIndicator` or its presets instead of ad hoc icon-plus-copy-plus-button stacks.
+- Use the state family when a condition owns the availability of its route or
+  region, including fatal prerequisites. Do not substitute a danger-colored
+  `StatusMessage`.
 - Keep route-level dashboard statuses on the default plain variant. Use `variant="framed"` only when the state owns a contained entity or table region.
 - State actions should stay on shared `Button` primitives so focus, loading, and semantics remain consistent.
 - Text should continue to use `Text` variants, not hardcoded typography classes.
@@ -23,6 +26,8 @@ Reusable state indicators for empty, idle, and error presentations.
 ## How To Use It
 - Use `ErrorState` for recoverable failures with a retry action.
 - Use `IdleState` for empty or not-yet-started states.
+- Use normal content or `StateIndicator` when a completed form is replaced by
+  durable instructions or a next action.
 - Use the default plain `StateIndicator` directly for minimal route statuses. Use `variant="framed"` for contained entity or table empties that need the shared dashed shell.
 
 ## Avoid

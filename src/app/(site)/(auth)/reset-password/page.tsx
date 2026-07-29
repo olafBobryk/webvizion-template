@@ -1,3 +1,5 @@
+import { ErrorState } from "@/components/ui/misc";
+import { Button } from "@/components/ui/primitives/Button";
 import { toPublicAuthError } from "@/lib/auth/errors";
 import { validatePasswordRecoveryToken } from "@/lib/auth/server";
 import { AuthScreen } from "../_components/AuthScreen";
@@ -11,12 +13,12 @@ export default async function ResetPasswordPage({
 	const query = await searchParams;
 	let recoveryError: string | undefined;
 	if (!query.token) {
-		recoveryError = "password-recovery-invalid";
+		recoveryError = "This password reset link is not valid.";
 	} else {
 		try {
 			await validatePasswordRecoveryToken({ token: query.token });
 		} catch (error) {
-			recoveryError = toPublicAuthError(error).code;
+			recoveryError = toPublicAuthError(error).message;
 		}
 	}
 
@@ -24,10 +26,23 @@ export default async function ResetPasswordPage({
 		<AuthScreen
 			description="Choose a new password for your account."
 			icon="lock"
-			message={recoveryError ?? query.message}
+			message={query.message}
 			title="Choose a new password"
 		>
-			{recoveryError ? null : <PasswordResetForm token={query.token} />}
+			{recoveryError ? (
+				<ErrorState
+					action={
+						<Button href="/forgot-password" size="sm" variant="secondary">
+							Request a new link
+						</Button>
+					}
+					description={recoveryError}
+					layout="stacked"
+					title="Reset link unavailable"
+				/>
+			) : (
+				<PasswordResetForm token={query.token} />
+			)}
 		</AuthScreen>
 	);
 }

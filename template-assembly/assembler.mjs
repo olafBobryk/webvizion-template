@@ -1,4 +1,5 @@
 import { execFileSync } from "node:child_process";
+import { existsSync } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { templateSurfaces } from "../template-surfaces/index.mjs";
@@ -46,6 +47,7 @@ function sourceFiles(sourceRoot) {
 	)
 		.split("\0")
 		.filter(Boolean)
+		.filter((relativePath) => existsSync(path.join(sourceRoot, relativePath)))
 		.sort();
 }
 

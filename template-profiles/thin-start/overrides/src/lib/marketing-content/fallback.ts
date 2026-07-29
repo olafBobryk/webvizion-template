@@ -120,6 +120,7 @@ export const fallbackSiteLayout: SiteLayoutDocument = {
 		],
 		topNavLinks: [{ label: "Home", routeId: "home" }],
 	},
+	socialLinks: [],
 	footer: {
 		navLinks: [{ label: "Home", routeId: "home" }],
 	},

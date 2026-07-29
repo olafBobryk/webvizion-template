@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Icon } from "@/components/ui/icons/Icon";
 import { Loader } from "@/components/ui/misc/Loader";
-import { Reveal } from "@/components/ui/motion";
+import * as Reveal from "@/components/ui/motion/reveal";
 import {
 	ModalContent,
 	ModalFooter,

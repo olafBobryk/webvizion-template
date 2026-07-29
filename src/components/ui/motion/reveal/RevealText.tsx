@@ -29,21 +29,12 @@ const charVariants = {
 	},
 } as const;
 
-type RevealTextProps = {
+export type RevealTextProps = {
 	children: string;
 	as?: TextAs;
 	className?: string;
 	charDelay?: number;
-} & Pick<
-	RevealItemProps,
-	| "after"
-	| "unlock"
-	| "waitFor"
-	| "unlockStage"
-	| "intensity"
-	| "expressive"
-	| "useViewport"
-> &
+} & Pick<RevealItemProps, "intensity" | "expressive"> &
 	VariantProps<typeof textVariants>;
 
 export function RevealText({
@@ -53,13 +44,8 @@ export function RevealText({
 	charDelay = 0.025,
 	variant,
 	tone,
-	after,
-	unlock,
-	waitFor,
-	unlockStage,
 	intensity,
 	expressive,
-	useViewport,
 }: RevealTextProps) {
 	const resolvedClass = textVariants({ variant, tone, className });
 	const MotionTag = motionElements[as];
@@ -75,13 +61,8 @@ export function RevealText({
 				show: { transition: { staggerChildren: charDelay } },
 			}}
 			disableTransform
-			after={after}
-			unlock={unlock}
-			waitFor={waitFor}
-			unlockStage={unlockStage}
 			intensity={intensity}
 			expressive={expressive}
-			useViewport={useViewport}
 		>
 			{chars.map((char, index) => (
 				<span

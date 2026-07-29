@@ -32,7 +32,7 @@ import {
 	updateFixtureOrganization,
 	updateFixtureUser,
 	validateFixturePasswordRecoveryToken,
-} from "./fixture-core";
+} from "./fixture";
 import { sendPasswordRecoveryEmail } from "./passwordRecoveryEmail";
 
 declare global {

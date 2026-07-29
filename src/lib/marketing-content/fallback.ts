@@ -1,8 +1,5 @@
-import type {
-	MarketingPageDocument,
-	MarketingPageSlug,
-	SiteLayoutDocument,
-} from "./types";
+import { defaultSiteLayout } from "@/app/(site)/_components/layout/siteLayout";
+import type { MarketingPageDocument, MarketingPageSlug } from "./types";
 
 export const fallbackHomePage: MarketingPageDocument = {
 	slug: "home",
@@ -73,89 +70,4 @@ export const fallbackMarketingPages = {
 	home: fallbackHomePage,
 } satisfies Record<MarketingPageSlug, MarketingPageDocument>;
 
-export const fallbackSiteLayout: SiteLayoutDocument = {
-	header: {
-		cta: {
-			label: "Dashboard",
-			href: "/login",
-		},
-		menuGroups: [
-			{
-				label: "Start",
-				link: { label: "Home", routeId: "home" },
-				links: [
-					{ label: "Hero", href: "/#home-hero" },
-					{ label: "Settings", routeId: "settings" },
-				],
-			},
-		],
-		mobile: {
-			closeAriaLabel: "Close navigation",
-			menuLabel: "Menu",
-			openAriaLabel: "Open navigation",
-		},
-		navLinks: [
-			{
-				label: "Home",
-				routeId: "home",
-				sections: [
-					{
-						label: "Hero",
-						href: "/#home-hero",
-						description: "Primary home page introduction.",
-					},
-				],
-			},
-			{ label: "Settings", routeId: "settings" },
-		],
-		search: {
-			ariaLabel: "Search pages",
-			clearLabel: "Clear",
-			noResultsText: "No matching pages",
-		},
-		searchGroups: [
-			{
-				label: "Home",
-				link: { label: "Home", routeId: "home" },
-				links: [{ label: "Hero", href: "/#home-hero" }],
-			},
-		],
-		topNavLinks: [
-			{ label: "Home", routeId: "home" },
-			{ label: "Settings", routeId: "settings" },
-		],
-	},
-	socialLinks: [
-		{
-			label: "X",
-			icon: "x",
-			href: "",
-		},
-		{
-			label: "Instagram",
-			icon: "instagram",
-			href: "",
-		},
-		{
-			label: "LinkedIn",
-			icon: "linked-in",
-			href: "",
-		},
-		{
-			label: "Meta",
-			icon: "meta",
-			href: "",
-		},
-		{
-			label: "You Tube",
-			icon: "youtube",
-			href: "",
-		},
-	],
-	footer: {
-		navLinks: [
-			{ label: "Home", routeId: "home" },
-			{ label: "Settings", routeId: "settings" },
-		],
-	},
-};
+export const fallbackSiteLayout = defaultSiteLayout;

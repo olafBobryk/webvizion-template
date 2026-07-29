@@ -1,6 +1,1 @@
-import { hrefFor } from "@/lib/routes";
-import type { MarketingLink } from "./types";
-
-export function getMarketingLinkHref(link: MarketingLink) {
-	return link.href ?? hrefFor(link.routeId);
-}
+export { getSiteLinkHref as getMarketingLinkHref } from "@/app/(site)/_components/layout/siteLayout";

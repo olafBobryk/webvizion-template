@@ -3,39 +3,52 @@
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { PasswordInput } from "@/components/ui/input";
+import { ErrorState } from "@/components/ui/misc";
 import { Button } from "@/components/ui/primitives/Button";
-import { StatusMessage } from "@/components/ui/primitives/StatusMessage";
-import { resetPassword } from "@/lib/api/auth";
+import { AuthApiError, resetPassword } from "@/lib/api/auth";
+import { showToast } from "@/lib/feedback";
 
 function PasswordResetFormRoot({ token }: { token?: string }) {
 	const router = useRouter();
 	const [password, setPassword] = React.useState("");
 	const [passwordConfirm, setPasswordConfirm] = React.useState("");
-	const [error, setError] = React.useState<string>();
+	const [passwordError, setPasswordError] = React.useState<string>();
+	const [passwordConfirmError, setPasswordConfirmError] =
+		React.useState<string>();
+	const [fatalError, setFatalError] = React.useState<string>();
 	const [pending, setPending] = React.useState(false);
 
 	async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
 		event.preventDefault();
 		if (pending) return;
 		if (!token) {
-			setError("This password reset link is not valid.");
+			setFatalError("This password reset link is not valid.");
 			return;
 		}
 		if (password.length < 8) {
-			setError("Use at least 8 characters.");
+			setPasswordError("Use at least 8 characters.");
 			return;
 		}
 		if (password !== passwordConfirm) {
-			setError("The passwords do not match.");
+			setPasswordConfirmError("The passwords do not match.");
 			return;
 		}
 		setPending(true);
-		setError(undefined);
+		setPasswordError(undefined);
+		setPasswordConfirmError(undefined);
 		try {
 			await resetPassword({ password, token });
 			router.replace("/login?message=password-reset");
 		} catch (nextError) {
-			setError(
+			if (
+				nextError instanceof AuthApiError &&
+				(nextError.code === "password-recovery-invalid" ||
+					nextError.code === "password-recovery-expired")
+			) {
+				setFatalError(nextError.message);
+				return;
+			}
+			showToast.error(
 				nextError instanceof Error
 					? nextError.message
 					: "Unable to reset your password.",
@@ -45,17 +58,32 @@ function PasswordResetFormRoot({ token }: { token?: string }) {
 		}
 	}
 
+	if (fatalError) {
+		return (
+			<ErrorState
+				action={
+					<Button href="/forgot-password" size="sm" variant="secondary">
+						Request a new link
+					</Button>
+				}
+				description={fatalError}
+				layout="stacked"
+				title="Reset link unavailable"
+			/>
+		);
+	}
+
 	return (
 		<form className="grid gap-4" noValidate onSubmit={handleSubmit}>
-			{error ? <StatusMessage tone="danger">{error}</StatusMessage> : null}
 			<PasswordInput
 				autoComplete="new-password"
 				disabled={pending}
+				error={passwordError}
 				label="New password"
 				name="password"
 				onChange={(value) => {
 					setPassword(value);
-					setError(undefined);
+					setPasswordError(undefined);
 				}}
 				required
 				showStrength
@@ -64,11 +92,12 @@ function PasswordResetFormRoot({ token }: { token?: string }) {
 			<PasswordInput
 				autoComplete="new-password"
 				disabled={pending}
+				error={passwordConfirmError}
 				label="Confirm password"
 				name="passwordConfirm"
 				onChange={(value) => {
 					setPasswordConfirm(value);
-					setError(undefined);
+					setPasswordConfirmError(undefined);
 				}}
 				required
 				value={passwordConfirm}

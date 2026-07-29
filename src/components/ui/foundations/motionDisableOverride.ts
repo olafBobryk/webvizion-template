@@ -44,9 +44,7 @@ function hasMotionDisabledDocumentOverride() {
 }
 
 export function useIntroDisableOverride() {
-	const [disabled, setDisabled] = React.useState(
-		() => hasIntroDisabledDocumentOverride() || hasIntroDisabledSearchParam(),
-	);
+	const [disabled, setDisabled] = React.useState(false);
 
 	React.useEffect(() => {
 		const update = () =>
@@ -62,9 +60,7 @@ export function useIntroDisableOverride() {
 }
 
 export function useMotionDisableOverride() {
-	const [disabled, setDisabled] = React.useState(
-		() => hasMotionDisabledDocumentOverride() || hasMotionDisabledSearchParam(),
-	);
+	const [disabled, setDisabled] = React.useState(false);
 
 	React.useEffect(() => {
 		const update = () =>

@@ -3,7 +3,7 @@
 ## Role
 Shared transient-feedback host for success, error, info, and loading toasts.
 
-The cross-channel decision table and unresolved `StatusMessage` boundary live in
+The cross-channel decision table and narrow `StatusMessage` boundary live in
 `docs/guides/components/feedback-and-status.md`. This file owns toast-specific
 implementation constraints.
 
@@ -19,6 +19,8 @@ implementation constraints.
 - Mount the host once through `ToastClientMount` near the app root.
 - Prefer `showToast.success`, `showToast.error`, `showToast.loading`, `showToast.dismiss`, and `showToast.promise` over feature-local toast state.
 - Toasts are for transient feedback, not for replacing inline validation or modal confirmation.
+- Do not repeat a field error or durable replacement message in a toast. Field
+  and toast channels may coexist only when their messages are distinct.
 - The host should continue to respect reduced-motion settings.
 - Dismiss controls and interactive content inside toasts must preserve visible focus.
 - Initial page loads should not show toasts. Use skeletons or inline loading states for first render.

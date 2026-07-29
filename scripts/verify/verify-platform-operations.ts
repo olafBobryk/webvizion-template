@@ -11,6 +11,7 @@ import {
 	getDashboardSurface,
 	getDashboardSurfaceTrail,
 } from "../../src/app/(site)/dashboard/_registry/surfaceRegistry";
+import { createFixtureAuthState } from "../../src/lib/auth/fixture";
 
 const root = process.cwd();
 
@@ -106,12 +107,15 @@ const authContracts = readFileSync(
 assert.match(authContracts, /export type PlatformRole = "admin"/);
 assert.match(authContracts, /platformRole: PlatformRole \| null/);
 
-const fixtureCore = readFileSync(
-	resolve(root, "src/lib/auth/fixture-core.ts"),
-	"utf8",
+const fixtureUsers = [...createFixtureAuthState().users.values()];
+assert.equal(
+	fixtureUsers.some((user) => user.platformRole === "admin"),
+	true,
 );
-assert.match(fixtureCore, /platformRole: "admin"/);
-assert.match(fixtureCore, /platformRole: null/);
+assert.equal(
+	fixtureUsers.some((user) => user.platformRole === null),
+	true,
+);
 
 const reportModal = readFileSync(
 	resolve(

@@ -9,10 +9,7 @@ import {
 	resolveMotionTransition,
 } from "@/components/ui/foundations/motionTiming";
 import { Skeleton } from "@/components/ui/misc";
-import {
-	ActiveStageHost,
-	useActiveStage,
-} from "@/components/ui/motion/ActiveStageHost";
+import * as AutoCycle from "@/components/ui/motion/auto-cycle";
 import { Button } from "@/components/ui/primitives/Button";
 import { Dropdown } from "@/components/ui/primitives/dropdown";
 import { Panel } from "@/components/ui/primitives/Panel";
@@ -140,7 +137,7 @@ function InteractiveSurfaceHitbox({
 	serviceIndex: number;
 	surfaceIds: readonly TemplateServiceSurfaceId[];
 }) {
-	const { getItemProps, hasInteraction, isActive } = useActiveStage();
+	const { getItemProps, hasInteraction, isActive } = AutoCycle.useController();
 	const active = hasInteraction && isActive(serviceIndex);
 	const itemProps = getItemProps(serviceIndex);
 	const surfaceNames = surfaceIds.map(
@@ -393,7 +390,7 @@ function LiveSurfaceAssemblyGrid({
 }: {
 	services: HomeHeroServiceItem[];
 }) {
-	const { activeIndex, hasInteraction } = useActiveStage();
+	const { activeIndex, hasInteraction } = AutoCycle.useController();
 	const calloutId = useId();
 	const [hitboxNodes, setHitboxNodes] = useState<Array<HTMLElement | null>>([]);
 	const registerHitbox = useCallback(
@@ -439,14 +436,14 @@ export function HomeHeroSurfaceAssembly({
 	if (services.length === 0) return null;
 
 	return (
-		<ActiveStageHost
+		<AutoCycle.Root
 			autoCycle={false}
 			count={services.length}
 			initialIndex={0}
 			className={assemblyHostClassName}
 		>
 			<LiveSurfaceAssemblyGrid services={services} />
-		</ActiveStageHost>
+		</AutoCycle.Root>
 	);
 }
 

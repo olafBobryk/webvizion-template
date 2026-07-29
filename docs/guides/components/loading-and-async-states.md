@@ -35,15 +35,18 @@ When a ghost fallback crossfades into content, the fallback and live layouts
 must be structurally identical so the transition does not jump. Do not add a
 spinner inside a control that already owns loading behavior.
 
-## Review Decisions
+## State Ownership
 
-- `StatusMessage` currently overlaps with minimal route and region statuses.
-  Confirm whether persistent unavailability and recoverable failures should
-  always use the state family while `StatusMessage` remains contextual copy.
-- Confirm when a successful asynchronous flow becomes durable replacement
-  content rather than a transient toast.
-- Decide whether any current page-local empty or error compositions justify a
-  new state variant before enforcing the shared family more strictly.
+- Use the state family whenever the represented condition owns the availability
+  of a route or region. Color alone is not a reason to substitute
+  `StatusMessage`.
+- Use `ErrorState` with an action for recoverable failures and fatal
+  prerequisites that offer another path.
+- A successful asynchronous flow becomes replacement content when users still
+  need its instructions, link, or next action after the toast lifetime would
+  end. Use normal content or `StateIndicator`; do not duplicate it in a toast.
+- Add a new state preset only when repeated real consumers share semantics and
+  presentation that the generic family cannot express.
 
 ## Avoid
 

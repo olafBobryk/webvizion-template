@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/overlays/modal/ModalShell";
 import { useModal } from "@/components/ui/overlays/modal/useModal";
 import { Button } from "@/components/ui/primitives/Button";
-import { StatusMessage } from "@/components/ui/primitives/StatusMessage";
 import { showToast } from "@/lib/feedback/toast";
 
 export type DashboardMarkdownSaveResult = {
@@ -104,32 +103,31 @@ function DashboardMarkdownEditorModalForm({
 	title: string;
 }) {
 	const [markdown, setMarkdown] = React.useState(initialMarkdown);
-	const [error, setError] = React.useState<string>();
+	const [markdownError, setMarkdownError] = React.useState<string>();
 	const { beginSubmission, endSubmission, isSubmitting } = useModalSubmission();
 
 	async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
 		event.preventDefault();
 		if (!beginSubmission()) return;
-		setError(undefined);
+		setMarkdownError(undefined);
 		let shouldEndSubmission = true;
 		try {
 			const result = await onSave(markdown);
 			if (!result.ok) {
-				const message =
-					result.fieldErrors?.markdown ??
-					result.message ??
-					result.error ??
-					"Could not save changes.";
-				setError(message);
-				showToast.error(result.message ?? result.error ?? message);
+				const fieldError = result.fieldErrors?.markdown;
+				const overallError = result.message ?? result.error;
+				if (fieldError) setMarkdownError(fieldError);
+				if (overallError && overallError !== fieldError) {
+					showToast.error(overallError);
+				} else if (!fieldError) {
+					showToast.error("Could not save changes.");
+				}
 				return;
 			}
 			shouldEndSubmission = false;
 			onSaved(result.message);
 		} catch {
-			const message = "Could not save changes.";
-			setError(message);
-			showToast.error(message);
+			showToast.error("Could not save changes.");
 		} finally {
 			if (shouldEndSubmission) endSubmission();
 		}
@@ -166,15 +164,14 @@ function DashboardMarkdownEditorModalForm({
 					defaultMarkdown={initialMarkdown}
 					density="compact"
 					disabled={isSubmitting}
+					error={markdownError}
 					mentions={mentions ? [...mentions] : undefined}
-					onChange={setMarkdown}
+					onChange={(value) => {
+						setMarkdown(value);
+						setMarkdownError(undefined);
+					}}
 					placeholder="Write a description"
 				/>
-				{error ? (
-					<StatusMessage role="alert" tone="danger">
-						{error}
-					</StatusMessage>
-				) : null}
 			</ModalForm>
 		</>
 	);

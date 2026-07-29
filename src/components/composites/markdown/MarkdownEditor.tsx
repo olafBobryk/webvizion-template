@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/misc";
 import { ModalForm } from "@/components/ui/overlays/modal/ModalForm";
 import { useModalSubmission } from "@/components/ui/overlays/modal/ModalShell";
 import { Button } from "@/components/ui/primitives/Button";
+import { Field } from "@/components/ui/primitives/Field";
 import type { MarkdownEditorProps } from "./editor/types";
 import { useMarkdownToolbarCollapse } from "./markdownToolbarLayout";
 
@@ -30,12 +31,14 @@ function MarkdownEditorRoot({
 	defaultMarkdown = "",
 	density = "default",
 	disabled = false,
+	error,
 	mentions,
 	name,
 	onChange,
 	placeholder,
 }: MarkdownEditorProps) {
 	const [markdown, setMarkdown] = React.useState(defaultMarkdown);
+	const errorId = React.useId();
 
 	React.useEffect(() => {
 		setMarkdown(defaultMarkdown);
@@ -47,18 +50,27 @@ function MarkdownEditorRoot({
 	}
 
 	return (
-		<div className={clsx("min-w-0 w-full", className)}>
-			{name ? <input name={name} type="hidden" value={markdown} /> : null}
-			<MarkdownEditorClient
-				ariaLabel={ariaLabel}
-				density={density}
-				disabled={disabled}
-				markdown={markdown}
-				mentions={mentions}
-				onChange={handleChange}
-				placeholder={placeholder}
-			/>
-		</div>
+		<Field
+			className={clsx("min-w-0 w-full", className)}
+			message={error}
+			messageId={errorId}
+			tone={error ? "error" : "default"}
+		>
+			<div className="min-w-0 w-full">
+				{name ? <input name={name} type="hidden" value={markdown} /> : null}
+				<MarkdownEditorClient
+					ariaDescribedBy={error ? errorId : undefined}
+					ariaLabel={ariaLabel}
+					density={density}
+					disabled={disabled}
+					invalid={Boolean(error)}
+					markdown={markdown}
+					mentions={mentions}
+					onChange={handleChange}
+					placeholder={placeholder}
+				/>
+			</div>
+		</Field>
 	);
 }
 
@@ -80,63 +92,65 @@ function MarkdownEditorSkeleton({
 	} = useMarkdownToolbarCollapse();
 
 	return (
-		<div aria-hidden className={clsx("min-w-0 w-full", className)}>
-			<div className="markdown-editor" data-density={density}>
-				<div
-					className={clsx(
-						"flex w-full items-center overflow-hidden rounded-md",
-						isCompact ? "h-9 px-1" : "h-10",
-					)}
-				>
+		<Field className={clsx("min-w-0 w-full", className)} disableMessage>
+			<div aria-hidden className="min-w-0 w-full">
+				<div className="markdown-editor" data-density={density}>
 					<div
-						className="flex w-full min-w-0 items-center overflow-hidden"
-						data-slot="markdown-editor-toolbar-skeleton"
-						ref={toolbarRef}
+						className={clsx(
+							"flex w-full items-center overflow-hidden rounded-md",
+							isCompact ? "h-9 px-1" : "h-10",
+						)}
 					>
 						<div
-							className="flex min-w-0 flex-1 items-center overflow-hidden"
-							ref={commandRegionRef}
+							className="flex w-full min-w-0 items-center overflow-hidden"
+							data-slot="markdown-editor-toolbar-skeleton"
+							ref={toolbarRef}
 						>
-							<MarkdownToolbarSkeletonSection
-								collapsed={historyCollapsed}
-								controlCount={2}
-								merged={mergeHistoryMenu}
-							/>
-							<MarkdownToolbarSkeletonSection
-								collapsed={textCollapsed}
-								controlCount={7}
-								merged={mergeTextMenu}
-							/>
-							<MarkdownToolbarSkeletonSection
-								collapsed={structureCollapsed}
-								controlCount={4}
-								merged={mergeStructureMenu}
-							/>
-						</div>
-						<div
-							className="ml-auto flex shrink-0 items-center gap-1 pl-1.5"
-							ref={trailingActionsRef}
-						>
-							<MarkdownToolbarGhostSkeleton />
-							<span
-								aria-hidden
-								className="mx-0.5 h-5 border-border/70 border-l"
-							/>
-							<Button.Skeleton size="icon-sm" variant="secondary" />
+							<div
+								className="flex min-w-0 flex-1 items-center overflow-hidden"
+								ref={commandRegionRef}
+							>
+								<MarkdownToolbarSkeletonSection
+									collapsed={historyCollapsed}
+									controlCount={2}
+									merged={mergeHistoryMenu}
+								/>
+								<MarkdownToolbarSkeletonSection
+									collapsed={textCollapsed}
+									controlCount={7}
+									merged={mergeTextMenu}
+								/>
+								<MarkdownToolbarSkeletonSection
+									collapsed={structureCollapsed}
+									controlCount={4}
+									merged={mergeStructureMenu}
+								/>
+							</div>
+							<div
+								className="ml-auto flex shrink-0 items-center gap-1 pl-1.5"
+								ref={trailingActionsRef}
+							>
+								<MarkdownToolbarGhostSkeleton />
+								<span
+									aria-hidden
+									className="mx-0.5 h-5 border-border/70 border-l"
+								/>
+								<Button.Skeleton size="icon-sm" variant="secondary" />
+							</div>
 						</div>
 					</div>
+					<Skeleton
+						className={clsx(
+							"w-full border border-transparent",
+							isCompact ? "h-[98px]" : "h-[194px]",
+							isCompact ? "mt-1.5" : "mt-2",
+						)}
+						data-slot="markdown-editor-body-skeleton"
+						radius="md"
+					/>
 				</div>
-				<Skeleton
-					className={clsx(
-						"w-full border border-transparent",
-						isCompact ? "h-[98px]" : "h-[194px]",
-						isCompact ? "mt-1.5" : "mt-2",
-					)}
-					data-slot="markdown-editor-body-skeleton"
-					radius="md"
-				/>
 			</div>
-		</div>
+		</Field>
 	);
 }
 

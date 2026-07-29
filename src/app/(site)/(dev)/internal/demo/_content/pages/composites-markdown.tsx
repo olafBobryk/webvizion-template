@@ -212,6 +212,27 @@ export const compositesMarkdownDemoPage: DemoPage = {
 					},
 				},
 				{
+					id: "markdown-editor-field-error",
+					kind: "component",
+					name: "Markdown.Editor",
+					label: "Field-owned server validation",
+					related: relatedMap["Markdown.Editor"],
+					Render() {
+						return (
+							<div className="max-w-3xl">
+								<Markdown.Editor
+									ariaLabel="Markdown editor with a field error"
+									defaultMarkdown={
+										"## Project note\n\nKeep the correction attached to its editor."
+									}
+									density="compact"
+									error="The project note could not be saved in this form."
+								/>
+							</div>
+						);
+					},
+				},
+				{
 					id: "markdown-editor-disabled",
 					kind: "component",
 					name: "Markdown.Editor",

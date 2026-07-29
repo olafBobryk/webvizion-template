@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { DashboardDetailField } from "@/app/(site)/dashboard/_components/detail/DashboardDetailField";
 import { Icon } from "@/components/ui/icons/Icon";
+import { ErrorState } from "@/components/ui/misc";
 import { Button } from "@/components/ui/primitives/Button";
-import { StatusMessage } from "@/components/ui/primitives/StatusMessage";
 import { getSafeContinuationPath } from "@/lib/auth/continuation";
 import { toPublicAuthError } from "@/lib/auth/errors";
 import { applicationAdapters } from "@/lib/auth/server";
@@ -82,14 +82,16 @@ export default async function InvitationPage({
 					</form>
 				</>
 			) : (
-				<>
-					<StatusMessage tone="danger">
-						{previewError ?? "This invitation link is incomplete."}
-					</StatusMessage>
-					<Button className="w-full" href="/login" variant="secondary">
-						Return to sign in
-					</Button>
-				</>
+				<ErrorState
+					action={
+						<Button href="/login" size="sm" variant="secondary">
+							Return to sign in
+						</Button>
+					}
+					description={previewError ?? "This invitation link is incomplete."}
+					layout="stacked"
+					title="Invitation unavailable"
+				/>
 			)}
 		</AuthScreen>
 	);

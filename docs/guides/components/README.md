@@ -26,21 +26,12 @@ component's implementation details, public exports, and profile availability.
   general rule for its component family.
 - Real source code owns the executable API. A guide must use real export names
   and paths so readers can confirm the contract.
-- A section marked **Review decision** records current ambiguity. It is not a
-  new rule and should not be treated as settled until the wording is changed.
 
 ## Review Order
 
 1. Review the decision tables first; they describe which component owns each
    common situation.
-2. Review every **Review decision** callout and choose the intended policy.
-3. Change one convention family at a time so the resulting implementation audit
+2. Change one convention family at a time so the resulting implementation audit
    remains attributable.
-4. After the policy review, verify documentation against actual consumers,
+3. After the policy review, verify documentation against actual consumers,
    demos, profile outputs, static checks, and visual behavior.
-
-## Decisions Waiting For Review
-
-- [Feedback ownership and `StatusMessage`](./feedback-and-status.md#review-decisions)
-- [Form-level versus field-level mutation errors](./forms-and-submission.md#review-decisions)
-- [When generic state components should replace persistent status copy](./loading-and-async-states.md#review-decisions)

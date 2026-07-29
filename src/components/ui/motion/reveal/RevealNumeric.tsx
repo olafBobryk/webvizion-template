@@ -1,19 +1,12 @@
 "use client";
 
 import clsx from "clsx";
-import { motion, useAnimationControls, useInView } from "motion/react";
+import { motion, useAnimationControls } from "motion/react";
 import type { ComponentPropsWithoutRef } from "react";
 import * as React from "react";
-import { useMotionDisableOverride } from "@/components/ui/foundations/motionDisableOverride";
 import { spring } from "@/components/ui/foundations/spring";
-import {
-	type MotionSceneStageInput,
-	useMotionSceneGate,
-} from "@/components/ui/motion/MotionScene";
 import { type TextProps, textVariants } from "@/components/ui/primitives/Text";
-import { useAppReady } from "@/hooks/useAppReady";
-import { useMotionAllowed } from "@/hooks/useMotionAllowed";
-import { resolveRevealStageAliases } from "./types";
+import { useRevealParticipant } from "./scheduler/useRevealParticipant";
 
 export type NumericRevealAnimation = "countUp" | "reveal" | "scroll";
 
@@ -24,42 +17,26 @@ const numericCountUpDelayStep = 8;
 const numericCountUpDurationStep = 10;
 
 type NumericRevealOwnProps = {
-	after?: MotionSceneStageInput;
 	animation?: NumericRevealAnimation;
 	as?: React.ElementType;
 	children?: string;
 	className?: string;
-	disableWhenReducedMotion?: boolean;
-	once?: boolean;
 	startDelay?: number;
 	text?: string;
 	textVariant?: TextProps["variant"];
-	unlock?: MotionSceneStageInput;
-	unlockStage?: MotionSceneStageInput;
-	useViewport?: boolean;
-	viewportAmount?: number;
-	waitFor?: MotionSceneStageInput;
 };
 
 export type NumericRevealProps = NumericRevealOwnProps &
 	Omit<ComponentPropsWithoutRef<"span">, keyof NumericRevealOwnProps | "as">;
 
 export function NumericReveal({
-	after,
 	animation = "reveal",
 	as,
 	children,
 	className,
-	disableWhenReducedMotion = true,
-	once = true,
 	startDelay = 0,
 	text,
 	textVariant,
-	unlock,
-	unlockStage,
-	useViewport = true,
-	viewportAmount = 0.2,
-	waitFor,
 	...rest
 }: NumericRevealProps) {
 	const finalText = text ?? children ?? "";
@@ -68,25 +45,9 @@ export function NumericReveal({
 	const ref = React.useRef<HTMLElement | null>(null);
 	const [hasPlayed, setHasPlayed] = React.useState(false);
 	const [hasHydrated, setHasHydrated] = React.useState(false);
-	const appReady = useAppReady();
-	const motionAllowed = useMotionAllowed(disableWhenReducedMotion);
-	const motionDisabled = useMotionDisableOverride();
-	const resolvedMotionAllowed = motionAllowed && !motionDisabled;
-	const inView = useInView(ref, { amount: viewportAmount, once });
-	const stages = resolveRevealStageAliases({
-		after,
-		unlock,
-		waitFor,
-		unlockStage,
-	});
-	const { sceneReady, markReady } = useMotionSceneGate("NumericReveal", stages);
-	const shouldPlay =
-		hasHydrated &&
-		resolvedMotionAllowed &&
-		appReady &&
-		sceneReady &&
-		(useViewport ? inView : true) &&
-		(!once || !hasPlayed);
+	const [scheduled, setScheduled] = React.useState(false);
+	const [schedulerDelay, setSchedulerDelay] = React.useState(0);
+	const completionResolverRef = React.useRef<(() => void) | null>(null);
 	const resolvedClassName = clsx(
 		textVariant && textVariants({ variant: textVariant, tone: "inherit" }),
 		className,
@@ -96,31 +57,51 @@ export function NumericReveal({
 		setHasHydrated(true);
 	}, []);
 
-	React.useEffect(() => {
-		if (
-			!resolvedMotionAllowed ||
-			finalText.length === 0 ||
-			(!hasDigits && animation !== "countUp")
-		) {
-			markReady();
-		}
-	}, [
-		animation,
-		finalText.length,
-		hasDigits,
-		markReady,
-		resolvedMotionAllowed,
-	]);
+	const play = React.useCallback(
+		(delay: number) => {
+			setSchedulerDelay(delay);
+			setScheduled(true);
+			if (finalText.length === 0 || (!hasDigits && animation !== "countUp")) {
+				setHasPlayed(true);
+				return Promise.resolve();
+			}
+			return new Promise<void>((resolve) => {
+				completionResolverRef.current = resolve;
+			});
+		},
+		[animation, finalText.length, hasDigits],
+	);
+
+	const showImmediately = React.useCallback(() => {
+		setScheduled(true);
+		setHasPlayed(true);
+		completionResolverRef.current?.();
+		completionResolverRef.current = null;
+	}, []);
+
+	const { disabled } = useRevealParticipant({
+		elementRef: ref,
+		play,
+		showImmediately,
+	});
+	const shouldPlay = hasHydrated && !disabled && scheduled && !hasPlayed;
 
 	const handleDigitComplete = React.useCallback(() => {
 		if (hasPlayed) return;
 		setHasPlayed(true);
-		markReady();
-	}, [hasPlayed, markReady]);
+		completionResolverRef.current?.();
+		completionResolverRef.current = null;
+	}, [hasPlayed]);
 
-	if (!hasHydrated || !resolvedMotionAllowed || finalText.length === 0) {
+	if (!hasHydrated || disabled || finalText.length === 0) {
 		return (
-			<Tag className={resolvedClassName} {...rest}>
+			<Tag
+				ref={(node: HTMLElement | null) => {
+					ref.current = node;
+				}}
+				className={resolvedClassName}
+				{...rest}
+			>
 				{finalText}
 			</Tag>
 		);
@@ -137,9 +118,9 @@ export function NumericReveal({
 				{...rest}
 			>
 				<CountUpNumericText
-					active={shouldPlay || (once && hasPlayed)}
+					active={shouldPlay || hasPlayed}
 					onComplete={handleDigitComplete}
-					startDelay={startDelay}
+					startDelay={startDelay + schedulerDelay}
 					text={finalText}
 				/>
 			</Tag>
@@ -194,9 +175,9 @@ export function NumericReveal({
 				return (
 					<NumericRevealDigit
 						key={token.key}
-						active={shouldPlay || (once && hasPlayed)}
+						active={shouldPlay || hasPlayed}
 						animation={animation}
-						delay={startDelay + token.digitIndex * 0.07}
+						delay={startDelay + schedulerDelay + token.digitIndex * 0.07}
 						digit={token.character}
 						isLast={token.digitIndex === digitCount - 1}
 						onComplete={handleDigitComplete}

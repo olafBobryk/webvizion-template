@@ -46,6 +46,16 @@ Modal-backed actions return a local structured result such as
 `{ ok, message, fieldErrors? }`. Field keys belong to the form or domain; do not
 create one global mutation-result registry.
 
+Distribute a failed result by ownership:
+
+- Put each `fieldErrors` entry on its complete input.
+- Toast a distinct overall `message` or non-field `error`.
+- Do not toast a field error again when it is the only failure.
+- Replace the editable region with `ErrorState` when a failure makes further
+  submission impossible, such as an expired recovery token.
+- Replace a successfully completed form with durable next-step content when the
+  instructions remain necessary.
+
 For server-backed modals, call `beginSubmission()` before the request and stop
 when it returns `false`. While pending, block Escape, backdrop, and header-close
 dismissal; disable Cancel; and use the submit button's loading state. On
@@ -54,26 +64,13 @@ performs one local update or one `router.refresh()`. Navigation success performs
 one `router.push()` or `router.replace()`, closes while still locked, and does
 not follow navigation with `router.refresh()`.
 
-## Review Decisions
-
-The current instructions establish field-owned validation and transient action
-feedback, but consumers do not consistently distinguish these cases:
-
-- A server response can contain both field errors and an overall failure. The
-  intended default appears to be inline field errors plus one toast for the
-  overall action, but duplicate copy in both channels has not been audited.
-- Some non-field form failures are currently stored in form-local error state
-  and rendered as `StatusMessage`; whether those are persistent prerequisites or
-  transient submission outcomes needs an explicit policy decision.
-- Successful flows that replace the form with durable next-step instructions
-  may be contextual content rather than transient feedback. That boundary needs
-  to be confirmed with the feedback guide.
-
 ## Avoid
 
 - Click-handler-only submission when a form expresses the interaction.
 - Page-local password visibility controls or strength meters.
 - Validation toasts that are detached from the invalid field.
+- Generic `StatusMessage` banners for submission results.
+- Repeating the same server message inline and in a toast.
 - Unlocking or unmounting a recoverable modal failure before users can correct
   it.
 

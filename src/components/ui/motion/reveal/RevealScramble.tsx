@@ -2,32 +2,19 @@
 
 import clsx from "clsx";
 import { animate } from "motion";
-import { useInView } from "motion/react";
 import type { ComponentPropsWithoutRef } from "react";
 import * as React from "react";
 import { resolveMotionTransition } from "@/components/ui/foundations/motionTiming";
-import {
-	type MotionSceneStageInput,
-	useMotionSceneGate,
-} from "@/components/ui/motion/MotionScene";
 import { type TextProps, textVariants } from "@/components/ui/primitives/Text";
-import { useAppReady } from "@/hooks/useAppReady";
-import { useMotionAllowed } from "@/hooks/useMotionAllowed";
-import { resolveRevealStageAliases } from "./types";
+import { useRevealParticipant } from "./scheduler/useRevealParticipant";
 
 const DEFAULT_CHARACTERS =
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[]{}<>?/|~";
 const NUMERIC_CHARACTERS = "0123456789";
-const REMOUNT_PLAY_CACHE_TTL_MS = 1500;
 const DEFAULT_SCRAMBLE_DURATION_MS = Math.round(
 	Number(resolveMotionTransition("reveal", { intensity: "hero" }).duration) *
 		1000,
 );
-
-const pendingRemountPlayCache = new Map<
-	string,
-	{ signature: string; timeoutId: number }
->();
 
 const textVariantAliasMap = {
 	"2xxl": "heading2xxl",
@@ -66,29 +53,6 @@ function isAnimatableCharacter(
 	return true;
 }
 
-function consumePendingRemountPlay(instanceId: string, signature: string) {
-	const entry = pendingRemountPlayCache.get(instanceId);
-	if (!entry || entry.signature !== signature) return false;
-	clearTimeout(entry.timeoutId);
-	pendingRemountPlayCache.delete(instanceId);
-	return true;
-}
-
-function primePendingRemountPlay(instanceId: string, signature: string) {
-	if (typeof window === "undefined") return;
-	const existing = pendingRemountPlayCache.get(instanceId);
-	if (existing) {
-		clearTimeout(existing.timeoutId);
-	}
-	const timeoutId = window.setTimeout(() => {
-		const current = pendingRemountPlayCache.get(instanceId);
-		if (current?.timeoutId === timeoutId) {
-			pendingRemountPlayCache.delete(instanceId);
-		}
-	}, REMOUNT_PLAY_CACHE_TTL_MS);
-	pendingRemountPlayCache.set(instanceId, { signature, timeoutId });
-}
-
 type ScrambleRevealOwnProps = {
 	text?: string;
 	children?: string;
@@ -102,18 +66,11 @@ type ScrambleRevealOwnProps = {
 	delayMs?: number;
 	delay?: number;
 	revealStep?: number;
-	useViewport?: boolean;
-	once?: boolean;
 	preserveWhitespace?: boolean;
-	disableWhenReducedMotion?: boolean;
 	maintainSpace?: boolean;
-	waitFor?: MotionSceneStageInput;
-	unlockStage?: MotionSceneStageInput;
-	after?: MotionSceneStageInput;
-	unlock?: MotionSceneStageInput;
 };
 
-type ScrambleRevealProps = ScrambleRevealOwnProps &
+export type ScrambleRevealProps = ScrambleRevealOwnProps &
 	Omit<ComponentPropsWithoutRef<"span">, keyof ScrambleRevealOwnProps | "as">;
 
 export function ScrambleReveal({
@@ -129,48 +86,29 @@ export function ScrambleReveal({
 	delayMs = 0,
 	delay,
 	revealStep,
-	useViewport = true,
-	once = true,
 	preserveWhitespace = true,
-	disableWhenReducedMotion = true,
 	maintainSpace = false,
-	waitFor,
-	unlockStage,
-	after,
-	unlock,
 	...rest
 }: ScrambleRevealProps) {
-	const stages = resolveRevealStageAliases({
-		after,
-		unlock,
-		waitFor,
-		unlockStage,
-	});
-	const appReady = useAppReady();
-	const motionAllowed = useMotionAllowed(disableWhenReducedMotion);
-	const { hasWaitFor, sceneReady, markReady } = useMotionSceneGate(
-		"ScrambleReveal",
-		stages,
-	);
 	const resolvedChildren =
 		typeof children === "string" || typeof children === "number"
 			? String(children)
 			: "";
 	const finalText = text ?? resolvedChildren;
 	const Tag = (as ?? "span") as React.ElementType;
-	const instanceId = React.useId();
 	const containerRef = React.useRef<HTMLElement | null>(null);
 	const displayRef = React.useRef<HTMLElement | null>(null);
-	const inView = useInView(containerRef, { amount: 0.2, once });
 	const animationRef = React.useRef<ReturnType<typeof animate> | null>(null);
 	const hasPlayedRef = React.useRef(false);
+	const completionResolverRef = React.useRef<(() => void) | null>(null);
+	const [scheduled, setScheduled] = React.useState(false);
+	const [schedulerDelayMs, setSchedulerDelayMs] = React.useState(0);
 
 	const resolvedTextVariant = resolveTextVariant(textVariant);
 	const resolvedClassName = clsx(
 		resolvedTextVariant &&
 			textVariants({ variant: resolvedTextVariant, tone: "inherit" }),
 		className,
-		hasWaitFor && !sceneReady && "pointer-events-none opacity-0",
 	);
 	const resolvedCharacters = getResolvedCharacters(mode, characters);
 	const resolvedTickMs =
@@ -179,17 +117,8 @@ export function ScrambleReveal({
 		mode === "numeric"
 			? Math.min(1500, Math.max(700, durationMs))
 			: Math.max(0, durationMs);
-	const remountReplaySignature = JSON.stringify({
-		finalText,
-		mode,
-		preserveWhitespace,
-		maintainSpace,
-		once,
-	});
-
 	React.useEffect(() => {
-		hasPlayedRef.current =
-			once && consumePendingRemountPlay(instanceId, remountReplaySignature);
+		hasPlayedRef.current = false;
 		if (animationRef.current) {
 			animationRef.current.stop();
 			animationRef.current = null;
@@ -197,13 +126,33 @@ export function ScrambleReveal({
 		if (displayRef.current) {
 			displayRef.current.textContent = finalText;
 		}
-	}, [finalText, instanceId, once, remountReplaySignature]);
+	}, [finalText]);
 
-	React.useEffect(() => {
-		if (finalText.length > 0 && motionAllowed) return;
-		if (hasWaitFor && !sceneReady) return;
-		markReady();
-	}, [finalText.length, hasWaitFor, markReady, motionAllowed, sceneReady]);
+	const play = React.useCallback(
+		(delaySeconds: number) => {
+			setSchedulerDelayMs(delaySeconds * 1000);
+			setScheduled(true);
+			if (finalText.length === 0) return Promise.resolve();
+			return new Promise<void>((resolve) => {
+				completionResolverRef.current = resolve;
+			});
+		},
+		[finalText.length],
+	);
+
+	const showImmediately = React.useCallback(() => {
+		setScheduled(true);
+		hasPlayedRef.current = true;
+		if (displayRef.current) displayRef.current.textContent = finalText;
+		completionResolverRef.current?.();
+		completionResolverRef.current = null;
+	}, [finalText]);
+
+	const { disabled } = useRevealParticipant({
+		elementRef: containerRef,
+		play,
+		showImmediately,
+	});
 
 	React.useEffect(() => {
 		if (animationRef.current) {
@@ -214,14 +163,12 @@ export function ScrambleReveal({
 		const displayNode = displayRef.current;
 		if (!displayNode) return undefined;
 
-		if (!motionAllowed || finalText.length === 0) {
+		if (disabled || finalText.length === 0) {
 			displayNode.textContent = finalText;
 			return undefined;
 		}
 
-		const shouldReveal =
-			appReady && sceneReady && (useViewport ? inView : true);
-		if (once && hasPlayedRef.current) {
+		if (hasPlayedRef.current) {
 			displayNode.textContent = finalText;
 			return undefined;
 		}
@@ -272,14 +219,12 @@ export function ScrambleReveal({
 		};
 		const markPlayed = () => {
 			hasPlayedRef.current = true;
-			markReady();
-			if (!once) return;
-			primePendingRemountPlay(instanceId, remountReplaySignature);
+			completionResolverRef.current?.();
+			completionResolverRef.current = null;
 		};
 
-		if (!shouldReveal) {
+		if (!scheduled) {
 			writeDisplay(buildFrame(0));
-			if (!once) hasPlayedRef.current = false;
 			return undefined;
 		}
 
@@ -291,8 +236,8 @@ export function ScrambleReveal({
 
 		const resolvedDelayMs =
 			typeof delay === "number"
-				? Math.max(0, delay) * 1000
-				: Math.max(0, delayMs);
+				? Math.max(0, delay) * 1000 + schedulerDelayMs
+				: Math.max(0, delayMs) + schedulerDelayMs;
 
 		if (mode === "numeric") {
 			const match = finalText.match(/\d+/);
@@ -380,29 +325,29 @@ export function ScrambleReveal({
 			}
 		};
 	}, [
-		appReady,
 		delayMs,
 		delay,
+		disabled,
 		finalText,
-		inView,
-		instanceId,
-		markReady,
 		mode,
-		motionAllowed,
-		once,
 		preserveWhitespace,
-		remountReplaySignature,
 		resolvedCharacters,
 		resolvedDurationMs,
 		resolvedTickMs,
 		revealStep,
-		sceneReady,
-		useViewport,
+		scheduled,
+		schedulerDelayMs,
 	]);
 
-	if (!motionAllowed || finalText.length === 0) {
+	if (disabled || finalText.length === 0) {
 		return (
-			<Tag className={resolvedClassName} {...rest}>
+			<Tag
+				ref={(node: HTMLElement | null) => {
+					containerRef.current = node;
+				}}
+				className={resolvedClassName}
+				{...rest}
+			>
 				{finalText}
 			</Tag>
 		);

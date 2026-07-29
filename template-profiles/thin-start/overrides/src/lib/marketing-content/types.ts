@@ -88,6 +88,11 @@ export type SiteLayoutDocument = {
 		searchGroups: MarketingMenuGroup[];
 		topNavLinks: MarketingLink[];
 	};
+	socialLinks: Array<{
+		label: string;
+		icon: HeaderIconName;
+		href: string;
+	}>;
 	footer: {
 		navLinks: MarketingLink[];
 	};

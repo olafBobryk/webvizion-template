@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/primitives/InputFrame";
 import { Listbox } from "@/components/ui/primitives/Listbox";
 import { Panel } from "@/components/ui/primitives/Panel";
+import { StatusMessage } from "@/components/ui/primitives/StatusMessage";
 import { Text } from "@/components/ui/primitives/Text";
 import { LISTBOX_OPTIONS } from "../inputOptions";
 import { relatedMap } from "../relationships";
@@ -278,6 +279,35 @@ export const uiPrimitivesDemoPage: DemoPage = {
 								<Panel background="surface" padding="sm" radius="xs">
 									<Divider>Surface-neutral label</Divider>
 								</Panel>
+							</div>
+						);
+					},
+				},
+				{
+					id: "status-message",
+					kind: "component",
+					name: "StatusMessage",
+					label: "Persistent contextual notice",
+					related: relatedMap.StatusMessage,
+					Render() {
+						const [open, setOpen] = useState(false);
+						return (
+							<div className="grid gap-4">
+								<StatusMessage tone="warning">
+									Changing ownership also transfers billing responsibility.
+								</StatusMessage>
+								<div className="flex flex-col items-start">
+									<Button
+										onClick={() => setOpen((current) => !current)}
+										size="sm"
+										variant="secondary"
+									>
+										{open ? "Hide contextual notice" : "Show contextual notice"}
+									</Button>
+									<StatusMessage.Presence open={open} tone="info">
+										This notice remains relevant until the setting changes.
+									</StatusMessage.Presence>
+								</div>
 							</div>
 						);
 					},

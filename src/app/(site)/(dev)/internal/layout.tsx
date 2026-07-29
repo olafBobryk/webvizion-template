@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { DevToolsShell } from "./_components/DevToolsShell";
+import { SiteShell } from "@/app/(site)/_components/layout/SiteShell";
+import { defaultSiteLayout } from "@/app/(site)/_components/layout/siteLayout";
 
 export const metadata: Metadata = {
 	robots: {
@@ -18,5 +19,9 @@ export default function DevOnlyInternalLayout({
 		notFound();
 	}
 
-	return <DevToolsShell>{children}</DevToolsShell>;
+	return (
+		<SiteShell siteLayout={defaultSiteLayout}>
+			<div className="min-h-screen bg-background">{children}</div>
+		</SiteShell>
+	);
 }

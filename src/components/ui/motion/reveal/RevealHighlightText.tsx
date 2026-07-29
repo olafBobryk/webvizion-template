@@ -21,7 +21,7 @@ const motionElements = {
 	h6: motion.h6,
 } as const;
 
-type RevealHighlightTextProps = {
+export type RevealHighlightTextProps = {
 	children: string;
 	highlight: string;
 	as?: TextAs;
@@ -29,16 +29,7 @@ type RevealHighlightTextProps = {
 	highlightClassName?: string;
 	charDelay?: number;
 	dir?: HTMLAttributes<HTMLElement>["dir"];
-} & Pick<
-	RevealItemProps,
-	| "after"
-	| "unlock"
-	| "waitFor"
-	| "unlockStage"
-	| "intensity"
-	| "expressive"
-	| "useViewport"
-> &
+} & Pick<RevealItemProps, "intensity" | "expressive"> &
 	VariantProps<typeof textVariants>;
 
 export function RevealHighlightText({
@@ -51,13 +42,8 @@ export function RevealHighlightText({
 	dir = "auto",
 	variant,
 	tone,
-	after,
-	unlock,
-	waitFor,
-	unlockStage,
 	intensity = "normal",
 	expressive,
-	useViewport,
 }: RevealHighlightTextProps) {
 	const resolvedClassName = textVariants({
 		variant,
@@ -83,13 +69,8 @@ export function RevealHighlightText({
 				staticAs={as}
 				className={resolvedClassName}
 				disableTransform
-				after={after}
-				unlock={unlock}
-				waitFor={waitFor}
-				unlockStage={unlockStage}
 				intensity={intensity}
 				expressive={expressive}
-				useViewport={useViewport}
 			>
 				<span dir={dir}>{children}</span>
 			</RevealItem>
@@ -106,13 +87,8 @@ export function RevealHighlightText({
 				show: {},
 			}}
 			disableTransform
-			after={after}
-			unlock={unlock}
-			waitFor={waitFor}
-			unlockStage={unlockStage}
 			intensity={intensity}
 			expressive={expressive}
-			useViewport={useViewport}
 		>
 			<span className="sr-only">{children}</span>
 			<span aria-hidden={true} dir={dir}>

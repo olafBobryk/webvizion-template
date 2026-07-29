@@ -70,7 +70,9 @@ choosing between this state family, field messaging, toasts, and
 - Use `InspectableImage` for click-to-zoom image behavior.
 - Use `HealthCheckIndicator` for compact live service status instead of page-local polling badges.
 - Use `ImageSwitcher` for small image carousels or before/after-style media switchers before building page-local slideshow state.
-- The current convention uses the shared `StatusMessage` primitive for cautionary and status messaging instead of introducing a misc-level warning surface; its narrower ownership boundary remains under review in the feedback guide.
+- Use the shared `StatusMessage` primitive only for persistent contextual
+  notices. Conditions that own a region's availability belong to
+  `StateIndicator`, `ErrorState`, or `IdleState` instead.
 - Use `ProfilePicture` for avatar display before assembling image, initial, or fallback badges by hand. Use `ProfilePictureStack` for overlapping groups; it owns overlap, surface-independent cutouts, z-order, the neutral overflow count, and the group label.
 - Keep profile-picture geometry on the shared `sm` (32px), `md` (40px), `lg` (56px), `xl` (80px), and `2xl` (96px) scale. Fallbacks use the same borderless helper-color soft fill as the compact pill/chip family, pre-composed into an opaque color against the nearest inherited `--ui-surface-color`; do not reintroduce local size maps, avatar borders, transparent stack fills, or avatar shadows. Stack separation clips the lower profile around the higher profile so it remains correct on every surface without surface-colored rings.
 - Use `SocialLinks` for reusable social/profile link clusters instead of product-local icon-button lists.

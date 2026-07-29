@@ -5,21 +5,13 @@ import {
 	AnimatePresence,
 	motion,
 	type Transition,
-	useInView,
 	type Variants,
 } from "motion/react";
 import Image, { type ImageProps } from "next/image";
 import * as React from "react";
 import { getMotionTiming } from "@/components/ui/foundations/motionTiming";
-import {
-	useMotionSceneGate,
-	useOptionalMotionScene,
-} from "@/components/ui/motion/MotionScene";
-import { useRevealAnimationsDisabled } from "@/components/ui/motion/reveal/RevealRoot";
-import { useAppReady } from "@/hooks/useAppReady";
-import { useMotionAllowed } from "@/hooks/useMotionAllowed";
-import { RevealItem, type RevealItemProps } from "./RevealItem";
-import { type RevealStageAliasProps, resolveRevealStageAliases } from "./types";
+import { type RevealItemProps, RevealParticipantItem } from "./RevealItem";
+import { RevealSchedulerContext } from "./scheduler/context";
 
 type RevealImageOwnProps = {
 	imageClassName?: string;
@@ -27,7 +19,6 @@ type RevealImageOwnProps = {
 	fallbackClassName?: string;
 	contentClassName?: string;
 	overlay?: React.ReactNode;
-	disableWrapperReveal?: boolean;
 	disableRevealAnimation?: boolean;
 	loadStrategy?: "ignore-load" | "wait-for-load";
 	revealDelay?: number;
@@ -133,23 +124,8 @@ const cornerClipRadiusTransition: Transition = {
 };
 
 export type RevealImageProps = ImageProps &
-	Pick<
-		RevealItemProps,
-		| "as"
-		| "asChild"
-		| "className"
-		| "disableTransform"
-		| "useViewport"
-		| "active"
-		| "waitFor"
-		| "unlockStage"
-		| "after"
-		| "unlock"
-		| "disableWhenReducedMotion"
-		| "viewportAmount"
-	> &
-	RevealImageOwnProps &
-	RevealStageAliasProps & {
+	Pick<RevealItemProps, "as" | "asChild" | "className" | "disableTransform"> &
+	RevealImageOwnProps & {
 		revealFinalRadius?: number;
 		revealOrigin?: RevealImageClipRevealOrigin;
 		revealTransition?: RevealImageClipRevealTransition;
@@ -169,20 +145,11 @@ export function RevealImage({
 	className,
 	variants,
 	disableTransform = false,
-	useViewport = false,
-	viewportAmount = 0.2,
-	active,
-	after,
-	unlock,
-	waitFor,
-	unlockStage,
-	disableWhenReducedMotion = true,
 	imageClassName,
 	fallback,
 	fallbackClassName,
 	contentClassName,
 	overlay,
-	disableWrapperReveal = false,
 	disableRevealAnimation = false,
 	loadStrategy = "ignore-load",
 	revealDelay = 0,
@@ -195,36 +162,27 @@ export function RevealImage({
 	placeholder,
 	src,
 	onLoad,
+	onError,
 	fill,
 	...imageProps
 }: RevealImageProps) {
-	const stages = resolveRevealStageAliases({
-		after,
-		unlock,
-		waitFor,
-		unlockStage,
-	});
-	const appReady = useAppReady();
-	const motionAllowed = useMotionAllowed(disableWhenReducedMotion);
-	const revealDisabled = useRevealAnimationsDisabled(disableWhenReducedMotion);
+	const scheduler = React.useContext(RevealSchedulerContext);
+	const revealDisabled = scheduler?.disabled ?? true;
 	const revealAnimationDisabled = revealDisabled || disableRevealAnimation;
-	const scene = useOptionalMotionScene();
-	const { markReady } = useMotionSceneGate("RevealImage", {
-		unlockStage: stages.unlockStage,
-	});
 	const sourceKey = getSourceKey(src);
 	const imageRef = React.useRef<HTMLImageElement | null>(null);
 	const contentRef = React.useRef<HTMLDivElement | null>(null);
 	const [loaded, setLoaded] = React.useState(false);
+	const [loadFailed, setLoadFailed] = React.useState(false);
 	const [revealed, setRevealed] = React.useState(false);
-	const isInViewport = useInView(contentRef, {
-		once: true,
-		amount: viewportAmount,
-	});
+	const [scheduled, setScheduled] = React.useState(false);
+	const [schedulerDelay, setSchedulerDelay] = React.useState(0);
+	const completionResolverRef = React.useRef<(() => void) | null>(null);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: reset state when the image source identity changes
 	React.useEffect(() => {
 		setLoaded(false);
+		setLoadFailed(false);
 		setRevealed(false);
 	}, [sourceKey]);
 
@@ -240,48 +198,34 @@ export function RevealImage({
 
 	React.useEffect(() => {
 		onRevealStateChange?.(revealed);
+		if (revealed) {
+			completionResolverRef.current?.();
+			completionResolverRef.current = null;
+		}
 	}, [onRevealStateChange, revealed]);
 
-	React.useEffect(() => {
-		if (!revealed) return;
-		markReady();
-	}, [markReady, revealed]);
-
 	const hasCustomRevealVariants = Boolean(variants);
-	const sceneReady = scene ? scene.isStageReady(stages.waitFor) : true;
-	const loadReady = loadStrategy === "ignore-load" || loaded;
-	const shouldRevealImage =
-		revealAnimationDisabled ||
-		(loadReady &&
-			appReady &&
-			sceneReady &&
-			active !== false &&
-			(useViewport ? isInViewport : true));
+	const loadReady = loadStrategy === "ignore-load" || loaded || loadFailed;
+	const shouldRevealImage = revealAnimationDisabled || scheduled;
 
 	React.useEffect(() => {
 		if (!shouldRevealImage) return;
-		if (motionAllowed && !revealAnimationDisabled && !hasCustomRevealVariants) {
+		if (!revealAnimationDisabled && !hasCustomRevealVariants) {
 			return;
 		}
 		setRevealed(true);
-	}, [
-		hasCustomRevealVariants,
-		motionAllowed,
-		revealAnimationDisabled,
-		shouldRevealImage,
-	]);
+	}, [hasCustomRevealVariants, revealAnimationDisabled, shouldRevealImage]);
 
-	const defaultRevealTransition =
-		motionAllowed && !revealDisabled
-			? {
-					...getMotionTiming("grand"),
-					delay: revealDelay,
-				}
-			: undefined;
+	const defaultRevealTransition = !revealDisabled
+		? {
+				...getMotionTiming("grand"),
+				delay: revealDelay + schedulerDelay,
+			}
+		: undefined;
 	const resolvedCustomRevealTransition = revealTransition
 		? {
 				...revealTransition,
-				delay: revealDelay,
+				delay: revealDelay + schedulerDelay,
 			}
 		: revealTransition;
 	const resolvedFallback =
@@ -293,7 +237,7 @@ export function RevealImage({
 					...(resolvedCustomRevealTransition ?? defaultRevealTransition),
 					"--clip-radius": {
 						...cornerClipRadiusTransition,
-						delay: revealDelay,
+						delay: revealDelay + schedulerDelay,
 					},
 				}
 			: defaultRevealTransition;
@@ -362,26 +306,24 @@ export function RevealImage({
 				animate={
 					revealAnimationDisabled
 						? revealedImageState
-						: motionAllowed
-							? hasCustomRevealVariants
-								? {
-										opacity: shouldRevealImage ? 1 : 0,
-										clipPath:
-											revealVariant === "corner-clip"
-												? cornerClipPath
-												: "inset(0% 0% 0% 0%)",
-										scale: 1,
-										...(revealVariant === "corner-clip"
-											? {
-													...cornerClipRevealedInsetValues,
-													"--clip-radius": `${revealFinalRadius}px`,
-												}
-											: null),
-									}
-								: shouldRevealImage
-									? revealedImageState
-									: hiddenImageState
-							: revealedImageState
+						: hasCustomRevealVariants
+							? {
+									opacity: shouldRevealImage ? 1 : 0,
+									clipPath:
+										revealVariant === "corner-clip"
+											? cornerClipPath
+											: "inset(0% 0% 0% 0%)",
+									scale: 1,
+									...(revealVariant === "corner-clip"
+										? {
+												...cornerClipRevealedInsetValues,
+												"--clip-radius": `${revealFinalRadius}px`,
+											}
+										: null),
+								}
+							: shouldRevealImage
+								? revealedImageState
+								: hiddenImageState
 				}
 				transition={
 					revealAnimationDisabled
@@ -404,7 +346,12 @@ export function RevealImage({
 					placeholder={placeholder}
 					onLoad={(event) => {
 						onLoad?.(event);
+						setLoadFailed(false);
 						setLoaded(true);
+					}}
+					onError={(event) => {
+						onError?.(event);
+						setLoadFailed(true);
 					}}
 					className={clsx("h-full w-full", imageClassName)}
 					{...imageProps}
@@ -414,24 +361,28 @@ export function RevealImage({
 		</div>
 	);
 
-	if (disableWrapperReveal) {
-		return <div className={className}>{imageContent}</div>;
-	}
-
 	return (
-		<RevealItem
+		<RevealParticipantItem
 			as={as}
 			asChild={asChild}
 			className={className}
 			variants={variants}
 			disableTransform={disableTransform}
-			useViewport={useViewport}
-			viewportAmount={viewportAmount}
-			active={shouldRevealImage}
-			waitFor={stages.waitFor}
-			disableWhenReducedMotion={disableWhenReducedMotion}
+			participantReady={loadReady}
+			onParticipantStart={(delay) => {
+				setSchedulerDelay(delay);
+				setScheduled(true);
+				return new Promise<void>((resolve) => {
+					completionResolverRef.current = resolve;
+				});
+			}}
+			onParticipantShow={() => {
+				setSchedulerDelay(0);
+				setScheduled(true);
+				setRevealed(true);
+			}}
 		>
 			{imageContent}
-		</RevealItem>
+		</RevealParticipantItem>
 	);
 }

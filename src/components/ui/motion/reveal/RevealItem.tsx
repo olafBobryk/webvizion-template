@@ -1,20 +1,19 @@
 "use client";
 
+import { Slot } from "@radix-ui/react-slot";
 import {
 	motion,
 	type TargetAndTransition,
 	useAnimationControls,
-	useInView,
 	type Variants,
 } from "motion/react";
 import {
 	createElement,
 	type ElementType,
+	forwardRef,
 	type ReactNode,
 	useCallback,
-	useContext,
 	useEffect,
-	useId,
 	useLayoutEffect,
 	useMemo,
 	useRef,
@@ -26,26 +25,22 @@ import {
 	type MotionIntensity,
 	type MotionSurface,
 } from "@/components/ui/foundations/motionTiming";
-import {
-	type MotionSceneStageInput,
-	useMotionSceneGate,
-} from "@/components/ui/motion/MotionScene";
-import { useAppReady } from "@/hooks/useAppReady";
-import { useMotionAllowed } from "@/hooks/useMotionAllowed";
-import {
-	disabledRevealStyle,
-	getStaticRevealTag,
-	MotionSlot,
-	RevealGroupContext,
-	type RevealRegisteredItem,
-	RevealRootContext,
-	restoreChildTransition,
-	SlotWithRef,
-} from "./_scheduler";
-import { RevealRoot } from "./RevealRoot";
-import { type RevealStageAliasProps, resolveRevealStageAliases } from "./types";
+import { waitForRevealDelay } from "./scheduler/context";
+import { useRevealParticipant } from "./scheduler/useRevealParticipant";
 
-export type RootScheduledRevealItemProps = {
+const SlotWithRef = forwardRef<HTMLElement, React.ComponentProps<typeof Slot>>(
+	(props, ref) => <Slot ref={ref} {...props} />,
+);
+SlotWithRef.displayName = "RevealSlot";
+const MotionSlot = motion.create(SlotWithRef);
+
+const staticRevealStyle = {
+	opacity: 1,
+	transform: "none",
+	clipPath: "none",
+} as const;
+
+export type RevealItemProps = {
 	children?: ReactNode;
 	as?: ElementType;
 	staticAs?: ElementType;
@@ -55,33 +50,23 @@ export type RootScheduledRevealItemProps = {
 	className?: string;
 	variants?: Variants;
 	disableTransform?: boolean;
-	useViewport?: boolean;
-	active?: boolean;
-	waitFor?: MotionSceneStageInput;
-	unlockStage?: MotionSceneStageInput;
 	intensity?: MotionIntensity;
 	expressive?: number;
 	distance?: MotionDistance | number;
 	surface?: MotionSurface | number;
-	disableWhenReducedMotion?: boolean;
-	viewportAmount?: number;
 };
 
-export function RootScheduledRevealItem(props: RootScheduledRevealItemProps) {
-	const root = useContext(RevealRootContext);
+type RevealParticipantItemProps = RevealItemProps & {
+	participantReady?: boolean;
+	onParticipantShow?: () => void;
+	onParticipantStart?: (delay: number) => Promise<void> | void;
+};
 
-	if (!root) {
-		return (
-			<RevealRoot disableWhenReducedMotion={props.disableWhenReducedMotion}>
-				<RootScheduledRevealItemInner {...props} />
-			</RevealRoot>
-		);
-	}
-
-	return <RootScheduledRevealItemInner {...props} />;
+export function RevealItem(props: RevealItemProps) {
+	return <RevealParticipantItem {...props} />;
 }
 
-function RootScheduledRevealItemInner({
+export function RevealParticipantItem({
 	children,
 	as = motion.div,
 	staticAs,
@@ -91,22 +76,14 @@ function RootScheduledRevealItemInner({
 	className,
 	variants,
 	disableTransform = false,
-	useViewport = true,
-	active,
-	waitFor,
-	unlockStage,
 	intensity,
 	expressive,
 	distance,
 	surface,
-	disableWhenReducedMotion = true,
-	viewportAmount = 0.2,
-}: RootScheduledRevealItemProps) {
-	const id = useId();
-	const root = useContext(RevealRootContext);
-	const appReady = useAppReady();
-	const itemMotionAllowed = useMotionAllowed(disableWhenReducedMotion);
-	const disabled = root?.disabled || !itemMotionAllowed;
+	participantReady = true,
+	onParticipantShow,
+	onParticipantStart,
+}: RevealParticipantItemProps) {
 	const controls = useAnimationControls();
 	const revealTiming = useMemo(
 		() =>
@@ -115,41 +92,80 @@ function RootScheduledRevealItemInner({
 	);
 	const [hasPlayed, setHasPlayed] = useState(false);
 	const childRef = useRef<HTMLElement | null>(null);
-	const viewportRef = useRef<HTMLElement | null>(null);
-	const measureRef = asChild ? childRef : viewportRef;
+	const wrapperRef = useRef<HTMLElement | null>(null);
+	const elementRef = asChild ? childRef : wrapperRef;
 	const mountedRef = useRef(false);
-	const isInViewport = useInView(measureRef, {
-		once: true,
-		amount: viewportAmount,
-	});
 	const originalTransitionRef = useRef<string | null>(null);
-	const restoreRafRef = useRef<number | null>(null);
-	const timeoutRef = useRef<number | null>(null);
-	const playRef = useRef<RevealRegisteredItem["play"]>(() => undefined);
-	const showImmediatelyRef = useRef<RevealRegisteredItem["showImmediately"]>(
-		() => undefined,
-	);
-	const onCompleteRef = useRef<RevealRegisteredItem["onComplete"]>(
-		() => undefined,
-	);
-	const { sceneReady, markReady } = useMotionSceneGate("RevealItem", {
-		waitFor,
-		unlockStage,
-	});
-	const isReady =
-		disabled ||
-		(appReady &&
-			(useViewport ? isInViewport : true) &&
-			active !== false &&
-			sceneReady);
 
 	useLayoutEffect(() => {
 		mountedRef.current = true;
-
 		return () => {
 			mountedRef.current = false;
 		};
 	}, []);
+
+	const completeReveal = useCallback(async () => {
+		if (!mountedRef.current) return;
+		if (asChild && handoffAfterReveal) {
+			await new Promise<void>((resolve) => {
+				requestAnimationFrame(() => {
+					if (childRef.current) {
+						childRef.current.style.transition =
+							originalTransitionRef.current ?? "";
+					}
+					if (mountedRef.current) setHasPlayed(true);
+					resolve();
+				});
+			});
+			return;
+		}
+		setHasPlayed(true);
+	}, [asChild, handoffAfterReveal]);
+
+	const play = useCallback(
+		async (delay: number) => {
+			const participantEffect = onParticipantStart?.(delay);
+			if (variants) {
+				await waitForRevealDelay(delay);
+				if (!mountedRef.current) return;
+				await controls.start("show");
+			} else {
+				const target: TargetAndTransition = disableTransform
+					? { opacity: 1, transition: { ...revealTiming, delay } }
+					: {
+							opacity: 1,
+							y: 0,
+							transition: { ...revealTiming, delay },
+							transitionEnd: { transform: "none", y: 0 },
+						};
+				await controls.start(target);
+			}
+			if (mountedRef.current) await completeReveal();
+			await participantEffect;
+		},
+		[
+			completeReveal,
+			controls,
+			disableTransform,
+			onParticipantStart,
+			revealTiming,
+			variants,
+		],
+	);
+
+	const showImmediately = useCallback(() => {
+		onParticipantShow?.();
+		if (variants) controls.set("show");
+		else controls.set(disableTransform ? { opacity: 1 } : { opacity: 1, y: 0 });
+		setHasPlayed(true);
+	}, [controls, disableTransform, onParticipantShow, variants]);
+
+	const { disabled } = useRevealParticipant({
+		elementRef,
+		play,
+		ready: participantReady,
+		showImmediately,
+	});
 
 	useLayoutEffect(() => {
 		if (!asChild || !handoffAfterReveal || disabled || hasPlayed) return;
@@ -159,175 +175,55 @@ function RootScheduledRevealItemInner({
 		node.style.transition = "none";
 	}, [asChild, disabled, handoffAfterReveal, hasPlayed]);
 
-	useEffect(() => {
-		return () => {
-			if (restoreRafRef.current !== null) {
-				cancelAnimationFrame(restoreRafRef.current);
-			}
-			if (timeoutRef.current !== null) {
-				window.clearTimeout(timeoutRef.current);
-			}
-		};
-	}, []);
-
-	const completeReveal = useCallback(async () => {
-		if (!mountedRef.current) return;
-
-		if (asChild && handoffAfterReveal) {
-			await restoreChildTransition({
-				node: childRef.current,
-				originalTransition: originalTransitionRef.current,
-				onRestored: () => {
-					if (mountedRef.current) {
-						setHasPlayed(true);
-					}
-				},
-			});
-			return;
-		}
-
-		if (!mountedRef.current) return;
-		setHasPlayed(true);
-	}, [asChild, handoffAfterReveal]);
-
-	const play = useCallback(
-		async (delay: number) => {
-			if (variants) {
-				await new Promise<void>((resolve) => {
-					timeoutRef.current = window.setTimeout(() => {
-						timeoutRef.current = null;
-						resolve();
-					}, delay * 1000);
-				});
-				if (!mountedRef.current) return;
-
-				await controls.start("show");
-				if (!mountedRef.current) return;
-				await completeReveal();
-				return;
-			}
-
-			const target: TargetAndTransition = disableTransform
-				? {
-						opacity: 1,
-						transition: { ...revealTiming, delay },
-					}
-				: {
-						opacity: 1,
-						y: 0,
-						transition: { ...revealTiming, delay },
-						transitionEnd: { transform: "none", y: 0 },
-					};
-
-			if (!mountedRef.current) return;
-			await controls.start(target);
-			if (!mountedRef.current) return;
-			await completeReveal();
+	useEffect(
+		() => () => {
+			mountedRef.current = false;
 		},
-		[completeReveal, controls, disableTransform, revealTiming, variants],
+		[],
 	);
 
-	const showImmediately = useCallback(() => {
-		if (!mountedRef.current) return;
-		if (variants) {
-			controls.set("show");
-			setHasPlayed(true);
-			return;
-		}
-		controls.set(disableTransform ? { opacity: 1 } : { opacity: 1, y: 0 });
-		setHasPlayed(true);
-	}, [controls, disableTransform, variants]);
-
-	const onComplete = useCallback(() => {
-		markReady();
-	}, [markReady]);
-
-	playRef.current = play;
-	showImmediatelyRef.current = showImmediately;
-	onCompleteRef.current = onComplete;
-
-	const registeredPlay = useCallback((delay: number) => {
-		return playRef.current(delay);
-	}, []);
-
-	const registeredShowImmediately = useCallback(() => {
-		showImmediatelyRef.current();
-	}, []);
-
-	const registeredOnComplete = useCallback(() => {
-		onCompleteRef.current();
-	}, []);
-
-	useEffect(() => {
-		if (hasPlayed) return;
-		const node = measureRef.current;
-		if (!node || !root) return;
-		const unregisterRoot = root.registerItem({
-			id,
-			element: node,
-			play: registeredPlay,
-			showImmediately: registeredShowImmediately,
-			onComplete: registeredOnComplete,
-		});
-
-		return () => unregisterRoot();
-	}, [
-		hasPlayed,
-		id,
-		measureRef,
-		registeredOnComplete,
-		registeredPlay,
-		registeredShowImmediately,
-		root,
-	]);
-
-	useEffect(() => {
-		if (hasPlayed) return;
-		if (!isReady || !root) return;
-		root.markReady(id);
-	}, [hasPlayed, id, isReady, root]);
-
-	const usePlainAsChild = asChild && handoffAfterReveal && hasPlayed;
+	const usePlainChild = asChild && handoffAfterReveal && hasPlayed;
 	const interactionLocked =
 		deferInteractionUntilRevealed && !disabled && !hasPlayed;
 	const revealClassName = interactionLocked
 		? [className, "pointer-events-none"].filter(Boolean).join(" ")
 		: className;
-	const interactionLockProps = interactionLocked
+	const interactionProps = interactionLocked
 		? ({ "aria-hidden": true, inert: true } as const)
 		: {};
 
-	if (disabled || usePlainAsChild) {
+	if (disabled || usePlainChild) {
 		if (asChild) {
 			return (
 				<SlotWithRef
 					ref={childRef}
 					className={revealClassName}
 					data-reveal-item=""
-					style={disabledRevealStyle}
-					{...interactionLockProps}
+					style={staticRevealStyle}
+					{...interactionProps}
 				>
 					{children}
 				</SlotWithRef>
 			);
 		}
 
-		const Tag = getStaticRevealTag(staticAs ?? as);
+		const StaticTag =
+			typeof (staticAs ?? as) === "string" ? (staticAs ?? as) : "div";
 		return createElement(
-			Tag,
+			StaticTag,
 			{
-				ref: viewportRef,
+				ref: wrapperRef,
 				className: revealClassName,
 				"data-reveal-item": "",
-				style: disabledRevealStyle,
-				...interactionLockProps,
+				style: staticRevealStyle,
+				...interactionProps,
 			},
 			children,
 		);
 	}
 
 	const MotionTag = asChild ? MotionSlot : (as ?? motion.div);
-	const baseVariants: Variants =
+	const resolvedVariants: Variants =
 		variants ??
 		({
 			hidden: disableTransform ? { opacity: 0 } : { opacity: 0, y: 12 },
@@ -343,297 +239,15 @@ function RootScheduledRevealItemInner({
 
 	return (
 		<MotionTag
-			ref={asChild ? childRef : viewportRef}
+			ref={asChild ? childRef : wrapperRef}
 			initial="hidden"
 			animate={controls}
-			variants={baseVariants}
+			variants={resolvedVariants}
 			className={revealClassName}
 			data-reveal-item=""
-			{...interactionLockProps}
+			{...interactionProps}
 		>
 			{children}
 		</MotionTag>
 	);
-}
-
-export type RevealGroupItemProps = RootScheduledRevealItemProps;
-
-export function RevealGroupItem(props: RevealGroupItemProps) {
-	const group = useContext(RevealGroupContext);
-
-	if (!group) {
-		return <RootScheduledRevealItem {...props} />;
-	}
-
-	return <RevealGroupItemInner {...props} />;
-}
-
-function RevealGroupItemInner({
-	children,
-	as = motion.div,
-	staticAs,
-	asChild = false,
-	handoffAfterReveal = false,
-	deferInteractionUntilRevealed = false,
-	className,
-	variants,
-	disableTransform = false,
-	intensity,
-	expressive,
-	distance,
-	surface,
-}: RevealGroupItemProps) {
-	const id = useId();
-	const group = useContext(RevealGroupContext);
-	const controls = useAnimationControls();
-	const revealTiming = useMemo(
-		() =>
-			getMotionTiming("grand", { intensity, expressive, distance, surface }),
-		[intensity, expressive, distance, surface],
-	);
-	const [hasPlayed, setHasPlayed] = useState(false);
-	const childRef = useRef<HTMLElement | null>(null);
-	const viewportRef = useRef<HTMLElement | null>(null);
-	const measureRef = asChild ? childRef : viewportRef;
-	const mountedRef = useRef(false);
-	const originalTransitionRef = useRef<string | null>(null);
-	const timeoutRef = useRef<number | null>(null);
-	const playRef = useRef<RevealRegisteredItem["play"]>(() => undefined);
-	const showImmediatelyRef = useRef<RevealRegisteredItem["showImmediately"]>(
-		() => undefined,
-	);
-	const onCompleteRef = useRef<RevealRegisteredItem["onComplete"]>(
-		() => undefined,
-	);
-	const disabled = group?.disabled === true;
-	const isReady = disabled || group?.started === true;
-
-	useLayoutEffect(() => {
-		mountedRef.current = true;
-
-		return () => {
-			mountedRef.current = false;
-		};
-	}, []);
-
-	useLayoutEffect(() => {
-		if (!asChild || !handoffAfterReveal || disabled || hasPlayed) return;
-		const node = childRef.current;
-		if (!node) return;
-		originalTransitionRef.current = node.style.transition;
-		node.style.transition = "none";
-	}, [asChild, disabled, handoffAfterReveal, hasPlayed]);
-
-	useEffect(() => {
-		return () => {
-			if (timeoutRef.current !== null) {
-				window.clearTimeout(timeoutRef.current);
-			}
-		};
-	}, []);
-
-	const completeReveal = useCallback(async () => {
-		if (!mountedRef.current) return;
-
-		if (asChild && handoffAfterReveal) {
-			await restoreChildTransition({
-				node: childRef.current,
-				originalTransition: originalTransitionRef.current,
-				onRestored: () => {
-					if (mountedRef.current) {
-						setHasPlayed(true);
-					}
-				},
-			});
-			return;
-		}
-
-		if (!mountedRef.current) return;
-		setHasPlayed(true);
-	}, [asChild, handoffAfterReveal]);
-
-	const play = useCallback(
-		async (delay: number) => {
-			if (variants) {
-				await new Promise<void>((resolve) => {
-					timeoutRef.current = window.setTimeout(() => {
-						timeoutRef.current = null;
-						resolve();
-					}, delay * 1000);
-				});
-				if (!mountedRef.current) return;
-
-				await controls.start("show");
-				if (!mountedRef.current) return;
-				await completeReveal();
-				return;
-			}
-
-			const target: TargetAndTransition = disableTransform
-				? {
-						opacity: 1,
-						transition: { ...revealTiming, delay },
-					}
-				: {
-						opacity: 1,
-						y: 0,
-						transition: { ...revealTiming, delay },
-						transitionEnd: { transform: "none", y: 0 },
-					};
-
-			if (!mountedRef.current) return;
-			await controls.start(target);
-			if (!mountedRef.current) return;
-			await completeReveal();
-		},
-		[completeReveal, controls, disableTransform, revealTiming, variants],
-	);
-
-	const showImmediately = useCallback(() => {
-		if (!mountedRef.current) return;
-		if (variants) {
-			controls.set("show");
-			setHasPlayed(true);
-			return;
-		}
-		controls.set(disableTransform ? { opacity: 1 } : { opacity: 1, y: 0 });
-		setHasPlayed(true);
-	}, [controls, disableTransform, variants]);
-
-	const onComplete = useCallback(() => {
-		group?.completeItem(id);
-	}, [group, id]);
-
-	playRef.current = play;
-	showImmediatelyRef.current = showImmediately;
-	onCompleteRef.current = onComplete;
-
-	const registeredPlay = useCallback((delay: number) => {
-		return playRef.current(delay);
-	}, []);
-
-	const registeredShowImmediately = useCallback(() => {
-		showImmediatelyRef.current();
-	}, []);
-
-	const registeredOnComplete = useCallback(() => {
-		onCompleteRef.current();
-	}, []);
-
-	useEffect(() => {
-		if (hasPlayed) return;
-		const node = measureRef.current;
-		if (!node || !group) return;
-		const unregisterGroup = group.registerItem({
-			id,
-			element: node,
-			play: registeredPlay,
-			showImmediately: registeredShowImmediately,
-			onComplete: registeredOnComplete,
-		});
-
-		return () => unregisterGroup();
-	}, [
-		group,
-		hasPlayed,
-		id,
-		measureRef,
-		registeredOnComplete,
-		registeredPlay,
-		registeredShowImmediately,
-	]);
-
-	useEffect(() => {
-		if (hasPlayed) return;
-		if (!isReady || !group) return;
-		group.markReady(id);
-	}, [group, hasPlayed, id, isReady]);
-
-	const usePlainAsChild = asChild && handoffAfterReveal && hasPlayed;
-	const interactionLocked =
-		deferInteractionUntilRevealed && !disabled && !hasPlayed;
-	const revealClassName = interactionLocked
-		? [className, "pointer-events-none"].filter(Boolean).join(" ")
-		: className;
-	const interactionLockProps = interactionLocked
-		? ({ "aria-hidden": true, inert: true } as const)
-		: {};
-
-	if (disabled || usePlainAsChild) {
-		if (asChild) {
-			return (
-				<SlotWithRef
-					ref={childRef}
-					className={revealClassName}
-					data-reveal-item=""
-					style={disabledRevealStyle}
-					{...interactionLockProps}
-				>
-					{children}
-				</SlotWithRef>
-			);
-		}
-
-		const Tag = getStaticRevealTag(staticAs ?? as);
-		return createElement(
-			Tag,
-			{
-				ref: viewportRef,
-				className: revealClassName,
-				"data-reveal-item": "",
-				style: disabledRevealStyle,
-				...interactionLockProps,
-			},
-			children,
-		);
-	}
-
-	const MotionTag = asChild ? MotionSlot : (as ?? motion.div);
-	const baseVariants: Variants =
-		variants ??
-		({
-			hidden: disableTransform ? { opacity: 0 } : { opacity: 0, y: 12 },
-			show: disableTransform
-				? { opacity: 1, transition: revealTiming }
-				: {
-						opacity: 1,
-						y: 0,
-						transition: revealTiming,
-						transitionEnd: { transform: "none", y: 0 },
-					},
-		} as const);
-
-	return (
-		<MotionTag
-			ref={asChild ? childRef : viewportRef}
-			initial="hidden"
-			animate={controls}
-			variants={baseVariants}
-			className={revealClassName}
-			data-reveal-item=""
-			{...interactionLockProps}
-		>
-			{children}
-		</MotionTag>
-	);
-}
-
-export type RevealItemProps = RootScheduledRevealItemProps &
-	RevealStageAliasProps;
-
-export function RevealItem({
-	after,
-	unlock,
-	waitFor,
-	unlockStage,
-	...props
-}: RevealItemProps) {
-	const stages = resolveRevealStageAliases({
-		after,
-		unlock,
-		waitFor,
-		unlockStage,
-	});
-
-	return <RevealGroupItem {...(props as RevealGroupItemProps)} {...stages} />;
 }
