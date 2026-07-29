@@ -117,9 +117,8 @@ Reviewed against [the staging acceptance ledger](./architecture-staging.md) on 2
 
 ### Inputs and supporting primitives
 
-- The frontend import policy lives in `docs/frontend-import-policy.md`. Cohesive component families may expose curated public barrels while keeping internal owner imports direct.
-- `@/components/ui/input` is the stable public input boundary for external consumers. Full and thin profiles own explicit barrels matching their retained capabilities, so physical input folders can be reorganized without changing consumer imports.
-- `@/components/ui/misc` is the stable public misc boundary for application and feature consumers. Full start exposes the reusable family while thin start exposes only `Skeleton`; misc internals and lower-level UI dependencies retain direct owner imports to prevent circular or inverted dependency graphs.
+- The frontend component API and import policy lives in `docs/frontend-import-policy.md`; nearest family instructions own their concrete entrypoints, members, profile subsets, and private boundaries.
+- Cohesive public families hide physical organization behind curated entrypoints while their internals retain direct owner imports and explicit dependency direction.
 - `ColorInput` and `ColorSwatchInput` belong to full start only.
 - `ColorInput` supports controlled and uncontrolled hexadecimal selection, pointer and keyboard operation, normal form submission, field validation, and portal-aware dropdown positioning.
 - `ColorSwatchInput` supports generic typed presets and an optional custom color. Shared semantic defaults are neutral, info, success, warning, and danger; product palettes remain outside the shared input.

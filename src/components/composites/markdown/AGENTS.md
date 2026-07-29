@@ -16,6 +16,11 @@ Reusable markdown rendering surfaces that compose design-system primitives into 
 - Supported custom directive:
   - `::button[Label]{href=/path variant=primary tone=default size=md}`
 
+## Import Boundary
+- External consumers use `import * as Markdown from "@/components/composites/markdown"` and the public `Markdown.Editor`, `Markdown.EditorModalForm`, and `Markdown.Render` members.
+- Full start exposes editing and rendering. Thin start exposes only `Markdown.Render` and renderer-related types.
+- Family internals import direct owners. Do not create a runtime `Markdown` object or a private editor barrel.
+
 ## Invariants
 - Keep markdown output grounded in design-system primitives.
 - Keep renderer and editor authored content on the shared `.markdown-content` contract. A selected editor density must match the renderer density used for the same content context.

@@ -25,11 +25,9 @@ For any new reusable UI-library feature:
 7. Run checks on the touched files before considering the feature complete.
 
 ## Import Boundaries
-- Follow `docs/frontend-import-policy.md` for public component-family entrypoints and internal imports.
-- Cohesive families with many complete leaf or composite components may expose one curated `index.ts` boundary so consumers do not depend on physical file placement.
-- Application, route, domain, and composite consumers import from that boundary. Files inside the family and lower-level UI dependencies import direct owners when routing through the barrel would create a cycle or invert the dependency graph.
-- Keep barrels explicit and intentional: export public components and public types, not every helper in the folder.
-- When profiles expose different capabilities, maintain matching full and thin barrel contracts and verify both in the same change.
+- Follow `docs/frontend-import-policy.md` for the canonical component API, namespace, and import-boundary decision rules.
+- The nearest family `AGENTS.md` records its actual entrypoint, public members, profile differences, and private implementation boundaries; do not duplicate those inventories here.
+- External consumers use the documented family entrypoint. Family internals and lower-level dependencies import direct owners when a barrel would invert the graph or create a cycle.
 
 ## Invariants
 - **Library-first invariant:** Never start from raw HTML if a library component already covers the pattern. Search here first.
