@@ -16,12 +16,12 @@ Choose the owner and public boundary before choosing the exported name.
 
 ## Choosing the Public Shape
 
-| Shape | Use when | Example |
+| Public form | Use when | Existing convention |
 | --- | --- | --- |
-| Standalone `XThing` | The component is independently owned and no meaningful family improves discovery. | `DateAgo` |
-| Module namespace `X.A` | A cohesive family exposes peer capabilities through one curated entrypoint. | `import * as Markdown ...`; `Markdown.Editor`, `Markdown.Render` |
-| Runtime compound `X.A` | `A` is structurally owned by a root component, shares its context, or is an attached mode or slot. | `Dropdown.Menu`, `Card.Header` |
-| Component extension `X.A` | `A` is a subordinate representation or operation of one component. | `Button.Skeleton` |
+| Standalone component | The component is independently owned and no meaningful family improves discovery. | `DateAgo` |
+| ES-module family namespace: `Family.Member` | A cohesive family exposes peer capabilities through one curated entrypoint. | `Markdown.Editor`, `Markdown.Render` |
+| Runtime compound component: `RootComponent.Part` | The member is structurally owned by a root component, shares its context, or is an attached mode or slot. | `Dropdown.Menu`, `Card.Header` |
+| Component-owned companion: `Component.Skeleton` | A component owns a subordinate representation with the same contract and identity. | `Button.Skeleton`, `Field.Skeleton` |
 
 ### Recommended Namespace Default
 
