@@ -3,6 +3,10 @@
 ## Role
 Shared transient-feedback host for success, error, info, and loading toasts.
 
+The cross-channel decision table and unresolved `StatusMessage` boundary live in
+`docs/guides/components/feedback-and-status.md`. This file owns toast-specific
+implementation constraints.
+
 ## Use This Folder When
 - A user action needs temporary asynchronous feedback.
 - A mutation, save, upload, or background task should report progress or completion unobtrusively.

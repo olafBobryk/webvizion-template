@@ -114,6 +114,14 @@ export const assemblyCoreDevDependencies = new Set([
 export const assemblyProjectDocs = new Set([
 	"docs/ORCHESTRATION.md",
 	"docs/guides/auth-organization-adapters.md",
+	"docs/guides/components/README.md",
+	"docs/guides/components/composition-and-public-apis.md",
+	"docs/guides/components/feedback-and-status.md",
+	"docs/guides/components/forms-and-submission.md",
+	"docs/guides/components/interaction-and-responsive-rendering.md",
+	"docs/guides/components/loading-and-async-states.md",
+	"docs/guides/components/overlays-and-confirmation.md",
+	"docs/guides/components/surfaces-and-presentation.md",
 	"docs/guides/payload-vercel-neon-blob.md",
 ]);
 

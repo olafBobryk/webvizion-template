@@ -199,9 +199,27 @@ const AGENT_MAP = {
 		},
 		{
 			id: "ui-primitives",
-			title: "Shared UI primitives and feedback rules",
-			aliases: ["design-system", "toast", "confirmation", "modal"],
+			title: "Shared UI component conventions and primitives",
+			aliases: [
+				"design-system",
+				"component-conventions",
+				"forms",
+				"feedback",
+				"status-message",
+				"skeleton",
+				"toast",
+				"confirmation",
+				"modal",
+			],
 			paths: [
+				"docs/guides/components/README.md",
+				"docs/guides/components/composition-and-public-apis.md",
+				"docs/guides/components/forms-and-submission.md",
+				"docs/guides/components/feedback-and-status.md",
+				"docs/guides/components/loading-and-async-states.md",
+				"docs/guides/components/overlays-and-confirmation.md",
+				"docs/guides/components/interaction-and-responsive-rendering.md",
+				"docs/guides/components/surfaces-and-presentation.md",
 				"src/components/AGENTS.md",
 				"src/components/ui/AGENTS.md",
 				"src/components/ui/primitives/AGENTS.md",
@@ -213,7 +231,7 @@ const AGENT_MAP = {
 				"src/components/ui/overlays/modal/ConfirmationModal.tsx",
 			],
 			notes:
-				"Start with AGENTS files for rules, then inspect concrete toast and confirmation primitives only if implementation details are needed.",
+				"Start with the component convention index and the guide matching the UX decision. Then read the nearest AGENTS file and inspect concrete owners only when implementation details are needed.",
 		},
 		{
 			id: "frontend-imports",

@@ -3,6 +3,10 @@
 ## Role
 Shared reveal, intro, and scroll-motion helpers for cases where motion meaningfully improves presentation.
 
+Read `docs/guides/components/interaction-and-responsive-rendering.md` for the
+cross-cutting decision between CSS, responsive rendering, and this motion
+family. This file owns motion-component implementation constraints.
+
 ## Use This Folder When
 - A page needs staggered entrance motion.
 - A section needs staged reveal sequencing between media and content.

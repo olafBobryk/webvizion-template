@@ -3,6 +3,11 @@
 ## Role
 Shared interaction tokens, motion tokens, settings, and base CSS that define how the whole library behaves.
 
+Cross-cutting usage policy lives in
+`docs/guides/components/interaction-and-responsive-rendering.md` and
+`docs/guides/components/surfaces-and-presentation.md`. This file owns the token
+and provider implementation contracts.
+
 ## Use This Folder When
 - You need the canonical focus classes.
 - You need shared motion presets for `motion/react` usage.

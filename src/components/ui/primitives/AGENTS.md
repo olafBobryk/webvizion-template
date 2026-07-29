@@ -3,6 +3,12 @@
 ## Role
 Lowest-level reusable building blocks. Agents should check this folder before writing raw UI markup.
 
+Cross-cutting selection rules live in
+`docs/guides/components/surfaces-and-presentation.md`; form ownership lives in
+`docs/guides/components/forms-and-submission.md`; and the unresolved
+`StatusMessage` boundary is recorded in
+`docs/guides/components/feedback-and-status.md`.
+
 ## Use This Folder When
 - You need a reusable button, text style, field wrapper, input shell, dropdown surface, listbox, card, divider, or section container.
 - A new higher-level component should be composed from existing building blocks.
@@ -19,7 +25,7 @@ Lowest-level reusable building blocks. Agents should check this folder before wr
 - `src/components/ui/primitives/Card.tsx`: structured card built on `Panel`, with owned header, action, content, and footer slots.
 - `src/components/ui/primitives/Section.tsx`: page section wrapper.
 - `src/components/ui/primitives/Divider.tsx`: horizontal or vertical separator with optional horizontal label.
-- `src/components/ui/primitives/StatusMessage.tsx`: semantic inline status surface for information, success, warning, and danger copy.
+- `src/components/ui/primitives/StatusMessage.tsx`: current semantic inline status surface for information, success, warning, and danger copy. Its narrower usage boundary remains a documented review decision.
 - `src/components/ui/primitives/accent.ts`: the closed semantic accent contract shared by Panel, Card, and compact status surfaces.
 - `src/components/ui/primitives/dropdownStyles.ts`: shared dropdown classnames.
 

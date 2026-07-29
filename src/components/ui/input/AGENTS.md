@@ -13,7 +13,8 @@ Ready-made form controls composed from the primitives. This folder should be the
 - The explicit root `index.ts` is the stable public boundary. Do not deep-import implementation files from outside this family.
 - Input-family implementations import direct owners such as `InputSkeleton`, choice primitives, and sibling modules. They must not self-import through the public barrel.
 - Full-start and thin-start own separate barrel files because thin-start deliberately exposes a smaller input inventory.
-- See `src/components/AGENTS.md` for the repository-wide policy.
+- See `docs/guides/components/composition-and-public-apis.md` for the public API
+  policy and `docs/guides/components/forms-and-submission.md` for usage policy.
 
 ## Choose The Highest-Level Match First
 - `src/components/ui/input/text/TextInput.tsx`: plain single-line text entry.
@@ -60,11 +61,6 @@ Ready-made form controls composed from the primitives. This folder should be the
   - Password visibility toggling should come from `PasswordInput`, not a page-specific eye button.
   - Searchable selection should start with `SelectInput` or a combobox variant, not a custom dropdown.
   - Country or dialing-code UX should start with `PhoneInput`.
-- Submission UX should stay form-native and accessible:
-  - Use real `<form>` elements with `onSubmit`.
-  - Guard against double submit by returning early when `loading` is already true.
-  - Set `loading` on the submit button and disable other conflicting actions while the request is in flight.
-  - Do not auto-clear the form after submit unless the product explicitly wants that behavior.
 - `SelectInput.onOptionSelect` may return `true` to intercept a selection before the normal value change. Keep ordinary `onChange` behavior as the default.
 - `SelectInput.showSelectedIcon` mirrors the selected option's passed icon in the closed field when an entity-context selector needs visible identity; leave it off for ordinary text selects.
 - Use `SelectInput.dropdownPositionStrategy="fixed"` inside scrolling Cards and modals so the portaled menu remains viewport-positioned instead of contributing to local overflow. The default remains `absolute` for ordinary page fields.
@@ -79,13 +75,6 @@ Ready-made form controls composed from the primitives. This folder should be the
 - **Profile or settings form:** start with `ProfilePictureInput`, `TextInput`, `EmailInput`, `PhoneInput`, `SelectInput`, and `ToggleInput` before creating bespoke controls.
 - **Filter bars and dashboards:** use `SelectInput`, `ComboboxTextInput`, `ComboboxMultiSelectInput`, and `DateRangeInput` before ad hoc filter UIs.
 - **Preference selection:** use `RadioInput`, `MultiselectInput`, `ButtonMultiSelectInput`, or `ToggleInput` so focus, semantics, and shared selection treatments stay consistent. `ButtonMultiSelectInput` uses plain primary/secondary Button variants without additional indicators or per-button styling.
-
-## Submission And Feedback Pattern
-- Use `showToast.promise` for user-initiated async submissions such as save, apply, submit, retry, or manual refresh.
-- Map toast success and error copy to server messages when available.
-- Keep toast copy short, neutral, and server-driven when possible.
-- Use inline validation through `Field` messages for invalid form data instead of validation toasts.
-- For initial page loads, use skeletons or inline loading states instead of a loading toast.
 
 ## Skeleton Ownership
 - Data-bearing inputs expose loading geometry through `Input.Skeleton`.
@@ -106,6 +95,9 @@ Ready-made form controls composed from the primitives. This folder should be the
 - Handling submissions from click handlers alone when a real form would solve the same job.
 
 ## See Also
+- `docs/guides/components/forms-and-submission.md`
+- `docs/guides/components/feedback-and-status.md`
+- `docs/guides/components/loading-and-async-states.md`
 - `src/components/AGENTS.md`
 - `src/components/ui/input/color/AGENTS.md`
 - `src/components/ui/input/editable/AGENTS.md`

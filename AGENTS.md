@@ -49,6 +49,11 @@
 
 ## Halo UI Primitives
 
+- Cross-cutting component usage conventions are indexed at
+  `docs/guides/components/README.md`. Read the matching guide before building or
+  reviewing forms, feedback, loading states, overlays, responsive behavior, or
+  shared surfaces. A nearer component `AGENTS.md` remains authoritative for
+  implementation details.
 - Treat `ToastHost` plus `showToast` as the shared transient-feedback system. Simple toast helpers accept `{ title }`; promise toasts accept `loadingTitle`, `successTitle`, and `errorTitle`.
 - Treat `ConfirmationModal` and `useConfirmationModal` as the shared confirm-before-action primitive. Do not create page-local confirmation dialogs for standard destructive or confirm flows.
 

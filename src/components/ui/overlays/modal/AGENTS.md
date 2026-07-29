@@ -3,6 +3,11 @@
 ## Role
 Shared modal shell, host, and hooks for confirmation dialogs, image inspection, and future modal flows. `ConfirmationModal` is a first-class Halo primitive, not a demo-only example.
 
+Cross-cutting selection and submission behavior lives in
+`docs/guides/components/overlays-and-confirmation.md` and
+`docs/guides/components/forms-and-submission.md`. This file owns modal-specific
+implementation constraints.
+
 ## Use This Folder When
 - A feature needs blocking or focused dialog UI.
 - The product needs confirmation, image inspection, or a reusable custom modal.
