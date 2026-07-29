@@ -20,6 +20,8 @@ function parseArgs(argv) {
 		engine: "prune",
 		integration: false,
 		keep: false,
+		oracleRef: undefined,
+		oracleRoot: undefined,
 		performanceRuns: 1,
 	};
 	for (let index = 0; index < argv.length; index += 1) {
@@ -34,7 +36,21 @@ function parseArgs(argv) {
 		} else if (arg === "--compare") options.engine = "both";
 		else if (arg === "--integration") options.integration = true;
 		else if (arg === "--keep") options.keep = true;
-		else if (arg === "--performance-runs") {
+		else if (arg === "--oracle-root") {
+			const value = argv[index + 1];
+			if (!value || value.startsWith("--")) {
+				throw new Error("--oracle-root requires a directory path.");
+			}
+			options.oracleRoot = path.resolve(value);
+			index += 1;
+		} else if (arg === "--oracle-ref") {
+			const value = argv[index + 1];
+			if (!value || value.startsWith("--")) {
+				throw new Error("--oracle-ref requires a Git revision.");
+			}
+			options.oracleRef = value;
+			index += 1;
+		} else if (arg === "--performance-runs") {
 			const value = Number.parseInt(argv[index + 1] ?? "", 10);
 			if (!Number.isInteger(value) || value < 1 || value > 10) {
 				throw new Error("--performance-runs requires an integer from 1 to 10.");
@@ -42,6 +58,14 @@ function parseArgs(argv) {
 			options.performanceRuns = value;
 			index += 1;
 		} else throw new Error(`Unknown flag: ${arg}`);
+	}
+	if (Boolean(options.oracleRoot) !== Boolean(options.oracleRef)) {
+		throw new Error(
+			"--oracle-root and --oracle-ref must be provided together.",
+		);
+	}
+	if (options.oracleRoot && options.engine !== "both") {
+		throw new Error("The prune oracle is only valid with --engine both.");
 	}
 	return options;
 }
@@ -128,7 +152,9 @@ function assertEqualRecord(left, right, label) {
 		);
 	};
 	if (JSON.stringify(normalize(left)) !== JSON.stringify(normalize(right))) {
-		throw new Error(`${label} differs between prune and assembly.`);
+		throw new Error(
+			`${label} differs between reference and candidate outputs.`,
+		);
 	}
 }
 
@@ -202,6 +228,17 @@ async function compareContracts(profileId, pruneRoot, assembleRoot) {
 		`${profileId} scripts`,
 	);
 	await compareRuntimeSource(profileId, pruneRoot, assembleRoot);
+	for (const relativePath of ["next.config.ts", "tsconfig.json"]) {
+		const [pruneContent, assembleContent] = await Promise.all([
+			fs.readFile(path.join(pruneRoot, relativePath)),
+			fs.readFile(path.join(assembleRoot, relativePath)),
+		]);
+		if (!pruneContent.equals(assembleContent)) {
+			throw new Error(
+				`${profileId} generated configuration differs: ${relativePath}`,
+			);
+		}
+	}
 
 	for (const relativePath of [
 		"template-profiles",
@@ -229,6 +266,24 @@ function median(values) {
 async function main() {
 	const options = parseArgs(process.argv.slice(2));
 	const templateRoot = process.cwd();
+	const pruneSourceRoot = options.oracleRoot ?? templateRoot;
+	if (options.oracleRoot) {
+		const actualRef = run("git", ["rev-parse", "HEAD"], pruneSourceRoot, {
+			silent: true,
+		}).stdout.trim();
+		const expectedRef = run(
+			"git",
+			["rev-parse", options.oracleRef],
+			templateRoot,
+			{ silent: true },
+		).stdout.trim();
+		if (actualRef !== expectedRef) {
+			throw new Error(
+				`Prune oracle mismatch: expected ${expectedRef}, received ${actualRef}.`,
+			);
+		}
+		console.log(`Using immutable prune oracle ${actualRef}.`);
+	}
 	const tempRoot = await fs.mkdtemp(
 		path.join(os.tmpdir(), "averlo-template-profile-matrix-"),
 	);
@@ -245,6 +300,8 @@ async function main() {
 			const profile = templateProfiles[profileId];
 			const outputs = {};
 			for (const engine of engines) {
+				const engineSourceRoot =
+					engine === "prune" ? pruneSourceRoot : templateRoot;
 				for (
 					let runIndex = 0;
 					runIndex < options.performanceRuns;
@@ -270,7 +327,7 @@ async function main() {
 							"--output",
 							outputRoot,
 						],
-						templateRoot,
+						engineSourceRoot,
 						{ silent: runIndex > 0 },
 					);
 					timings[engine].push(performance.now() - startedAt);

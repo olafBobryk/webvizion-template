@@ -1,14 +1,6 @@
 import { execFileSync } from "node:child_process";
 import fs from "node:fs/promises";
 import path from "node:path";
-import {
-	buildState,
-	renderApiIndexFile,
-	renderLibRoutesFile,
-	renderNextConfigFile,
-	renderRoutesFile,
-	renderTsconfigFile,
-} from "../scripts/prune-template.mjs";
 import { templateSurfaces } from "../template-surfaces/index.mjs";
 import {
 	assemblyCoreDependencies,
@@ -22,6 +14,14 @@ import {
 	assemblyTemplateOnlyScripts,
 	isWithinPath,
 } from "./manifest.mjs";
+import {
+	createProjectState,
+	renderApiIndexFile,
+	renderLibRoutesFile,
+	renderNextConfigFile,
+	renderRoutesFile,
+	renderTsconfigFile,
+} from "./project-files.mjs";
 
 function sortedRecord(record) {
 	return Object.fromEntries(
@@ -314,11 +314,7 @@ async function writePackage(sourceRoot, destinationRoot, profile) {
 }
 
 async function writeCentralFiles(sourceRoot, destinationRoot, profile) {
-	const selected = new Set(profile.assembly.surfaces);
-	const removed = Object.keys(templateSurfaces).filter(
-		(key) => !selected.has(key),
-	);
-	const state = buildState(removed);
+	const state = createProjectState(profile.assembly.surfaces);
 	const targets = [
 		["src/config/routes.ts", renderRoutesFile(state)],
 		["src/lib/routes.ts", renderLibRoutesFile(state)],
