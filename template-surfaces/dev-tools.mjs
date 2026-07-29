@@ -20,13 +20,9 @@ export const devToolSurfaces = {
 			"scripts/template-intelligence-serena-service.mjs",
 			"scripts/verify/verify-template-intelligence-benchmark.mjs",
 			"scripts/verify/verify-codex-turn-recording.ts",
-			"docs/template-intelligence.md",
-			"docs/worklogs/template-intelligence-ledger.md",
-			"docs/worklogs/template-intelligence-handoff.md",
-			"docs/worklogs/template-intelligence-review-handoff.md",
-			"docs/worklogs/template-intelligence-benchmark.md",
-			"docs/worklogs/template-intelligence-benchmark-runs.jsonl",
-			"docs/worklogs/template-intelligence-benchmark-runs.example.jsonl",
+			"docs/guides/template-intelligence.md",
+			"src/lib/template-intelligence/fixtures/template-intelligence-benchmark-runs.jsonl",
+			"src/lib/template-intelligence/fixtures/template-intelligence-benchmark-runs.example.jsonl",
 		],
 		packageScripts: [
 			"intelligence:generate",
@@ -53,8 +49,8 @@ export const devToolSurfaces = {
 	scrollPerformance: {
 		ownedPaths: [
 			"scripts/scroll-performance",
-			"docs/worklogs/scroll-performance-benchmark.md",
-			"docs/worklogs/scroll-performance-runs.example.jsonl",
+			"docs/guides/scroll-performance.md",
+			"scripts/scroll-performance/fixtures/scroll-performance-runs.example.jsonl",
 		],
 		packageScripts: [
 			"measure:scroll-performance",

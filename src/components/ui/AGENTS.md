@@ -28,7 +28,7 @@ Main design-system and UX-system entry point. This folder is where agents should
 - Favor additive extension through props, variants, slots, and composition over cloning components into page-local folders.
 - Keep shortcut registration scoped and discoverable.
 - When a folder already has a purpose, put work there instead of creating parallel structure.
-- Follow `docs/frontend-import-policy.md` for public naming and namespace decisions. Treat documented family `index.ts` files as public APIs; external consumers use the entrypoint while family internals and lower-level dependencies import direct owners when needed to preserve dependency direction.
+- Follow `src/components/AGENTS.md` for public naming and namespace decisions. Treat documented family `index.ts` files as public APIs; external consumers use the entrypoint while family internals and lower-level dependencies import direct owners when needed to preserve dependency direction.
 - Initial-load feedback should default to inline loading states or skeletons, not toasts.
 - Memoization helpers should be rare and justified, not automatic.
 

@@ -203,7 +203,7 @@ async function main() {
 
 		const legacyRows = (
 			await fs.readFile(
-				"docs/worklogs/template-intelligence-benchmark-runs.jsonl",
+				"src/lib/template-intelligence/fixtures/template-intelligence-benchmark-runs.jsonl",
 				"utf8",
 			)
 		)

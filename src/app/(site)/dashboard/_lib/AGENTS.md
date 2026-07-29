@@ -10,5 +10,5 @@
 - Keep fixture-only support and product-report domains under `_lib/platform`.
   They are dashboard-owned, reset through the debug fixture reset, and must not
   send email, upload files, or perform external writes.
-- Follow `docs/frontend-entity-policy.md` and keep its machine-verifiable paths
-  current when moving a canonical contract.
+- Entity verticals define only the presentation surfaces they need. Keep domain facts serializable, presentation factories React-free and fetch-free, renderers data-ready, and route or adapter code responsible for authorization and mutation.
+- Reuse entity-owned presentation definitions across tables, details, selectors, Command-K, Markdown mentions, empty states, and loading surfaces instead of copying labels or variants into consumers.

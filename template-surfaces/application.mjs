@@ -1,7 +1,7 @@
 export const applicationSurfaces = {
 	dashboardReferenceEntities: {
 		ownedPaths: [
-			"docs/frontend-entity-policy.md",
+			"src/app/(site)/dashboard/_lib/entities/AGENTS.md",
 			"scripts/verify/verify-reference-entities.ts",
 			"scripts/verify/verify-entity-deletion.ts",
 			"scripts/verify/verify-mutation-policy.ts",
@@ -28,8 +28,7 @@ export const applicationSurfaces = {
 	},
 	dashboard: {
 		ownedPaths: [
-			"docs/auth-organization-adapters.md",
-			"docs/dashboard-page-policy.md",
+			"docs/guides/auth-organization-adapters.md",
 			"scripts/verify/verify-auth-organization.ts",
 			"scripts/verify/verify-dashboard-page-policy.ts",
 			"scripts/verify/verify-dashboard-surfaces.ts",

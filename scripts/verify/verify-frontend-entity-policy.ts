@@ -3,7 +3,10 @@ import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 const root = process.cwd();
-const policyPath = resolve(root, "docs/frontend-entity-policy.md");
+const policyPath = resolve(
+	root,
+	"src/app/(site)/dashboard/_lib/entities/AGENTS.md",
+);
 const policy = readFileSync(policyPath, "utf8");
 const markers = [
 	...policy.matchAll(/<!-- entity-contract:([^=]+)=([^ ]+) -->/g),
@@ -22,7 +25,7 @@ for (const [, key, value] of markers) {
 }
 assert.ok(
 	policy.includes(
-		"<!-- entity-contract:optional-surface=dashboard.reference-entities -->",
+		"<!-- entity-contract:optional-surface=dashboardReferenceEntities -->",
 	),
 );
 

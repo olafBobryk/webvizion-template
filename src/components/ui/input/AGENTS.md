@@ -13,7 +13,7 @@ Ready-made form controls composed from the primitives. This folder should be the
 - The explicit root `index.ts` is the stable public boundary. Do not deep-import implementation files from outside this family.
 - Input-family implementations import direct owners such as `InputSkeleton`, choice primitives, and sibling modules. They must not self-import through the public barrel.
 - Full-start and thin-start own separate barrel files because thin-start deliberately exposes a smaller input inventory.
-- See `docs/frontend-import-policy.md` for the repository-wide policy.
+- See `src/components/AGENTS.md` for the repository-wide policy.
 
 ## Choose The Highest-Level Match First
 - `src/components/ui/input/text/TextInput.tsx`: plain single-line text entry.
@@ -106,7 +106,7 @@ Ready-made form controls composed from the primitives. This folder should be the
 - Handling submissions from click handlers alone when a real form would solve the same job.
 
 ## See Also
-- `docs/frontend-import-policy.md`
+- `src/components/AGENTS.md`
 - `src/components/ui/input/color/AGENTS.md`
 - `src/components/ui/input/editable/AGENTS.md`
 - `src/components/ui/input/choice/AGENTS.md`

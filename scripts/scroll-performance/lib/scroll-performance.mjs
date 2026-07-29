@@ -33,8 +33,8 @@ export const GEOMETRY_GATE_TOLERANCES = {
 export const READ_ONLY_SCOPE = [
 	"scripts/scroll-performance",
 	"scripts/_lib/local-production-preview.mjs",
-	"docs/worklogs/scroll-performance-benchmark.md",
-	"docs/worklogs/scroll-performance-runs.example.jsonl",
+	"docs/guides/scroll-performance.md",
+	"scripts/scroll-performance/fixtures/scroll-performance-runs.example.jsonl",
 	"docs/orchestration",
 ];
 

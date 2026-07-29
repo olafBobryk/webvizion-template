@@ -11,14 +11,6 @@ export const assemblyGeneratedPaths = new Set([
 ]);
 
 export const assemblyTemplateOnlyPaths = new Set([
-	"docs/architecture-staging.md",
-	"docs/architecture.md",
-	"docs/positive-assembly-transition.md",
-	"docs/template-content-modes.md",
-	"docs/thin-start-creation-boundary.md",
-	"docs/worklogs/template-backport-differences-ledger.md",
-	"docs/worklogs/template-backport-handoff.md",
-	"docs/worklogs/template-profile-setup-friction.md",
 	"scripts/create-template-profile.mjs",
 	"scripts/dev-thin.mjs",
 	"scripts/generate-template-assembly-inventory.mjs",
@@ -121,12 +113,8 @@ export const assemblyCoreDevDependencies = new Set([
 
 export const assemblyProjectDocs = new Set([
 	"docs/ORCHESTRATION.md",
-	"docs/auth-organization-adapters.md",
-	"docs/dashboard-page-policy.md",
-	"docs/frontend-entity-policy.md",
-	"docs/frontend-import-policy.md",
-	"docs/payload-vercel-neon-blob.md",
-	"docs/responsive-rendering.md",
+	"docs/guides/auth-organization-adapters.md",
+	"docs/guides/payload-vercel-neon-blob.md",
 ]);
 
 export function isWithinPath(relativePath, ownedPath) {

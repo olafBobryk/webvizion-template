@@ -19,7 +19,7 @@ Template repository: [github.com/olafBobryk/averlo-next-template](https://github
 Copy this prompt into Codex or another coding agent:
 
 **Create a project from `https://github.com/olafBobryk/averlo-next-template`.
-Read `AGENTS.md`, `README.md`, and `docs/template-content-modes.md`; help me
+Read `AGENTS.md` and `README.md`; help me
 choose a route profile; materialize it into a new folder; and verify the result
 before project-specific work. Preserve the existing UI primitives, marketing
 layout contract, resolvers, and isolated agent dev workflow. Keep secrets,
@@ -55,9 +55,7 @@ Profile selection is the main setup decision:
 
 Generated projects are one-way starting points rather than alternate states of
 this checkout. Positive assembly copies only selected, explicitly owned project
-code and omits template profiles, inventories, and creation machinery. The
-completed migration and legacy recovery references live in
-[`docs/positive-assembly-transition.md`](docs/positive-assembly-transition.md).
+code and omits template profiles, inventories, and creation machinery.
 
 ## How It Works
 
@@ -86,10 +84,8 @@ Marketing-capable profiles support three content states:
   Vercel Blob.
 
 No generated profile is Payload-powered by default. Read
-[`docs/template-content-modes.md`](docs/template-content-modes.md) for mode
-boundaries and
-[`docs/payload-vercel-neon-blob.md`](docs/payload-vercel-neon-blob.md) before
-activation.
+[`docs/guides/payload-vercel-neon-blob.md`](docs/guides/payload-vercel-neon-blob.md)
+before activation.
 
 The marketing layout model and resolver boundary already exist. When using the
 optional `$cms-backfill` workflow, treat that model as an input to preserve and
@@ -132,27 +128,27 @@ npm run intelligence:query -- content-modes
 ```
 
 Serena is an optional warm semantic service, not a setup prerequisite. See
-[`docs/template-intelligence.md`](docs/template-intelligence.md).
+[`docs/guides/template-intelligence.md`](docs/guides/template-intelligence.md).
 
 ### Thin Start
 
 `thin-start` can also be reviewed as an isolated workspace before committing to
-that profile. Its positive creation and API-review boundary are documented in
-[`docs/thin-start-creation-boundary.md`](docs/thin-start-creation-boundary.md).
+that profile. Create it with the normal project command, then run
+`npm run review:thin-start-api -- --root <output> --strict` from the template.
 
 ### Scroll Performance
 
 The repository includes real-page measurement and disposable autoresearch
 worktrees for scroll-sensitive changes. Use them when motion, shared shell
 behavior, or expensive sections change; see
-[`docs/worklogs/scroll-performance-benchmark.md`](docs/worklogs/scroll-performance-benchmark.md).
+[`docs/guides/scroll-performance.md`](docs/guides/scroll-performance.md).
 
 ## Repository Map
 
 ```text
 .
 |-- AGENTS.md               Agent and repository boundaries
-|-- docs/                   Architecture and workflow guides
+|-- docs/guides/            Active setup and operational guides
 |-- scripts/                Creation, development, and verification tooling
 |-- src/app/                Marketing, auth, dashboard, Payload, and API routes
 |-- src/components/         Shared UI and product components
@@ -182,9 +178,7 @@ Vercel Blob for `BLOB_READ_WRITE_TOKEN`, and a project-specific
 
 ## Further Reading
 
-- [Content-mode boundaries](docs/template-content-modes.md)
-- [Positive-assembly transition](docs/positive-assembly-transition.md)
-- [Payload on Vercel with Neon and Blob](docs/payload-vercel-neon-blob.md)
-- [Responsive rendering](docs/responsive-rendering.md)
-- [Template Intelligence](docs/template-intelligence.md)
-- [Thin-start creation boundary](docs/thin-start-creation-boundary.md)
+- [Auth and organization adapters](docs/guides/auth-organization-adapters.md)
+- [Payload on Vercel with Neon and Blob](docs/guides/payload-vercel-neon-blob.md)
+- [Scroll-performance workflow](docs/guides/scroll-performance.md)
+- [Template Intelligence](docs/guides/template-intelligence.md)

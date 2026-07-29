@@ -18,7 +18,8 @@ website on Vercel.
 - Use **Payload-powered Vercel** mode when the project will run Payload in
   production. Complete the activation checklist below.
 
-See `docs/template-content-modes.md` for the full mode model.
+The root README documents project-time content selection. This guide owns the
+later Payload-powered activation path.
 
 ## Required Vercel Services
 

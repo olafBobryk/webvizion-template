@@ -32,10 +32,10 @@
 
 ## Template Content Modes
 
-- This template supports static, Payload-ready, and Payload-powered Vercel modes. Read `docs/template-content-modes.md` before changing content architecture, Payload wiring, or assembly behavior.
+- This template supports static, Payload-ready, and Payload-powered Vercel modes. Read the nearest instructions in `template-assembly/`, `src/lib/marketing-content/`, and `src/payload/` before changing their ownership.
 - Static projects should select `--content static` during `create:project` so Payload is never included, then build from fallback TypeScript content.
 - Payload-ready projects keep the guarded Payload scaffold but do not expose live admin/API routes until activation.
-- Payload-powered Vercel projects must follow `docs/payload-vercel-neon-blob.md` and use Neon Postgres, Vercel Blob, and real Payload admin/API routes.
+- Payload-powered Vercel projects must follow `docs/guides/payload-vercel-neon-blob.md` and use Neon Postgres, Vercel Blob, and real Payload admin/API routes.
 - Keep the frontend contract lightweight. Marketing components should render page, section, and site layout data; they should not depend on full Payload document shapes.
 - Put source-specific details in server-side resolvers/adapters. Payload-only metadata such as relationships, media records, drafts, SEO fields, localization, redirects, and taxonomies should be resolved before it reaches section renderers.
 
@@ -55,4 +55,5 @@
 ## Responsive Rendering
 
 - Use Tailwind responsive classes for visual breakpoint changes and lightweight markup.
-- Use `useTailwindBreakpoints` only when a hidden branch would still mount expensive client work such as animation scenes, observers, canvas/WebGL/Rive, media, or duplicated decorative DOM. See `docs/responsive-rendering.md`.
+- Use `useTailwindBreakpoints` only when a hidden branch would still mount expensive client work such as animation scenes, observers, canvas/WebGL/Rive, media, or duplicated decorative DOM.
+- Do not hide SEO-critical content, primary copy, headings, or essential accessibility affordances behind client-only breakpoint checks.

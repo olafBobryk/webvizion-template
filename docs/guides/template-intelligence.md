@@ -2,10 +2,8 @@
 
 Template Intelligence is an internal authoring surface for maintainers and
 agents working inside this template. It generates a local map of repo concepts
-and renders it at `/internal/intelligence` during development. Client clones
-keep `/internal/*` dev-only in production by default, while the canonical
-template production deployment may expose those routes as live reference
-material.
+and renders it at `/internal/intelligence` during development. Internal routes
+remain unavailable in production.
 
 The feature is template-owned infrastructure. Profiles include it explicitly
 through positive surface ownership; generated projects contain only the
@@ -132,7 +130,7 @@ The tracked benchmark log contains 34 recovered legacy observations with source
 provenance:
 
 ```text
-docs/worklogs/template-intelligence-benchmark-runs.jsonl
+src/lib/template-intelligence/fixtures/template-intelligence-benchmark-runs.jsonl
 ```
 
 Those historical self-reports are preserved for review but never mixed with
@@ -158,10 +156,10 @@ its area inventory, per-turn chips, and aggregate touched counts at render time;
 the hook event schema does not store a second domain model.
 
 Omitting a dashboard child surface excludes its registry entries, so areas with
-no remaining canonical surfaces disappear automatically. Thin-start and
-`--no-dashboard` instances keep Codex turn recording but omit dashboard-domain
-reporting. Historical observations and visual fixtures are never assigned
-dashboard areas retroactively.
+no remaining canonical surfaces disappear automatically. Profiles without the
+dashboard keep Codex turn recording but omit dashboard-domain reporting.
+Historical observations and visual fixtures are never assigned dashboard areas
+retroactively.
 
 Implementation instances must update the canonical registry whenever they add,
 move, or remove a dashboard destination. `npm run verify:static` includes the

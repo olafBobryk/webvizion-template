@@ -225,11 +225,11 @@ const INTELLIGENCE_AGENT_MAP_PATH = path.join(
 );
 const BENCHMARK_RUNS_PATH = path.join(
 	process.cwd(),
-	"docs/worklogs/template-intelligence-benchmark-runs.jsonl",
+	"src/lib/template-intelligence/fixtures/template-intelligence-benchmark-runs.jsonl",
 );
 const BENCHMARK_EXAMPLE_RUNS_PATH = path.join(
 	process.cwd(),
-	"docs/worklogs/template-intelligence-benchmark-runs.example.jsonl",
+	"src/lib/template-intelligence/fixtures/template-intelligence-benchmark-runs.example.jsonl",
 );
 const CODEX_TURN_EVENTS_PATH = path.join(
 	process.cwd(),
@@ -622,14 +622,14 @@ async function readTemplateIntelligenceBenchmarkJsonl(
 export async function readTemplateIntelligenceBenchmarkRuns(): Promise<TemplateIntelligenceBenchmarkReadResult> {
 	return readTemplateIntelligenceBenchmarkJsonl(
 		BENCHMARK_RUNS_PATH,
-		"docs/worklogs/template-intelligence-benchmark-runs.jsonl",
+		"src/lib/template-intelligence/fixtures/template-intelligence-benchmark-runs.jsonl",
 	);
 }
 
 export async function readTemplateIntelligenceBenchmarkExampleRuns(): Promise<TemplateIntelligenceBenchmarkReadResult> {
 	return readTemplateIntelligenceBenchmarkJsonl(
 		BENCHMARK_EXAMPLE_RUNS_PATH,
-		"docs/worklogs/template-intelligence-benchmark-runs.example.jsonl",
+		"src/lib/template-intelligence/fixtures/template-intelligence-benchmark-runs.example.jsonl",
 	);
 }
 

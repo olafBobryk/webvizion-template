@@ -21,5 +21,5 @@
   `platformRole` from organization owner or administrator membership; keep its
   `/dashboard/platform` routes in this registry and the shared dashboard shell.
 - Entity paths, dependency layers, examples, and selection contracts are defined in
-  `docs/frontend-entity-policy.md`; registry entries expose routes but do not own
+  `src/app/(site)/dashboard/_lib/entities/AGENTS.md`; registry entries expose routes but do not own
   entity presentation.

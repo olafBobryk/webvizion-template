@@ -26,7 +26,7 @@ export const VALID_RESOLUTIONS = new Set(["promote", "hold", "inconclusive"]);
 export function getBenchmarkRunsPath(root) {
 	return path.join(
 		root,
-		"docs/worklogs/template-intelligence-benchmark-runs.jsonl",
+		"src/lib/template-intelligence/fixtures/template-intelligence-benchmark-runs.jsonl",
 	);
 }
 

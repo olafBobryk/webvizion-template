@@ -256,8 +256,9 @@ async function main() {
 			metrics: null,
 		},
 		benchmark: {
-			doc: "docs/worklogs/scroll-performance-benchmark.md",
-			exampleLog: "docs/worklogs/scroll-performance-runs.example.jsonl",
+			doc: "docs/guides/scroll-performance.md",
+			exampleLog:
+				"scripts/scroll-performance/fixtures/scroll-performance-runs.example.jsonl",
 			primaryMetricTolerances: PRIMARY_METRIC_TOLERANCES,
 		},
 		branch: branchName,

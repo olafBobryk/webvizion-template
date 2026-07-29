@@ -1,7 +1,7 @@
 export const payloadSurface = {
 	payload: {
 		ownedPaths: [
-			"docs/payload-vercel-neon-blob.md",
+			"docs/guides/payload-vercel-neon-blob.md",
 			"payload.config.ts",
 			"src/payload",
 			"src/app/(payload)",

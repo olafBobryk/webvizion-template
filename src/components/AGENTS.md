@@ -25,9 +25,20 @@ For any new reusable UI-library feature:
 7. Run checks on the touched files before considering the feature complete.
 
 ## Import Boundaries
-- Follow `docs/frontend-import-policy.md` for the canonical component API, namespace, and import-boundary decision rules.
-- The nearest family `AGENTS.md` records its actual entrypoint, public members, profile differences, and private implementation boundaries; do not duplicate those inventories here.
+- Choose component ownership before choosing export syntax. A curated family `index.ts` is justified only when it hides meaningful organization from multiple consumers; do not create one-file or route-local barrels.
+- Use a standalone component name for an independent owner, an ES-module `Family.Member` namespace for cohesive peers such as `Markdown.Editor`, a runtime `RootComponent.Part` compound for structurally owned slots such as `Card.Header`, and a component-owned companion such as `Button.Skeleton` for subordinate representations.
+- ES-module namespaces remain ordinary named exports consumed with `import * as Family`; do not create runtime namespace objects merely to obtain dot syntax. Runtime compounds are reserved for relationships that are actually compound.
+- Barrels use explicit named exports, never `export *`, and expose public components and types rather than private helpers.
+- The nearest family `AGENTS.md` records its entrypoint, public members, profile differences, and private implementation boundaries; do not duplicate complete inventories here.
 - External consumers use the documented family entrypoint. Family internals and lower-level dependencies import direct owners when a barrel would invert the graph or create a cycle.
+- Reduced profiles expose deliberate subsets of the same family contract and omit unavailable members instead of stubbing them.
+- Preserve public names during behavior-neutral file moves. Treat an approved API rename as a separate checkpoint and update entrypoints, consumers, demos, profile manifests, verification, and Template Intelligence together.
+
+## Responsive Rendering
+- Use Tailwind breakpoint classes for layout, spacing, ordering, alignment, and lightweight visibility changes. CSS-hidden React subtrees still render and hydrate.
+- Use client-only breakpoint hooks only when a hidden branch would otherwise mount expensive animation, observers, canvas/WebGL/Rive, media, timers, listeners, measurements, or duplicated decorative DOM.
+- Breakpoint hooks are false before their first client effect. Do not gate primary content, SEO-relevant copy, headings, or essential accessibility affordances behind them.
+- Prefer stable CSS rendering whenever avoiding hidden work is less important than first-render stability.
 
 ## Invariants
 - **Library-first invariant:** Never start from raw HTML if a library component already covers the pattern. Search here first.
