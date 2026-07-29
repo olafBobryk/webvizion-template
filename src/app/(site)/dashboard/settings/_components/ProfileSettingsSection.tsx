@@ -3,7 +3,6 @@
 import * as React from "react";
 import { Icon } from "@/components/ui/icons/Icon";
 import { ProfilePictureInput, TextInput } from "@/components/ui/input";
-import { ProfilePicture } from "@/components/ui/misc";
 import { ModalForm } from "@/components/ui/overlays/modal/ModalForm";
 import {
 	ModalDescription,
@@ -13,10 +12,11 @@ import {
 import { useModal } from "@/components/ui/overlays/modal/useModal";
 import { Button } from "@/components/ui/primitives/Button";
 import { Card } from "@/components/ui/primitives/Card";
-import { Text } from "@/components/ui/primitives/Text";
 import type { SessionUser } from "@/lib/api/auth";
 import { showToast } from "@/lib/feedback";
+import { AccountIdentity } from "../../_components/entities/account/AccountIdentity";
 import { useDashboardAuth } from "../../_components/providers/DashboardAuthProvider";
+import { getAccountPresentation } from "../../_lib/entities/account/presentation";
 
 const MAX_PROFILE_PICTURE_SIZE_BYTES = 3 * 1024 * 1024;
 
@@ -37,9 +37,14 @@ function readFileAsDataUrl(file: File) {
 
 function ProfileSettingsSectionRoot() {
 	const { openModal } = useModal();
-	const { updateUser, user } = useDashboardAuth();
+	const { membership, organization, updateUser, user } = useDashboardAuth();
 	if (!user) return null;
 	const currentUser = user;
+	const accountPresentation = getAccountPresentation({
+		membership,
+		organization,
+		user,
+	});
 
 	function openProfileEditor() {
 		openModal(
@@ -81,30 +86,20 @@ function ProfileSettingsSectionRoot() {
 				</Card.Action>
 			</Card.Header>
 			<Card.Content>
-				<div className="flex min-w-0 items-center gap-3.5">
-					<ProfilePicture
-						alt={`${user.name || "User"} profile picture`}
-						name={user.name}
-						size="xl"
-						src={user.profilePictureUrl}
-					/>
-					<div className="grid min-w-0 flex-1 gap-1">
-						<Text as="h3" className="truncate" variant="headingXs">
-							{user.name || "User"}
-						</Text>
-						<Text className="truncate" tone="muted" variant="support">
-							{user.email || "Email unavailable"}
-						</Text>
-					</div>
-				</div>
+				<AccountIdentity presentation={accountPresentation} />
 			</Card.Content>
 		</Card>
 	);
 }
 
 function ProfileSettingsSectionSkeleton() {
-	const { user } = useDashboardAuth();
+	const { membership, organization, user } = useDashboardAuth();
 	if (!user) return null;
+	const accountPresentation = getAccountPresentation({
+		membership,
+		organization,
+		user,
+	});
 
 	return (
 		<Card className="scroll-mt-24" id="profile">
@@ -121,17 +116,10 @@ function ProfileSettingsSectionSkeleton() {
 				</Card.Action>
 			</Card.Header>
 			<Card.Content>
-				<div className="flex min-w-0 items-center gap-3.5">
-					<ProfilePicture.Skeleton size="xl" />
-					<div className="grid min-w-0 flex-1 gap-1">
-						<Text.Skeleton as="h3" className="truncate" variant="headingXs">
-							{user.name || "User"}
-						</Text.Skeleton>
-						<Text.Skeleton className="truncate" tone="muted" variant="support">
-							{user.email || "Email unavailable"}
-						</Text.Skeleton>
-					</div>
-				</div>
+				<AccountIdentity.Skeleton
+					displayLabel={accountPresentation.displayLabel}
+					emailLabel={accountPresentation.emailLabel}
+				/>
 			</Card.Content>
 		</Card>
 	);
