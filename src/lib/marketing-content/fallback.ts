@@ -18,8 +18,8 @@ export const fallbackHomePage: MarketingPageDocument = {
 				},
 			],
 			cta: {
-				label: "Contact",
-				href: "/contact",
+				label: "Dashboard",
+				href: "/login",
 			},
 			services: [
 				{
@@ -76,8 +76,8 @@ export const fallbackMarketingPages = {
 export const fallbackSiteLayout: SiteLayoutDocument = {
 	header: {
 		cta: {
-			label: "Contact",
-			href: "/contact",
+			label: "Dashboard",
+			href: "/login",
 		},
 		menuGroups: [
 			{
