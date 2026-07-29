@@ -2,6 +2,7 @@
 
 import { spawnSync } from "node:child_process";
 import fs from "node:fs/promises";
+import { createRequire } from "node:module";
 import os from "node:os";
 import path from "node:path";
 import { performance } from "node:perf_hooks";
@@ -12,8 +13,26 @@ import {
 	templateProfiles,
 } from "../../template-profiles/index.mjs";
 
-const VERIFIED_PROFILES = ["full", "app-only", "marketing-only", "thin-start"];
+const PROFILE_CASES = [
+	{ profileId: "full", content: "payload-ready" },
+	{ profileId: "full", content: "static", oracleFlags: ["--no-payload"] },
+	{ profileId: "app-only", content: "static" },
+	{ profileId: "marketing-only", content: "payload-ready" },
+	{
+		profileId: "marketing-only",
+		content: "static",
+		oracleFlags: ["--no-payload"],
+	},
+	{ profileId: "thin-start", content: "payload-ready" },
+	{
+		profileId: "thin-start",
+		content: "static",
+		oracleFlags: ["--no-payload"],
+	},
+];
 const ENGINES = ["prune", "assemble"];
+const require = createRequire(import.meta.url);
+const BIOME_CLI = require.resolve("@biomejs/biome/bin/biome");
 
 function parseArgs(argv) {
 	const options = {
@@ -116,16 +135,19 @@ async function readJson(filePath) {
 	return JSON.parse(await fs.readFile(filePath, "utf8"));
 }
 
-async function assertReceipt(outputRoot, profileId, engine) {
+async function assertReceipt(outputRoot, profileCase, engine, isOracle) {
 	const receipt = await readJson(
 		path.join(outputRoot, ".template-profile.json"),
 	);
 	if (
-		receipt.profile !== profileId ||
+		receipt.profile !== profileCase.profileId ||
 		receipt.schemaVersion !== 1 ||
-		receipt.engine !== engine
+		receipt.engine !== engine ||
+		(!isOracle && receipt.content !== profileCase.content)
 	) {
-		throw new Error(`Invalid ${engine} profile receipt for ${profileId}.`);
+		throw new Error(
+			`Invalid ${engine} profile receipt for ${profileCase.profileId}/${profileCase.content}.`,
+		);
 	}
 }
 
@@ -296,12 +318,15 @@ async function main() {
 	const timings = Object.fromEntries(engines.map((engine) => [engine, []]));
 
 	try {
-		for (const profileId of VERIFIED_PROFILES) {
+		for (const profileCase of PROFILE_CASES) {
+			const { profileId, content } = profileCase;
+			const caseId = `${profileId}-${content}`;
 			const profile = templateProfiles[profileId];
 			const outputs = {};
 			for (const engine of engines) {
 				const engineSourceRoot =
 					engine === "prune" ? pruneSourceRoot : templateRoot;
+				const isOracle = engine === "prune" && Boolean(options.oracleRoot);
 				for (
 					let runIndex = 0;
 					runIndex < options.performanceRuns;
@@ -309,35 +334,62 @@ async function main() {
 				) {
 					const outputRoot = path.join(
 						tempRoot,
-						`${profileId}-${engine}-${runIndex + 1}`,
+						`${caseId}-${engine}-${runIndex + 1}`,
 					);
 					if (runIndex === 0) outputs[engine] = outputRoot;
 					console.log(
-						`\nMaterializing ${profileId} with ${engine} (${runIndex + 1}/${options.performanceRuns})`,
+						`\nMaterializing ${profileId}/${content} with ${engine} (${runIndex + 1}/${options.performanceRuns})`,
 					);
 					const startedAt = performance.now();
-					run(
-						process.execPath,
-						[
-							"scripts/create-template-profile.mjs",
-							"--profile",
-							profileId,
-							"--engine",
-							engine,
-							"--output",
+					const createArgs = [
+						"scripts/create-template-profile.mjs",
+						"--profile",
+						profileId,
+						"--engine",
+						engine,
+						"--output",
+						outputRoot,
+					];
+					if (!isOracle) createArgs.push("--content", content);
+					run(process.execPath, createArgs, engineSourceRoot, {
+						silent: runIndex > 0,
+					});
+					if (isOracle && profileCase.oracleFlags?.length) {
+						run(
+							process.execPath,
+							[
+								"scripts/prune-template.mjs",
+								"--yes",
+								"--materialize-profile",
+								...profileCase.oracleFlags,
+							],
 							outputRoot,
-						],
-						engineSourceRoot,
-						{ silent: runIndex > 0 },
-					);
+							{ silent: runIndex > 0 },
+						);
+						run(
+							process.execPath,
+							[
+								BIOME_CLI,
+								"check",
+								"--write",
+								"src/config/routes.ts",
+								"src/lib/routes.ts",
+								"src/lib/api/index.ts",
+								"next.config.ts",
+								"tsconfig.json",
+							],
+							outputRoot,
+							{ silent: runIndex > 0 },
+						);
+					}
 					timings[engine].push(performance.now() - startedAt);
-					await assertReceipt(outputRoot, profileId, engine);
+					await assertReceipt(outputRoot, profileCase, engine, isOracle);
 				}
 			}
 
 			if (outputs.prune && outputs.assemble) {
 				await compareContracts(profileId, outputs.prune, outputs.assemble);
-				console.log(`Contract parity passed for ${profileId}.`);
+				console.log(`Contract parity passed for ${profileId}/${content}.`);
 			}
 
 			const integrationRoot = outputs.assemble ?? outputs.prune;
@@ -366,7 +418,7 @@ async function main() {
 		}
 
 		if (engines.includes("prune") && engines.includes("assemble")) {
-			const pruneRoot = path.join(tempRoot, "full-prune-1");
+			const pruneRoot = path.join(tempRoot, "full-payload-ready-prune-1");
 			const mismatch = run(
 				process.execPath,
 				[
@@ -375,6 +427,8 @@ async function main() {
 					"full",
 					"--engine",
 					"assemble",
+					"--content",
+					"payload-ready",
 					"--output",
 					pruneRoot,
 					"--force",
@@ -386,6 +440,28 @@ async function main() {
 				throw new Error("Cross-engine force replacement did not fail closed.");
 			}
 
+			const assemblyRoot = path.join(tempRoot, "full-payload-ready-assemble-1");
+			const contentMismatch = run(
+				process.execPath,
+				[
+					"scripts/create-template-profile.mjs",
+					"--profile",
+					"full",
+					"--engine",
+					"assemble",
+					"--content",
+					"static",
+					"--output",
+					assemblyRoot,
+					"--force",
+				],
+				templateRoot,
+				{ allowFailure: true, silent: true },
+			);
+			if (contentMismatch.status === 0) {
+				throw new Error("Cross-content force replacement did not fail closed.");
+			}
+
 			const dryRunRoot = path.join(tempRoot, "assembly-dry-run");
 			const dryRun = run(
 				process.execPath,
@@ -395,6 +471,8 @@ async function main() {
 					"full",
 					"--engine",
 					"assemble",
+					"--content",
+					"static",
 					"--output",
 					dryRunRoot,
 					"--dry-run",
@@ -413,6 +491,9 @@ async function main() {
 			if (!dryRun.stdout.includes("- engine: assemble")) {
 				throw new Error("Assembly dry-run did not report its engine.");
 			}
+			if (!dryRun.stdout.includes("- content: static")) {
+				throw new Error("Assembly dry-run did not report its content mode.");
+			}
 
 			const defaultEngine = run(
 				process.execPath,
@@ -429,6 +510,28 @@ async function main() {
 			);
 			if (!defaultEngine.stdout.includes("- engine: prune")) {
 				throw new Error("The compatibility default engine is not prune.");
+			}
+			if (!defaultEngine.stdout.includes("- content: payload-ready")) {
+				throw new Error(
+					"The full profile default content is not payload-ready.",
+				);
+			}
+
+			const unsupportedContent = run(
+				process.execPath,
+				[
+					"scripts/create-template-profile.mjs",
+					"--profile",
+					"app-only",
+					"--content",
+					"payload-ready",
+					"--dry-run",
+				],
+				templateRoot,
+				{ allowFailure: true, silent: true },
+			);
+			if (unsupportedContent.status === 0) {
+				throw new Error("Unsupported profile content did not fail closed.");
 			}
 
 			const unsafeInPlace = run(

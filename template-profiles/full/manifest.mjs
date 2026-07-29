@@ -4,6 +4,10 @@ export const fullProfile = {
 	description:
 		"The complete Averlo template with marketing, authentication, dashboard, local developer tools, and the guarded Payload-ready scaffold.",
 	defaultOutput: ".template-instances/full",
+	content: {
+		supported: ["static", "payload-ready"],
+		default: "payload-ready",
+	},
 	pruneFlags: [],
 	assembly: {
 		surfaces: [

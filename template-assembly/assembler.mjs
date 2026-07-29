@@ -87,8 +87,18 @@ async function loadThinInventory(sourceRoot, profile) {
 	return new Set(JSON.parse(raw));
 }
 
-async function buildCopyPlan(sourceRoot, profile) {
-	const selectedSurfaces = new Set(profile.assembly?.surfaces ?? []);
+function selectedProfileSurfaces(profile, content) {
+	if (!profile.content?.supported.includes(content)) {
+		throw new Error(
+			`Profile ${profile.id} does not support ${content} content.`,
+		);
+	}
+	const selected = new Set(profile.assembly?.surfaces ?? []);
+	if (content === "static") selected.delete("payload");
+	return selected;
+}
+
+async function buildCopyPlan(sourceRoot, profile, selectedSurfaces) {
 	const thinInventory = await loadThinInventory(sourceRoot, profile);
 	const providedTargets = new Set([
 		...(profile.sharedFiles ?? []),
@@ -192,11 +202,11 @@ function applyRecordChanges(record, changes) {
 	return sortedRecord(next);
 }
 
-function selectedPackageEntries(profile) {
+function selectedPackageEntries(selectedSurfaces) {
 	const scripts = new Set(assemblyCoreScripts);
 	const dependencies = new Set(assemblyCoreDependencies);
 	const devDependencies = new Set(assemblyCoreDevDependencies);
-	for (const surfaceKey of profile.assembly?.surfaces ?? []) {
+	for (const surfaceKey of selectedSurfaces) {
 		const surface = templateSurfaces[surfaceKey];
 		if (!surface) throw new Error(`Unknown assembly surface: ${surfaceKey}`);
 		for (const scriptName of surface.packageScripts ?? []) {
@@ -258,12 +268,17 @@ function assertPackageOwnership(pkg) {
 	}
 }
 
-async function writePackage(sourceRoot, destinationRoot, profile) {
+async function writePackage(
+	sourceRoot,
+	destinationRoot,
+	profile,
+	selectedSurfaces,
+) {
 	const sourcePackage = JSON.parse(
 		await fs.readFile(path.join(sourceRoot, "package.json"), "utf8"),
 	);
 	assertPackageOwnership(sourcePackage);
-	const selected = selectedPackageEntries(profile);
+	const selected = selectedPackageEntries(selectedSurfaces);
 	const pkg = {
 		...sourcePackage,
 		scripts: selectRecord(sourcePackage.scripts, selected.scripts),
@@ -313,8 +328,12 @@ async function writePackage(sourceRoot, destinationRoot, profile) {
 	);
 }
 
-async function writeCentralFiles(sourceRoot, destinationRoot, profile) {
-	const state = createProjectState(profile.assembly.surfaces);
+async function writeCentralFiles(
+	sourceRoot,
+	destinationRoot,
+	selectedSurfaces,
+) {
+	const state = createProjectState(selectedSurfaces);
 	const targets = [
 		["src/config/routes.ts", renderRoutesFile(state)],
 		["src/lib/routes.ts", renderLibRoutesFile(state)],
@@ -343,14 +362,14 @@ async function writeCentralFiles(sourceRoot, destinationRoot, profile) {
 	}
 }
 
-async function writeProjectDocs(destinationRoot, profile) {
+async function writeProjectDocs(destinationRoot, profile, content) {
 	const profileLabel = profile.id;
 	await fs.writeFile(
 		path.join(destinationRoot, "README.md"),
 		[
 			`# ${profileLabel} project`,
 			"",
-			`Initialized from Averlo with the \`${profileLabel}\` profile using positive assembly.`,
+			`Initialized from Averlo with the \`${profileLabel}\` profile and \`${content}\` content using positive assembly.`,
 			"",
 			"```sh",
 			"npm install",
@@ -382,19 +401,21 @@ export async function assembleTemplateProfile({
 	sourceRoot,
 	destinationRoot,
 	profile,
+	content,
 }) {
 	if (!profile.assembly?.surfaces) {
 		throw new Error(
 			`Profile ${profile.id} has no assembly surface declaration.`,
 		);
 	}
-	const plan = await buildCopyPlan(sourceRoot, profile);
+	const selectedSurfaces = selectedProfileSurfaces(profile, content);
+	const plan = await buildCopyPlan(sourceRoot, profile, selectedSurfaces);
 	for (const relativePath of plan.included) {
 		await copyFile(sourceRoot, destinationRoot, relativePath);
 	}
-	await writeCentralFiles(sourceRoot, destinationRoot, profile);
-	await writePackage(sourceRoot, destinationRoot, profile);
-	await writeProjectDocs(destinationRoot, profile);
+	await writeCentralFiles(sourceRoot, destinationRoot, selectedSurfaces);
+	await writePackage(sourceRoot, destinationRoot, profile, selectedSurfaces);
+	await writeProjectDocs(destinationRoot, profile, content);
 	return {
 		includedFiles: plan.included.length,
 		omittedFiles: plan.omitted.length,

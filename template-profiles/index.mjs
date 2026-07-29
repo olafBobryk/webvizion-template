@@ -20,6 +20,16 @@ export function getTemplateProfile(id) {
 	return profile;
 }
 
+export function getProfileContentMode(profile, requestedContent) {
+	const content = requestedContent ?? profile.content.default;
+	if (!profile.content.supported.includes(content)) {
+		throw new Error(
+			`Profile ${profile.id} does not support ${content} content. Choose one of ${profile.content.supported.join(", ")}.`,
+		);
+	}
+	return content;
+}
+
 export function getProfileVerificationCommands(profile, engine = "prune") {
 	if (engine === "assemble") {
 		return (

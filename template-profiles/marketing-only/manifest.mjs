@@ -4,6 +4,10 @@ export const marketingOnlyProfile = {
 	description:
 		"The broad marketing template with the full shared UI system, local developer tools, and the guarded Payload-ready scaffold, without authentication or dashboard routes.",
 	defaultOutput: ".template-instances/marketing-only",
+	content: {
+		supported: ["static", "payload-ready"],
+		default: "payload-ready",
+	},
 	pruneFlags: ["--no-dashboard"],
 	assembly: {
 		surfaces: [

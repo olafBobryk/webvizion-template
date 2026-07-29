@@ -48,6 +48,10 @@ export const thinStartProfile = {
 	description:
 		"A complete, minimal Averlo workspace with the shared visual foundation and a filesystem-backed live surface.",
 	defaultOutput: ".thin-start/workspace",
+	content: {
+		supported: ["static", "payload-ready"],
+		default: "payload-ready",
+	},
 	assembly: {
 		surfaces: ["marketing", "intelligence", "payload"],
 		sourceInventory: "template-assembly/thin-start-src-files.json",

@@ -6,6 +6,10 @@ export const appOnlyProfile = {
 	description:
 		"The authentication and dashboard application template with local developer tools, without public marketing or Payload.",
 	defaultOutput: ".template-instances/app-only",
+	content: {
+		supported: ["static"],
+		default: "static",
+	},
 	pruneFlags: ["--no-marketing", "--no-payload"],
 	assembly: {
 		surfaces: [

@@ -9,10 +9,12 @@ import process, { stdin as input, stdout as output } from "node:process";
 import { createInterface } from "node:readline/promises";
 import { assembleTemplateProfile } from "../template-assembly/assembler.mjs";
 import {
+	getProfileContentMode,
 	getProfileVerificationCommands,
 	getTemplateProfile,
 	templateProfiles,
 } from "../template-profiles/index.mjs";
+import { templateSurfaces } from "../template-surfaces/index.mjs";
 
 const TEMPLATE_ROOT = process.cwd();
 const require = createRequire(import.meta.url);
@@ -30,6 +32,7 @@ let activeProfile;
 function parseArgs(argv) {
 	const options = {
 		confirmInstance: false,
+		content: undefined,
 		dryRun: false,
 		engine: "prune",
 		force: false,
@@ -48,6 +51,15 @@ function parseArgs(argv) {
 				throw new Error("--profile requires a profile id.");
 			}
 			options.profile = value;
+			index += 1;
+			continue;
+		}
+		if (arg === "--content") {
+			const value = argv[index + 1];
+			if (!value || !["static", "payload-ready"].includes(value)) {
+				throw new Error("--content requires static or payload-ready.");
+			}
+			options.content = value;
 			index += 1;
 			continue;
 		}
@@ -94,6 +106,7 @@ ${activeProfile.defaultOutput}.
 
 Flags:
 	--profile <id>      Select the template profile (default: full)
+	--content <mode>    Select static or payload-ready content (profile default when omitted)
   --engine <engine>  Select prune or assemble (default: prune)
   --output <path>     Materialize at a custom directory
   --dry-run           Print the profile plan without changing files
@@ -148,7 +161,7 @@ async function readJson(filePath) {
 	return JSON.parse(await fs.readFile(filePath, "utf8"));
 }
 
-async function assertReplaceableOutput(outputRoot, engine) {
+async function assertReplaceableOutput(outputRoot, options) {
 	const markerPath = path.join(outputRoot, PROFILE_MARKER);
 	if (!(await pathExists(markerPath))) {
 		throw new Error(
@@ -162,9 +175,15 @@ async function assertReplaceableOutput(outputRoot, engine) {
 		);
 	}
 	const markerEngine = marker.engine ?? "prune";
-	if (markerEngine !== engine) {
+	if (markerEngine !== options.engine) {
 		throw new Error(
-			`Refusing to replace ${displayPath(outputRoot)} because its engine marker is ${markerEngine}, not ${engine}.`,
+			`Refusing to replace ${displayPath(outputRoot)} because its engine marker is ${markerEngine}, not ${options.engine}.`,
+		);
+	}
+	const markerContent = marker.content ?? activeProfile.content.default;
+	if (markerContent !== options.content) {
+		throw new Error(
+			`Refusing to replace ${displayPath(outputRoot)} because its content marker is ${markerContent}, not ${options.content}.`,
 		);
 	}
 }
@@ -395,15 +414,25 @@ async function assertNoParkedImports(destinationRoot) {
 	}
 }
 
-async function validateProfile(destinationRoot, engine) {
-	for (const requiredFile of activeProfile.verification.requiredFiles) {
+async function validateProfile(destinationRoot, engine, content) {
+	const payloadPaths = templateSurfaces.payload.ownedPaths;
+	const payloadPackages = templateSurfaces.payload.packageDependencies;
+	const requiredFiles = activeProfile.verification.requiredFiles.filter(
+		(requiredFile) =>
+			content === "payload-ready" || requiredFile !== "payload.config.ts",
+	);
+	for (const requiredFile of requiredFiles) {
 		if (!(await pathExists(path.join(destinationRoot, requiredFile)))) {
 			throw new Error(
 				`template profile required file is missing: ${requiredFile}`,
 			);
 		}
 	}
-	for (const forbiddenPath of activeProfile.verification.forbiddenPaths) {
+	const forbiddenPaths = [
+		...activeProfile.verification.forbiddenPaths,
+		...(content === "static" ? payloadPaths : []),
+	];
+	for (const forbiddenPath of new Set(forbiddenPaths)) {
 		if (await pathExists(path.join(destinationRoot, forbiddenPath))) {
 			throw new Error(
 				`template profile forbidden path remains: ${forbiddenPath}`,
@@ -419,7 +448,11 @@ async function validateProfile(destinationRoot, engine) {
 	}
 
 	const pkg = await readJson(path.join(destinationRoot, "package.json"));
-	for (const name of activeProfile.verification.forbiddenPackages) {
+	const forbiddenPackages = [
+		...activeProfile.verification.forbiddenPackages,
+		...(content === "static" ? payloadPackages : []),
+	];
+	for (const name of new Set(forbiddenPackages)) {
 		if (pkg.dependencies?.[name] || pkg.devDependencies?.[name]) {
 			throw new Error(`template profile forbidden package remains: ${name}`);
 		}
@@ -454,15 +487,22 @@ function isSourceDirty() {
 	);
 }
 
-function runProfilePrune(destinationRoot) {
-	if (!activeProfile.pruneFlags?.length) return;
+function runProfilePrune(destinationRoot, content) {
+	const pruneFlags = [
+		...(activeProfile.pruneFlags ?? []),
+		...(content === "static" &&
+		!activeProfile.pruneFlags?.includes("--no-payload")
+			? ["--no-payload"]
+			: []),
+	];
+	if (pruneFlags.length === 0) return;
 	const result = spawnSync(
 		process.execPath,
 		[
 			"scripts/prune-template.mjs",
 			"--yes",
 			"--materialize-profile",
-			...activeProfile.pruneFlags,
+			...pruneFlags,
 		],
 		{ cwd: destinationRoot, stdio: "inherit" },
 	);
@@ -474,10 +514,17 @@ function runProfilePrune(destinationRoot) {
 	}
 }
 
-async function writeReceipt(destinationRoot, mode, engine, assemblyResult) {
+async function writeReceipt(
+	destinationRoot,
+	mode,
+	engine,
+	content,
+	assemblyResult,
+) {
 	const receipt = {
 		schemaVersion: activeProfile.schemaVersion,
 		profile: activeProfile.id,
+		content,
 		mode,
 		engine,
 		sourceCommit: currentCommit(),
@@ -511,6 +558,7 @@ function printPlan(options, destinationRoot) {
 	console.log(
 		`- profile: ${activeProfile.id} (schema ${activeProfile.schemaVersion})`,
 	);
+	console.log(`- content: ${options.content}`);
 	console.log(`- engine: ${options.engine}`);
 	console.log(
 		`- mode: ${options.inPlace ? "in-place" : "materialized workspace"}`,
@@ -521,8 +569,11 @@ function printPlan(options, destinationRoot) {
 			`- prune flags: ${activeProfile.pruneFlags?.join(", ") || "none"}`,
 		);
 	} else {
+		const selectedSurfaces = activeProfile.assembly?.surfaces.filter(
+			(surface) => options.content === "payload-ready" || surface !== "payload",
+		);
 		console.log(
-			`- selected surfaces: ${activeProfile.assembly?.surfaces.join(", ") || "core only"}`,
+			`- selected surfaces: ${selectedSurfaces?.join(", ") || "core only"}`,
 		);
 	}
 	console.log(`- shared files: ${activeProfile.sharedFiles?.length ?? 0}`);
@@ -545,7 +596,7 @@ async function materializeWorkspace(options, destinationRoot) {
 				`${displayPath(destinationRoot)} already exists. Re-run with --force to replace a verified template profile output.`,
 			);
 		}
-		await assertReplaceableOutput(destinationRoot, options.engine);
+		await assertReplaceableOutput(destinationRoot, options);
 		await fs.rm(destinationRoot, { recursive: true, force: true });
 	}
 	await fs.mkdir(destinationRoot, { recursive: true });
@@ -555,20 +606,22 @@ async function materializeWorkspace(options, destinationRoot) {
 			sourceRoot: TEMPLATE_ROOT,
 			destinationRoot,
 			profile: activeProfile,
+			content: options.content,
 		});
 		await applyFileRules(destinationRoot, { removePaths: false });
 	} else {
 		await copyTrackedWorkspace(destinationRoot);
-		runProfilePrune(destinationRoot);
+		runProfilePrune(destinationRoot, options.content);
 		await applyFileRules(destinationRoot);
 		await applyPackageChanges(destinationRoot);
 	}
 	formatWorkspace(destinationRoot);
-	await validateProfile(destinationRoot, options.engine);
+	await validateProfile(destinationRoot, options.engine, options.content);
 	await writeReceipt(
 		destinationRoot,
 		"materialized",
 		options.engine,
+		options.content,
 		assemblyResult,
 	);
 	formatReceipt(destinationRoot);
@@ -578,17 +631,18 @@ async function activateInPlace(options) {
 	if (activeProfile.id === "thin-start") {
 		await parkComponentReference(options);
 	}
-	runProfilePrune(TEMPLATE_ROOT);
+	runProfilePrune(TEMPLATE_ROOT, options.content);
 	await applyFileRules(TEMPLATE_ROOT);
 	await applyPackageChanges(TEMPLATE_ROOT);
 	formatWorkspace(TEMPLATE_ROOT);
-	await validateProfile(TEMPLATE_ROOT, "prune");
-	await writeReceipt(TEMPLATE_ROOT, "in-place", "prune");
+	await validateProfile(TEMPLATE_ROOT, "prune", options.content);
+	await writeReceipt(TEMPLATE_ROOT, "in-place", "prune", options.content);
 }
 
 async function main() {
 	const options = parseArgs(process.argv.slice(2));
 	activeProfile = getTemplateProfile(options.profile);
+	options.content = getProfileContentMode(activeProfile, options.content);
 	if (options.help) {
 		printUsage();
 		return;
