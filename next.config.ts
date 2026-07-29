@@ -65,13 +65,18 @@ const getDevIsolationConfig = (
 		return {};
 	}
 
-	const isValidUserDistDir =
+	const isValidLocalDistDir =
 		distDir === ".next-user" || /^\.next-user-\d{4}$/.test(distDir);
-	const isValidAgentDistDir = /^\.next-agent-\d{4}$/.test(distDir);
+	const isValidPreviewDistDir = /^\.next-preview-\d{4}$/.test(distDir);
+	const isValidLegacyAgentDistDir = /^\.next-agent-\d{4}$/.test(distDir);
 
-	if (!isValidUserDistDir && !isValidAgentDistDir) {
+	if (
+		!isValidLocalDistDir &&
+		!isValidPreviewDistDir &&
+		!isValidLegacyAgentDistDir
+	) {
 		throw new Error(
-			"NEXT_DEV_DIST_DIR must be .next-user, .next-user-<port>, or .next-agent-<port>.",
+			"NEXT_DEV_DIST_DIR must be .next-user, .next-user-<port>, .next-preview-<port>, or the legacy .next-agent-<port>.",
 		);
 	}
 
@@ -98,7 +103,8 @@ const getDevIsolationConfig = (
 };
 
 const shouldEnableCodeInspector = (phase: string) =>
-	phase === PHASE_DEVELOPMENT_SERVER && process.env.NODE_ENV === "development";
+	phase === PHASE_DEVELOPMENT_SERVER &&
+	process.env.NEXT_DEV_CODE_INSPECTOR === "1";
 
 const getCodeInspectorDevServerPort = () => {
 	const distDir = process.env.NEXT_DEV_DIST_DIR;

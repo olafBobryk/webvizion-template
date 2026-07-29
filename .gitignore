@@ -18,6 +18,7 @@
 /.next/
 /.next-user/
 /.next-user-*/
+/.next-preview-*/
 /.next-agent-*/
 /tsconfig.next-*.json
 /out/

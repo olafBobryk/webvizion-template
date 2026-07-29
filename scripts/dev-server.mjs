@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { execFileSync, spawn } from "node:child_process";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, unlink, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import net from "node:net";
 import path from "node:path";
@@ -13,15 +13,23 @@ const AGENT_PORT_END = 3099;
 
 const require = createRequire(import.meta.url);
 const args = process.argv.slice(2);
-const mode = args.find((arg) => !arg.startsWith("-")) ?? "user";
+const requestedMode = args.find((arg) => !arg.startsWith("-")) ?? "preview";
+const mode =
+	requestedMode === "agent"
+		? "preview"
+		: requestedMode === "user"
+			? "local"
+			: requestedMode;
 const isDryRun = args.includes("--dry-run");
+const shouldPrewarm = args.includes("--prewarm");
+const shouldEnableInspector = args.includes("--inspect");
 const useRandomPort = args.includes("--random");
 const checkoutRoot = process.cwd();
 const previewMetadataPath = path.join(checkoutRoot, ".codex", "preview.json");
 
 const printUsageAndExit = () => {
 	console.error(
-		"Usage: node scripts/dev-server.mjs <user|agent> [--dry-run] [--random]",
+		"Usage: node scripts/dev-server.mjs <preview|local> [--dry-run] [--inspect] [--prewarm] [--random]",
 	);
 	process.exit(1);
 };
@@ -139,16 +147,64 @@ const writePreviewMetadata = async ({ child, target, url }) => {
 	);
 };
 
+const clearPreviewMetadata = async (pid) => {
+	try {
+		const metadata = JSON.parse(await readFile(previewMetadataPath, "utf8"));
+
+		if (metadata.pid === pid) {
+			await unlink(previewMetadataPath);
+		}
+	} catch (error) {
+		if (error?.code !== "ENOENT") {
+			console.warn(`Could not clear preview metadata: ${error.message}`);
+		}
+	}
+};
+
+const wait = (milliseconds) =>
+	new Promise((resolve) => {
+		setTimeout(resolve, milliseconds);
+	});
+
+const prewarmHomepage = async (url) => {
+	const startedAt = Date.now();
+	const timeoutMs = 45_000;
+	const deadline = startedAt + timeoutMs;
+
+	console.log(`Prewarming: ${url}`);
+
+	while (Date.now() - startedAt < timeoutMs) {
+		try {
+			const response = await fetch(url, {
+				signal: AbortSignal.timeout(Math.max(1, deadline - Date.now())),
+			});
+
+			if (response.ok || (response.status >= 300 && response.status < 400)) {
+				console.log(
+					`Preview ready: ${url} (${((Date.now() - startedAt) / 1000).toFixed(1)}s prewarm)`,
+				);
+				return;
+			}
+		} catch {
+			// Next may not be listening yet. Retry until the preview deadline.
+		}
+
+		await wait(150);
+	}
+
+	console.warn(`Preview prewarm timed out after ${timeoutMs / 1000}s: ${url}`);
+};
+
 const getServerTarget = async () => {
-	if (mode === "user") {
+	if (mode === "local") {
 		const port = await findAvailablePort(USER_PORT, USER_PORT_END);
 
 		if (!port) {
 			console.error(
 				[
 					`No available user dev server ports found in ${USER_PORT}-${USER_PORT_END}.`,
-					"The user dev server avoids the agent port range so it does not collide with isolated agent servers.",
-					"Stop the existing process yourself if you want to replace it, or run npm run dev:agent for an isolated agent server.",
+					"The local dev server avoids the preview port range so it does not collide with isolated previews.",
+					"Stop the existing process yourself if you want to replace it, or run npm run dev for an isolated preview.",
 				].join("\n"),
 			);
 			process.exit(1);
@@ -156,7 +212,7 @@ const getServerTarget = async () => {
 
 		return {
 			distDir: port === USER_PORT ? ".next-user" : `.next-user-${port}`,
-			label: "user",
+			label: "local",
 			port,
 			tsconfigPath:
 				port === USER_PORT
@@ -165,23 +221,23 @@ const getServerTarget = async () => {
 		};
 	}
 
-	if (mode === "agent") {
+	if (mode === "preview") {
 		const port = useRandomPort
 			? await findRandomAvailablePort(AGENT_PORT_START, AGENT_PORT_END)
 			: await findAvailablePort(AGENT_PORT_START, AGENT_PORT_END);
 
 		if (!port) {
 			console.error(
-				`No available agent dev server ports found in ${AGENT_PORT_START}-${AGENT_PORT_END}.`,
+				`No available preview ports found in ${AGENT_PORT_START}-${AGENT_PORT_END}.`,
 			);
 			process.exit(1);
 		}
 
 		return {
-			distDir: `.next-agent-${port}`,
-			label: "agent",
+			distDir: `.next-preview-${port}`,
+			label: "preview",
 			port,
-			tsconfigPath: `tsconfig.next-agent-${port}.json`,
+			tsconfigPath: `tsconfig.next-preview-${port}.json`,
 		};
 	}
 
@@ -194,7 +250,7 @@ const start = async () => {
 
 	console.log(`Mode: ${target.label}`);
 	console.log(`URL: ${url}`);
-	if (target.label === "agent") {
+	if (target.label === "preview") {
 		console.log(`Automation URL: ${getAutomationUrl(url)}`);
 	}
 	if (process.env.PAYLOAD_DEV_MAGIC_LOGIN === "1") {
@@ -238,6 +294,10 @@ const start = async () => {
 				...process.env,
 				NEXT_DEV_DIST_DIR: target.distDir,
 				NEXT_DEV_SERVER_MODE: target.label,
+				NEXT_DEV_CODE_INSPECTOR:
+					shouldEnableInspector || process.env.NEXT_DEV_CODE_INSPECTOR === "1"
+						? "1"
+						: "0",
 				NEXT_DEV_TSCONFIG_PATH: target.tsconfigPath,
 				NEXT_WORKTREE_ROOT: checkoutRoot,
 				PORT: String(target.port),
@@ -248,13 +308,19 @@ const start = async () => {
 
 	await writePreviewMetadata({ child, target, url });
 
-	child.on("exit", (code, signal) => {
-		if (signal) {
-			process.kill(process.pid, signal);
-			return;
-		}
+	if (shouldPrewarm) {
+		void prewarmHomepage(url);
+	}
 
-		process.exit(code ?? 0);
+	child.on("exit", (code, signal) => {
+		void clearPreviewMetadata(child.pid).finally(() => {
+			if (signal) {
+				process.kill(process.pid, signal);
+				return;
+			}
+
+			process.exit(code ?? 0);
+		});
 	});
 };
 

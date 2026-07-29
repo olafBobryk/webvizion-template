@@ -111,11 +111,14 @@ frontend continues to render the same small contract.
 
 ### Development
 
-Use `npm run dev` for the human-owned local server. Agents doing browser testing
-or automation should use the isolated random-port workflow:
+Use `npm run dev` for the isolated, prewarmed preview workflow. It selects a
+random port and an isolated build directory, then warms the home route before
+reporting the preview ready. Existing automation can continue using the
+`dev:agent` alias. Use `npm run dev:local` only when a stable local server is
+actually needed:
 
 ```sh
-npm run dev:agent -- --random
+npm run dev
 ```
 
 ### Template Intelligence
@@ -162,8 +165,10 @@ behavior, or expensive sections change; see
 | Script | Purpose |
 | --- | --- |
 | `npm run create:project` | Materialize a route profile into a project workspace. |
-| `npm run dev` | Start the human-owned local development server. |
-| `npm run dev:agent -- --random` | Start an isolated server for agent verification. |
+| `npm run dev` | Start an isolated, prewarmed preview on a random port. |
+| `npm run dev:local` | Start the former local server flow on port 3000–3010. |
+| `npm run dev:agent` | Compatibility alias for `npm run dev`. |
+| `npm run dev:inspect` | Start a preview with the code-inspector sidecar enabled. |
 | `npm run verify:static` | Run static policy, formatting, and type checks. |
 | `npm run verify:profiles` | Materialize and verify every profile. |
 | `npm run build` | Create the production Next.js build. |

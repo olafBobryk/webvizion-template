@@ -13,6 +13,7 @@ const EXCLUDED_DIRS = new Set([
 	".git",
 	".next",
 	".next-user",
+	".next-preview",
 	".serena",
 	".template-intelligence",
 	".understand-anything",
@@ -158,7 +159,7 @@ const CONCEPTS = [
 		summary:
 			"Isolated user and agent development server behavior, build wrappers, and generated local artifacts.",
 		matches: ["AGENTS.md", "scripts/dev-server.mjs", "package.json"],
-		keywords: ["dev:agent", "dev:user", "automation url", "distDir", "port"],
+		keywords: ["dev", "dev:preview", "automation url", "distDir", "port"],
 	},
 	{
 		id: "route-surfaces",
@@ -310,7 +311,7 @@ const AGENT_MAP = {
 				"scripts/prune-template.mjs",
 			],
 			notes:
-				"Use npm run dev:agent, keep user ports reserved, use isolated dist dirs and generated tsconfig files, and use automation URL query flags for automated traversal.",
+				"Use npm run dev for isolated prewarmed previews. dev:agent and dev:user remain compatibility aliases; use the automation URL query flags for automated traversal.",
 		},
 		{
 			id: "intelligence-benchmark",
@@ -609,7 +610,6 @@ async function buildIndex() {
 	};
 }
 
-const index = await buildIndex();
 const args = process.argv.slice(2);
 
 if (args[0] === "--query") {
@@ -626,6 +626,66 @@ if (args[0] === "--query") {
 	printAgentMapTopic(topicQuery);
 	process.exit(0);
 }
+
+const getIncludedFiles = async () => {
+	const files = [];
+
+	for (const includedRoot of INCLUDED_ROOTS) {
+		const absoluteRoot = path.join(ROOT, includedRoot);
+		if (!(await pathExists(absoluteRoot))) continue;
+
+		const stat = await fs.stat(absoluteRoot);
+		files.push(
+			...(stat.isDirectory() ? await walk(absoluteRoot) : [absoluteRoot]),
+		);
+	}
+
+	return files.sort((left, right) => left.localeCompare(right));
+};
+
+const isGeneratedIndexCurrent = async () => {
+	if (!(await pathExists(OUTPUT_PATH)) || !(await pathExists(AGENT_MAP_PATH))) {
+		return false;
+	}
+
+	try {
+		const [outputStat, mapStat, index, sourceFiles] = await Promise.all([
+			fs.stat(OUTPUT_PATH),
+			fs.stat(AGENT_MAP_PATH),
+			fs.readFile(OUTPUT_PATH, "utf8").then(JSON.parse),
+			getIncludedFiles(),
+		]);
+		const generatedAt = Math.min(outputStat.mtimeMs, mapStat.mtimeMs);
+		const indexedPaths = [...index.files.map((file) => file.path)].sort(
+			(left, right) => left.localeCompare(right),
+		);
+		const sourcePaths = sourceFiles.map((filePath) =>
+			toPosixPath(path.relative(ROOT, filePath)),
+		);
+
+		if (
+			indexedPaths.length !== sourcePaths.length ||
+			indexedPaths.some((filePath, index) => filePath !== sourcePaths[index])
+		) {
+			return false;
+		}
+
+		const sourceStats = await Promise.all(
+			sourceFiles.map((filePath) => fs.stat(filePath)),
+		);
+
+		return sourceStats.every((stat) => stat.mtimeMs <= generatedAt);
+	} catch {
+		return false;
+	}
+};
+
+if (args[0] === "--ensure" && (await isGeneratedIndexCurrent())) {
+	console.log("Template Intelligence is current.");
+	process.exit(0);
+}
+
+const index = await buildIndex();
 
 await fs.mkdir(OUTPUT_DIR, { recursive: true });
 await fs.writeFile(OUTPUT_PATH, `${JSON.stringify(index, null, "\t")}\n`);

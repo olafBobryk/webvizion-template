@@ -185,7 +185,7 @@ of this template.
 
 Do not add Understand-Anything packages to `package.json`. Do not commit
 `.understand-anything` outputs. If a maintainer installs it locally, treat its
-generated graph as dev-local context in the same category as `.next-agent-*`
+generated graph as dev-local context in the same category as `.next-preview-*`
 or `.template-intelligence`.
 
 Future work can add an adapter that reads Understand-Anything output when

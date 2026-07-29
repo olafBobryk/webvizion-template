@@ -55,7 +55,7 @@ async function main() {
 	if (options.dryRun) return;
 
 	run("npm", ["install"], outputRoot);
-	const devArgs = ["run", "dev:agent", "--"];
+	const devArgs = ["run", "dev", "--"];
 	if (options.random) devArgs.push("--random");
 
 	const child = spawn("npm", devArgs, {

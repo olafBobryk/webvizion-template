@@ -99,6 +99,7 @@ export const thinStartProfile = {
 		"src/app/(site)/(marketing)/_components/providers",
 		"src/components/composites/markdown/MarkdownEditor.tsx",
 		"src/components/composites/markdown/MarkdownEditorClient.tsx",
+		"src/components/composites/markdown/MarkdownEditor.css",
 		"src/components/ui/input/color/ColorInput.tsx",
 		"src/components/ui/input/color/ColorSwatchInput.tsx",
 		"src/components/ui/overlays/modal/ModalForm.tsx",

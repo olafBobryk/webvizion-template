@@ -80,10 +80,10 @@ outside Vercel, with `DATABASE_URL` and `PAYLOAD_SECRET` configured.
 
 Test the local magic-login setup before relying on it:
 
-1. Run `npm run dev:agent -- --dry-run` without `PAYLOAD_DEV_MAGIC_LOGIN`; it
+1. Run `npm run dev -- --dry-run` without `PAYLOAD_DEV_MAGIC_LOGIN`; it
    should not print a `Payload Admin URL`.
-2. Run `PAYLOAD_DEV_MAGIC_LOGIN=1 npm run dev:agent -- --dry-run`; it should
-   print a localhost `Payload Admin URL` for the isolated agent port.
+2. Run `PAYLOAD_DEV_MAGIC_LOGIN=1 npm run dev -- --dry-run`; it should print a
+   localhost `Payload Admin URL` for the isolated preview port.
 3. Start the local dev server with the env values above and an existing Payload
    admin user, then open the printed `Payload Admin URL`.
 4. Confirm the link redirects to `/admin` and the browser is signed in.
