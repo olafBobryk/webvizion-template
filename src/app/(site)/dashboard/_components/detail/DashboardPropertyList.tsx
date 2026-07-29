@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/primitives/Button";
 import {
 	Dropdown,
 	type DropdownMenuOption,
-} from "@/components/ui/primitives/Dropdown";
+} from "@/components/ui/primitives/dropdown";
 import { Text } from "@/components/ui/primitives/Text";
 
 export type DashboardPropertyOption = {

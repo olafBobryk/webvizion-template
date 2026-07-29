@@ -350,7 +350,7 @@ function requireActiveFixtureMembership(
 	membershipId: string,
 ) {
 	const membership = state.memberships.get(membershipId);
-	if (!membership || membership.status !== "active") {
+	if (membership?.status !== "active") {
 		throw new AuthDomainError("membership-required");
 	}
 	return membership;

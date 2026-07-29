@@ -235,7 +235,7 @@ export const thinStartProfile = {
 			"@/components/ui/primitives/Section",
 			"@/components/ui/primitives/Field",
 			"@/components/ui/primitives/InputFrame",
-			"@/components/ui/primitives/Dropdown",
+			"@/components/ui/primitives/dropdown",
 			"@/components/ui/primitives/dropdownStyles",
 			"@/components/ui/input/choice/ChoiceField",
 			"@/components/ui/input/choice/ChoiceIndicators",

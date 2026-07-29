@@ -5,7 +5,7 @@ import * as React from "react";
 import {
 	Dropdown,
 	type DropdownTriggerRenderProps,
-} from "@/components/ui/primitives/Dropdown";
+} from "@/components/ui/primitives/dropdown";
 import { Text } from "@/components/ui/primitives/Text";
 
 type TooltipProps = {

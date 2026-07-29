@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { MarkdownEditor } from "@/components/composites/markdown/MarkdownEditor";
+import { MarkdownEditor } from "@/components/composites/markdown";
 import { Icon } from "@/components/ui/icons/Icon";
 import { ModalForm } from "@/components/ui/overlays/modal/ModalForm";
 import {

@@ -12,7 +12,7 @@ const joinedAtByMembershipId: Record<string, string> = {
 function toReferenceMember(membershipId: string): ReferenceMember | null {
 	const state = getFixtureAuthState();
 	const membership = state.memberships.get(membershipId);
-	if (!membership || membership.status !== "active") return null;
+	if (membership?.status !== "active") return null;
 	const user = state.users.get(membership.userId);
 	if (!user) return null;
 	return {

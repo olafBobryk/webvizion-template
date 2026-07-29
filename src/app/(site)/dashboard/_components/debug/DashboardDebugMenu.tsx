@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Icon } from "@/components/ui/icons/Icon";
-import { Dropdown } from "@/components/ui/primitives/Dropdown";
+import { Dropdown } from "@/components/ui/primitives/dropdown";
 import { showToast } from "@/lib/feedback";
 import {
 	type DashboardDebugState,

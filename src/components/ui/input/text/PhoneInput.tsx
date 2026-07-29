@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/primitives/Button";
 import {
 	Dropdown,
 	useDropdownListNavigation,
-} from "@/components/ui/primitives/Dropdown";
+} from "@/components/ui/primitives/dropdown";
 import { dropdownListClassName } from "@/components/ui/primitives/dropdownStyles";
 import { Field } from "@/components/ui/primitives/Field";
 import {

@@ -1,11 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { MarkdownRenderer } from "@/components/composites/markdown/MarkdownRenderer";
+import { MarkdownRenderer } from "@/components/composites/markdown";
 import { Icon } from "@/components/ui/icons/Icon";
 import { Button } from "@/components/ui/primitives/Button";
 import { Card } from "@/components/ui/primitives/Card";
-import { Dropdown } from "@/components/ui/primitives/Dropdown";
+import { Dropdown } from "@/components/ui/primitives/dropdown";
 import { Text } from "@/components/ui/primitives/Text";
 import { showToast } from "@/lib/feedback/toast";
 import type { MemberPresentation } from "../../../_lib/entities/member/presentation";

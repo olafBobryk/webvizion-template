@@ -10,7 +10,7 @@ import {
 	Dropdown,
 	type DropdownPositionStrategy,
 	useDropdownListNavigation,
-} from "@/components/ui/primitives/Dropdown";
+} from "@/components/ui/primitives/dropdown";
 import { dropdownListClassName } from "@/components/ui/primitives/dropdownStyles";
 import { Field } from "@/components/ui/primitives/Field";
 import {

@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Icon } from "@/components/ui/icons/Icon";
 import { ProfilePicture } from "@/components/ui/misc";
-import { Dropdown } from "@/components/ui/primitives/Dropdown";
+import { Dropdown } from "@/components/ui/primitives/dropdown";
 import { getAccountPresentation } from "../../_lib/entities/account/presentation";
 import { AccountIdentity } from "../entities/account/AccountIdentity";
 import { useDashboardAuth } from "../providers/DashboardAuthProvider";

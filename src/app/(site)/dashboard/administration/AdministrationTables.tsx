@@ -6,7 +6,7 @@ import { useConfirmationModal } from "@/components/ui/overlays/modal/useConfirma
 import { useModal } from "@/components/ui/overlays/modal/useModal";
 import { Button } from "@/components/ui/primitives/Button";
 import { Card } from "@/components/ui/primitives/Card";
-import { Dropdown } from "@/components/ui/primitives/Dropdown";
+import { Dropdown } from "@/components/ui/primitives/dropdown";
 import {
 	refreshOrganizationInvitation,
 	removeOrganizationMembership,

@@ -13,7 +13,7 @@ Lowest-level reusable building blocks. Agents should check this folder before wr
 - `src/components/ui/primitives/Button.tsx`: canonical action and button-like link component.
 - `src/components/ui/primitives/InputFrame.tsx`: canonical shell for text-like inputs.
 - `src/components/ui/primitives/Field.tsx`: canonical label, description, and message wrapper.
-- `src/components/ui/primitives/Dropdown.tsx`: canonical trigger-plus-menu overlay primitive with `Dropdown.Menu`, `Dropdown.Listbox`, and `Dropdown.Panel` extensions.
+- `src/components/ui/primitives/dropdown/index.ts`: canonical trigger-plus-menu overlay public entrypoint with `Dropdown.Menu`, `Dropdown.Listbox`, and `Dropdown.Panel` extensions.
 - `src/components/ui/primitives/Listbox.tsx`: canonical accessible option list for menus and selectors.
 - `src/components/ui/primitives/Panel.tsx`: generic surface, layout, and overlay-root primitive.
 - `src/components/ui/primitives/Card.tsx`: structured card built on `Panel`, with owned header, action, content, and footer slots.

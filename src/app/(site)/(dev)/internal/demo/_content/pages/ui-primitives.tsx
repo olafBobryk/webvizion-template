@@ -12,7 +12,7 @@ import {
 	CardTitle,
 } from "@/components/ui/primitives/Card";
 import Divider from "@/components/ui/primitives/Divider";
-import { Dropdown } from "@/components/ui/primitives/Dropdown";
+import { Dropdown } from "@/components/ui/primitives/dropdown";
 import { Field } from "@/components/ui/primitives/Field";
 import {
 	InputFrame,

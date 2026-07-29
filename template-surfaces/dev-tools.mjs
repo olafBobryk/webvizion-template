@@ -58,6 +58,7 @@ export const devToolSurfaces = {
 		searchSources: [],
 		packageScripts: [
 			"intelligence:generate",
+			"intelligence:ensure",
 			"intelligence:query",
 			"intelligence:benchmark",
 			"intelligence:record",

@@ -10,7 +10,7 @@ import { Card } from "@/components/ui/primitives/Card";
 import {
 	Dropdown,
 	type DropdownPositionStrategy,
-} from "@/components/ui/primitives/Dropdown";
+} from "@/components/ui/primitives/dropdown";
 import {
 	addDays,
 	addMonths,

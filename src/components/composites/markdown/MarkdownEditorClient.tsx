@@ -73,7 +73,7 @@ import { Button, type ButtonProps } from "@/components/ui/primitives/Button";
 import {
 	Dropdown,
 	type DropdownMenuOption,
-} from "@/components/ui/primitives/Dropdown";
+} from "@/components/ui/primitives/dropdown";
 import type { ListboxOption } from "@/components/ui/primitives/Listbox";
 import { Panel } from "@/components/ui/primitives/Panel";
 import { Text } from "@/components/ui/primitives/Text";

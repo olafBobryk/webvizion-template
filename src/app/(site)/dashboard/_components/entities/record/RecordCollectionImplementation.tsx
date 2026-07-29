@@ -18,7 +18,7 @@ import { Card } from "@/components/ui/primitives/Card";
 import {
 	Dropdown,
 	type DropdownMenuOption,
-} from "@/components/ui/primitives/Dropdown";
+} from "@/components/ui/primitives/dropdown";
 import { StatusMessage } from "@/components/ui/primitives/StatusMessage";
 import { Text } from "@/components/ui/primitives/Text";
 import { showToast } from "@/lib/feedback/toast";

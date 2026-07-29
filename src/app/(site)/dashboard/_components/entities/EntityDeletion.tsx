@@ -5,7 +5,7 @@ import { useConfirmationModal } from "@/components/ui/overlays/modal/useConfirma
 import {
 	Dropdown,
 	type DropdownMenuOption,
-} from "@/components/ui/primitives/Dropdown";
+} from "@/components/ui/primitives/dropdown";
 import { showToast } from "@/lib/feedback/toast";
 import type {
 	DashboardEntityDeletionDefinition,

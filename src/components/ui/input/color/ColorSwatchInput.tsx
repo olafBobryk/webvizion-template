@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/misc/Skeleton";
 import {
 	Dropdown,
 	type DropdownPositionStrategy,
-} from "@/components/ui/primitives/Dropdown";
+} from "@/components/ui/primitives/dropdown";
 import { Field } from "@/components/ui/primitives/Field";
 import { ColorPickerPanel } from "./ColorInput";
 

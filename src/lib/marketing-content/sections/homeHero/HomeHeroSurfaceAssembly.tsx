@@ -8,13 +8,13 @@ import {
 	instantTransition,
 	resolveMotionTransition,
 } from "@/components/ui/foundations/motionTiming";
-import { Skeleton } from "@/components/ui/misc/Skeleton";
+import { Skeleton } from "@/components/ui/misc";
 import {
 	ActiveStageHost,
 	useActiveStage,
 } from "@/components/ui/motion/ActiveStageHost";
 import { Button } from "@/components/ui/primitives/Button";
-import { Dropdown } from "@/components/ui/primitives/Dropdown";
+import { Dropdown } from "@/components/ui/primitives/dropdown";
 import { Panel } from "@/components/ui/primitives/Panel";
 import { Text } from "@/components/ui/primitives/Text";
 import { useMotionAllowed } from "@/hooks/useMotionAllowed";

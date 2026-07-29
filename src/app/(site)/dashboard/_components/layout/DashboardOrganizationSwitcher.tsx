@@ -9,7 +9,7 @@ import {
 	getOrganizationPresentation,
 	type OrganizationPresentation,
 } from "@/app/(site)/dashboard/_lib/entities/organization/presentation";
-import { Dropdown } from "@/components/ui/primitives/Dropdown";
+import { Dropdown } from "@/components/ui/primitives/dropdown";
 import { selectOrganization } from "@/lib/api/auth";
 import { showToast } from "@/lib/feedback/toast";
 import { dashboardFeatureConfig } from "../../_registry/surfaceRegistry";

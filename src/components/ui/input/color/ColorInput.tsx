@@ -6,7 +6,7 @@ import { InputSkeleton } from "@/components/ui/input/InputSkeleton";
 import {
 	Dropdown,
 	type DropdownPositionStrategy,
-} from "@/components/ui/primitives/Dropdown";
+} from "@/components/ui/primitives/dropdown";
 import { Field } from "@/components/ui/primitives/Field";
 import { InputFrame } from "@/components/ui/primitives/InputFrame";
 
