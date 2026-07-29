@@ -43,7 +43,6 @@ export const applicationSurfaces = {
 			"verify:entity-skeletons",
 			"verify:frontend-entity-policy",
 			"verify:frontend-entities",
-			"verify:profile-pruning",
 		],
 		postRemovalAssertions: [
 			{

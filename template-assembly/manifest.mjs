@@ -13,6 +13,7 @@ export const assemblyGeneratedPaths = new Set([
 export const assemblyTemplateOnlyPaths = new Set([
 	"docs/architecture-staging.md",
 	"docs/architecture.md",
+	"docs/positive-assembly-transition.md",
 	"docs/template-content-modes.md",
 	"docs/thin-start-creation-boundary.md",
 	"docs/worklogs/prune-reset-hardening-handoff.md",
@@ -26,7 +27,6 @@ export const assemblyTemplateOnlyPaths = new Set([
 	"scripts/generate-template-assembly-inventory.mjs",
 	"scripts/prune-template.mjs",
 	"scripts/review-thin-start-api.mjs",
-	"scripts/verify/verify-profile-pruning.mjs",
 	"scripts/verify/verify-template-profiles.mjs",
 ]);
 
@@ -56,8 +56,6 @@ export const assemblyTemplateOnlyScripts = new Set([
 	"dev:thin",
 	"prune:template",
 	"review:thin-start-api",
-	"verify:assembly",
-	"verify:profile-pruning",
 	"verify:profiles",
 ]);
 

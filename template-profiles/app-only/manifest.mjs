@@ -1,7 +1,7 @@
 const overridesRoot = "template-profiles/app-only/overrides";
 
 export const appOnlyProfile = {
-	schemaVersion: 1,
+	schemaVersion: 2,
 	id: "app-only",
 	description:
 		"The authentication and dashboard application template with local developer tools, without public marketing or Payload.",
@@ -10,7 +10,6 @@ export const appOnlyProfile = {
 		supported: ["static"],
 		default: "static",
 	},
-	pruneFlags: ["--no-marketing", "--no-payload"],
 	assembly: {
 		surfaces: [
 			"dashboardReferenceEntities",

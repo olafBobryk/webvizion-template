@@ -1,5 +1,5 @@
 export const marketingOnlyProfile = {
-	schemaVersion: 1,
+	schemaVersion: 2,
 	id: "marketing-only",
 	description:
 		"The broad marketing template with the full shared UI system, local developer tools, and the guarded Payload-ready scaffold, without authentication or dashboard routes.",
@@ -8,7 +8,6 @@ export const marketingOnlyProfile = {
 		supported: ["static", "payload-ready"],
 		default: "payload-ready",
 	},
-	pruneFlags: ["--no-dashboard"],
 	assembly: {
 		surfaces: [
 			"marketing",

@@ -30,11 +30,8 @@ export function getProfileContentMode(profile, requestedContent) {
 	return content;
 }
 
-export function getProfileVerificationCommands(profile, engine = "prune") {
-	if (engine === "assemble") {
-		return (
-			profile.assembly?.verificationCommands ?? profile.verification.commands
-		);
-	}
-	return profile.verification.commands;
+export function getProfileVerificationCommands(profile) {
+	return (
+		profile.assembly?.verificationCommands ?? profile.verification.commands
+	);
 }

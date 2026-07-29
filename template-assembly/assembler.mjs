@@ -152,8 +152,7 @@ async function buildCopyPlan(sourceRoot, profile, selectedSurfaces) {
 			relativePath.startsWith("docs/") &&
 			!assemblyProjectDocs.has(relativePath)
 		) {
-			omitted.push({ path: relativePath, reason: "template-documentation" });
-			continue;
+			throw new Error(`Unclassified assembly documentation: ${relativePath}`);
 		}
 
 		if (withinAny(relativePath, assemblyCoreRoots)) {
@@ -193,19 +192,14 @@ async function copyFile(sourceRoot, destinationRoot, relativePath) {
 	}
 }
 
-function applyRecordChanges(record, changes) {
-	const next = { ...(record ?? {}) };
-	for (const name of changes?.remove ?? []) delete next[name];
-	for (const [name, value] of Object.entries(changes?.add ?? {})) {
-		next[name] = value;
-	}
-	return sortedRecord(next);
-}
-
-function selectedPackageEntries(selectedSurfaces) {
-	const scripts = new Set(assemblyCoreScripts);
-	const dependencies = new Set(assemblyCoreDependencies);
-	const devDependencies = new Set(assemblyCoreDevDependencies);
+function selectedPackageEntries(profile, selectedSurfaces) {
+	const scripts = new Set(profile.assembly.coreScripts ?? assemblyCoreScripts);
+	const dependencies = new Set(
+		profile.assembly.coreDependencies ?? assemblyCoreDependencies,
+	);
+	const devDependencies = new Set(
+		profile.assembly.coreDevDependencies ?? assemblyCoreDevDependencies,
+	);
 	for (const surfaceKey of selectedSurfaces) {
 		const surface = templateSurfaces[surfaceKey];
 		if (!surface) throw new Error(`Unknown assembly surface: ${surfaceKey}`);
@@ -278,7 +272,7 @@ async function writePackage(
 		await fs.readFile(path.join(sourceRoot, "package.json"), "utf8"),
 	);
 	assertPackageOwnership(sourcePackage);
-	const selected = selectedPackageEntries(selectedSurfaces);
+	const selected = selectedPackageEntries(profile, selectedSurfaces);
 	const pkg = {
 		...sourcePackage,
 		scripts: selectRecord(sourcePackage.scripts, selected.scripts),
@@ -291,20 +285,6 @@ async function writePackage(
 			selected.devDependencies,
 		),
 	};
-
-	if (profile.packageChanges) {
-		pkg.dependencies = applyRecordChanges(
-			pkg.dependencies,
-			profile.packageChanges.dependencies,
-		);
-		pkg.devDependencies = applyRecordChanges(
-			pkg.devDependencies,
-			profile.packageChanges.devDependencies,
-		);
-		for (const scriptName of profile.packageChanges.scripts?.remove ?? []) {
-			delete pkg.scripts[scriptName];
-		}
-	}
 
 	await fs.writeFile(
 		path.join(destinationRoot, "package.json"),
@@ -326,6 +306,21 @@ async function writePackage(
 		],
 		{ cwd: destinationRoot, stdio: "inherit" },
 	);
+}
+
+async function applyProfileFiles(sourceRoot, destinationRoot, profile) {
+	const files = [
+		...(profile.sharedFiles ?? []).map((target) => ({
+			source: target,
+			target,
+		})),
+		...(profile.overrides ?? []),
+	];
+	for (const file of files) {
+		const destination = path.join(destinationRoot, file.target);
+		await fs.mkdir(path.dirname(destination), { recursive: true });
+		await fs.copyFile(path.join(sourceRoot, file.source), destination);
+	}
 }
 
 async function writeCentralFiles(
@@ -413,6 +408,7 @@ export async function assembleTemplateProfile({
 	for (const relativePath of plan.included) {
 		await copyFile(sourceRoot, destinationRoot, relativePath);
 	}
+	await applyProfileFiles(sourceRoot, destinationRoot, profile);
 	await writeCentralFiles(sourceRoot, destinationRoot, selectedSurfaces);
 	await writePackage(sourceRoot, destinationRoot, profile, selectedSurfaces);
 	await writeProjectDocs(destinationRoot, profile, content);

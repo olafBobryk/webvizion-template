@@ -31,12 +31,17 @@ const PROFILE_CASES = [
 	},
 ];
 const ENGINES = ["prune", "assemble"];
+const LEGACY_REFERENCE_ONLY_SCRIPTS = new Set([
+	...assemblyTemplateOnlyScripts,
+	"verify:assembly",
+	"verify:profile-pruning",
+]);
 const require = createRequire(import.meta.url);
 const BIOME_CLI = require.resolve("@biomejs/biome/bin/biome");
 
 function parseArgs(argv) {
 	const options = {
-		engine: "prune",
+		engine: "assemble",
 		integration: false,
 		keep: false,
 		oracleRef: undefined,
@@ -85,6 +90,9 @@ function parseArgs(argv) {
 	}
 	if (options.oracleRoot && options.engine !== "both") {
 		throw new Error("The prune oracle is only valid with --engine both.");
+	}
+	if (!options.oracleRoot && options.engine === "prune") {
+		throw new Error("Prune verification requires an immutable oracle root.");
 	}
 	return options;
 }
@@ -141,9 +149,10 @@ async function assertReceipt(outputRoot, profileCase, engine, isOracle) {
 	);
 	if (
 		receipt.profile !== profileCase.profileId ||
-		receipt.schemaVersion !== 1 ||
-		receipt.engine !== engine ||
-		(!isOracle && receipt.content !== profileCase.content)
+		receipt.schemaVersion !== (isOracle ? 1 : 2) ||
+		(isOracle && receipt.engine !== engine) ||
+		(!isOracle &&
+			(receipt.engine !== undefined || receipt.content !== profileCase.content))
 	) {
 		throw new Error(
 			`Invalid ${engine} profile receipt for ${profileCase.profileId}/${profileCase.content}.`,
@@ -241,7 +250,7 @@ async function compareContracts(profileId, pruneRoot, assembleRoot) {
 	);
 	const expectedScripts = Object.fromEntries(
 		Object.entries(prunePackage.scripts).filter(
-			([name]) => !assemblyTemplateOnlyScripts.has(name),
+			([name]) => !LEGACY_REFERENCE_ONLY_SCRIPTS.has(name),
 		),
 	);
 	assertEqualRecord(
@@ -345,12 +354,11 @@ async function main() {
 						"scripts/create-template-profile.mjs",
 						"--profile",
 						profileId,
-						"--engine",
-						engine,
 						"--output",
 						outputRoot,
 					];
-					if (!isOracle) createArgs.push("--content", content);
+					if (isOracle) createArgs.push("--engine", "prune");
+					else createArgs.push("--content", content);
 					run(process.execPath, createArgs, engineSourceRoot, {
 						silent: runIndex > 0,
 					});
@@ -409,37 +417,12 @@ async function main() {
 					templateRoot,
 				);
 			}
-			for (const command of getProfileVerificationCommands(
-				profile,
-				integrationEngine,
-			)) {
+			for (const command of getProfileVerificationCommands(profile)) {
 				runNpm(npmRunArgs(command), integrationRoot);
 			}
 		}
 
-		if (engines.includes("prune") && engines.includes("assemble")) {
-			const pruneRoot = path.join(tempRoot, "full-payload-ready-prune-1");
-			const mismatch = run(
-				process.execPath,
-				[
-					"scripts/create-template-profile.mjs",
-					"--profile",
-					"full",
-					"--engine",
-					"assemble",
-					"--content",
-					"payload-ready",
-					"--output",
-					pruneRoot,
-					"--force",
-				],
-				templateRoot,
-				{ allowFailure: true, silent: true },
-			);
-			if (mismatch.status === 0) {
-				throw new Error("Cross-engine force replacement did not fail closed.");
-			}
-
+		if (engines.includes("assemble")) {
 			const assemblyRoot = path.join(tempRoot, "full-payload-ready-assemble-1");
 			const contentMismatch = run(
 				process.execPath,
@@ -447,8 +430,6 @@ async function main() {
 					"scripts/create-template-profile.mjs",
 					"--profile",
 					"full",
-					"--engine",
-					"assemble",
 					"--content",
 					"static",
 					"--output",
@@ -461,6 +442,24 @@ async function main() {
 			if (contentMismatch.status === 0) {
 				throw new Error("Cross-content force replacement did not fail closed.");
 			}
+			const profileMismatch = run(
+				process.execPath,
+				[
+					"scripts/create-template-profile.mjs",
+					"--profile",
+					"marketing-only",
+					"--content",
+					"payload-ready",
+					"--output",
+					assemblyRoot,
+					"--force",
+				],
+				templateRoot,
+				{ allowFailure: true, silent: true },
+			);
+			if (profileMismatch.status === 0) {
+				throw new Error("Cross-profile force replacement did not fail closed.");
+			}
 
 			const dryRunRoot = path.join(tempRoot, "assembly-dry-run");
 			const dryRun = run(
@@ -469,8 +468,6 @@ async function main() {
 					"scripts/create-template-profile.mjs",
 					"--profile",
 					"full",
-					"--engine",
-					"assemble",
 					"--content",
 					"static",
 					"--output",
@@ -488,14 +485,11 @@ async function main() {
 			) {
 				throw new Error("Assembly dry-run created its output directory.");
 			}
-			if (!dryRun.stdout.includes("- engine: assemble")) {
-				throw new Error("Assembly dry-run did not report its engine.");
-			}
 			if (!dryRun.stdout.includes("- content: static")) {
 				throw new Error("Assembly dry-run did not report its content mode.");
 			}
 
-			const defaultEngine = run(
+			const defaults = run(
 				process.execPath,
 				[
 					"scripts/create-template-profile.mjs",
@@ -508,10 +502,7 @@ async function main() {
 				templateRoot,
 				{ silent: true },
 			);
-			if (!defaultEngine.stdout.includes("- engine: prune")) {
-				throw new Error("The compatibility default engine is not prune.");
-			}
-			if (!defaultEngine.stdout.includes("- content: payload-ready")) {
+			if (!defaults.stdout.includes("- content: payload-ready")) {
 				throw new Error(
 					"The full profile default content is not payload-ready.",
 				);
@@ -534,25 +525,31 @@ async function main() {
 				throw new Error("Unsupported profile content did not fail closed.");
 			}
 
-			const unsafeInPlace = run(
+			const removedEngineFlag = run(
 				process.execPath,
 				[
 					"scripts/create-template-profile.mjs",
-					"--profile",
-					"full",
 					"--engine",
-					"assemble",
-					"--in-place",
-					"--confirm-instance",
-					"--yes",
+					"prune",
+					"--dry-run",
 				],
 				templateRoot,
 				{ allowFailure: true, silent: true },
 			);
-			if (unsafeInPlace.status === 0) {
-				throw new Error("Assembly in-place activation did not fail closed.");
+			if (removedEngineFlag.status === 0) {
+				throw new Error("Removed --engine flag was still accepted.");
 			}
-			console.log("Engine safety checks passed.");
+
+			const removedInPlaceFlag = run(
+				process.execPath,
+				["scripts/create-template-profile.mjs", "--in-place", "--dry-run"],
+				templateRoot,
+				{ allowFailure: true, silent: true },
+			);
+			if (removedInPlaceFlag.status === 0) {
+				throw new Error("Removed --in-place flag was still accepted.");
+			}
+			console.log("Assembly safety checks passed.");
 		}
 
 		for (const engine of engines) {

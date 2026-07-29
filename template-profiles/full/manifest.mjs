@@ -1,5 +1,5 @@
 export const fullProfile = {
-	schemaVersion: 1,
+	schemaVersion: 2,
 	id: "full",
 	description:
 		"The complete Averlo template with marketing, authentication, dashboard, local developer tools, and the guarded Payload-ready scaffold.",
@@ -8,7 +8,6 @@ export const fullProfile = {
 		supported: ["static", "payload-ready"],
 		default: "payload-ready",
 	},
-	pruneFlags: [],
 	assembly: {
 		surfaces: [
 			"dashboardReferenceEntities",
