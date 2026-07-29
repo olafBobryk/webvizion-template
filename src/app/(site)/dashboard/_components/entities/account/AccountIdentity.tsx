@@ -29,9 +29,11 @@ function AccountIdentityRoot({
 				size={profile ? "xl" : "md"}
 				src={presentation.avatarUrl}
 			/>
-			<div className={clsx("grid min-w-0 flex-1", profile ? "gap-1" : "gap-0")}>
+			<div
+				className={clsx("grid min-w-0 flex-1", profile ? "gap-0.5" : "gap-0")}
+			>
 				{profile ? (
-					<Text as="h2" className="truncate" variant="headingXs">
+					<Text as="h2" className="truncate" variant="support">
 						{presentation.displayLabel}
 					</Text>
 				) : (
@@ -69,11 +71,13 @@ export function AccountIdentitySkeleton({
 			)}
 		>
 			<ProfilePicture loading size={profile ? "xl" : "md"} />
-			<div className={clsx("grid min-w-0 flex-1", profile ? "gap-1" : "gap-0")}>
+			<div
+				className={clsx("grid min-w-0 flex-1", profile ? "gap-0.5" : "gap-0")}
+			>
 				<Text.Skeleton
 					as={profile ? "h2" : "span"}
 					className="max-w-48 truncate"
-					variant={profile ? "headingXs" : "support"}
+					variant="support"
 				>
 					{displayLabel}
 				</Text.Skeleton>

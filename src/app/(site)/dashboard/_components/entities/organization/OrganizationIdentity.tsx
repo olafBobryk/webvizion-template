@@ -34,11 +34,11 @@ function OrganizationIdentityRoot({
 				size={avatarSize}
 				visual={visual}
 			/>
-			<span className={clsx("grid min-w-0 flex-1 gap-0", textClassName)}>
+			<span className={clsx("grid min-w-0 flex-1 gap-0.5", textClassName)}>
 				<Text as="span" className="truncate" variant="support">
 					{presentation.displayLabel}
 				</Text>
-				<Text as="span" className="truncate" tone="muted" variant="caption">
+				<Text as="span" className="truncate" tone="muted" variant="support">
 					{presentation.secondaryLabel}
 				</Text>
 			</span>
@@ -62,7 +62,7 @@ function OrganizationIdentitySkeleton({
 	return (
 		<span className={clsx("flex min-w-0 items-center gap-3.5", className)}>
 			<OrganizationAvatarSkeleton size={avatarSize} visual={visual} />
-			<span className="grid min-w-0 flex-1 gap-0">
+			<span className="grid min-w-0 flex-1 gap-0.5">
 				<Text.Skeleton
 					as="span"
 					className="max-w-48 truncate"
@@ -74,7 +74,7 @@ function OrganizationIdentitySkeleton({
 					as="span"
 					className="max-w-36 truncate"
 					tone="muted"
-					variant="caption"
+					variant="support"
 				>
 					{secondaryLabel}
 				</Text.Skeleton>
