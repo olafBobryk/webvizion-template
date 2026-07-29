@@ -24,7 +24,7 @@ Keep consumer imports stable while allowing cohesive component families to organ
 
 - Full and thin profiles expose deliberate public surfaces. When a full barrel exports files removed by thin-start, thin-start owns a file-backed barrel override that exports only retained capabilities.
 - Profile API review should allow the public family entrypoint for consumers while retaining only the narrow deep imports required by family internals.
-- Full and thin barrel changes must pass profile pruning, thin-start dry-run, and strict API review when the required runtime is available.
+- Full and thin barrel changes must pass profile assembly, thin-start dry-run, and strict API review when the required runtime is available.
 
 ## Input Family
 
@@ -38,11 +38,11 @@ Keep consumer imports stable while allowing cohesive component families to organ
 - `@/components/ui/misc` is the public entrypoint for application, route, domain, composite, and demo consumers of cross-cutting UI components.
 - Files inside `src/components/ui/misc/**`, input implementations, primitives, icons, and overlays may import direct misc owners to preserve dependency direction and avoid barrel cycles.
 - Accordion client/shared modules and the file-preview implementation owned by `FileInput` are private and are not public misc exports.
-- The full barrel exposes the reusable misc inventory. The thin barrel exposes only `Skeleton`, matching the capability retained after thin-start pruning.
+- The full barrel exposes the reusable misc inventory. The thin barrel exposes only `Skeleton`, matching the capability selected by thin-start assembly.
 
 ## Verification
 
 - Search for external imports beneath `@/components/ui/input/`; only input-family implementation files may use them.
 - Search for imports beneath `@/components/ui/misc/`; only misc internals and lower-level UI implementation edges may use them.
 - Search for old filesystem paths after moves.
-- Run lint, profile-pruning verification, thin-start dry-run, component and route skeleton verification, and build/type checks when their local runtimes are available.
+- Run lint, profile-assembly verification, thin-start dry-run, component and route skeleton verification, and build/type checks when their local runtimes are available.

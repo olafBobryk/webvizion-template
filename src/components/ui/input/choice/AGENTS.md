@@ -38,7 +38,7 @@ Shared building blocks and complete radio, checkbox, and toggle-style inputs.
   subpixel scaling.
 - In full-start, checkbox artwork must render through `Icon name="check"` so it
   follows the active icon registry. Thin-start retains its local fallback because
-  that profile intentionally prunes the shared icon subsystem.
+  that profile does not select the shared icon subsystem.
 
 ## How To Use It
 - Use `ChoiceField` as the structural wrapper whenever you need a custom-looking radio, checkbox, or toggle.

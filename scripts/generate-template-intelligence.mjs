@@ -247,7 +247,7 @@ const AGENT_MAP = {
 				"assembly",
 				"profiles",
 				"optional-surfaces",
-				"template-pruning",
+				"project-generation",
 			],
 			paths: [
 				"scripts/create-template-profile.mjs",

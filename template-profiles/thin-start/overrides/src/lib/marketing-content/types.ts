@@ -52,7 +52,7 @@ export type TemplateServiceSurfaceId =
 	| "fullStart"
 	| "intelligence"
 	| "playground"
-	| "prune"
+	| "assembly"
 	| "thinStart";
 
 export type HomeHeroServiceItem = {

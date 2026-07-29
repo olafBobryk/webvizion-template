@@ -56,11 +56,11 @@ const renderedSurfaces = {
 		width: 1280,
 		height: 590,
 	},
-	prune: {
-		name: "Template prune dry run",
-		src: "/template-services/prune.png",
+	assembly: {
+		name: "Positive assembly plan",
+		src: "/template-services/assembly.png",
 		width: 920,
-		height: 1861,
+		height: 1200,
 	},
 	thinStart: {
 		name: "Thin start homepage hero",
@@ -252,7 +252,7 @@ function SurfaceAssemblyGrid({
 							registerHitbox={registerHitbox}
 							services={services}
 							skeleton={skeleton}
-							surfaceIds={["prune"]}
+							surfaceIds={["assembly"]}
 						/>
 					</div>
 					<div className="grid gap-4">

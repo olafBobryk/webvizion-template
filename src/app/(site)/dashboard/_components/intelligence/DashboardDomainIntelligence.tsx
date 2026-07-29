@@ -57,7 +57,7 @@ export function DashboardDomainOverview({
 				<Card.Title>Dashboard domain coverage</Card.Title>
 				<Card.Description>
 					Current registered product areas and the local turns that edited them.
-					Pruned or removed surfaces are excluded automatically.
+					Unselected or removed surfaces are excluded automatically.
 				</Card.Description>
 			</Card.Header>
 			<Card.Content className="grid gap-5">

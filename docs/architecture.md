@@ -22,11 +22,10 @@ Reviewed against [the staging acceptance ledger](./architecture-staging.md) on 2
 - `marketing-only` removes auth/dashboard while retaining the broad shared UI,
   marketing, developer tools, and Payload-ready scaffolding.
 - `thin-start` remains the explicit minimal marketing profile.
-- Profiles compose surface-owned manifests through one command with two engines.
-  `prune` remains the compatibility default. `assemble` positively selects owned
-  core and surface files, then emits a one-way project without template tooling.
-- This dual-engine state is transitional. The accepted gates and removal path
-  for making positive assembly the sole creation model are recorded in
+- Profiles compose surface-owned manifests through one assembly command. The
+  selected profile and content capability determine the owned core and surface
+  files emitted into a one-way project without template tooling.
+- The completed cutover and its verification evidence are recorded in
   `docs/positive-assembly-transition.md`.
 
 ### Shared-source invariant
@@ -192,7 +191,7 @@ Reviewed against [the staging acceptance ledger](./architecture-staging.md) on 2
 - Entity-presentation source lives beneath `src/app/(site)/dashboard` so dashboard assembly ownership remains physically visible.
 - Non-React contracts and factories live beneath dashboard `_lib`, with generic presentation contracts separated from entity-owned domain inputs and presentation definitions. React renderers live beneath dashboard `_components`, with generic presentation components separated from entity-owned components.
 - Surface adapters remain with their route or surface until repeated consumers justify promoting a reusable entity-owned adapter.
-- The profile manifest exposes `dashboard.reference-entities` as the independently pruneable child surface. The small presentation foundation remains dashboard core; dashboard removal removes both, while reference-entity pruning removes its examples, integrations, demonstrations, and policy hooks.
+- The profile manifest exposes `dashboard.reference-entities` as an independently selectable child surface. The small presentation foundation remains dashboard core; profiles without the dashboard exclude both, while profiles without reference entities exclude their examples, integrations, demonstrations, and policy hooks.
 - A small dashboard presentation foundation owns only reusable contracts such as entity nouns, action labels, empty-state copy, field and column metadata, semantic variants, and renderer inputs.
 - Source is split by dependency layer and entity ownership. Each entity folder separates domain inputs, presentation definitions, derived view-model factories, render components, and surface adapters; product-specific roles, routes, labels, icons, permissions, formatting, and variants remain with that entity.
 - Dashboard consumers import directly from owning files. There is no global entity barrel, central `presentationRegistry`, or `presentationRender` object; a narrow entity entrypoint exists only when it deliberately hides private structure from multiple consumers.
@@ -325,7 +324,7 @@ Reviewed against [the staging acceptance ledger](./architecture-staging.md) on 2
 - Color-input verification covers pointer and keyboard operation, validation, form behavior, and portal positioning.
 - Detail-system verification covers responsive property layout across its container breakpoint.
 - Entity-presentation verification covers the example member across identity, table, detail, selector, Command-K, Markdown mention, empty, and loading surfaces and checks that owning definitions are reused rather than copied into routes.
-- Profile verification proves that thin start excludes dashboard presentation and reference-entity capabilities, that dashboard pruning removes both, and that pruning `dashboard.reference-entities` leaves no reference-entity imports, dependencies, demonstrations, policy hooks, or generated output behind.
-- Focused behavioral or structural verification covers authentication entry, invitation acceptance, viable-identity protection, entity deletion, component skeleton parity, and profile pruning. Product-specific Inference Console verifier scripts are not copied.
+- Profile verification proves that thin start excludes dashboard presentation and reference-entity capabilities, that profiles without the dashboard exclude both, and that omitting `dashboard.reference-entities` leaves no reference-entity imports, dependencies, demonstrations, policy hooks, or generated output behind.
+- Focused behavioral or structural verification covers authentication entry, invitation acceptance, viable-identity protection, entity deletion, component skeleton parity, and profile assembly. Product-specific Inference Console verifier scripts are not copied.
 - Mutation verification covers duplicate-submit rejection, dismissal locking, inline field errors, retained values after failure, confirmation `false` behavior, optimistic rollback after returned and thrown failures, explicit refresh-versus-navigation completion, and the absence of navigation-plus-refresh handoffs.
 - Dashboard visual review covers the baseline route matrix in light and dark modes, desktop and mobile shell behavior, Command-K, and deterministic live, loading, empty, error, unavailable, and not-found states.

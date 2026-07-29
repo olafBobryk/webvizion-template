@@ -25,4 +25,4 @@
   header rather than adding table-specific toolbar props or a second Card.
 - A table supports at most one action column, and it must be the final column.
   Mirror `kind` and `responsivePriority` in `DashboardTablePanel.Skeleton` so
-  live and loading layouts prune in the same order.
+  live and loading layouts hide columns in the same order.

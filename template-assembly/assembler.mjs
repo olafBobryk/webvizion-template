@@ -377,7 +377,7 @@ async function writeProjectDocs(destinationRoot, profile, content) {
 			"npm run verify",
 			"```",
 			"",
-			"Template setup and pruning machinery is intentionally not included in this initialized project.",
+			"Template setup and assembly machinery is intentionally not included in this initialized project.",
 			"See `.template-profile.json` for its immutable setup receipt.",
 			"",
 		].join("\n"),

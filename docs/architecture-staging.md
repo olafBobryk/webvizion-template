@@ -95,7 +95,7 @@ Consolidated into [the final architecture](./architecture.md) on 2026-07-20 afte
 - Entity-presentation source lives beneath `src/app/(site)/dashboard` so dashboard assembly ownership remains physically visible.
 - Non-React contracts and factories live beneath dashboard `_lib`, with generic presentation contracts separated from entity-owned domain inputs and presentation definitions. React renderers live beneath dashboard `_components`, with generic presentation components separated from entity-owned components.
 - Surface adapters remain with their route or surface until repeated consumers justify promoting a reusable entity-owned adapter.
-- The authoritative profile manifest exposes `dashboard.reference-entities` as the independently pruneable child surface. The small presentation foundation remains dashboard core; removing the dashboard removes both, while pruning the reference entities removes their examples, integrations, demonstrations, and policy hooks without pretending that dashboard core is optional.
+- The authoritative profile manifest exposes `dashboard.reference-entities` as an independently selectable child surface. The small presentation foundation remains dashboard core; profiles without the dashboard exclude both, while profiles without reference entities exclude their examples, integrations, demonstrations, and policy hooks without pretending that dashboard core is optional.
 - The source is split by ownership and dependency direction instead of reproducing Inference Console's monolithic presentation registry and renderer namespace.
 - A small dashboard presentation foundation owns only reusable contracts such as entity nouns, action labels, empty-state copy, field and column metadata, semantic variants, and renderer inputs.
 - Every entity lives in its own folder and separates its domain input types, presentation definitions, derived view-model factory, render components, and surface adapters. Product-specific roles, routes, labels, icons, permissions, formatting, and variant registries remain with the owning entity.
@@ -160,8 +160,8 @@ Consolidated into [the final architecture](./architecture.md) on 2026-07-20 afte
 - Color-input verification covers pointer and keyboard operation, validation, form behavior, and portal positioning.
 - Detail-system verification covers responsive property layout across its container breakpoint.
 - Entity-presentation verification covers the example member across identity, table, detail, selector, Command-K, Markdown mention, empty, and loading surfaces and checks that owning definitions are reused rather than copied into routes.
-- Profile verification proves that thin start excludes dashboard presentation and reference-entity capabilities, that dashboard pruning removes both, and that pruning `dashboard.reference-entities` leaves no reference-entity imports, dependencies, demonstrations, policy hooks, or generated output behind.
-- Focused behavioral or structural verification covers authentication entry, invitation acceptance, viable-identity protection, entity deletion, component skeleton parity, and profile pruning. Product-specific Inference Console verifier scripts are not copied.
+- Profile verification proves that thin start excludes dashboard presentation and reference-entity capabilities, that profiles without the dashboard exclude both, and that omitting `dashboard.reference-entities` leaves no reference-entity imports, dependencies, demonstrations, policy hooks, or generated output behind.
+- Focused behavioral or structural verification covers authentication entry, invitation acceptance, viable-identity protection, entity deletion, component skeleton parity, and profile assembly. Product-specific Inference Console verifier scripts are not copied.
 
 ## Full-start dashboard role
 
@@ -183,7 +183,7 @@ Consolidated into [the final architecture](./architecture.md) on 2026-07-20 afte
   browser context, validation, pending close lock, and automatic triage.
 - Skip attachments, Supabase, storage uploads, email delivery, and product role
   coupling. Platform Inbox and Reports remain separate peer surfaces under a
-  protected dashboard-pruned shell.
+  protected dashboard-owned shell.
 
 ## Dashboard routes and surface registry
 

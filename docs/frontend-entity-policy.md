@@ -1,8 +1,8 @@
 # Frontend entity policy
 
 This repository keeps entity presentation inside the dashboard product boundary.
-The reference member and record verticals are examples to rename or prune, not a
-global framework that every product must retain.
+The reference member and record verticals are optional examples, not a global
+framework that every product must retain.
 
 <!-- entity-contract:policy-version=1 -->
 <!-- entity-contract:foundation=src/app/(site)/dashboard/_lib/presentation/contracts.ts -->
@@ -16,7 +16,7 @@ global framework that every product must retain.
 <!-- entity-contract:record-domain=src/app/(site)/dashboard/_lib/entities/record/domain.ts -->
 <!-- entity-contract:record-presentation=src/app/(site)/dashboard/_lib/entities/record/presentation.ts -->
 <!-- entity-contract:reference-demo=src/app/(site)/dashboard/reference/entities/page.tsx -->
-<!-- entity-contract:prune-flag=--no-dashboard-reference-entities -->
+<!-- entity-contract:optional-surface=dashboard.reference-entities -->
 
 ## Dependency layers
 
@@ -32,8 +32,8 @@ global framework that every product must retain.
 Keep global users separate from organization memberships. The core account
 vertical owns global identity for Profile and account-menu rendering. The member
 vertical composes adapter-backed users with organization role and joined-at
-facts without duplicating the underlying user. These core verticals remain when
-reference records, member details, and demonstration routes are pruned.
+facts without duplicating the underlying user. These core verticals remain in
+profiles that omit reference records, member details, and demonstration routes.
 
 ## Required surfaces
 

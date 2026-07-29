@@ -259,7 +259,7 @@ async function verifyCreationSafety(templateRoot, tempRoot) {
 
 	for (const args of [
 		["--profile", "app-only", "--content", "payload-ready", "--dry-run"],
-		["--engine", "prune", "--dry-run"],
+		["--engine", "legacy", "--dry-run"],
 		["--in-place", "--dry-run"],
 		["--output", templateRoot],
 	]) {

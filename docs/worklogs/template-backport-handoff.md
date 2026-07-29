@@ -38,7 +38,7 @@ full-start dashboard.
 2. P1-C2 — shared visual system and component convergence; visual gate 1.
 3. P1-C3 — provider-neutral auth and organization lifecycle.
 4. P1-C4 — dashboard shell, registry, commands, and debug state.
-5. P1-C5 — reference entities, policy, pruning, skill, and visual gate 2.
+5. P1-C5 — reference entities, policy, surface removal, skill, and visual gate 2.
 
 One verified commit closes each chunk. P1-C1 through P1-C4 are closed; P1-C5 is
 complete and its closing commit follows this handoff update.
@@ -154,7 +154,7 @@ complete and its closing commit follows this handoff update.
 - `docs/frontend-entity-policy.md` declares machine-verifiable canonical paths,
   ownership layers, mutation rules, skeleton parity, and agent workflow. Nearest
   dashboard policies reinforce those boundaries.
-- `dashboard.reference-entities` is a child prune surface.
+- `dashboard.reference-entities` is a child legacy removal surface.
   `--no-dashboard-reference-entities` removes the examples while retaining
   dashboard core; `--no-dashboard` implicitly removes both. Child-only,
   dashboard-only, and dashboard-plus-no-Payload disposable builds pass.
@@ -234,9 +234,9 @@ complete and its closing commit follows this handoff update.
   the dashboard Markdown result retains its prior `error` field as a compatibility
   fallback. No global mutation-result registry or provider dependency was added.
 - `verify:mutation-policy`, the expanded entity-deletion verifier, the internal
-  async modal demo, nearest policies, child-prune ownership, and thin-profile
+  async modal demo, nearest policies, child-surface ownership, and thin-profile
   exclusions make the contract discoverable and machine-verifiable.
-- Full typecheck/build/smoke and focused mutation/entity/dashboard/prune checks
+- Full typecheck/build/smoke and focused mutation/entity/dashboard/legacy removal checks
   pass. A disposable thin workspace passes strict API review, install,
   typecheck, build, and smoke while excluding dashboard and Markdown-editor
   ownership.

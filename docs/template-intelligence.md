@@ -157,7 +157,7 @@ their route and optional non-route source ownership. The recording view derives
 its area inventory, per-turn chips, and aggregate touched counts at render time;
 the hook event schema does not store a second domain model.
 
-Pruning a dashboard child surface removes its registry entries, so areas with
+Omitting a dashboard child surface excludes its registry entries, so areas with
 no remaining canonical surfaces disappear automatically. Thin-start and
 `--no-dashboard` instances keep Codex turn recording but omit dashboard-domain
 reporting. Historical observations and visual fixtures are never assigned

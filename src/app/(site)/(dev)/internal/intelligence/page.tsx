@@ -1,4 +1,4 @@
-// biome-ignore-all assist/source/organizeImports: The dashboard import must remain inside its prune marker block.
+// biome-ignore-all assist/source/organizeImports: The dashboard import order is part of the surface-owned source contract.
 import { Button } from "@/components/ui/primitives/Button";
 import { Card } from "@/components/ui/primitives/Card";
 import { StatusMessage } from "@/components/ui/primitives/StatusMessage";

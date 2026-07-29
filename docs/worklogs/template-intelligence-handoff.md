@@ -5,7 +5,7 @@ Use $agent-worktree-workflow
 
 ## Active Plan
 
-- Goal: Build a prunable internal intelligence surface backed by a generated local repo index.
+- Goal: Build an optional internal intelligence surface backed by a generated local repo index.
 - Ledger: `docs/worklogs/template-intelligence-ledger.md`
 - Handoff source: `docs/worklogs/template-intelligence-handoff.md`
 - Current chunk: Chunk 16 2D Focus Map Repair
@@ -24,10 +24,10 @@ Use $agent-worktree-workflow
 - Added query state, selected concept details, strongest links, source-type nodes, and mobile-safe horizontal graph canvas.
 - Upgraded the visual graph to a force-graph digital-twin style map after the
   dependency gate was explicitly approved.
-- Added segmented graph modes for Concepts, Task Map, Prune Ownership, and
+- Added segmented graph modes for Concepts, Task Map, Surface Ownership, and
   Content Boundaries.
 - Polished graph readability with mode-aware density settings, Task Map
-  path-family lanes, Prune Ownership ownership lanes, selected-neighborhood
+  path-family lanes, Surface Ownership ownership lanes, selected-neighborhood
   dimming, filtered fit behavior, and center-selected controls.
 - Reworked the intelligence index graph into a first-screen digital-twin canvas
   hero with visible physics, sparse segmented controls, and the content below
@@ -93,7 +93,7 @@ Use $agent-worktree-workflow
 - Added active/placeholder benchmark JSONL logs, recording CLIs, and
   `/internal/intelligence?view=benchmarks`.
 - Added optional user-local Serena setup docs and dry-run script.
-- Added `--no-intelligence` prune support, including the worklog files.
+- Added `--no-intelligence` legacy removal support, including the worklog files.
 - Documented the local artifact and Understand-Anything external boundary.
 
 ## Next Task
@@ -101,7 +101,7 @@ Use $agent-worktree-workflow
 - Start with: Review `/internal/intelligence`, `/internal/intelligence/graph`,
   and the benchmark view, then decide whether to commit and merge/publish.
 - Scope: Source/docs/scripts only; generated `.template-intelligence/`, `.next-*`, `node_modules`, and `tsconfig.next-*` stay untracked.
-- Acceptance criteria: The branch remains buildable, pruneable, previewable, and generated artifacts stay untracked.
+- Acceptance criteria: The branch remains buildable, removable, previewable, and generated artifacts stay untracked.
 - Stop for human if: Broader nav architecture change, Serena repo dependency, generated artifact commit, or secret scanning is proposed.
 
 ## Context
@@ -119,8 +119,8 @@ Use $agent-worktree-workflow
 - Benchmark: `npm run intelligence:record`, `npm run intelligence:record:clear -- --yes`
 - Serena dry run: `npm run intelligence:serena:setup -- --dry-run`
 - Run: `npm run dev:agent`
-- Verify: `npm run lint`, `npm run build`, `npm run prune:template -- --dry-run --no-intelligence`
-- Disposable prune verification used: copy worktree to `/tmp/averlo-next-template-prune-verify`, install, then run `npm run prune:template -- --yes --no-intelligence`
+- Verify: `npm run lint`, `npm run build`, `retired generator command -- --dry-run --no-intelligence`
+- Disposable legacy removal verification used: copy worktree to `/tmp/averlo-next-template-legacy removal-verify`, install, then run `retired generator command -- --yes --no-intelligence`
 
 ## Human Gates
 

@@ -16,8 +16,6 @@ export const assemblyTemplateOnlyPaths = new Set([
 	"docs/positive-assembly-transition.md",
 	"docs/template-content-modes.md",
 	"docs/thin-start-creation-boundary.md",
-	"docs/worklogs/prune-reset-hardening-handoff.md",
-	"docs/worklogs/prune-reset-hardening-ledger.md",
 	"docs/worklogs/template-backport-differences-ledger.md",
 	"docs/worklogs/template-backport-handoff.md",
 	"docs/worklogs/template-profile-setup-friction.md",

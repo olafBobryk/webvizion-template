@@ -2,11 +2,8 @@
 
 Status: research note, not current implementation.
 
-This note belongs under the internal reference surface so it is removed by:
-
-```bash
-npm run prune:template -- --no-reference
-```
+This note belongs under the internal reference surface, so assembly includes it
+only in profiles that select the reference capability.
 
 ## Current implementation
 

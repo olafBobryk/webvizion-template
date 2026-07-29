@@ -4,11 +4,11 @@
 
 The transition completed on 2026-07-29. Positive assembly is the only project
 creation model on the current branch. Users choose a route profile and a
-supported content capability; there is no engine or post-creation prune choice.
+supported content capability; there is no engine or post-creation subtraction step.
 
 The migration was preserved in independently verified commits:
 
-- `5b5a3d7`: final pre-migration prune oracle and code-clarity baseline;
+- `5b5a3d7`: final pre-migration subtractive-generator oracle and code-clarity baseline;
 - `146bfc2`: assembly-owned project state and generated-file renderers;
 - `ab04dd1`: positive static versus Payload-ready selection; and
 - `315a5a1`: assembly-only project creation with schema-v2 receipts.
@@ -28,7 +28,7 @@ The migration was preserved in independently verified commits:
 
 ## Verification evidence
 
-Every migration stage was compared against the immutable prune implementation
+Every migration stage was compared against the immutable legacy implementation
 at `5b5a3d754068671fffe001f08b55464e1e93433e` from a detached worktree.
 
 The parity matrix covered:
@@ -70,11 +70,10 @@ migration and readback are proven.
 
 ## Legacy recovery
 
-Prune remains recoverable from the immutable
-`checkpoint/profile-prune-v1` tag and the matching remote
-`origin/codex/template-profile-modes` branch, both resolving to
-`96248e8a4a1ddbfe3dcb17ffad82322af220ad26`.
+The retired subtractive generator remains recoverable from commit
+`96248e8a4a1ddbfe3dcb17ffad82322af220ad26` and the matching remote
+`origin/codex/template-profile-modes` branch.
 
-Existing initialized projects that retained prune may maintain it at their
-pinned revision. Current project creation and documentation must not restore
-negative prune flags or mix legacy manifests into positive assembly.
+Existing initialized projects that retained the earlier generator may maintain
+it at their pinned revision. Current project creation and documentation must not
+restore exclusion flags or mix legacy manifests into positive assembly.

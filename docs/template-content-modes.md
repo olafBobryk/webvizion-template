@@ -117,19 +117,11 @@ There is no in-place activation path.
 
 ## Legacy initialized projects
 
-Prune is no longer distributed on the current branch. Existing initialized
-projects that still contain their original prune command may maintain it at
-their pinned revision. For historical recovery, use the immutable
-`checkpoint/profile-prune-v1` tag or the matching
-`origin/codex/template-profile-modes` branch.
-
-```bash
-git fetch origin refs/tags/checkpoint/profile-prune-v1
-git worktree add ../averlo-prune-reference checkpoint/profile-prune-v1
-```
-
-Treat that checkout as legacy reference tooling; do not mix its negative flags
-or manifests into the current positive-assembly implementation.
+The retired subtractive generator is not distributed on the current branch.
+Existing initialized projects that still contain it may maintain it at their
+pinned revision. Historical recovery details live in
+`docs/positive-assembly-transition.md`; do not mix legacy exclusion flags or
+manifests into the current positive-assembly implementation.
 
 ## Render contract
 

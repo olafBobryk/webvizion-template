@@ -25,11 +25,11 @@ direction, implementation quality, and ship readiness.
   - `.template-intelligence/agent-map.json`
 - Direct task lookup:
   - `npm run intelligence:query -- dev-server`
-  - topics: `route-architecture`, `ui-primitives`, `prune-behavior`,
+  - topics: `route-architecture`, `ui-primitives`, `legacy-subtraction`,
     `content-modes`, `dev-server`, `new-internal-surface`
 - Graph surface:
   - `/internal/intelligence?view=index`
-  - segmented graph modes: Concepts, Task Map, Prune Ownership, Content
+  - segmented graph modes: Concepts, Task Map, Surface Ownership, Content
     Boundaries
 - Benchmark recording:
   - `npm run intelligence:record`
@@ -56,14 +56,14 @@ direction, implementation quality, and ship readiness.
   `scripts/clear-template-intelligence-benchmark.mjs`
 - Serena setup:
   `scripts/setup-template-intelligence-serena.mjs`
-- Prune ownership:
-  `scripts/prune-template.mjs`
+- Legacy removal ownership:
+  `retired generator script`
 
 ## Review Focus
 
 - Graph modes should be readable at desktop, wide desktop, tablet, and mobile.
 - Task Map should expose concrete starting files, not only high-level concepts.
-- Prune Ownership should match the `--no-intelligence` dry-run and show broader
+- Surface Ownership should match the `--no-intelligence` dry-run and show broader
   optional-surface blast radius.
 - Content Boundaries should keep static, Payload-ready, and Payload-powered
   responsibilities clear.
@@ -75,10 +75,10 @@ direction, implementation quality, and ship readiness.
 ```bash
 npm run intelligence:generate
 npm run intelligence:query -- dev-server
-npm run intelligence:query -- prune
+npm run intelligence:query -- legacy removal
 npm run intelligence:query -- content-modes
 npm run intelligence:serena:setup -- --dry-run
-npm run prune:template -- --dry-run --no-intelligence
+retired generator command -- --dry-run --no-intelligence
 npm run lint
 npm run build
 git diff --check

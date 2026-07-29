@@ -117,9 +117,9 @@ is experienced as time. Those metrics are protected by the geometry gate below.
 - If both primary metrics improve, the result is eligible to keep without using
   the cross-metric tolerance.
 
-## Prune Ownership
+## Surface Ownership
 
-`npm run prune:template -- --no-scroll-performance` removes the grouped scripts,
+`retired generator command -- --no-scroll-performance` removes the grouped scripts,
 benchmark docs, package scripts, and Playwright dependency. It does not own an
 internal route because measurements run against real page paths.
 

@@ -44,11 +44,11 @@ export const fallbackHomePage: MarketingPageDocument = {
 					surfaceIds: ["playground"],
 				},
 				{
-					id: "prune",
-					title: "Prune",
+					id: "assembly",
+					title: "Assembly",
 					description:
-						"Dry-run optional surfaces, then remove them without leaving stale routes or dependencies.",
-					surfaceIds: ["prune"],
+						"Select a profile and content capability, preview the plan, then materialize a verified project.",
+					surfaceIds: ["assembly"],
 				},
 				{
 					id: "thin-start",

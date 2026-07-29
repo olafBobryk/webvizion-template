@@ -14,13 +14,17 @@ assert.ok(
 );
 
 for (const [, key, value] of markers) {
-	if (key === "policy-version" || key === "prune-flag") continue;
+	if (key === "policy-version" || key === "optional-surface") continue;
 	assert.ok(
 		existsSync(resolve(root, value)),
 		`Missing entity policy path ${value}`,
 	);
 }
-assert.ok(policy.includes("--no-dashboard-reference-entities"));
+assert.ok(
+	policy.includes(
+		"<!-- entity-contract:optional-surface=dashboard.reference-entities -->",
+	),
+);
 
 for (const relativePath of [
 	"src/app/(site)/dashboard/_lib/entities/account/presentation.ts",

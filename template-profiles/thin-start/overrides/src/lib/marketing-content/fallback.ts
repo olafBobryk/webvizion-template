@@ -51,7 +51,7 @@ export const fallbackHomePage: MarketingPageDocument = {
 					title: "API review",
 					description:
 						"Reject broad imports, parked references, and profile drift before the workspace ships.",
-					surfaceIds: ["prune"],
+					surfaceIds: ["assembly"],
 				},
 				{
 					id: "full-start",
