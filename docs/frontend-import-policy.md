@@ -40,6 +40,12 @@ Keep consumer imports stable while allowing cohesive component families to organ
 - Accordion client/shared modules and the file-preview implementation owned by `FileInput` are private and are not public misc exports.
 - The full barrel exposes the reusable misc inventory. The thin barrel exposes only `Skeleton`, matching the capability selected by thin-start assembly.
 
+## Markdown Family
+
+- External consumers use `import * as Markdown from "@/components/composites/markdown"` and the `Markdown.Editor`, `Markdown.EditorModalForm`, and `Markdown.Render` members.
+- The full barrel exposes editing and rendering. The thin barrel exposes only `Markdown.Render` and its renderer-related types.
+- Markdown-family internals import direct owners. Do not create a runtime `Markdown` object or a private editor barrel.
+
 ## Verification
 
 - Search for external imports beneath `@/components/ui/input/`; only input-family implementation files may use them.

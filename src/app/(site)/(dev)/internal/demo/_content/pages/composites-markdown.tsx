@@ -1,10 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-	MarkdownEditor,
-	MarkdownRenderer,
-} from "@/components/composites/markdown";
+import * as Markdown from "@/components/composites/markdown";
 import { Chip } from "@/components/ui/misc";
 import { Text } from "@/components/ui/primitives/Text";
 
@@ -110,13 +107,13 @@ export const compositesMarkdownDemoPage: DemoPage = {
 				{
 					id: "markdown-renderer-live",
 					kind: "component",
-					name: "MarkdownRenderer",
+					name: "Markdown.Render",
 					label: "Broad markdown coverage",
-					related: relatedMap.MarkdownRenderer,
+					related: relatedMap["Markdown.Render"],
 					Render() {
 						return (
 							<div className="max-w-3xl">
-								<MarkdownRenderer markdown={MARKDOWN_RENDERER_DEMO_MARKDOWN} />
+								<Markdown.Render markdown={MARKDOWN_RENDERER_DEMO_MARKDOWN} />
 							</div>
 						);
 					},
@@ -124,7 +121,7 @@ export const compositesMarkdownDemoPage: DemoPage = {
 				{
 					id: "markdown-editor-live",
 					kind: "component",
-					name: "MarkdownEditor",
+					name: "Markdown.Editor",
 					label: "Full authoring and synchronized output",
 					Render() {
 						const [markdown, setMarkdown] = useState(
@@ -132,7 +129,7 @@ export const compositesMarkdownDemoPage: DemoPage = {
 						);
 						return (
 							<div className="grid max-w-3xl gap-4">
-								<MarkdownEditor
+								<Markdown.Editor
 									ariaLabel="Project note"
 									defaultMarkdown={markdown}
 									density="default"
@@ -148,7 +145,7 @@ export const compositesMarkdownDemoPage: DemoPage = {
 									<Text as="h4" tone="muted" variant="caption">
 										Rendered output
 									</Text>
-									<MarkdownRenderer
+									<Markdown.Render
 										density="default"
 										markdown={markdown}
 										resolveUserMention={() => (
@@ -164,7 +161,7 @@ export const compositesMarkdownDemoPage: DemoPage = {
 				{
 					id: "markdown-editor-responsive",
 					kind: "component",
-					name: "MarkdownEditor",
+					name: "Markdown.Editor",
 					label: "Compact dashboard authoring and synchronized output",
 					Render() {
 						const [markdown, setMarkdown] = useState(
@@ -172,7 +169,7 @@ export const compositesMarkdownDemoPage: DemoPage = {
 						);
 						return (
 							<div className="grid max-w-3xl gap-4">
-								<MarkdownEditor
+								<Markdown.Editor
 									ariaLabel="Compact project note"
 									defaultMarkdown={markdown}
 									density="compact"
@@ -188,7 +185,7 @@ export const compositesMarkdownDemoPage: DemoPage = {
 									<Text as="h4" tone="muted" variant="caption">
 										Rendered output
 									</Text>
-									<MarkdownRenderer
+									<Markdown.Render
 										density="compact"
 										markdown={markdown}
 										variant="result"
@@ -201,12 +198,12 @@ export const compositesMarkdownDemoPage: DemoPage = {
 				{
 					id: "markdown-editor-invalid-source",
 					kind: "component",
-					name: "MarkdownEditor",
+					name: "Markdown.Editor",
 					label: "Invalid Markdown source mode",
 					Render() {
 						return (
 							<div className="max-w-3xl">
-								<MarkdownEditor
+								<Markdown.Editor
 									ariaLabel="Invalid Markdown source mode"
 									defaultMarkdown={MARKDOWN_EDITOR_INVALID_MARKDOWN}
 								/>
@@ -217,12 +214,12 @@ export const compositesMarkdownDemoPage: DemoPage = {
 				{
 					id: "markdown-editor-disabled",
 					kind: "component",
-					name: "MarkdownEditor",
+					name: "Markdown.Editor",
 					label: "Disabled state",
 					Render() {
 						return (
 							<div className="max-w-3xl">
-								<MarkdownEditor
+								<Markdown.Editor
 									ariaLabel="Disabled Markdown editor"
 									defaultMarkdown={
 										"## Read only\n\nDisabled editors retain their document geometry.\n\n- [x] Completed read-only task"

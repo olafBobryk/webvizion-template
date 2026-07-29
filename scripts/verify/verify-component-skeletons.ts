@@ -196,6 +196,45 @@ const markdownEditorSource = fs.readFileSync(
 	path.join(root, markdownEditorPath),
 	"utf8",
 );
+const markdownIndexPath = "src/components/composites/markdown/index.ts";
+const markdownIndexSource = fs.readFileSync(
+	path.join(root, markdownIndexPath),
+	"utf8",
+);
+const thinMarkdownIndexPath =
+	"template-profiles/thin-start/overrides/src/components/composites/markdown/index.ts";
+const thinMarkdownIndexSource = fs.readFileSync(
+	path.join(root, thinMarkdownIndexPath),
+	"utf8",
+);
+const markdownPublicContracts = [
+	"MarkdownEditor as Editor",
+	"MarkdownEditorModalForm as EditorModalForm",
+	"MarkdownRenderer as Render",
+	"MarkdownContentDensity as ContentDensity",
+];
+for (const contract of markdownPublicContracts) {
+	if (!markdownIndexSource.includes(contract)) {
+		failures.push(
+			`Markdown namespace is missing ${contract} in ${markdownIndexPath}`,
+		);
+	}
+}
+for (const contract of [
+	"MarkdownRenderer as Render",
+	"MarkdownContentDensity as ContentDensity",
+]) {
+	if (!thinMarkdownIndexSource.includes(contract)) {
+		failures.push(
+			`Thin Markdown namespace is missing ${contract} in ${thinMarkdownIndexPath}`,
+		);
+	}
+}
+if (/MarkdownEditor|EditorModalForm/.test(thinMarkdownIndexSource)) {
+	failures.push(
+		`Thin Markdown namespace must not expose editor capabilities in ${thinMarkdownIndexPath}`,
+	);
+}
 const markdownEditorSkeletonContracts = [
 	{
 		label: "density-owned toolbar shell",
@@ -230,14 +269,14 @@ const markdownEditorSkeletonContracts = [
 for (const contract of markdownEditorSkeletonContracts) {
 	if (!markdownEditorSource.includes(contract.token)) {
 		failures.push(
-			`MarkdownEditor.Skeleton is missing its ${contract.label} contract in ${markdownEditorPath}`,
+			`Markdown.Editor.Skeleton is missing its ${contract.label} contract in ${markdownEditorPath}`,
 		);
 	}
 }
 for (const staleToken of ["h-24", "h-32", "h-48", "h-56", "min-h-11"]) {
 	if (markdownEditorSource.includes(staleToken)) {
 		failures.push(
-			`MarkdownEditor.Skeleton retains stale geometry token ${staleToken} in ${markdownEditorPath}`,
+			`Markdown.Editor.Skeleton retains stale geometry token ${staleToken} in ${markdownEditorPath}`,
 		);
 	}
 }

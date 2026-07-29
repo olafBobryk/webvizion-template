@@ -44,13 +44,13 @@ Consolidated into [the final architecture](./architecture.md) on 2026-07-20 afte
 ## Additional shared-component convergence
 
 - Source convergence is additive: matching the pinned Inference Console visual and behavioral contracts must not flatten or remove mature template APIs that remain useful.
-- `MarkdownRenderer` remains a shared full-start and thin-start composite over plain Markdown strings.
+- `Markdown.Render` remains a shared full-start and thin-start composite over plain Markdown strings.
 - Its contract includes default and compact density, design-system-backed GFM rendering, task lists, tables, images, code, quotes, links, validated generic button directives, and optional durable `@[user:<id>]` mention resolution.
 - Default density owns site and document content; dashboard cards and Markdown modals opt into compact density. Renderer and editor use the same `.markdown-content` typography, list, quote, code, table, and rhythm contract for the selected density.
 - Rendered tasks use `ChoiceIndicatorMulti`. The editor preserves Lexical's native inline checklist marker and interaction model while matching that shared indicator's geometry and tokens without injecting React into Lexical-owned DOM.
 - Markdown rendering does not allow arbitrary HTML, JSX, class injection, data registries, or product-specific directives.
 - Underline is the sole narrow exception: the editor stores paired `<u>...</u>` tags and the renderer recognizes only exact pairs without enabling general raw HTML parsing.
-- `MarkdownEditor` is a full-start-only, client-only composite; thin start retains the renderer without the MDXEditor dependency.
+- `Markdown.Editor` is a full-start-only, client-only composite; thin start retains `Markdown.Render` without the MDXEditor dependency.
 - The editor persists only plain Markdown strings and supports responsive rich editing, lossless source mode, automatic source fallback, headings, inline formatting, lists and tasks, links, tables, images, code, dividers, undo and redo, optional mention insertion, generic button-directive editing, and default or compact density.
 - The width-aware editor toolbar composes the template's canonical `Icon`, `Dropdown.Menu`, `Dropdown.Listbox`, and `Button` contracts rather than introducing a duplicate package-owned menu system; editor dialogs remain on the Card-owned modal host.
 - `Dropdown.Menu` owns action-menu keyboard navigation, fixed or absolute positioning, portal support, hover and pinned interaction modes, Button-backed triggers, and active or disabled options.

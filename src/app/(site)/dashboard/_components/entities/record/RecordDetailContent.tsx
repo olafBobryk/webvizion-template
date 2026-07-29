@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { MarkdownRenderer } from "@/components/composites/markdown";
+import * as Markdown from "@/components/composites/markdown";
 import { Icon } from "@/components/ui/icons/Icon";
 import { Button } from "@/components/ui/primitives/Button";
 import { Card } from "@/components/ui/primitives/Card";
@@ -179,7 +179,7 @@ function RecordDetailContentRoot({
 				</Card.Header>
 				<Card.Content>
 					{record.descriptionMarkdown ? (
-						<MarkdownRenderer
+						<Markdown.Render
 							density="compact"
 							markdown={record.descriptionMarkdown}
 							variant="result"
@@ -329,7 +329,7 @@ function RecordDetailContentSkeleton({
 					) : null}
 				</Card.Header>
 				<Card.Content>
-					<MarkdownRenderer.Skeleton
+					<Markdown.Render.Skeleton
 						density="compact"
 						markdown={descriptionMarkdown}
 						variant="result"

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { MarkdownEditor } from "@/components/composites/markdown";
+import * as Markdown from "@/components/composites/markdown";
 import { Icon } from "@/components/ui/icons/Icon";
 import { ModalForm } from "@/components/ui/overlays/modal/ModalForm";
 import {
@@ -161,7 +161,7 @@ function DashboardMarkdownEditorModalForm({
 				}
 				onSubmit={handleSubmit}
 			>
-				<MarkdownEditor
+				<Markdown.Editor
 					ariaLabel={title}
 					defaultMarkdown={initialMarkdown}
 					density="compact"

@@ -1,15 +1,15 @@
 export {
-	MarkdownEditor,
-	type MarkdownEditorDensity,
-	type MarkdownEditorMentionOption,
-	MarkdownEditorModalForm,
-	type MarkdownEditorModalFormProps,
-	type MarkdownEditorProps,
+	MarkdownEditor as Editor,
+	type MarkdownEditorDensity as EditorDensity,
+	type MarkdownEditorMentionOption as EditorMentionOption,
+	MarkdownEditorModalForm as EditorModalForm,
+	type MarkdownEditorModalFormProps as EditorModalFormProps,
+	type MarkdownEditorProps as EditorProps,
 } from "./MarkdownEditor";
 export {
-	type MarkdownButtonDirective,
-	MarkdownRenderer,
-	type MarkdownRendererProps,
-	type MarkdownRendererVariant,
+	type MarkdownButtonDirective as ButtonDirective,
+	MarkdownRenderer as Render,
+	type MarkdownRendererProps as RenderProps,
+	type MarkdownRendererVariant as RenderVariant,
 } from "./MarkdownRenderer";
-export type { MarkdownContentDensity } from "./markdownContent";
+export type { MarkdownContentDensity as ContentDensity } from "./markdownContent";

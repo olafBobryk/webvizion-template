@@ -1,7 +1,7 @@
 export {
-	type MarkdownButtonDirective,
-	MarkdownRenderer,
-	type MarkdownRendererProps,
-	type MarkdownRendererVariant,
+	type MarkdownButtonDirective as ButtonDirective,
+	MarkdownRenderer as Render,
+	type MarkdownRendererProps as RenderProps,
+	type MarkdownRendererVariant as RenderVariant,
 } from "./MarkdownRenderer";
-export type { MarkdownContentDensity } from "./markdownContent";
+export type { MarkdownContentDensity as ContentDensity } from "./markdownContent";

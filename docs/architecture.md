@@ -101,13 +101,13 @@ Reviewed against [the staging acceptance ledger](./architecture-staging.md) on 2
 
 ### Markdown
 
-- `MarkdownRenderer` is shared by full and thin profiles and operates on plain Markdown strings.
+- `Markdown.Render` is shared by full and thin profiles and operates on plain Markdown strings.
 - It supports default and compact density, design-system-backed GFM, task lists, tables, images, code, quotes, links, validated generic button directives, and optional durable `@[user:<id>]` mention resolution.
 - Default density owns site and document content; dashboard cards and Markdown modals opt into compact density. Renderer and editor use the same `.markdown-content` typography, list, quote, code, table, and rhythm contract for the selected density.
 - Rendered tasks use `ChoiceIndicatorMulti`. The editor preserves Lexical's native inline checklist marker and interaction model while matching that shared indicator's geometry and tokens without injecting React into Lexical-owned DOM.
 - It does not accept arbitrary HTML, JSX, class injection, data registries, or product-specific directives.
 - Underline is the sole narrow exception: the editor stores paired `<u>...</u>` tags and the renderer recognizes only exact pairs without enabling general raw HTML parsing.
-- `MarkdownEditor` is a full-start-only client composite; thin start retains the renderer without the MDXEditor dependency.
+- `Markdown.Editor` is a full-start-only client composite; thin start retains `Markdown.Render` without the MDXEditor dependency.
 - The editor persists only plain Markdown strings and provides responsive rich editing, lossless source mode, automatic source fallback, headings, inline formatting, lists and tasks, links, tables, images, code, dividers, undo and redo, optional mention insertion, generic button-directive editing, and default or compact density.
 - Its width-aware toolbar composes the template's canonical `Icon`, `Dropdown.Menu`, `Dropdown.Listbox`, and `Button` contracts rather than a duplicate package-owned menu system; editor dialogs remain on the Card-owned modal host.
 - `Dropdown.Menu` owns action-menu keyboard navigation, fixed or absolute positioning, portal support, hover and pinned modes, Button-backed triggers, and active or disabled options.

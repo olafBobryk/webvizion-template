@@ -9,7 +9,7 @@ Reusable composed components that sit above primitives and inputs but below rout
 - A page needs a copyable higher-level component without inheriting page chrome, data loading, or metadata behavior.
 
 ## Prefer These Files
-- `src/components/composites/markdown/MarkdownRenderer.tsx`: shared markdown renderer that maps plain markdown and the generic `::button[...]` directive onto design-system primitives.
+- `Markdown.Render`, implemented by `src/components/composites/markdown/MarkdownRenderer.tsx`: shared markdown renderer that maps plain markdown and the generic `::button[...]` directive onto design-system primitives.
 
 ## Invariants
 - Keep composites grounded in shared design-system primitives and helpers.
