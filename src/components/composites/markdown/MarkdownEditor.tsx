@@ -7,35 +7,22 @@ import { Skeleton } from "@/components/ui/misc";
 import { ModalForm } from "@/components/ui/overlays/modal/ModalForm";
 import { useModalSubmission } from "@/components/ui/overlays/modal/ModalShell";
 import { Button } from "@/components/ui/primitives/Button";
-import type { MarkdownContentDensity } from "./markdownContent";
+import type { MarkdownEditorProps } from "./editor/types";
 import { useMarkdownToolbarCollapse } from "./markdownToolbarLayout";
+
+export type {
+	MarkdownEditorDensity,
+	MarkdownEditorMentionOption,
+	MarkdownEditorProps,
+} from "./editor/types";
 
 const MarkdownEditorClient = dynamic(
 	() =>
-		import("./MarkdownEditorClient").then(
+		import("./editor/MarkdownEditorClient").then(
 			(module) => module.MarkdownEditorClient,
 		),
 	{ ssr: false },
 );
-
-export type MarkdownEditorDensity = MarkdownContentDensity;
-
-export type MarkdownEditorMentionOption = {
-	id: string;
-	label: string;
-};
-
-export type MarkdownEditorProps = {
-	ariaLabel: string;
-	className?: string;
-	defaultMarkdown?: string;
-	density?: MarkdownEditorDensity;
-	disabled?: boolean;
-	mentions?: MarkdownEditorMentionOption[];
-	name?: string;
-	onChange?: (markdown: string) => void;
-	placeholder?: string;
-};
 
 function MarkdownEditorRoot({
 	ariaLabel,
