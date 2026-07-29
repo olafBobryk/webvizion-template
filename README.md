@@ -10,6 +10,13 @@ surfaces without turning the generated project into a demo-heavy product. Its
 frontend stays source-agnostic: server-side resolvers turn fallback or Payload
 documents into lightweight page, layout, and section props.
 
+## Repository Change History
+
+![Net line delta by commit](docs/assets/commit-line-delta.svg)
+
+Each point is one commit, ordered chronologically. The y-axis is net lines
+changed: additions minus deletions. The chart is refreshed on pushes to `main`.
+
 ## Instant Setup
 
 Template repository: [github.com/olafBobryk/averlo-next-template](https://github.com/olafBobryk/averlo-next-template)

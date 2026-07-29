@@ -135,7 +135,7 @@ export function SpamProtectedFormPreview() {
 
 	return (
 		<Card>
-			<Card.Header className="border-b">
+			<Card.Header>
 				<Card.Title>Working preview</Card.Title>
 				<Card.Description>
 					Submit once to set the cooldown cookie, then submit again within 60

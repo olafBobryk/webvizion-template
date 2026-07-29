@@ -117,7 +117,7 @@ export function DashboardSkeletonReferenceClient({
 			title="Skeleton reference"
 		>
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title>Representative route composition</Card.Title>
 					<Card.Description>
 						The authentication loading boundary delegates to its field and
@@ -135,7 +135,7 @@ export function DashboardSkeletonReferenceClient({
 			</Card>
 
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title>Pinned-source table correspondence</Card.Title>
 					<Card.Description>
 						Identical copy and row geometry for normalized source comparison.
@@ -152,7 +152,7 @@ export function DashboardSkeletonReferenceClient({
 			</Card>
 
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title>Input owners</Card.Title>
 					<Card.Description>
 						Live controls and their namespaced skeletons use the same field,
@@ -267,7 +267,7 @@ export function DashboardSkeletonReferenceClient({
 			</Card>
 
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title>Presentation owners</Card.Title>
 					<Card.Description>
 						Avatar, identity, and detail owners reserve loaded geometry.
@@ -326,7 +326,7 @@ function NormalizedTableLive() {
 			columns={normalizedTableColumns}
 			getRowKey={(row) => row.item}
 			header={
-				<Card.Header className="min-w-0 border-b !grid-cols-1 sm:!grid-cols-[1fr_auto]">
+				<Card.Header className="min-w-0 !grid-cols-1 sm:!grid-cols-[1fr_auto]">
 					<Card.Title className="inline-flex min-w-0 flex-wrap items-center gap-2">
 						<Icon name="list" size="sm" />
 						Budget items
@@ -358,7 +358,7 @@ function NormalizedTableSkeleton() {
 				}),
 			)}
 			header={
-				<Card.Header className="min-w-0 border-b !grid-cols-1 sm:!grid-cols-[1fr_auto]">
+				<Card.Header className="min-w-0 !grid-cols-1 sm:!grid-cols-[1fr_auto]">
 					<Card.Title className="inline-flex min-w-0 flex-wrap items-center gap-2">
 						<Icon name="list" size="sm" />
 						Budget items

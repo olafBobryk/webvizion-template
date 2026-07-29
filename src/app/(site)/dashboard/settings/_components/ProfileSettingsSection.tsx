@@ -67,7 +67,7 @@ function ProfileSettingsSectionRoot() {
 
 	return (
 		<Card className="scroll-mt-24" id="profile">
-			<Card.Header className="border-b">
+			<Card.Header>
 				<Card.Title className="inline-flex items-center gap-2">
 					<Icon className="text-muted-foreground" name="user" size="sm" />
 					Profile
@@ -103,7 +103,7 @@ function ProfileSettingsSectionSkeleton() {
 
 	return (
 		<Card className="scroll-mt-24" id="profile">
-			<Card.Header className="border-b">
+			<Card.Header>
 				<Card.Title className="inline-flex items-center gap-2">
 					<Icon className="text-muted-foreground" name="user" size="sm" />
 					Profile

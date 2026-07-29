@@ -31,7 +31,7 @@ export function DemoShell({ children }: DemoShellProps) {
 			<aside className="w-full shrink-0 lg:w-64">
 				<div className="lg:sticky lg:top-24">
 					<Card size="sm">
-						<Card.Header className="border-b">
+						<Card.Header>
 							<Card.Title>Demo catalog</Card.Title>
 							<Card.Action>
 								<Button href="/internal/demo" size="sm" variant="secondary">

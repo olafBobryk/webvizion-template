@@ -44,7 +44,7 @@ export function OrganizationSurface({
 			title="Organization"
 		>
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title className="inline-flex items-center gap-2">
 						<Icon className="text-muted-foreground" name="building" size="sm" />
 						Organization identity

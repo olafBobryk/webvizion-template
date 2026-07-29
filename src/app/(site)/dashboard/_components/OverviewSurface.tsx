@@ -51,7 +51,7 @@ function OverviewCard({
 }) {
 	return (
 		<Card>
-			<Card.Header className="border-b">
+			<Card.Header>
 				<Card.Title className="inline-flex items-center gap-2">
 					<Icon name={icon} size="sm" />
 					{title}

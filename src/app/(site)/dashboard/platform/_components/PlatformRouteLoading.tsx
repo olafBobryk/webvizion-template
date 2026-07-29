@@ -34,7 +34,7 @@ export function PlatformOverviewLoading() {
 			>
 				{platformDestinations.map((destination) => (
 					<Card key={destination.label}>
-						<Card.Header className="border-b">
+						<Card.Header>
 							<Card.Title className="inline-flex items-center gap-2">
 								<Icon name={destination.icon} size="sm" />
 								{destination.label}
@@ -79,7 +79,7 @@ export function PlatformCollectionLoading({
 						sortable: column.kind !== "action",
 					}))}
 					header={
-						<Card.Header className="min-w-0 border-b">
+						<Card.Header className="min-w-0">
 							<Card.Title className="inline-flex min-w-0 flex-wrap items-center gap-2">
 								{title}
 							</Card.Title>
@@ -153,7 +153,7 @@ export function PlatformDetailLoading({
 					<div className="grid gap-5">
 						{["Content", "Requester context"].map((cardTitle) => (
 							<Card key={cardTitle}>
-								<Card.Header className="border-b">
+								<Card.Header>
 									<Card.Title>
 										<Text.Skeleton variant="headingXs">
 											{cardTitle}
@@ -174,7 +174,7 @@ export function PlatformDetailLoading({
 						))}
 					</div>
 					<Card className="self-start">
-						<Card.Header className="border-b">
+						<Card.Header>
 							<Card.Title>
 								<Text.Skeleton variant="headingXs">Triage</Text.Skeleton>
 							</Card.Title>

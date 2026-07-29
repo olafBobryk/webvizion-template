@@ -51,7 +51,7 @@ export function ComponentCard({
 				.filter(Boolean)
 				.join(" ")}
 		>
-			<Card.Header className="border-b">
+			<Card.Header>
 				<Card.Title as="h3">{name}</Card.Title>
 				<Card.Action>
 					<Text

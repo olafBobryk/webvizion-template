@@ -2,7 +2,7 @@
 
 import clsx from "clsx";
 import { AnimatePresence, motion, type Transition } from "motion/react";
-import { useEffect, useId, useRef, useState } from "react";
+import { type CSSProperties, useEffect, useId, useRef, useState } from "react";
 import Logo from "@/components/branding/Logo";
 import { instantTransition } from "@/components/ui/foundations/motionTiming";
 import { spring } from "@/components/ui/foundations/spring";
@@ -10,7 +10,6 @@ import { IconSwap } from "@/components/ui/helpers/IconSwap";
 import { Icon } from "@/components/ui/icons/Icon";
 import { Button } from "@/components/ui/primitives/Button";
 import { useMotionAllowed } from "@/hooks/useMotionAllowed";
-import { useTailwindBreakpoints } from "@/hooks/useTailwindBreakpoints";
 import {
 	getHeaderSearchGroups,
 	getMenuContentHeight,
@@ -70,25 +69,25 @@ export default function HeaderFull({
 	layout: SiteLayoutDocument["header"];
 	className?: string;
 }) {
-	const { isMd, isLg } = useTailwindBreakpoints();
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [searchQuery, setSearchQuery] = useState("");
 	const headerRef = useRef<HTMLElement>(null);
 	const menuId = useId();
 	const isCompact = isScrolled && !isMenuOpen;
 	const isSearchActive = searchQuery.trim().length > 0;
-	const shouldHideTopNavLinks = isMd || isLg;
-	const areTopNavLinksVisible = !isMenuOpen && !shouldHideTopNavLinks;
-	const shouldUseCappedMenuColumns = isMd || isLg;
+	const areTopNavLinksVisible = !isMenuOpen;
 	const searchGroups = getHeaderSearchGroups(searchQuery, layout.searchGroups);
-	const menuColumnCount = shouldUseCappedMenuColumns
-		? HEADER_MENU_CAPPED_COLUMNS
-		: HEADER_MENU_DEFAULT_COLUMNS;
 	const activeMenuGroups = isSearchActive ? searchGroups : layout.menuGroups;
-	const menuContentHeight = getMenuContentHeight(
-		activeMenuGroups,
-		menuColumnCount,
-	);
+	const menuContentHeightStyle = {
+		"--header-menu-content-height-lg": `${getMenuContentHeight(
+			activeMenuGroups,
+			HEADER_MENU_CAPPED_COLUMNS,
+		)}px`,
+		"--header-menu-content-height-xl": `${getMenuContentHeight(
+			activeMenuGroups,
+			HEADER_MENU_DEFAULT_COLUMNS,
+		)}px`,
+	} as CSSProperties;
 	const showHeaderSurface = isScrolled || isMenuOpen;
 	const motionAllowed = useMotionAllowed(true);
 	const headerTransition: Transition = motionAllowed
@@ -194,7 +193,7 @@ export default function HeaderFull({
 							aria-label="Primary navigation"
 						>
 							<motion.div
-								className="flex items-center justify-center gap-10 overflow-hidden py-2"
+								className="hidden items-center justify-center gap-10 overflow-hidden py-2 xl:flex"
 								initial={false}
 								animate={{
 									width: areTopNavLinksVisible ? "auto" : 0,
@@ -293,24 +292,27 @@ export default function HeaderFull({
 								}}
 							>
 								<motion.div
-									className="relative"
+									className="relative [--header-menu-content-height:var(--header-menu-content-height-lg)] xl:[--header-menu-content-height:var(--header-menu-content-height-xl)]"
 									initial={false}
-									animate={{ height: menuContentHeight }}
+									animate={{ height: "var(--header-menu-content-height)" }}
+									style={menuContentHeightStyle}
 									transition={menuTransition}
 								>
 									<div className="absolute inset-0">
 										{isSearchActive ? (
 											<HeaderSearchResults
+												className="lg:grid-cols-5 xl:grid-cols-6"
 												groups={searchGroups}
 												onNavigate={closeMenu}
-												columnCount={menuColumnCount}
+												columnCount={HEADER_MENU_DEFAULT_COLUMNS}
 												noResultsText={layout.search.noResultsText}
 											/>
 										) : (
 											<HeaderMenuGrid
+												className="lg:grid-cols-5 xl:grid-cols-6"
 												groups={layout.menuGroups}
 												onNavigate={closeMenu}
-												columnCount={menuColumnCount}
+												columnCount={HEADER_MENU_DEFAULT_COLUMNS}
 											/>
 										)}
 									</div>

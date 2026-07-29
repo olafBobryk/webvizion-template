@@ -80,7 +80,7 @@ export function CardHeader({
 	return (
 		<div
 			className={clsx(
-				"grid auto-rows-min items-start gap-1 px-4 group-data-[size=sm]/card:px-3 has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-4 group-data-[size=sm]/card:[.border-b]:pb-3",
+				"grid auto-rows-min items-start gap-1 border-b px-4 pb-4 group-data-[size=sm]/card:px-3 group-data-[size=sm]/card:pb-3 has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto]",
 				getAccentClassName(accent, "slot", {
 					solidBackground: solidAccentBackground,
 				}),

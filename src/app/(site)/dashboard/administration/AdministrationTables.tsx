@@ -110,7 +110,7 @@ export function PendingInvitationsTable({
 			}
 			getRowKey={(invitation) => invitation.id}
 			header={
-				<Card.Header className="min-w-0 border-b">
+				<Card.Header className="min-w-0">
 					<Card.Title className="inline-flex min-w-0 items-center gap-2">
 						<Icon name="mail" size="sm" />
 						Pending invitations
@@ -294,7 +294,7 @@ export function MembersTable({
 			]}
 			getRowKey={(member) => member.id}
 			header={
-				<Card.Header className="min-w-0 border-b">
+				<Card.Header className="min-w-0">
 					<Card.Title className="inline-flex min-w-0 items-center gap-2">
 						<Icon name="users" size="sm" />
 						Members

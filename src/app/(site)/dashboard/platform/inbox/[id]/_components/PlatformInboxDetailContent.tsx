@@ -100,7 +100,7 @@ export function PlatformInboxDetailContent({
 			<div className="grid min-w-0 gap-5 xl:grid-cols-[minmax(0,1fr)_22rem]">
 				<div className="grid min-w-0 gap-5">
 					<Card>
-						<Card.Header className="border-b">
+						<Card.Header>
 							<Card.Title>Support message</Card.Title>
 							<Card.Description>
 								Submitted from the authenticated dashboard support form.
@@ -116,7 +116,7 @@ export function PlatformInboxDetailContent({
 						</Card.Content>
 					</Card>
 					<Card>
-						<Card.Header className="border-b">
+						<Card.Header>
 							<Card.Title>Requester context</Card.Title>
 							<Card.Description>
 								Identity and organization facts resolved by the server.
@@ -149,7 +149,7 @@ export function PlatformInboxDetailContent({
 					</Card>
 				</div>
 				<Card as="form" className="self-start" onSubmit={handleSubmit}>
-					<Card.Header className="border-b">
+					<Card.Header>
 						<Card.Title>Inbox triage</Card.Title>
 						<Card.Description>
 							Add an internal note and update the fixture status.

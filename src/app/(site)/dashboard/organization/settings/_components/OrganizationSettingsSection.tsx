@@ -92,7 +92,7 @@ function OrganizationSettingsSectionRoot({
 	return (
 		<>
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title className="inline-flex items-center gap-2">
 						<Icon className="text-muted-foreground" name="building" size="sm" />
 						Organization identity
@@ -136,7 +136,7 @@ function OrganizationSettingsSectionRoot({
 			</Card>
 
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title className="inline-flex items-center gap-2">
 						<Icon className="text-muted-foreground" name="users" size="sm" />
 						People and access
@@ -191,7 +191,7 @@ export function OrganizationSettingsSectionSkeleton() {
 	return (
 		<>
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title className="inline-flex items-center gap-2">
 						<Icon className="text-muted-foreground" name="building" size="sm" />
 						Organization identity
@@ -224,7 +224,7 @@ export function OrganizationSettingsSectionSkeleton() {
 			</Card>
 
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title className="inline-flex items-center gap-2">
 						<Icon className="text-muted-foreground" name="users" size="sm" />
 						People and access

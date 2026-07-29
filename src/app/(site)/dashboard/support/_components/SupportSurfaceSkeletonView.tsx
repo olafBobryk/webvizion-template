@@ -12,7 +12,7 @@ export function SupportSurfaceSkeletonView() {
 			<DashboardSection contentClassName="grid gap-5" title="Support">
 				{["Email support", "Contact support"].map((title, index) => (
 					<Card key={title}>
-						<Card.Header className="border-b">
+						<Card.Header>
 							<Card.Title>
 								<Text.Skeleton variant="headingXs">{title}</Text.Skeleton>
 							</Card.Title>

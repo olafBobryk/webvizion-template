@@ -74,7 +74,7 @@ export function OrganizationMemberSurface({
 				ownerId={`dashboard.member.${member.id}`}
 			/>
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title className="flex items-center gap-2">
 						<Icon className="text-muted-foreground" name="user" size="sm" />
 						Member details
@@ -112,7 +112,7 @@ export function OrganizationMemberSurface({
 			</Card>
 
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title className="flex items-center gap-2">
 						<Icon className="text-muted-foreground" name="shield" size="sm" />
 						Role and permissions
@@ -196,7 +196,7 @@ export function OrganizationMemberSurfaceSkeleton() {
 				}
 			>
 				<Card>
-					<Card.Header className="border-b">
+					<Card.Header>
 						<Card.Title className="flex items-center gap-2">
 							<Icon className="text-muted-foreground" name="user" size="sm" />
 							Member details
@@ -233,7 +233,7 @@ export function OrganizationMemberSurfaceSkeleton() {
 					</Card.Content>
 				</Card>
 				<Card>
-					<Card.Header className="border-b">
+					<Card.Header>
 						<Card.Title className="flex items-center gap-2">
 							<Icon className="text-muted-foreground" name="shield" size="sm" />
 							Role and permissions

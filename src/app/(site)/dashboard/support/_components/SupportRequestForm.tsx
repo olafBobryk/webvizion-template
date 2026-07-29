@@ -97,7 +97,7 @@ export function SupportRequestForm() {
 
 	return (
 		<Card as="form" onSubmit={handleSubmit}>
-			<Card.Header className="border-b">
+			<Card.Header>
 				<Card.Title>Contact support</Card.Title>
 				<Card.Description>
 					Save a fixture-only request for the platform team to review.

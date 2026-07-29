@@ -99,7 +99,7 @@ function QaCard({
 }) {
 	return (
 		<Card>
-			<Card.Header className="border-b">
+			<Card.Header>
 				<div className="flex flex-wrap items-center justify-between gap-3">
 					<Card.Title>{title}</Card.Title>
 					<code className="rounded-md bg-foreground/5 px-3 py-1.5 text-xs text-foreground">

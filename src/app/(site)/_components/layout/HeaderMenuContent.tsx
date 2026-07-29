@@ -189,8 +189,10 @@ export function HeaderSearchResults({
 	groups,
 	onNavigate,
 	columnCount,
+	className,
 	noResultsText,
 }: {
+	className?: string;
 	groups: readonly SiteMenuGroup[];
 	onNavigate: () => void;
 	columnCount: number;
@@ -202,6 +204,7 @@ export function HeaderSearchResults({
 
 	return (
 		<HeaderMenuGrid
+			className={className}
 			groups={groups}
 			onNavigate={onNavigate}
 			columnCount={columnCount}

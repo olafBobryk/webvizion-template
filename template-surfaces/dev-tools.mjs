@@ -62,6 +62,7 @@ export const devToolSurfaces = {
 	},
 	playground: {
 		ownedPaths: ["src/app/(site)/(dev)/internal/playground"],
+		packageDependencies: ["recharts"],
 	},
 	dictionary: {
 		ownedPaths: ["src/app/(site)/(dev)/internal/dictionary"],

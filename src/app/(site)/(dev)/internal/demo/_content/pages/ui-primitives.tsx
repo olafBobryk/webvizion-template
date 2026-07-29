@@ -244,7 +244,7 @@ export const uiPrimitivesDemoPage: DemoPage = {
 					Render() {
 						return (
 							<Card>
-								<CardHeader className="border-b">
+								<CardHeader>
 									<div className="flex items-center gap-2">
 										<Icon
 											name="cards"

@@ -89,7 +89,7 @@ export function ModalHeader({
 		closeDisabled || Boolean(modalContext?.isSubmitting);
 
 	return (
-		<CardHeader className={clsx("border-b px-5 py-4", className)} {...props}>
+		<CardHeader className={clsx("px-5 py-4", className)} {...props}>
 			<ModalHeaderContext.Provider value={{ leadingIcon }}>
 				{children}
 			</ModalHeaderContext.Provider>

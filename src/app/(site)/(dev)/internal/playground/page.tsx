@@ -5,6 +5,19 @@ import { InternalPage, InternalPageHeader } from "../_components/InternalPage";
 
 const playgroundGroups = [
 	{
+		id: "repository",
+		title: "Repository",
+		description: "Local tools for inspecting this template's own history.",
+		links: [
+			{
+				href: "/internal/playground/commit-history",
+				title: "Commit History",
+				description:
+					"Explore per-commit line deltas and cumulative net lines with a linked date navigator.",
+			},
+		],
+	},
+	{
 		id: "motion",
 		title: "Motion",
 		description: "Loose prototypes for reveal, scroll, and choreography ideas.",

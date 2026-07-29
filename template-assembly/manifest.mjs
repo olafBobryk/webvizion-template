@@ -13,9 +13,12 @@ export const assemblyGeneratedPaths = new Set([
 export const assemblyTemplateOnlyPaths = new Set([
 	"scripts/create-template-profile.mjs",
 	"scripts/dev-thin.mjs",
+	"scripts/generate-commit-line-delta.mjs",
 	"scripts/generate-template-assembly-inventory.mjs",
 	"scripts/review-thin-start-api.mjs",
 	"scripts/verify/verify-template-profiles.mjs",
+	".github/workflows/update-commit-line-delta.yml",
+	"docs/assets/commit-line-delta.svg",
 ]);
 
 export const assemblyTemplateOnlyRoots = [
@@ -41,6 +44,7 @@ export const assemblyCoreRoots = [
 export const assemblyTemplateOnlyScripts = new Set([
 	"create:project",
 	"dev:thin",
+	"chart:commit-line-delta",
 	"review:thin-start-api",
 	"verify:profiles",
 ]);

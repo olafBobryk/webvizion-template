@@ -40,7 +40,7 @@ export function AuthScreen({
 	const status = getMessage(message);
 	return (
 		<Card className="w-full">
-			<Card.Header className="border-b">
+			<Card.Header>
 				<Card.Title as="h1" className="inline-flex items-center gap-2">
 					<Icon className="text-muted-foreground" name={icon} size="sm" />
 					{title}

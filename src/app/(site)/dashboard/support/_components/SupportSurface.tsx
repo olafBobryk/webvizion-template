@@ -16,7 +16,7 @@ export function SupportSurface({
 	return (
 		<DashboardSection contentClassName="grid gap-5" title="Support">
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title className="inline-flex items-center gap-2">
 						<Icon className="text-muted-foreground" name="mail" size="sm" />
 						Email support

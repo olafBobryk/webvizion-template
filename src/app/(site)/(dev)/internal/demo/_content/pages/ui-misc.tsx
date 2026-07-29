@@ -36,7 +36,7 @@ import type { DemoPage } from "../types";
 function ShareReportDemo({ skeleton = false }: { skeleton?: boolean }) {
 	return (
 		<Card size="sm">
-			<Card.Header className="border-b">
+			<Card.Header>
 				{skeleton ? (
 					<>
 						<Text.Skeleton as="h3" variant="headingSm">

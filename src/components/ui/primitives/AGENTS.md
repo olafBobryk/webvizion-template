@@ -71,6 +71,8 @@ Cross-cutting selection rules live in
 	- Opaque `Panel` backgrounds publish their resolved token through the inherited `--ui-surface-color` variable. Transparent panels inherit the nearest surface. Descendants that must pre-compose opaque color treatments should consume that variable rather than assuming the page background.
   - Use `Card` only when its structured slots describe the content.
   - Use `CardHeader`, `CardContent`, and `CardFooter` under a real `Card` root; do not imitate Card data attributes on `Panel`.
+	- `CardHeader` owns its standard bottom divider; callers should not add
+	  `border-b` to ordinary card headers.
   - Use semantic `accent` values from `accent.ts`; do not pass product-specific color strings into shared surfaces.
   - Use `Divider` instead of ad hoc border divs when separating content groups or labeling a horizontal break.
   - Labeled `Divider` rules must terminate at the label's padded box. Do not paint `bg-background` behind the label; the divider must remain neutral on Card, Panel, modal, and page surfaces.

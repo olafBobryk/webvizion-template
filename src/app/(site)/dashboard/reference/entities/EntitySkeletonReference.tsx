@@ -21,7 +21,7 @@ import { recordColumnDefinitions } from "../../_lib/entities/record/presentation
 export function AccountSkeletonReferenceCard() {
 	return (
 		<Card>
-			<Card.Header className="border-b">
+			<Card.Header>
 				<Card.Title>Account presentation · skeleton</Card.Title>
 				<Card.Description>
 					Global identity remains separate from organization membership facts.
@@ -38,7 +38,7 @@ export function AccountSkeletonReferenceCard() {
 export function MemberSkeletonReferenceCard() {
 	return (
 		<Card>
-			<Card.Header className="border-b">
+			<Card.Header>
 				<Card.Title>Member presentation · skeleton</Card.Title>
 				<Card.Description>
 					The owning components reserve the same avatar, text, border, and gap
@@ -61,7 +61,7 @@ export function MemberSkeletonReferenceCard() {
 export function OrganizationSkeletonReferenceCard() {
 	return (
 		<Card>
-			<Card.Header className="border-b">
+			<Card.Header>
 				<Card.Title>Organization presentation · skeleton</Card.Title>
 				<Card.Description>
 					The owning namespace preserves the 40px avatar and compact text
@@ -130,7 +130,7 @@ function RecordTableSkeleton({
 				},
 			]}
 			header={
-				<Card.Header className="min-w-0 border-b">
+				<Card.Header className="min-w-0">
 					<Card.Title className="inline-flex min-w-0 flex-wrap items-center gap-2">
 						{title}
 					</Card.Title>
@@ -246,7 +246,7 @@ export function DashboardEntityReferenceLoadingComposition() {
 		>
 			<div className="grid gap-5 xl:grid-cols-2">
 				<Card>
-					<Card.Header className="border-b">
+					<Card.Header>
 						<Card.Title>Account presentation · live</Card.Title>
 						<Card.Description>
 							Profile and account-menu identity share one global account model.
@@ -270,7 +270,7 @@ export function DashboardEntityReferenceLoadingComposition() {
 
 			<div className="grid gap-5 xl:grid-cols-2">
 				<Card>
-					<Card.Header className="border-b">
+					<Card.Header>
 						<Card.Title>Member presentation · live</Card.Title>
 						<Card.Description>
 							Profile, compact, actor, avatar list, mention, and role all
@@ -307,7 +307,7 @@ export function DashboardEntityReferenceLoadingComposition() {
 
 			<div className="grid gap-5 xl:grid-cols-2">
 				<Card>
-					<Card.Header className="border-b">
+					<Card.Header>
 						<Card.Title>Organization presentation · live</Card.Title>
 						<Card.Description>
 							The switcher and chooser share one compact identity across
@@ -362,7 +362,7 @@ export function DashboardEntityReferenceLoadingComposition() {
 			</div>
 
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title className="inline-flex items-center gap-2">
 						<Icon name="cards" size="sm" />
 						Copyable ownership pattern

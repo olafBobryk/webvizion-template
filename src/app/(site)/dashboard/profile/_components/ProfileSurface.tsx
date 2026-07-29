@@ -40,7 +40,7 @@ export function ProfileSurface({
 			title="Profile"
 		>
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title className="inline-flex items-center gap-2">
 						<Icon className="text-muted-foreground" name="user" size="sm" />
 						Account identity
@@ -68,7 +68,7 @@ export function ProfileSurface({
 				</Card.Content>
 			</Card>
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title className="inline-flex items-center gap-2">
 						<Icon className="text-muted-foreground" name="shield" size="sm" />
 						Organization access
@@ -131,7 +131,7 @@ export function ProfileSurfaceSkeleton() {
 				title="Profile"
 			>
 				<Card>
-					<Card.Header className="border-b">
+					<Card.Header>
 						<Card.Title className="inline-flex items-center gap-2">
 							<Icon className="text-muted-foreground" name="user" size="sm" />
 							Account identity
@@ -158,7 +158,7 @@ export function ProfileSurfaceSkeleton() {
 					</Card.Content>
 				</Card>
 				<Card>
-					<Card.Header className="border-b">
+					<Card.Header>
 						<Card.Title className="inline-flex items-center gap-2">
 							<Icon className="text-muted-foreground" name="shield" size="sm" />
 							Organization access

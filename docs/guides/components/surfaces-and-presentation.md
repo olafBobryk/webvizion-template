@@ -22,6 +22,8 @@ feature code.
 - `Panel` owns non-semantic surfaces, generic groups, and overlay roots.
 - `Card` is used only when its structured slots describe the content. Card slots
   belong under a real Card root; do not imitate its data attributes on Panel.
+- `Card.Header` owns its standard bottom divider and spacing. Do not add a
+  caller-local `border-b` to ordinary card headers.
 - `Section.Background` owns decorative image, gradient, or node media behind
   normal section flow. Mark it interactive only when it contains real controls.
 - `Divider` replaces ad hoc border elements and owns labeled-rule geometry.

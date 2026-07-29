@@ -20,7 +20,7 @@ export default function SpamProtectedFormDictionaryPage() {
 			<SpamProtectedFormPreview />
 
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title>Implementation notes</Card.Title>
 				</Card.Header>
 				<Card.Content className="grid gap-5">

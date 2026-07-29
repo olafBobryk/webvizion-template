@@ -53,7 +53,7 @@ export function DashboardDomainOverview({
 
 	return (
 		<Card>
-			<Card.Header className="border-b">
+			<Card.Header>
 				<Card.Title>Dashboard domain coverage</Card.Title>
 				<Card.Description>
 					Current registered product areas and the local turns that edited them.

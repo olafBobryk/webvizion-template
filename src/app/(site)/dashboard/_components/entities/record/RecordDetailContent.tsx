@@ -73,7 +73,7 @@ function RecordDetailContentRoot({
 	return (
 		<div className="grid gap-5">
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title>Record details</Card.Title>
 					<Card.Description>
 						Field metadata comes from the record-owned presentation definition.
@@ -140,7 +140,7 @@ function RecordDetailContentRoot({
 			</Card>
 
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title>Description</Card.Title>
 					<Card.Description>
 						Rendered with the shared Markdown renderer and edited in a focused
@@ -258,7 +258,7 @@ function RecordDetailContentSkeleton({
 	return (
 		<div className="grid gap-5">
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title>Record details</Card.Title>
 					<Card.Description>
 						Field metadata comes from the record-owned presentation definition.
@@ -316,7 +316,7 @@ function RecordDetailContentSkeleton({
 			</Card>
 
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title>Description</Card.Title>
 					<Card.Description>
 						Rendered with the shared Markdown renderer and edited in a focused

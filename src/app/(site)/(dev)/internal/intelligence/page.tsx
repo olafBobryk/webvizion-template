@@ -71,7 +71,7 @@ function TurnCard({ turn }: { turn: CodexTurnSummary }) {
 
 	return (
 		<Card size="sm">
-			<Card.Header className="border-b">
+			<Card.Header>
 				<div className="flex flex-wrap items-start justify-between gap-2">
 					<div className="grid gap-1">
 						<Card.Title>{turn.observedPath}</Card.Title>
@@ -219,7 +219,7 @@ function ReadyState({
 			</div>
 
 			<Card className="mx-auto max-w-3xl text-center">
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title>Codex turn recording</Card.Title>
 					<Card.Description>
 						Inspect automatically observed local sessions and turns without
@@ -297,7 +297,7 @@ function BenchmarkState({
 					<div className="grid gap-4 lg:grid-cols-2">
 						{exampleRuns.map((run) => (
 							<Card key={`${run.taskId}:${run.strategy}`} size="sm">
-								<Card.Header className="border-b">
+								<Card.Header>
 									<Card.Title>{run.strategy}</Card.Title>
 									<Card.Description>{run.taskName}</Card.Description>
 								</Card.Header>
@@ -385,7 +385,7 @@ function BenchmarkState({
 					)}
 
 					<Card>
-						<Card.Header className="border-b">
+						<Card.Header>
 							<Card.Title>Curated legacy observations</Card.Title>
 							<Card.Description>
 								Historical self-reported rows are preserved for review and never

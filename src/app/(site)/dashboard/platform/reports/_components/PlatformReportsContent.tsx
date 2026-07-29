@@ -183,7 +183,7 @@ export function PlatformReportsContent({
 				}
 				getRowKey={(report) => report.id}
 				header={
-					<Card.Header className="min-w-0 border-b">
+					<Card.Header className="min-w-0">
 						<Card.Title className="inline-flex min-w-0 flex-wrap items-center gap-2">
 							Product reports
 						</Card.Title>

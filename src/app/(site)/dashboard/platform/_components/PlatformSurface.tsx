@@ -12,7 +12,7 @@ export function PlatformSurface() {
 			title="Platform"
 		>
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title className="inline-flex items-center gap-2">
 						<Icon name="mail" size="sm" />
 						Inbox
@@ -32,7 +32,7 @@ export function PlatformSurface() {
 				</Card.Content>
 			</Card>
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title className="inline-flex items-center gap-2">
 						<Icon name="flag" size="sm" />
 						Reports

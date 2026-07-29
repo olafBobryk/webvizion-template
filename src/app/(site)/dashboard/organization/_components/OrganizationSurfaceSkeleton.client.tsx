@@ -34,7 +34,7 @@ export function OrganizationSurfaceSkeletonClient() {
 				title="Organization"
 			>
 				<Card>
-					<Card.Header className="border-b">
+					<Card.Header>
 						<Card.Title className="inline-flex items-center gap-2">
 							<Icon
 								className="text-muted-foreground"

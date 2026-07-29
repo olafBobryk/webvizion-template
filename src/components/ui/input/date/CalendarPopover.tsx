@@ -324,7 +324,7 @@ export function CalendarPopover({
 			shadow="none"
 		>
 			<Card className="w-full" shadow="lg" size="sm">
-				<Card.Header className="border-b">
+				<Card.Header>
 					<div className="flex w-full items-center justify-between gap-2">
 						<button
 							aria-label="Previous month"

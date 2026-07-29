@@ -39,7 +39,7 @@ function SecuritySettingsSectionRoot({
 
 	return (
 		<Card className="scroll-mt-24" id="security-sign-in">
-			<Card.Header className="border-b">
+			<Card.Header>
 				<Card.Title className="inline-flex items-center gap-2">
 					<Icon className="text-muted-foreground" name="lock" size="sm" />
 					Security and sign-in
@@ -101,7 +101,7 @@ function SecuritySettingsSectionSkeleton({
 
 	return (
 		<Card className="scroll-mt-24" id="security-sign-in">
-			<Card.Header className="border-b">
+			<Card.Header>
 				<Card.Title className="inline-flex items-center gap-2">
 					<Icon className="text-muted-foreground" name="lock" size="sm" />
 					Security and sign-in

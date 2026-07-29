@@ -72,7 +72,7 @@ export default function DictionaryIndexPage() {
 						<div className="grid gap-4 lg:grid-cols-2">
 							{family.entries.map((entry) => (
 								<Card key={entry.manifest.id}>
-									<Card.Header className="border-b">
+									<Card.Header>
 										<Card.Title as="h3">{entry.manifest.title}</Card.Title>
 										<Card.Description>
 											{entry.manifest.summary}

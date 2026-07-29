@@ -18,6 +18,7 @@
 		"intelligence:serena:stop": "node scripts/template-intelligence-serena-service.mjs stop",
 		"orchestration": "node scripts/orchestration.mjs",
 		"orchestration-state": "node scripts/orchestration.mjs state",
+		"chart:commit-line-delta": "node scripts/generate-commit-line-delta.mjs",
 		"predev": "npm run intelligence:ensure",
 		"predev:preview": "npm run intelligence:ensure",
 		"predev:agent": "npm run intelligence:ensure",
@@ -92,6 +93,7 @@
 		"react-markdown": "^10.1.0",
 		"react-phone-number-input": "^3.4.14",
 		"react-responsive": "^10.0.1",
+		"recharts": "^3.10.1",
 		"remark-gfm": "^4.0.1",
 		"sharp": "0.35.3",
 		"sonner": "^2.0.7"

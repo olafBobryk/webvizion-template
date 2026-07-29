@@ -54,7 +54,7 @@ export function EntityReferenceSurface({
 		>
 			<div className="grid gap-5 xl:grid-cols-2">
 				<Card>
-					<Card.Header className="border-b">
+					<Card.Header>
 						<Card.Title>Account presentation · live</Card.Title>
 						<Card.Description>
 							Profile and account-menu identity share one global account model.
@@ -70,7 +70,7 @@ export function EntityReferenceSurface({
 
 			<div className="grid gap-5 xl:grid-cols-2">
 				<Card>
-					<Card.Header className="border-b">
+					<Card.Header>
 						<Card.Title>Member presentation · live</Card.Title>
 						<Card.Description>
 							Profile, compact, actor, avatar list, mention, and role all
@@ -121,7 +121,7 @@ export function EntityReferenceSurface({
 
 			<div className="grid gap-5 xl:grid-cols-2">
 				<Card>
-					<Card.Header className="border-b">
+					<Card.Header>
 						<Card.Title>Organization presentation · live</Card.Title>
 						<Card.Description>
 							The switcher and chooser share one compact identity across
@@ -195,7 +195,7 @@ export function EntityReferenceSurface({
 					getRowHref={(record) => getRecordPresentation(record).href}
 					getRowKey={(record) => record.id}
 					header={
-						<Card.Header className="min-w-0 border-b">
+						<Card.Header className="min-w-0">
 							<Card.Title className="inline-flex min-w-0 flex-wrap items-center gap-2">
 								Responsive record table · live
 							</Card.Title>
@@ -233,7 +233,7 @@ export function EntityReferenceSurface({
 			</div>
 
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title className="inline-flex items-center gap-2">
 						<Icon name="cards" size="sm" />
 						Copyable ownership pattern

@@ -18,7 +18,7 @@ export default function RiveLogoRevealDictionaryPage() {
 			/>
 
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title>Preview</Card.Title>
 					<Card.Description>
 						The mount contract is live; the final `.riv` asset remains an
@@ -31,7 +31,7 @@ export default function RiveLogoRevealDictionaryPage() {
 			</Card>
 
 			<Card>
-				<Card.Header className="border-b">
+				<Card.Header>
 					<Card.Title>Implementation notes</Card.Title>
 				</Card.Header>
 				<Card.Content className="grid gap-5">

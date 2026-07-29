@@ -39,6 +39,7 @@
 	"src/components/composites/AGENTS.md",
 	"src/components/composites/markdown/AGENTS.md",
 	"src/components/composites/markdown/MarkdownRenderer.tsx",
+	"src/components/composites/markdown/markdownTransforms.ts",
 	"src/components/composites/markdown/index.ts",
 	"src/components/composites/markdown/markdownContent.ts",
 	"src/components/composites/markdown/markdownToolbarLayout.ts",

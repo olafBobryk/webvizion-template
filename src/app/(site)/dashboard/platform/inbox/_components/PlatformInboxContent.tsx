@@ -145,7 +145,7 @@ export function PlatformInboxContent({
 				}
 				getRowKey={(request) => request.id}
 				header={
-					<Card.Header className="min-w-0 border-b">
+					<Card.Header className="min-w-0">
 						<Card.Title className="inline-flex min-w-0 flex-wrap items-center gap-2">
 							Support requests
 						</Card.Title>

@@ -85,7 +85,7 @@ function AccountDetailsSettingsSectionRoot({
 
 	return (
 		<Card className="scroll-mt-24" id="account-details">
-			<Card.Header className="border-b">
+			<Card.Header>
 				<Card.Title className="inline-flex items-center gap-2">
 					<Icon className="text-muted-foreground" name="user" size="sm" />
 					Account details
@@ -151,7 +151,7 @@ function AccountDetailsSettingsSectionSkeleton({
 
 	return (
 		<Card className="scroll-mt-24" id="account-details">
-			<Card.Header className="border-b">
+			<Card.Header>
 				<Card.Title className="inline-flex items-center gap-2">
 					<Icon className="text-muted-foreground" name="user" size="sm" />
 					Account details
