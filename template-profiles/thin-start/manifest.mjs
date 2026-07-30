@@ -95,7 +95,6 @@ export const thinStartProfile = {
 			"react-dom",
 			"react-markdown",
 			"react-phone-number-input",
-			"react-responsive",
 			"remark-gfm",
 			"sonner",
 		],

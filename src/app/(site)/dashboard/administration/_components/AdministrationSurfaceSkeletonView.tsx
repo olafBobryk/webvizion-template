@@ -20,17 +20,15 @@ function InvitationTableSkeleton() {
 	return (
 		<DashboardTablePanelSkeleton
 			columns={[
-				...invitationColumns.map((header, index) => ({
+				...invitationColumns.map((header) => ({
 					header,
 					id: header.toLowerCase(),
-					sortable: index !== 4,
 				})),
 				{
 					align: "right" as const,
 					header: "Action",
 					id: "action",
 					kind: "action" as const,
-					sortable: false,
 				},
 			]}
 			header={
@@ -121,7 +119,6 @@ function MembersTableSkeleton() {
 					header: "Action",
 					id: "action",
 					kind: "action",
-					sortable: false,
 				},
 			]}
 			header={

@@ -125,24 +125,35 @@ function DashboardTablePanelRoot<Row>({
 												{!isSortable ? (
 													column.header
 												) : (
-													<button
+													<Button
+														align="left"
 														className={clsx(
-															"group -mx-1.5 -my-1 inline-flex items-center gap-2 rounded-md px-1.5 py-1 transition-colors motion-interactive hover:text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/30",
+															"-mx-1.5 -my-1 border-0 px-1.5 py-1 text-muted-foreground transition-colors motion-interactive hover:text-foreground",
 															(column.align === "right" || isAction) &&
 																"ml-auto",
 														)}
+														contentClassName="w-fit gap-2"
 														data-column-index={columnIndex}
 														data-dashboard-table-sort-header=""
 														data-sort-direction="neutral"
-														type="button"
+														radius="sm"
+														size="none"
+														variant="ghost"
 													>
 														<span className="truncate">{column.header}</span>
-														<Icon
-															className="text-muted-foreground transition-transform group-data-[sort-direction=ascending]:rotate-180"
-															name="chevron-down"
-															size="sm"
-														/>
-													</button>
+														<span className="relative inline-grid size-3 shrink-0 place-items-center">
+															<Icon
+																className="absolute opacity-0 scale-50 text-muted-foreground transition-all motion-micro group-data-[sort-direction=neutral]:opacity-100 group-data-[sort-direction=neutral]:scale-100"
+																name="minus"
+																size="sm"
+															/>
+															<Icon
+																className="absolute text-muted-foreground transition-all motion-micro group-data-[sort-direction=neutral]:opacity-0 group-data-[sort-direction=neutral]:scale-50 group-data-[sort-direction=ascending]:rotate-180"
+																name="chevron-down"
+																size="sm"
+															/>
+														</span>
+													</Button>
 												)}
 											</th>
 										);
@@ -258,7 +269,6 @@ type DashboardTablePanelSkeletonProps = {
 		id: string;
 		kind?: "action" | "data";
 		responsivePriority?: number;
-		sortable?: boolean;
 	}[];
 	header: ReactNode;
 	id?: string;
@@ -296,8 +306,6 @@ export function DashboardTablePanelSkeleton({
 						<thead>
 							<tr className="bg-muted/50 text-left text-xs text-muted-foreground">
 								{columns.map((column, columnIndex) => {
-									const isAction = column.kind === "action";
-									const isSortable = !isAction && column.sortable !== false;
 									return (
 										<th
 											className={clsx(
@@ -319,22 +327,7 @@ export function DashboardTablePanelSkeleton({
 											}
 											key={column.id}
 										>
-											{!isSortable ? (
-												column.header
-											) : (
-												<button
-													aria-disabled="true"
-													className={clsx(
-														"group -mx-1.5 -my-1 inline-flex items-center gap-2 rounded-md px-1.5 py-1",
-														column.align === "right" && "ml-auto",
-													)}
-													tabIndex={-1}
-													type="button"
-												>
-													<span className="truncate">{column.header}</span>
-													<Icon name="chevron-down" size="sm" />
-												</button>
-											)}
+											{column.header}
 										</th>
 									);
 								})}

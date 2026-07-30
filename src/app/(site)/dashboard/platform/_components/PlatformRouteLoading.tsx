@@ -76,7 +76,6 @@ export function PlatformCollectionLoading({
 						header: column.label,
 						id: column.id,
 						kind: column.kind,
-						sortable: column.kind !== "action",
 					}))}
 					header={
 						<Card.Header className="min-w-0">

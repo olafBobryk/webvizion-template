@@ -138,7 +138,9 @@ export function DashboardSkeletonReferenceClient({
 				<Card.Header>
 					<Card.Title>Pinned-source table correspondence</Card.Title>
 					<Card.Description>
-						Identical copy and row geometry for normalized source comparison.
+						The left table is live and sortable; the right is a static,
+						non-interactive loading comparison with identical copy and row
+						geometry.
 					</Card.Description>
 				</Card.Header>
 				<Card.Content className="grid gap-5 xl:grid-cols-2">
@@ -349,14 +351,11 @@ function NormalizedTableLive() {
 function NormalizedTableSkeleton() {
 	return (
 		<DashboardTablePanel.Skeleton
-			columns={normalizedTableColumns.map(
-				({ align, header, id, sortable }) => ({
-					align,
-					header,
-					id,
-					sortable,
-				}),
-			)}
+			columns={normalizedTableColumns.map(({ align, header, id }) => ({
+				align,
+				header,
+				id,
+			}))}
 			header={
 				<Card.Header className="min-w-0 !grid-cols-1 sm:!grid-cols-[1fr_auto]">
 					<Card.Title className="inline-flex min-w-0 flex-wrap items-center gap-2">

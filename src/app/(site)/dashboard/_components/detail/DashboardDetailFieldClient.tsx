@@ -1,13 +1,11 @@
 "use client";
 
 import clsx from "clsx";
-import Link from "next/link";
-import type { MouseEventHandler } from "react";
-import { focusRing } from "@/components/ui/foundations/focus";
 import {
 	CopyStatusIcon,
 	useCopyAction,
 } from "@/components/ui/helpers/useCopyAction";
+import { Button } from "@/components/ui/primitives/Button";
 import type { DashboardDetailFieldProps } from "./DashboardDetailField.shared";
 
 export function DashboardDetailFieldClient({
@@ -38,8 +36,7 @@ export function DashboardDetailFieldClient({
 		valueClassNameProp,
 	);
 	const controlClassName = clsx(
-		"inline-flex max-w-full min-w-0 rounded-sm text-left outline-none transition-opacity motion-interactive hover:opacity-70 disabled:pointer-events-none disabled:opacity-50",
-		focusRing.visibleDefault,
+		"max-w-full min-w-0 !rounded-sm text-left",
 		valueClassName,
 	);
 	return (
@@ -57,23 +54,27 @@ export function DashboardDetailFieldClient({
 			</dt>
 			<dd className="min-w-0">
 				{href ? (
-					<Link
+					<Button
+						align="left"
 						aria-label={actionLabel}
 						className={controlClassName}
 						href={href}
-						onClick={onClick as MouseEventHandler<HTMLAnchorElement>}
+						onClick={onClick}
+						size="none"
+						variant="ghost"
 					>
 						{value}
-					</Link>
+					</Button>
 				) : interactive ? (
-					<button
+					<Button
+						align="left"
 						aria-label={actionLabel ?? (isCopyable ? copyLabel : undefined)}
 						className={controlClassName}
+						contentClassName="min-w-0 gap-2"
 						disabled={disabled}
-						onClick={
-							(onClick ?? handleCopy) as MouseEventHandler<HTMLButtonElement>
-						}
-						type="button"
+						onClick={onClick ?? handleCopy}
+						size="none"
+						variant="ghost"
 					>
 						<span className="inline-flex min-w-0 items-center gap-2">
 							<span className="truncate">{value}</span>
@@ -84,7 +85,7 @@ export function DashboardDetailFieldClient({
 								/>
 							) : null}
 						</span>
-					</button>
+					</Button>
 				) : (
 					<span className={valueClassName}>{value}</span>
 				)}

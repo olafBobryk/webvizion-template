@@ -34,17 +34,19 @@ export function Skeleton({
 	className,
 	children,
 	radius,
+	style,
 	...rest
 }: SkeletonProps) {
 	return (
 		<Component
 			className={clsx(skeletonStyles({ radius }), className)}
 			aria-hidden={rest["aria-hidden"] ?? true}
+			style={{ ...style, textOverflow: "clip" }}
 			{...rest}
 		>
 			{children ? (
 				<span
-					className="contents pointer-events-none select-none opacity-0 [&_*]:pointer-events-none [&_*]:select-none [&_*]:opacity-0"
+					className="contents invisible pointer-events-none select-none"
 					aria-hidden="true"
 				>
 					{children}

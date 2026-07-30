@@ -264,7 +264,7 @@ function chipClassName(
 
 function chipSkeletonClassName(className?: string) {
 	return clsx(
-		"inline-flex min-w-0 max-w-full items-center justify-center gap-1.5 rounded-full border px-2 py-1",
+		"inline-flex min-w-0 max-w-full items-center justify-center gap-1.5 border px-2 py-1",
 		"pointer-events-none border-transparent !bg-muted/80",
 		className,
 	);
@@ -301,7 +301,11 @@ function ChipSkeleton({
 	const iconStyle = { width: `${iconSize}px`, height: `${iconSize}px` };
 
 	return (
-		<Skeleton className={chipSkeletonClassName(className)} aria-hidden="true">
+		<Skeleton
+			aria-hidden="true"
+			className={chipSkeletonClassName(className)}
+			radius="full"
+		>
 			<span className="inline-flex min-w-0 items-center justify-center gap-1.5">
 				{leadingIcon ? (
 					<span

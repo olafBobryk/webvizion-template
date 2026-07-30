@@ -97,7 +97,6 @@ export const assemblyCoreDependencies = new Set([
 	"react-dom",
 	"react-markdown",
 	"react-phone-number-input",
-	"react-responsive",
 	"remark-gfm",
 	"sonner",
 ]);
