@@ -2,6 +2,7 @@ import { Icon } from "@/components/ui/icons/Icon";
 import { Chip } from "@/components/ui/misc";
 import { Button } from "@/components/ui/primitives/Button";
 import { Card } from "@/components/ui/primitives/Card";
+import { hrefFor } from "@/lib/routes";
 import { DashboardDetailField } from "../../_components/detail/DashboardDetailField";
 import { OrganizationIdentity } from "../../_components/entities/organization/OrganizationIdentity";
 import {
@@ -32,7 +33,7 @@ export function OrganizationSurface({
 			actions={
 				canManage ? (
 					<Button
-						href="/dashboard/organization/settings"
+						href={hrefFor("dashboard.organization.settings")}
 						size="sm"
 						variant="primary"
 					>
@@ -87,7 +88,7 @@ export function OrganizationSurface({
 			</Card>
 			<DashboardFooterNote>
 				Looking for account preferences?{" "}
-				<DashboardFooterNoteLink href="/dashboard/settings">
+				<DashboardFooterNoteLink href={hrefFor("dashboard.settings")}>
 					Open Account settings
 				</DashboardFooterNoteLink>
 				.

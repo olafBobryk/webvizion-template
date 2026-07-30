@@ -264,10 +264,14 @@ expectCode(
 	"invitation-invalid",
 );
 assert.equal(
-	previewFixtureInvitation(reinviteState, {
-		invitationId: refreshed.id,
-		tokenHash: refreshed.tokenHash,
-	}).id,
+	previewFixtureInvitation(
+		reinviteState,
+		{
+			invitationId: refreshed.id,
+			tokenHash: refreshed.tokenHash,
+		},
+		new Date("2026-07-23T09:01:00Z"),
+	).id,
 	refreshed.id,
 );
 revokeFixtureInvitation(reinviteState, {

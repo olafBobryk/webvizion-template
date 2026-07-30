@@ -70,7 +70,7 @@ const panelStyles = cva("text-foreground", {
 		},
 		tone: {
 			default: "",
-			warning: "border-warning/20 bg-warning/10",
+			warning: "border-warning-accent/20 bg-warning-accent/10",
 			danger: "border-danger/20 bg-danger/10",
 		},
 		width: {

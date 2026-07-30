@@ -1,16 +1,22 @@
 import type { IconName } from "@/components/ui/icons/Icon";
-import { type AppRouteId, appRoutes } from "@/config/routes";
+import {
+	hrefFor,
+	internalHrefFor,
+	isInternalRouteId,
+	isStaticAppSurfaceId,
+	type StaticAppSurfaceId,
+} from "@/lib/routes";
 
 export type SiteLink =
 	| {
 			label: string;
-			routeId: AppRouteId;
+			surfaceId: StaticAppSurfaceId;
 			href?: never;
 	  }
 	| {
 			label: string;
 			href: string;
-			routeId?: never;
+			surfaceId?: never;
 	  };
 
 export type SiteNavSection = SiteLink & {
@@ -60,32 +66,75 @@ export type SiteLayoutDocument = {
 };
 
 export function getSiteLinkHref(link: SiteLink) {
-	return link.href ?? appRoutes[link.routeId];
+	return link.href ?? hrefFor(link.surfaceId);
 }
 
-const availableRoutes: Readonly<Record<string, string>> = appRoutes;
-
-function getAvailableRouteLink(
+export function getAvailableSiteSurfaceLink(
 	label: string,
-	routeId: string,
+	surfaceId: string,
 ): SiteLink | null {
-	const href = availableRoutes[routeId];
-	return href ? { label, href } : null;
+	return isStaticAppSurfaceId(surfaceId) ? { label, surfaceId } : null;
+}
+
+function getAvailableInternalRouteLink(
+	label: string,
+	internalRouteId: string,
+): SiteLink | null {
+	return isInternalRouteId(internalRouteId)
+		? { label, href: internalHrefFor(internalRouteId) }
+		: null;
 }
 
 function omitMissingLinks<T>(items: Array<T | null>): T[] {
 	return items.filter((item): item is T => item !== null);
 }
 
-const homeLink: SiteLink = {
-	label: "Home",
-	href: availableRoutes.home ?? "/",
-};
-const settingsLink = getAvailableRouteLink("Settings", "settings");
-const dashboardLink: SiteLink = {
-	label: "Dashboard",
-	href: availableRoutes.login ?? availableRoutes.home ?? "/",
-};
+const homeLink: SiteLink = getAvailableSiteSurfaceLink(
+	"Home",
+	"marketing.home",
+) ?? { label: "Home", href: "/" };
+const settingsLink = getAvailableSiteSurfaceLink(
+	"Settings",
+	"marketing.settings",
+);
+const dashboardLink: SiteLink = getAvailableSiteSurfaceLink(
+	"Dashboard",
+	"auth.login",
+) ??
+	getAvailableSiteSurfaceLink("Dashboard", "marketing.home") ?? {
+		label: "Dashboard",
+		href: "/",
+	};
+const canShowInternalRoutes = process.env.NODE_ENV !== "production";
+const demoLink = canShowInternalRoutes
+	? getAvailableInternalRouteLink("Demo", "demo")
+	: null;
+const intelligenceLink = canShowInternalRoutes
+	? getAvailableInternalRouteLink("Intelligence", "intelligence")
+	: null;
+const playgroundLink = canShowInternalRoutes
+	? getAvailableInternalRouteLink("Playground", "playground")
+	: null;
+const dictionaryLink = canShowInternalRoutes
+	? getAvailableInternalRouteLink("Dictionary", "dictionary")
+	: null;
+const referenceLink = canShowInternalRoutes
+	? getAvailableInternalRouteLink("Reference", "reference")
+	: null;
+const internalRouteLinks = omitMissingLinks<SiteLink>([
+	demoLink,
+	intelligenceLink,
+	playgroundLink,
+	dictionaryLink,
+	referenceLink,
+]);
+const developerMenuGroup: SiteMenuGroup | null =
+	internalRouteLinks.length > 0
+		? {
+				label: "Development",
+				links: internalRouteLinks,
+			}
+		: null;
 
 export const defaultSiteLayout: SiteLayoutDocument = {
 	header: {
@@ -99,6 +148,7 @@ export const defaultSiteLayout: SiteLayoutDocument = {
 					settingsLink,
 				]),
 			},
+			...omitMissingLinks([developerMenuGroup]),
 		],
 		mobile: {
 			closeAriaLabel: "Close navigation",
@@ -116,6 +166,9 @@ export const defaultSiteLayout: SiteLayoutDocument = {
 					},
 				],
 			},
+			demoLink,
+			intelligenceLink,
+			playgroundLink,
 			settingsLink,
 		]),
 		search: {
@@ -129,8 +182,15 @@ export const defaultSiteLayout: SiteLayoutDocument = {
 				link: homeLink,
 				links: [{ label: "Hero", href: "/#home-hero" }],
 			},
+			...omitMissingLinks([developerMenuGroup]),
 		],
-		topNavLinks: omitMissingLinks([homeLink, settingsLink]),
+		topNavLinks: omitMissingLinks([
+			homeLink,
+			demoLink,
+			intelligenceLink,
+			playgroundLink,
+			settingsLink,
+		]),
 	},
 	socialLinks: [
 		{ label: "X", icon: "x", href: "" },

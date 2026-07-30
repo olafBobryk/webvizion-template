@@ -11,6 +11,7 @@ import {
 	type FeedbackSeverity,
 } from "@/app/(site)/dashboard/_lib/platform/contracts";
 import { createProductReport } from "@/app/(site)/dashboard/_lib/platform/fixtures.server";
+import { hrefFor } from "@/lib/routes";
 
 type FeedbackPayload = {
 	browserMetadata?: unknown;
@@ -84,7 +85,8 @@ export async function POST(request: Request) {
 			actor: getPlatformActorSnapshot(resolution),
 			browserMetadata: readMetadata(body?.browserMetadata),
 			category,
-			currentRoute: readText(body?.currentRoute) || "/dashboard",
+			currentRoute:
+				readText(body?.currentRoute) || hrefFor("dashboard.overview"),
 			description: readText(body?.description),
 			severity,
 			viewportHeight: readNumber(body?.viewportHeight),

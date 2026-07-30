@@ -5,6 +5,7 @@ import {
 	withSafeContinuation,
 } from "@/lib/auth/continuation";
 import { applicationAdapters, resolveCurrentSession } from "@/lib/auth/server";
+import { hrefFor, surfaceHref } from "@/lib/routes";
 import { DashboardFrame } from "./_components/layout/DashboardFrame";
 import { DashboardUnauthenticatedRedirect } from "./_components/pages/DashboardUnauthenticatedRedirect";
 import { DashboardProviders } from "./_components/providers/DashboardProviders";
@@ -17,22 +18,30 @@ export default async function DashboardLayout({
 }>) {
 	const requestPath = getSafeContinuationPath(
 		(await headers()).get("x-template-request-path"),
-		"/dashboard",
+		hrefFor("dashboard.overview"),
 	);
 	const resolution = await resolveCurrentSession();
 	if (resolution.status === "anonymous") {
 		return (
 			<DashboardUnauthenticatedRedirect
-				destination={withSafeContinuation("/login", requestPath)}
+				destination={withSafeContinuation(hrefFor("auth.login"), requestPath)}
 			/>
 		);
 	}
 	if (resolution.status === "organization-selection-required") {
-		redirect(withSafeContinuation("/select-organization", requestPath));
+		redirect(
+			withSafeContinuation(hrefFor("auth.select-organization"), requestPath),
+		);
 	}
 	if (resolution.status === "membership-required") {
 		redirect(
-			`/login?next=${encodeURIComponent(requestPath)}&message=membership-required`,
+			surfaceHref(
+				"auth.login",
+				{},
+				{
+					search: { message: "membership-required", next: requestPath },
+				},
+			),
 		);
 	}
 

@@ -12,6 +12,7 @@ import { dropdownSurfaceClassName } from "../dropdownStyles";
 import { COLLISION_PADDING, DEFAULT_MENU_MIN_WIDTH } from "./constants";
 import { resolveAnchoredDropdownPosition } from "./positioning";
 import type { DropdownProps, DropdownSide } from "./types";
+import type { DropdownCollectionController } from "./useDropdownCollectionController";
 
 const DEFAULT_CHEVRON_ICON = ({ isOpen }: { isOpen: boolean }) => {
 	return (
@@ -45,7 +46,10 @@ export function DropdownRoot({
 	disableWhenReducedMotion = true,
 	autoFocusMenu = true,
 	onOpenChange,
-}: DropdownProps) {
+	collectionController,
+}: DropdownProps & {
+	collectionController?: DropdownCollectionController;
+}) {
 	const motionAllowed = useMotionAllowed(disableWhenReducedMotion);
 	const [uncontrolledOpen, setUncontrolledOpen] = React.useState(false);
 	const [isPinned, setIsPinned] = React.useState(false);
@@ -158,12 +162,20 @@ export function DropdownRoot({
 
 	const scheduleClose = React.useCallback(() => {
 		clearHoverTimeout();
+		if (!openOnHover || isPinned) return false;
 		hoverTimeoutRef.current = window.setTimeout(() => {
-			if (!isPinned) {
-				setOpenState(false);
-			}
+			setOpenState(false);
 		}, 120);
-	}, [clearHoverTimeout, isPinned, setOpenState]);
+		return true;
+	}, [clearHoverTimeout, isPinned, openOnHover, setOpenState]);
+
+	React.useEffect(() => {
+		collectionController?.connectRootHoverHandlers({
+			cancel: clearHoverTimeout,
+			schedule: scheduleClose,
+		});
+		return () => collectionController?.connectRootHoverHandlers(undefined);
+	}, [clearHoverTimeout, collectionController, scheduleClose]);
 
 	const openMenu = React.useCallback(
 		(options?: { focusMenu?: boolean; pin?: boolean }) => {
@@ -312,7 +324,8 @@ export function DropdownRoot({
 				rootRef.current &&
 				!rootRef.current.contains(target) &&
 				menuRef.current &&
-				!menuRef.current.contains(target)
+				!menuRef.current.contains(target) &&
+				!collectionController?.containsTarget(target)
 			) {
 				closeMenu({ restoreFocus: false });
 			}
@@ -323,15 +336,26 @@ export function DropdownRoot({
 				rootRef.current &&
 				!rootRef.current.contains(target) &&
 				menuRef.current &&
-				!menuRef.current.contains(target)
+				!menuRef.current.contains(target) &&
+				!collectionController?.containsTarget(target)
 			) {
 				closeMenu({ restoreFocus: false });
 			}
 		};
 		const handleKeyDown = (event: KeyboardEvent) => {
 			if (event.key === "Escape") {
+				if (event.defaultPrevented) return;
 				event.preventDefault();
+				if (collectionController?.closeDeepest({ focusParent: true })) return;
 				closeMenu({ restoreFocus: true });
+				return;
+			}
+			if (
+				event.key === "Tab" &&
+				collectionController &&
+				collectionController.openPath.length > 0
+			) {
+				closeMenu({ restoreFocus: false });
 				return;
 			}
 			if (event.key !== "Tab" || !menuRef.current) return;
@@ -367,6 +391,7 @@ export function DropdownRoot({
 		isPinned,
 		getMenuFocusableElements,
 		focusRelativeToTrigger,
+		collectionController,
 	]);
 
 	const setMenuNode = React.useCallback(

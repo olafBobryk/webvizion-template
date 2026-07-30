@@ -12,6 +12,7 @@ import {
 import { useModal } from "@/components/ui/overlays/modal/useModal";
 import { Button } from "@/components/ui/primitives/Button";
 import { useMotionAllowed } from "@/hooks/useMotionAllowed";
+import { hrefFor } from "@/lib/routes";
 import {
 	dashboardDebugEnabled,
 	isDashboardDebugState,
@@ -73,7 +74,7 @@ function DashboardFooterActions({
 
 	const actions = [
 		{
-			href: "/dashboard/support",
+			href: hrefFor("dashboard.support"),
 			icon: "question",
 			id: "support",
 			label: "Support",
@@ -87,7 +88,7 @@ function DashboardFooterActions({
 		...(platformAdmin
 			? [
 					{
-						href: "/dashboard/platform",
+						href: hrefFor("dashboard.platform"),
 						icon: "shield",
 						id: "platform",
 						label: "Manage platform",
@@ -112,18 +113,31 @@ function DashboardFooterActions({
 						motionAllowed ? footerLayoutTransition : instantTransition
 					}
 				>
-					<Button
-						aria-label={action.label}
-						className="!text-muted-foreground hover:!text-sidebar-accent-foreground"
-						href={"href" in action ? action.href : undefined}
-						iconSize={20}
-						leadingIcon={action.icon}
-						onClick={"onClick" in action ? action.onClick : () => onNavigate()}
-						size="icon"
-						title={action.label}
-						type={"href" in action ? undefined : "button"}
-						variant="ghost"
-					/>
+					{"href" in action ? (
+						<Button
+							aria-label={action.label}
+							className="!text-muted-foreground hover:!text-sidebar-accent-foreground"
+							href={action.href}
+							iconSize={20}
+							leadingIcon={action.icon}
+							onClick={onNavigate}
+							size="icon"
+							title={action.label}
+							variant="ghost"
+						/>
+					) : (
+						<Button
+							aria-label={action.label}
+							className="!text-muted-foreground hover:!text-sidebar-accent-foreground"
+							iconSize={20}
+							leadingIcon={action.icon}
+							onClick={action.onClick}
+							size="icon"
+							title={action.label}
+							type="button"
+							variant="ghost"
+						/>
+					)}
 				</motion.span>
 			))}
 		</div>
@@ -214,7 +228,7 @@ export function DashboardFrame({
 								className={clsx(
 									mobileSidebarOpen ? "inline-flex" : "max-lg:!hidden",
 								)}
-								href="/dashboard"
+								href={hrefFor("dashboard.overview")}
 								size="sm"
 							/>
 						) : null}

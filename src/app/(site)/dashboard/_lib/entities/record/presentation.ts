@@ -1,3 +1,4 @@
+import { surfaceHref } from "@/lib/routes";
 import type {
 	DashboardColumnDefinition,
 	DashboardCommandPresentation,
@@ -70,7 +71,7 @@ export function getRecordPresentation(record: ReferenceRecord) {
 	return {
 		createdAtLabel: formatRecordDate(record.createdAt),
 		descriptionMarkdown: record.descriptionMarkdown,
-		href: `/dashboard/records/${encodeURIComponent(record.id)}`,
+		href: surfaceHref("dashboard.record", { recordId: record.id }),
 		id: record.id,
 		ownerMemberId: record.ownerMemberId,
 		properties: record.properties,

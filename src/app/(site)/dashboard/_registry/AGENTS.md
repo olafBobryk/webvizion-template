@@ -1,11 +1,13 @@
 # Dashboard registry policy
 
-- Dashboard navigation, ancestor trails, layout width, capability checks, and
-  static commands derive from `surfaceRegistry.ts`. Do not mirror dashboard
-  routes in the global marketing route registry.
-- New surfaces declare their route, parent, sidebar tier, required capability,
-  layout width, dashboard domain area, optional non-route source roots, and
-  commands in one registry entry.
+- Canonical dashboard path and matching data derive from
+  `src/config/surfaces/dashboard.ts`; dashboard navigation, ancestor trails,
+  layout width, capability checks, and static commands compose that route data
+  with dashboard-owned metadata in `surfaceRegistry.ts`.
+- New surfaces declare their route once in the Dashboard route registry and
+  their parent, sidebar tier, required capability, layout width, dashboard
+  domain area, optional non-route source roots, and commands once in the
+  matching dashboard metadata entry.
 - Adding, moving, or removing a dashboard destination in a template instance
   requires updating its canonical registry entry in the same change. Standard
   verification discovers unregistered pages and stale registered routes.

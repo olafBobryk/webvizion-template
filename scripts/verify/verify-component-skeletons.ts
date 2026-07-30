@@ -145,11 +145,11 @@ if (!comboboxMultiSelectSource.includes('size = "sm"')) {
 	);
 }
 if (
-	(comboboxMultiSelectSource.match(/min-w-\[4ch\]/g)?.length ?? 0) !== 2 ||
+	(comboboxMultiSelectSource.match(/min-w-\[4ch\]/g)?.length ?? 0) !== 1 ||
 	comboboxMultiSelectSource.includes("min-w-[120px]")
 ) {
 	failures.push(
-		`ComboboxMultiSelectInput query branches must use the text-relative 4ch minimum in ${comboboxMultiSelectPath}`,
+		`ComboboxMultiSelectInput query input must use the text-relative 4ch minimum in ${comboboxMultiSelectPath}`,
 	);
 }
 

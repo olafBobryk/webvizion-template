@@ -4,6 +4,7 @@ import {
 	getSafeContinuationPath,
 	withSafeContinuation,
 } from "@/lib/auth/continuation";
+import { hrefFor } from "@/lib/routes";
 import { AuthScreen } from "../_components/AuthScreen";
 import { requestUnavailableAuthMethodAction } from "../actions";
 
@@ -24,7 +25,11 @@ export default async function SignInOptionsPage({
 			<form action={requestUnavailableAuthMethodAction} className="grid gap-4">
 				<input name="method" type="hidden" value="magic-link-sign-in" />
 				<input name="next" type="hidden" value={next} />
-				<input name="returnTo" type="hidden" value="/sign-in-options" />
+				<input
+					name="returnTo"
+					type="hidden"
+					value={hrefFor("auth.sign-in-options")}
+				/>
 				<EmailInput label="Email" name="email" required />
 				<Button className="w-full" type="submit" variant="primary">
 					Request magic link
@@ -32,7 +37,7 @@ export default async function SignInOptionsPage({
 			</form>
 			<Button
 				className="w-full"
-				href={withSafeContinuation("/login", next)}
+				href={withSafeContinuation(hrefFor("auth.login"), next)}
 				variant="ghost"
 			>
 				Use password

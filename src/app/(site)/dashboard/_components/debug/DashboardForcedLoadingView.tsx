@@ -1,5 +1,6 @@
 "use client";
 
+import { getDashboardSurface } from "../../_registry/surfaceRegistry";
 import { AdministrationSurfaceSkeleton } from "../../administration/_components/AdministrationSurface";
 import { OrganizationSurfaceSkeleton } from "../../organization/_components/OrganizationSurface";
 import { OrganizationMemberSurfaceSkeleton } from "../../organization/members/[memberId]/_components/OrganizationMemberSurface";
@@ -19,35 +20,40 @@ import { SettingsSurfaceSkeleton } from "../../settings/_components/SettingsSurf
 import { OverviewSurfaceSkeleton } from "../OverviewSurface";
 
 export function DashboardForcedLoadingView({ pathname }: { pathname: string }) {
-	if (pathname === "/dashboard/profile") return <ProfileSurfaceSkeleton />;
-	if (pathname === "/dashboard/administration")
-		return <AdministrationSurfaceSkeleton />;
-	if (pathname === "/dashboard/platform") return <PlatformSurfaceSkeleton />;
-	if (/^\/dashboard\/platform\/inbox\/[^/]+$/.test(pathname))
-		return <PlatformInboxRequestSurfaceSkeleton />;
-	if (pathname === "/dashboard/platform/inbox")
-		return <PlatformInboxSurfaceSkeleton />;
-	if (/^\/dashboard\/platform\/reports\/[^/]+$/.test(pathname))
-		return <PlatformReportSurfaceSkeleton />;
-	if (pathname === "/dashboard/platform/reports")
-		return <PlatformReportsSurfaceSkeleton />;
-	if (pathname === "/dashboard/settings") return <SettingsSurfaceSkeleton />;
-	if (pathname === "/dashboard/organization/settings")
-		return <OrganizationSettingsSurfaceSkeleton />;
-	if (pathname === "/dashboard/organization/switch")
-		return <OrganizationSwitchSurfaceSkeleton />;
-	if (pathname === "/dashboard/organization")
-		return <OrganizationSurfaceSkeleton />;
-	if (/^\/dashboard\/organization\/members\/[^/]+$/.test(pathname))
-		return <OrganizationMemberSurfaceSkeleton />;
-	if (pathname === "/dashboard/organization/members")
-		return <AdministrationSurfaceSkeleton />;
-	if (/^\/dashboard\/records\/[^/]+$/.test(pathname))
-		return <RecordSurfaceSkeleton />;
-	if (pathname === "/dashboard/records") return <RecordsSurfaceSkeleton />;
-	if (pathname === "/dashboard/reference/entities")
-		return <EntityReferenceSurfaceSkeleton />;
-	if (pathname === "/dashboard/reference/skeletons")
-		return <ReferenceSkeletonsSurfaceSkeleton />;
-	return <OverviewSurfaceSkeleton />;
+	switch (getDashboardSurface(pathname)?.id) {
+		case "dashboard.profile":
+			return <ProfileSurfaceSkeleton />;
+		case "dashboard.administration":
+			return <AdministrationSurfaceSkeleton />;
+		case "dashboard.platform":
+			return <PlatformSurfaceSkeleton />;
+		case "dashboard.platform.inbox.request":
+			return <PlatformInboxRequestSurfaceSkeleton />;
+		case "dashboard.platform.inbox":
+			return <PlatformInboxSurfaceSkeleton />;
+		case "dashboard.platform.report":
+			return <PlatformReportSurfaceSkeleton />;
+		case "dashboard.platform.reports":
+			return <PlatformReportsSurfaceSkeleton />;
+		case "dashboard.settings":
+			return <SettingsSurfaceSkeleton />;
+		case "dashboard.organization.settings":
+			return <OrganizationSettingsSurfaceSkeleton />;
+		case "dashboard.organization.switch":
+			return <OrganizationSwitchSurfaceSkeleton />;
+		case "dashboard.organization":
+			return <OrganizationSurfaceSkeleton />;
+		case "dashboard.organization.member":
+			return <OrganizationMemberSurfaceSkeleton />;
+		case "dashboard.record":
+			return <RecordSurfaceSkeleton />;
+		case "dashboard.records":
+			return <RecordsSurfaceSkeleton />;
+		case "dashboard.reference.entities":
+			return <EntityReferenceSurfaceSkeleton />;
+		case "dashboard.reference.skeletons":
+			return <ReferenceSkeletonsSurfaceSkeleton />;
+		default:
+			return <OverviewSurfaceSkeleton />;
+	}
 }

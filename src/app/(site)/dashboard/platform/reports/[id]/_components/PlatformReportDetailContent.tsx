@@ -30,6 +30,7 @@ import { Button } from "@/components/ui/primitives/Button";
 import { Card } from "@/components/ui/primitives/Card";
 import { Text } from "@/components/ui/primitives/Text";
 import { showToast } from "@/lib/feedback";
+import { hrefFor } from "@/lib/routes";
 import {
 	FeedbackSeverityChip,
 	FeedbackStatusChip,
@@ -82,7 +83,10 @@ export function PlatformReportDetailContent({
 		<DashboardSection
 			actions={
 				<div className="flex flex-wrap gap-2">
-					<Button href="/dashboard/platform/reports" variant="secondary">
+					<Button
+						href={hrefFor("dashboard.platform.reports")}
+						variant="secondary"
+					>
 						All reports
 					</Button>
 					<Button

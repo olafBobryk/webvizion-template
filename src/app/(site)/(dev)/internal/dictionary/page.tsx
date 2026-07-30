@@ -2,8 +2,7 @@ import { Chip } from "@/components/ui/misc";
 import { Button } from "@/components/ui/primitives/Button";
 import { Card } from "@/components/ui/primitives/Card";
 import { Text } from "@/components/ui/primitives/Text";
-import type { AppRouteId } from "@/config/routes";
-import { hrefFor } from "@/lib/routes";
+import { type InternalRouteId, internalHrefFor } from "@/lib/routes";
 import { InternalPage, InternalPageHeader } from "../_components/InternalPage";
 import { manifest as spamProtectedFormManifest } from "./forms/spam-protected-form/manifest";
 import { manifest as riveLogoRevealManifest } from "./loading-screens/rive-logo-reveal/manifest";
@@ -19,7 +18,7 @@ type DictionaryFamily = {
 			summary: string;
 			copyTargets: string[];
 		};
-		routeId: AppRouteId;
+		internalRouteId: InternalRouteId;
 	}[];
 };
 
@@ -32,7 +31,7 @@ const families: DictionaryFamily[] = [
 		entries: [
 			{
 				manifest: riveLogoRevealManifest,
-				routeId: "dictionaryRiveLogoReveal",
+				internalRouteId: "dictionaryRiveLogoReveal",
 			},
 		],
 	},
@@ -44,7 +43,7 @@ const families: DictionaryFamily[] = [
 		entries: [
 			{
 				manifest: spamProtectedFormManifest,
-				routeId: "dictionarySpamProtectedForm",
+				internalRouteId: "dictionarySpamProtectedForm",
 			},
 		],
 	},
@@ -90,7 +89,7 @@ export default function DictionaryIndexPage() {
 											</div>
 										</div>
 										<Button
-											href={hrefFor(entry.routeId)}
+											href={internalHrefFor(entry.internalRouteId)}
 											size="sm"
 											variant="secondary"
 											className="w-fit"

@@ -17,7 +17,7 @@ export default function MarketingErrorPage({
 				<StatusErrorState
 					error={error}
 					reset={reset}
-					href={hrefFor("home")}
+					href={hrefFor("marketing.home")}
 					hrefLabel="Go home"
 				/>
 			</Section>

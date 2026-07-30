@@ -7,7 +7,6 @@ const overrideFiles = [
 	"src/app/(site)/_components/layout/HeaderFull.tsx",
 	"src/app/(site)/_components/layout/HeaderMenuContent.tsx",
 	"src/app/(site)/_components/layout/siteLayout.ts",
-	"src/app/(site)/(marketing)/contact/page.tsx",
 	"src/app/(site)/(dev)/internal/intelligence/_components/InternalCard.tsx",
 	"src/app/(site)/(dev)/internal/intelligence/BenchmarkRunToggle.tsx",
 	"src/app/(site)/(dev)/internal/intelligence/page.tsx",
@@ -31,7 +30,6 @@ const overrideFiles = [
 	"src/components/ui/primitives/Field.tsx",
 	"src/components/ui/primitives/InputFrame.tsx",
 	"src/components/ui/primitives/Text.tsx",
-	"src/config/routes.ts",
 	"src/lib/api/index.ts",
 	"src/lib/feedback/toast.ts",
 	"src/lib/marketing-content/fallback.ts",
@@ -39,7 +37,6 @@ const overrideFiles = [
 	"src/lib/marketing-content/resolvers.ts",
 	"src/lib/marketing-content/sections/homeHero/HomeHeroSection.tsx",
 	"src/lib/marketing-content/types.ts",
-	"src/lib/routes.ts",
 ];
 
 export const thinStartProfile = {
@@ -80,6 +77,7 @@ export const thinStartProfile = {
 			"verify:smoke",
 			"verify:static",
 			"verify:surface-contracts",
+			"verify:route-surfaces",
 		],
 		coreDependencies: [
 			"@phosphor-icons/react",
@@ -163,7 +161,6 @@ export const thinStartProfile = {
 		compatibilityMarkerExemptions: [
 			"src/app/(site)/(dev)/internal/intelligence/page.tsx",
 			"src/proxy.ts",
-			"src/lib/template-intelligence/index.ts",
 		],
 	},
 	verification: {

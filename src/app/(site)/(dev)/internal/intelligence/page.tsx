@@ -11,13 +11,17 @@ import {
 	type CodexTurnRecordingReadResult,
 	type CodexTurnSummary,
 	readCodexTurnRecording,
-	readTemplateIntelligenceAgentMap,
+} from "@/lib/template-intelligence/codex-turn-recording";
+import {
+	type TemplateIntelligenceBenchmarkRun,
 	readTemplateIntelligenceBenchmarkExampleRuns,
 	readTemplateIntelligenceBenchmarkRuns,
+} from "@/lib/template-intelligence/benchmark-runs";
+import {
+	readTemplateIntelligenceAgentMap,
 	readTemplateIntelligenceIndex,
-	type TemplateIntelligenceBenchmarkRun,
 	type TemplateIntelligenceIndex,
-} from "@/lib/template-intelligence";
+} from "@/lib/template-intelligence/artifacts";
 import { InternalPage, InternalPageHeader } from "../_components/InternalPage";
 import { BenchmarkRunToggle } from "./BenchmarkRunToggle";
 

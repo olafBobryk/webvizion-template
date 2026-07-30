@@ -1,4 +1,5 @@
 import type { MembershipRole } from "@/lib/auth/contracts";
+import { hrefFor } from "@/lib/routes";
 import type { OrganizationEntity } from "./domain";
 
 const roleLabels = {
@@ -36,7 +37,7 @@ export function getOrganizationPresentation(organization: OrganizationEntity) {
 		avatarColorIndex: hashSeed(organization.id) % 8,
 		avatarUrl: organization.profilePictureUrl,
 		displayLabel,
-		href: "/dashboard/organization",
+		href: hrefFor("dashboard.organization"),
 		id: organization.id,
 		initials: getOrganizationInitials(displayLabel),
 		roleLabel,

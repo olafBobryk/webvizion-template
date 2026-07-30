@@ -16,6 +16,7 @@ import { useModal } from "@/components/ui/overlays/modal/useModal";
 import { Button } from "@/components/ui/primitives/Button";
 import { StatusMessage } from "@/components/ui/primitives/StatusMessage";
 import { showToast } from "@/lib/feedback/toast";
+import { hrefFor } from "@/lib/routes";
 import type { MemberPresentation } from "../../../_lib/entities/member/presentation";
 import type {
 	ReferenceRecord,
@@ -79,7 +80,7 @@ function RecordDetailActionsRoot({
 			</Button>
 			<EntityDeletionDetailMenu
 				completion={{
-					href: "/dashboard/records",
+					href: hrefFor("dashboard.records"),
 					replace: true,
 					type: "navigate",
 				}}

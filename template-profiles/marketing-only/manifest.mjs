@@ -31,7 +31,7 @@ export const marketingOnlyProfile = {
 	verification: {
 		requiredFiles: [
 			"src/app/(site)/(marketing)/(home)/page.tsx",
-			"src/app/(site)/(dev)/internal/layout.tsx",
+			"src/app/(site)/(marketing)/internal/layout.tsx",
 			"src/lib/marketing-content/fallback.ts",
 			"src/proxy.ts",
 			"payload.config.ts",

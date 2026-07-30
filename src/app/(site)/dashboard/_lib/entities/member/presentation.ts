@@ -1,4 +1,5 @@
 import type { MembershipRole } from "@/lib/auth/contracts";
+import { surfaceHref } from "@/lib/routes";
 import type {
 	DashboardColumnDefinition,
 	DashboardCommandPresentation,
@@ -84,7 +85,7 @@ export function formatMemberJoinedDate(value: string) {
 }
 
 export function getMemberProfileHref(memberId: string) {
-	return `/dashboard/organization/members/${encodeURIComponent(memberId)}`;
+	return surfaceHref("dashboard.organization.member", { memberId });
 }
 
 function hashSeed(seed: string) {

@@ -14,8 +14,8 @@ export const fallbackHomePage: MarketingPageDocument = {
 				},
 			],
 			cta: {
-				label: "Start",
-				href: "/#home-hero",
+				label: "Contact",
+				surfaceId: "marketing.contact",
 			},
 			services: [
 				{
@@ -75,15 +75,15 @@ export const fallbackSiteLayout: SiteLayoutDocument = {
 			{
 				label: "Start",
 				icon: "dot",
-				link: { label: "Home", routeId: "home" },
+				link: { label: "Home", surfaceId: "marketing.home" },
 				links: [{ label: "Hero", href: "/#home-hero" }],
 			},
 			{
 				label: "Build",
 				icon: "dot",
 				links: [
-					{ label: "Home", routeId: "home" },
-					{ label: "Contact", routeId: "contact" },
+					{ label: "Home", surfaceId: "marketing.home" },
+					{ label: "Contact", surfaceId: "marketing.contact" },
 				],
 			},
 		],
@@ -95,7 +95,7 @@ export const fallbackSiteLayout: SiteLayoutDocument = {
 		navLinks: [
 			{
 				label: "Home",
-				routeId: "home",
+				surfaceId: "marketing.home",
 				sections: [
 					{
 						label: "Hero",
@@ -114,14 +114,14 @@ export const fallbackSiteLayout: SiteLayoutDocument = {
 			{
 				label: "Home",
 				icon: "dot",
-				link: { label: "Home", routeId: "home" },
+				link: { label: "Home", surfaceId: "marketing.home" },
 				links: [{ label: "Hero", href: "/#home-hero" }],
 			},
 		],
-		topNavLinks: [{ label: "Home", routeId: "home" }],
+		topNavLinks: [{ label: "Home", surfaceId: "marketing.home" }],
 	},
 	socialLinks: [],
 	footer: {
-		navLinks: [{ label: "Home", routeId: "home" }],
+		navLinks: [{ label: "Home", surfaceId: "marketing.home" }],
 	},
 };

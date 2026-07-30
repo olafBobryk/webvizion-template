@@ -2,6 +2,7 @@ import { ErrorState } from "@/components/ui/misc";
 import { Button } from "@/components/ui/primitives/Button";
 import { toPublicAuthError } from "@/lib/auth/errors";
 import { validatePasswordRecoveryToken } from "@/lib/auth/server";
+import { hrefFor } from "@/lib/routes";
 import { AuthScreen } from "../_components/AuthScreen";
 import { PasswordResetForm } from "../_components/PasswordResetForm";
 
@@ -32,7 +33,11 @@ export default async function ResetPasswordPage({
 			{recoveryError ? (
 				<ErrorState
 					action={
-						<Button href="/forgot-password" size="sm" variant="secondary">
+						<Button
+							href={hrefFor("auth.forgot-password")}
+							size="sm"
+							variant="secondary"
+						>
 							Request a new link
 						</Button>
 					}

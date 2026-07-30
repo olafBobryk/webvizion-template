@@ -1,6 +1,10 @@
 export const devToolSurfaces = {
 	demo: {
-		ownedPaths: ["src/app/(site)/(dev)/internal/demo"],
+		ownedPaths: [
+			"src/app/(site)/(dev)/internal/demo",
+			"scripts/verify/verify-recursive-dropdown.mjs",
+		],
+		packageScripts: ["verify:recursive-dropdown"],
 	},
 	intelligence: {
 		ownedPaths: [

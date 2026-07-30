@@ -29,6 +29,7 @@ import { Button } from "@/components/ui/primitives/Button";
 import { Card } from "@/components/ui/primitives/Card";
 import { Text } from "@/components/ui/primitives/Text";
 import { showToast } from "@/lib/feedback";
+import { hrefFor } from "@/lib/routes";
 import { SupportStatusChip } from "../../../_components/PlatformStatusChip";
 
 const statusOptions: SelectOption<SupportRequestStatus>[] =
@@ -85,7 +86,10 @@ export function PlatformInboxDetailContent({
 		<DashboardSection
 			actions={
 				<div className="flex flex-wrap gap-2">
-					<Button href="/dashboard/platform/inbox" variant="secondary">
+					<Button
+						href={hrefFor("dashboard.platform.inbox")}
+						variant="secondary"
+					>
 						All requests
 					</Button>
 					<Button href={mailto} leadingIcon="mail">

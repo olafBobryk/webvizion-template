@@ -93,7 +93,7 @@ Optional:
   --graph-nodes 0
   --graph-edges 0
   --graph-queries 0
-  --suggested-files src/app/page.tsx,src/config/routes.ts
+  --suggested-files src/app/page.tsx,src/config/surfaces.ts
   --actual-files src/app/page.tsx
   --correctness 3
   --wrong-turns 1

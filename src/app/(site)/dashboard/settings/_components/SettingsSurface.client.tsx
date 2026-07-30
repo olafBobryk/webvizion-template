@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { hrefFor } from "@/lib/routes";
 import {
 	DashboardFooterNote,
 	DashboardFooterNoteLink,
@@ -20,7 +21,7 @@ function SettingsFooter({ canManage }: { canManage: boolean }) {
 	return canManage ? (
 		<DashboardFooterNote>
 			Looking for administration?{" "}
-			<DashboardFooterNoteLink href="/dashboard/administration">
+			<DashboardFooterNoteLink href={hrefFor("dashboard.administration")}>
 				Open organization administration
 			</DashboardFooterNoteLink>
 			.

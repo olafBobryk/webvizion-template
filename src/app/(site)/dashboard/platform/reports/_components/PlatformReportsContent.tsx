@@ -32,6 +32,7 @@ import {
 import { Button } from "@/components/ui/primitives/Button";
 import { Card } from "@/components/ui/primitives/Card";
 import { Text } from "@/components/ui/primitives/Text";
+import { surfaceHref } from "@/lib/routes";
 import {
 	FeedbackSeverityChip,
 	FeedbackStatusChip,
@@ -160,7 +161,9 @@ export function PlatformReportsContent({
 						render: (report) => (
 							<Button
 								aria-label={`Open report from ${report.name}`}
-								href={`/dashboard/platform/reports/${encodeURIComponent(report.id)}`}
+								href={surfaceHref("dashboard.platform.report", {
+									id: report.id,
+								})}
 								leadingIcon="arrow-right"
 								size="icon-sm"
 								variant="ghost"
@@ -179,7 +182,7 @@ export function PlatformReportsContent({
 				}
 				getRowAriaLabel={(report) => `Open report from ${report.name}`}
 				getRowHref={(report) =>
-					`/dashboard/platform/reports/${encodeURIComponent(report.id)}`
+					surfaceHref("dashboard.platform.report", { id: report.id })
 				}
 				getRowKey={(report) => report.id}
 				header={

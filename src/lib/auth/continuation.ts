@@ -7,7 +7,7 @@ function hasControlCharacter(value: string) {
 
 export function getSafeContinuationPath(
 	value: string | null | undefined,
-	fallback = "/dashboard",
+	fallback = hrefFor("dashboard.overview"),
 ) {
 	const candidate = value?.trim();
 	if (
@@ -40,3 +40,5 @@ export function withSafeContinuation(path: string, next: string | null) {
 	}
 	return `${url.pathname}${url.search}`;
 }
+
+import { hrefFor } from "@/lib/routes";

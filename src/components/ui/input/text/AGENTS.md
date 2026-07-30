@@ -12,4 +12,4 @@ Text-like controls, including semantic email, password, phone, multiline, and hi
 ## Invariants
 
 - Preserve `Field` and `InputFrame` ownership, real input semantics, browser autofill behavior, validation wiring, and visible focus.
-- Keep password visibility and strength behavior in `PasswordInput`, and country-aware behavior in `PhoneInput`.
+- Keep password visibility and strength behavior in `PasswordInput`, and country-aware behavior in `PhoneInput`; `phoneCountryOptions.ts` owns country normalization, filtering, and dial-code matching, while `PhoneCountryListbox.tsx` privately owns country-menu rendering.

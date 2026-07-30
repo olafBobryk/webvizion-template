@@ -7,6 +7,7 @@ import { ErrorState } from "@/components/ui/misc";
 import { Button } from "@/components/ui/primitives/Button";
 import { AuthApiError, resetPassword } from "@/lib/api/auth";
 import { showToast } from "@/lib/feedback";
+import { hrefFor, surfaceHref } from "@/lib/routes";
 
 function PasswordResetFormRoot({ token }: { token?: string }) {
 	const router = useRouter();
@@ -38,7 +39,13 @@ function PasswordResetFormRoot({ token }: { token?: string }) {
 		setPasswordConfirmError(undefined);
 		try {
 			await resetPassword({ password, token });
-			router.replace("/login?message=password-reset");
+			router.replace(
+				surfaceHref(
+					"auth.login",
+					{},
+					{ search: { message: "password-reset" } },
+				),
+			);
 		} catch (nextError) {
 			if (
 				nextError instanceof AuthApiError &&
@@ -62,7 +69,11 @@ function PasswordResetFormRoot({ token }: { token?: string }) {
 		return (
 			<ErrorState
 				action={
-					<Button href="/forgot-password" size="sm" variant="secondary">
+					<Button
+						href={hrefFor("auth.forgot-password")}
+						size="sm"
+						variant="secondary"
+					>
 						Request a new link
 					</Button>
 				}

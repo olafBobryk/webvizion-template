@@ -1,17 +1,22 @@
-import { type AppRouteId, appRoutes } from "@/config/routes";
+import {
+	hrefFor,
+	internalHrefFor,
+	isInternalRouteId,
+	type StaticAppSurfaceId,
+} from "@/lib/routes";
 
 export type HeaderIconName = "close" | "menu" | "search" | "dot";
 
 export type SiteLink =
 	| {
 			label: string;
-			routeId: AppRouteId;
+			surfaceId: StaticAppSurfaceId;
 			href?: never;
 	  }
 	| {
 			label: string;
 			href: string;
-			routeId?: never;
+			surfaceId?: never;
 	  };
 
 export type SiteNavSection = SiteLink & {
@@ -59,8 +64,53 @@ export type SiteLayoutDocument = {
 };
 
 export function getSiteLinkHref(link: SiteLink) {
-	return link.routeId ? appRoutes[link.routeId] : link.href;
+	return link.href ?? hrefFor(link.surfaceId);
 }
+
+function getAvailableInternalRouteLink(
+	label: string,
+	internalRouteId: string,
+): SiteLink | null {
+	return isInternalRouteId(internalRouteId)
+		? { label, href: internalHrefFor(internalRouteId) }
+		: null;
+}
+
+function omitMissingLinks<T>(items: Array<T | null>): T[] {
+	return items.filter((item): item is T => item !== null);
+}
+
+const canShowInternalRoutes = process.env.NODE_ENV !== "production";
+const demoLink = canShowInternalRoutes
+	? getAvailableInternalRouteLink("Demo", "demo")
+	: null;
+const intelligenceLink = canShowInternalRoutes
+	? getAvailableInternalRouteLink("Intelligence", "intelligence")
+	: null;
+const playgroundLink = canShowInternalRoutes
+	? getAvailableInternalRouteLink("Playground", "playground")
+	: null;
+const dictionaryLink = canShowInternalRoutes
+	? getAvailableInternalRouteLink("Dictionary", "dictionary")
+	: null;
+const referenceLink = canShowInternalRoutes
+	? getAvailableInternalRouteLink("Reference", "reference")
+	: null;
+const internalRouteLinks = omitMissingLinks<SiteLink>([
+	demoLink,
+	intelligenceLink,
+	playgroundLink,
+	dictionaryLink,
+	referenceLink,
+]);
+const developerMenuGroup: SiteMenuGroup | null =
+	internalRouteLinks.length > 0
+		? {
+				label: "Development",
+				icon: "dot",
+				links: internalRouteLinks,
+			}
+		: null;
 
 export const defaultSiteLayout: SiteLayoutDocument = {
 	header: {
@@ -72,17 +122,18 @@ export const defaultSiteLayout: SiteLayoutDocument = {
 			{
 				label: "Start",
 				icon: "dot",
-				link: { label: "Home", routeId: "home" },
+				link: { label: "Home", surfaceId: "marketing.home" },
 				links: [{ label: "Hero", href: "/#home-hero" }],
 			},
 			{
 				label: "Build",
 				icon: "dot",
 				links: [
-					{ label: "Home", routeId: "home" },
-					{ label: "Contact", routeId: "contact" },
+					{ label: "Home", surfaceId: "marketing.home" },
+					{ label: "Contact", surfaceId: "marketing.contact" },
 				],
 			},
+			...omitMissingLinks([developerMenuGroup]),
 		],
 		mobile: {
 			closeAriaLabel: "Close navigation",
@@ -92,7 +143,7 @@ export const defaultSiteLayout: SiteLayoutDocument = {
 		navLinks: [
 			{
 				label: "Home",
-				routeId: "home",
+				surfaceId: "marketing.home",
 				sections: [
 					{
 						label: "Hero",
@@ -101,6 +152,11 @@ export const defaultSiteLayout: SiteLayoutDocument = {
 					},
 				],
 			},
+			...omitMissingLinks<SiteNavLink>([
+				demoLink,
+				intelligenceLink,
+				playgroundLink,
+			]),
 		],
 		search: {
 			ariaLabel: "Search pages",
@@ -111,14 +167,18 @@ export const defaultSiteLayout: SiteLayoutDocument = {
 			{
 				label: "Home",
 				icon: "dot",
-				link: { label: "Home", routeId: "home" },
+				link: { label: "Home", surfaceId: "marketing.home" },
 				links: [{ label: "Hero", href: "/#home-hero" }],
 			},
+			...omitMissingLinks([developerMenuGroup]),
 		],
-		topNavLinks: [{ label: "Home", routeId: "home" }],
+		topNavLinks: [
+			{ label: "Home", surfaceId: "marketing.home" },
+			...omitMissingLinks([demoLink, intelligenceLink, playgroundLink]),
+		],
 	},
 	socialLinks: [],
 	footer: {
-		navLinks: [{ label: "Home", routeId: "home" }],
+		navLinks: [{ label: "Home", surfaceId: "marketing.home" }],
 	},
 };

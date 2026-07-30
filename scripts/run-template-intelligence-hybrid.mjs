@@ -72,8 +72,8 @@ function printUsage() {
   --task-id T1 \\
   --task-name "Route architecture" \\
   --topics route-architecture,dev-server \\
-  --serena-file src/config/routes.ts \\
-  --serena-symbol appRoutes
+  --serena-file src/config/surfaces.ts \\
+  --serena-symbol appSurfaceRegistry
 
 Optional:
   --ensure-serena

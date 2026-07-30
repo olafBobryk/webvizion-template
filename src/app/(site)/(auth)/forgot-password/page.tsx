@@ -3,6 +3,7 @@ import {
 	getSafeContinuationPath,
 	withSafeContinuation,
 } from "@/lib/auth/continuation";
+import { hrefFor } from "@/lib/routes";
 import { AuthScreen } from "../_components/AuthScreen";
 import { PasswordRecoveryRequestForm } from "../_components/PasswordRecoveryRequestForm";
 
@@ -23,7 +24,7 @@ export default async function ForgotPasswordPage({
 			<PasswordRecoveryRequestForm />
 			<Button
 				className="w-full"
-				href={withSafeContinuation("/login", next)}
+				href={withSafeContinuation(hrefFor("auth.login"), next)}
 				variant="ghost"
 			>
 				Return to sign in

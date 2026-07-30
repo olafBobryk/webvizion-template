@@ -1,7 +1,7 @@
 import { Chip } from "@/components/ui/misc";
 import { Button } from "@/components/ui/primitives/Button";
 import { Card } from "@/components/ui/primitives/Card";
-import { hrefFor } from "@/lib/routes";
+import { internalHrefFor } from "@/lib/routes";
 import {
 	InternalPage,
 	InternalPageHeader,
@@ -34,7 +34,11 @@ export default function SpamProtectedFormDictionaryPage() {
 							<li key={note}>{note}</li>
 						))}
 					</ul>
-					<Button href={hrefFor("dictionary")} size="sm" variant="secondary">
+					<Button
+						href={internalHrefFor("dictionary")}
+						size="sm"
+						variant="secondary"
+					>
 						Back to dictionary
 					</Button>
 				</Card.Content>

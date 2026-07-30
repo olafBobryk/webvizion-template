@@ -18,9 +18,9 @@ import {
 import {
 	createProjectState,
 	renderApiIndexFile,
-	renderLibRoutesFile,
+	renderInternalLayoutFile,
 	renderNextConfigFile,
-	renderRoutesFile,
+	renderSurfacesFile,
 	renderTsconfigFile,
 } from "./project-files.mjs";
 
@@ -187,9 +187,14 @@ async function buildCopyPlan(sourceRoot, profile, selectedSurfaces) {
 	return { included, omitted, ownership, selectedSurfaces };
 }
 
-async function copyFile(sourceRoot, destinationRoot, relativePath) {
-	const source = path.join(sourceRoot, relativePath);
-	const destination = path.join(destinationRoot, relativePath);
+async function copyFile(
+	sourceRoot,
+	destinationRoot,
+	sourceRelativePath,
+	destinationRelativePath = sourceRelativePath,
+) {
+	const source = path.join(sourceRoot, sourceRelativePath);
+	const destination = path.join(destinationRoot, destinationRelativePath);
 	const stat = await fs.lstat(source);
 	await fs.mkdir(path.dirname(destination), { recursive: true });
 	if (stat.isSymbolicLink()) {
@@ -197,6 +202,20 @@ async function copyFile(sourceRoot, destinationRoot, relativePath) {
 	} else {
 		await fs.copyFile(source, destination);
 	}
+}
+
+function getAssembledPath(relativePath, selectedSurfaces) {
+	if (
+		selectedSurfaces.has("marketing") &&
+		isWithinPath(relativePath, "src/app/(site)/(dev)/internal")
+	) {
+		return relativePath.replace(
+			"src/app/(site)/(dev)/internal",
+			"src/app/(site)/(marketing)/internal",
+		);
+	}
+
+	return relativePath;
 }
 
 function selectedPackageEntries(profile, selectedSurfaces) {
@@ -336,10 +355,16 @@ async function writeCentralFiles(
 	selectedSurfaces,
 ) {
 	const state = createProjectState(selectedSurfaces);
+	state.hasMarketingSettings = await pathExists(
+		path.join(destinationRoot, "src/app/(site)/(marketing)/settings/page.tsx"),
+	);
+	const internalLayoutPath = state.hasMarketing
+		? "src/app/(site)/(marketing)/internal/layout.tsx"
+		: "src/app/(site)/(dev)/internal/layout.tsx";
 	const targets = [
-		["src/config/routes.ts", renderRoutesFile(state)],
-		["src/lib/routes.ts", renderLibRoutesFile(state)],
+		["src/config/surfaces.ts", renderSurfacesFile(state)],
 		["src/lib/api/index.ts", renderApiIndexFile(state)],
+		[internalLayoutPath, renderInternalLayoutFile(state)],
 	];
 	const nextConfig = renderNextConfigFile(state);
 	const tsconfig = renderTsconfigFile(state);
@@ -413,7 +438,12 @@ export async function assembleTemplateProfile({
 	const selectedSurfaces = selectedProfileSurfaces(profile, content);
 	const plan = await buildCopyPlan(sourceRoot, profile, selectedSurfaces);
 	for (const relativePath of plan.included) {
-		await copyFile(sourceRoot, destinationRoot, relativePath);
+		await copyFile(
+			sourceRoot,
+			destinationRoot,
+			relativePath,
+			getAssembledPath(relativePath, selectedSurfaces),
+		);
 	}
 	await applyProfileFiles(sourceRoot, destinationRoot, profile);
 	await writeCentralFiles(sourceRoot, destinationRoot, selectedSurfaces);

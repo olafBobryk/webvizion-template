@@ -1,5 +1,6 @@
 import type * as React from "react";
 import type { ButtonBaseProps } from "../Button";
+import type { DropdownOptionTone } from "../dropdownStyles";
 import type { ListboxOption } from "../Listbox";
 import type { PanelProps } from "../Panel";
 
@@ -42,7 +43,7 @@ export type DropdownProps = {
 	menuWidth?: number | "trigger";
 	menuMinWidth?: number;
 	align?: "start" | "end";
-	side?: "top" | "bottom";
+	side?: "top" | "bottom" | "left" | "right";
 	offset?: number;
 	positionStrategy?: "fixed" | "absolute";
 	disabled?: boolean;
@@ -68,6 +69,7 @@ export type DropdownSurfaceProps = PanelProps<"div"> & {
 	positionStrategy?: DropdownPositionStrategy;
 	ref?: React.Ref<HTMLDivElement>;
 	side?: DropdownSide;
+	zIndex?: number;
 };
 
 export type DropdownMenuEvent =
@@ -89,8 +91,9 @@ export type DropdownMenuOption = {
 	leadingIcon?: DropdownIcon;
 	onSelect?: (event: DropdownMenuEvent) => void;
 	textClassName?: string;
-	tone?: "danger" | "default";
+	tone?: DropdownOptionTone;
 	trailingIcon?: DropdownIcon;
+	children?: DropdownMenuOption[];
 };
 
 type DropdownTriggerButtonProps = Omit<ButtonBaseProps, "children" | "href"> &
@@ -99,7 +102,7 @@ type DropdownTriggerButtonProps = Omit<ButtonBaseProps, "children" | "href"> &
 		"children" | "onClick" | "onKeyDown" | "onMouseEnter" | "onMouseLeave"
 	>;
 
-type DropdownCompoundProps = Pick<
+export type DropdownCompoundProps = Pick<
 	DropdownProps,
 	| "align"
 	| "collisionPadding"

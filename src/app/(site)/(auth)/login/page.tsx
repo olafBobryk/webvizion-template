@@ -7,6 +7,7 @@ import {
 	withSafeContinuation,
 } from "@/lib/auth/continuation";
 import { resolveCurrentSession } from "@/lib/auth/server";
+import { hrefFor } from "@/lib/routes";
 import { AuthScreen } from "../_components/AuthScreen";
 import { enterDemoAction, signInAction } from "../actions";
 
@@ -20,7 +21,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 	const resolution = await resolveCurrentSession();
 	if (resolution.status === "resolved") redirect(next);
 	if (resolution.status === "organization-selection-required") {
-		redirect(withSafeContinuation("/select-organization", next));
+		redirect(withSafeContinuation(hrefFor("auth.select-organization"), next));
 	}
 
 	return (
@@ -44,7 +45,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 					label="Password"
 					labelAction={
 						<Button
-							href={withSafeContinuation("/forgot-password", next)}
+							href={withSafeContinuation(hrefFor("auth.forgot-password"), next)}
 							size="none"
 							textVariant="caption"
 							variant="ghost"
@@ -69,7 +70,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 			</form>
 			<Button
 				className="w-full"
-				href={withSafeContinuation("/sign-in-options", next)}
+				href={withSafeContinuation(hrefFor("auth.sign-in-options"), next)}
 				variant="ghost"
 			>
 				Use magic link

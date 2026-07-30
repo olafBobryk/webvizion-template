@@ -4,6 +4,7 @@ import * as Reveal from "@/components/ui/motion/reveal";
 import { Button } from "@/components/ui/primitives/Button";
 import { Section } from "@/components/ui/primitives/Section";
 import { Text } from "@/components/ui/primitives/Text";
+import { getMarketingLinkHref } from "../../links";
 import type { HomeHeroSectionBlock } from "../../types";
 import {
 	HomeHeroSurfaceAssembly,
@@ -63,7 +64,7 @@ function HomeHeroSectionRoot({ section }: HomeHeroSectionProps) {
 						}}
 					>
 						<Button
-							href={section.cta.href}
+							href={getMarketingLinkHref(section.cta)}
 							variant="primary"
 							size="md"
 							className="pointer-events-auto"

@@ -3,6 +3,7 @@ import "server-only";
 import { redirect } from "next/navigation";
 import type { ResolvedOrganizationContext } from "@/lib/auth/contracts";
 import { resolveCurrentSession } from "@/lib/auth/server";
+import { hrefFor } from "@/lib/routes";
 import type { PlatformActorSnapshot } from "./contracts";
 
 export async function requireResolvedDashboardSession() {
@@ -19,7 +20,7 @@ export async function requirePlatformAdmin() {
 		resolution.status !== "resolved" ||
 		resolution.user.platformRole !== "admin"
 	) {
-		redirect("/dashboard");
+		redirect(hrefFor("dashboard.overview"));
 	}
 	return resolution;
 }

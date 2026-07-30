@@ -2,13 +2,17 @@ import { Button } from "@/components/ui/primitives/Button";
 import { Section } from "@/components/ui/primitives/Section";
 import { Text } from "@/components/ui/primitives/Text";
 import {
-	type CodexTurnSummary,
-	readCodexTurnRecording,
 	readTemplateIntelligenceAgentMap,
+	readTemplateIntelligenceIndex,
+} from "@/lib/template-intelligence/artifacts";
+import {
 	readTemplateIntelligenceBenchmarkExampleRuns,
 	readTemplateIntelligenceBenchmarkRuns,
-	readTemplateIntelligenceIndex,
-} from "@/lib/template-intelligence";
+} from "@/lib/template-intelligence/benchmark-runs";
+import {
+	type CodexTurnSummary,
+	readCodexTurnRecording,
+} from "@/lib/template-intelligence/codex-turn-recording";
 import { InternalCard } from "./_components/InternalCard";
 import { BenchmarkRunToggle } from "./BenchmarkRunToggle";
 

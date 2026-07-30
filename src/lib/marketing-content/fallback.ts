@@ -1,5 +1,16 @@
-import { defaultSiteLayout } from "@/app/(site)/_components/layout/siteLayout";
+import {
+	defaultSiteLayout,
+	getAvailableSiteSurfaceLink,
+} from "@/app/(site)/_components/layout/siteLayout";
 import type { MarketingPageDocument, MarketingPageSlug } from "./types";
+
+const fallbackHeroCta =
+	getAvailableSiteSurfaceLink("Dashboard", "auth.login") ??
+	getAvailableSiteSurfaceLink("Contact", "marketing.contact");
+
+if (!fallbackHeroCta) {
+	throw new Error("Marketing fallback content requires a primary CTA surface.");
+}
 
 export const fallbackHomePage: MarketingPageDocument = {
 	slug: "home",
@@ -15,8 +26,7 @@ export const fallbackHomePage: MarketingPageDocument = {
 				},
 			],
 			cta: {
-				label: "Dashboard",
-				href: "/login",
+				...fallbackHeroCta,
 			},
 			services: [
 				{

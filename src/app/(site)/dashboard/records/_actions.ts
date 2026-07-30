@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { hrefFor, surfaceHref } from "@/lib/routes";
 import type {
 	ReferenceRecordCreateInput,
 	ReferenceRecordUpdateInput,
@@ -14,9 +15,11 @@ import {
 import { requireDashboardCapability } from "../_registry/access.server";
 
 function refreshRecordRoutes(recordId?: string) {
-	revalidatePath("/dashboard");
-	revalidatePath("/dashboard/records");
-	if (recordId) revalidatePath(`/dashboard/records/${recordId}`);
+	revalidatePath(hrefFor("dashboard.overview"));
+	revalidatePath(hrefFor("dashboard.records"));
+	if (recordId) {
+		revalidatePath(surfaceHref("dashboard.record", { recordId }));
+	}
 }
 
 export async function createReferenceRecordAction(

@@ -1,6 +1,7 @@
 import "server-only";
 
 import { randomUUID } from "node:crypto";
+import { hrefFor } from "@/lib/routes";
 import type {
 	CreateProductReportInput,
 	CreateSupportRequestInput,
@@ -100,7 +101,7 @@ function createInitialState(): PlatformFixtureState {
 			browserMetadata: { language: "en-US", platform: "iPhone" },
 			category: "bug",
 			createdAt: "2026-07-20T16:30:00.000Z",
-			currentRoute: "/dashboard/settings",
+			currentRoute: hrefFor("dashboard.settings"),
 			description:
 				"The profile modal close action briefly became available while the save request was pending.",
 			id: "report-demo-modal-lock",
@@ -220,7 +221,7 @@ export function createProductReport(input: CreateProductReportInput) {
 	const currentRoute =
 		routeCandidate.startsWith("/") && !routeCandidate.startsWith("//")
 			? routeCandidate
-			: "/dashboard";
+			: hrefFor("dashboard.overview");
 	const now = new Date().toISOString();
 	const report: ProductReport = {
 		...input.actor,

@@ -1,6 +1,6 @@
 import { StatusContent } from "@/app/(site)/_components/status/StatusContent";
 import { Button } from "@/components/ui/primitives/Button";
-import { hrefFor } from "@/lib/routes";
+import { getOptionalSurfaceHref, hrefFor } from "@/lib/routes";
 
 export function DashboardLoadingFallback() {
 	return (
@@ -23,10 +23,16 @@ export function DashboardBannedFallback() {
 				enableRevealMotion={false}
 				actions={
 					<>
-						<Button variant="primary" href={hrefFor("login")}>
+						<Button variant="primary" href={hrefFor("auth.login")}>
 							Go to login
 						</Button>
-						<Button variant="secondary" href={hrefFor("home")}>
+						<Button
+							variant="secondary"
+							href={
+								getOptionalSurfaceHref("marketing.home") ??
+								hrefFor("dashboard.overview")
+							}
+						>
 							Back to site
 						</Button>
 					</>
@@ -37,7 +43,7 @@ export function DashboardBannedFallback() {
 }
 
 export function DashboardUnauthenticatedFallback({
-	loginHref = hrefFor("login"),
+	loginHref = hrefFor("auth.login"),
 }: {
 	loginHref?: string;
 }) {

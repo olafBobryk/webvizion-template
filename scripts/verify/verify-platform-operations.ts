@@ -89,8 +89,8 @@ const platformPage = [
 	.map((relativePath) => readFileSync(resolve(root, relativePath), "utf8"))
 	.join("\n");
 assert.doesNotMatch(platformPage, /redirect\(/);
-assert.match(platformPage, /href="\/dashboard\/platform\/inbox"/);
-assert.match(platformPage, /href="\/dashboard\/platform\/reports"/);
+assert.match(platformPage, /hrefFor\("dashboard\.platform\.inbox"\)/);
+assert.match(platformPage, /hrefFor\("dashboard\.platform\.reports"\)/);
 assert.equal(
 	existsSync(resolve(root, "src/app/(site)/platform/layout.tsx")),
 	false,

@@ -8,7 +8,7 @@ import path from "node:path";
 import {
 	aggregateCodexHookEvents,
 	type CodexHookEventV1,
-} from "../../src/lib/template-intelligence/index";
+} from "../../src/lib/template-intelligence/codex-turn-recording";
 import {
 	appendCodexHookEvent,
 	extractEditedPaths,

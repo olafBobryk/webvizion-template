@@ -1,6 +1,7 @@
 import { Icon } from "@/components/ui/icons/Icon";
 import { Button } from "@/components/ui/primitives/Button";
 import { Card } from "@/components/ui/primitives/Card";
+import { hrefFor } from "@/lib/routes";
 import { DashboardSection } from "./layout/DashboardSection";
 import { DashboardLoadingStatus } from "./loading/DashboardLoadingStatus";
 
@@ -13,21 +14,21 @@ function OverviewContent() {
 		>
 			<OverviewCard
 				description="Review members, roles, and organization administration."
-				href="/dashboard/organization"
+				href={hrefFor("dashboard.organization")}
 				icon="building"
 				label="Open organization"
 				title="Organization"
 			/>
 			<OverviewCard
 				description="Browse and manage records for the active organization."
-				href="/dashboard/records"
+				href={hrefFor("dashboard.records")}
 				icon="database"
 				label="Open records"
 				title="Records"
 			/>
 			<OverviewCard
 				description="Manage your profile, security, and accessibility preferences."
-				href="/dashboard/settings"
+				href={hrefFor("dashboard.settings")}
 				icon="gear"
 				label="Open account settings"
 				title="Account"

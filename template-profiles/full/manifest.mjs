@@ -29,7 +29,7 @@ export const fullProfile = {
 			"src/app/(site)/(marketing)/(home)/page.tsx",
 			"src/app/(site)/(auth)/login/page.tsx",
 			"src/app/(site)/dashboard/page.tsx",
-			"src/app/(site)/(dev)/internal/layout.tsx",
+			"src/app/(site)/(marketing)/internal/layout.tsx",
 			"src/proxy.ts",
 			"payload.config.ts",
 		],

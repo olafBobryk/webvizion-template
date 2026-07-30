@@ -28,6 +28,8 @@ export const applicationSurfaces = {
 	},
 	dashboard: {
 		ownedPaths: [
+			"src/config/surfaces/auth.ts",
+			"src/config/surfaces/dashboard.ts",
 			"docs/guides/auth-organization-adapters.md",
 			"scripts/verify/verify-auth-organization.ts",
 			"scripts/verify/verify-dashboard-page-policy.ts",

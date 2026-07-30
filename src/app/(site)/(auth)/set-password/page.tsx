@@ -1,6 +1,7 @@
 import { PasswordInput } from "@/components/ui/input";
 import { Button } from "@/components/ui/primitives/Button";
 import { getSafeContinuationPath } from "@/lib/auth/continuation";
+import { hrefFor } from "@/lib/routes";
 import { AuthScreen } from "../_components/AuthScreen";
 import { requestUnavailableAuthMethodAction } from "../actions";
 
@@ -21,7 +22,11 @@ export default async function SetPasswordPage({
 			<form action={requestUnavailableAuthMethodAction} className="grid gap-4">
 				<input name="method" type="hidden" value="password-update" />
 				<input name="next" type="hidden" value={next} />
-				<input name="returnTo" type="hidden" value="/set-password" />
+				<input
+					name="returnTo"
+					type="hidden"
+					value={hrefFor("auth.set-password")}
+				/>
 				<PasswordInput
 					autoComplete="new-password"
 					label="New password"

@@ -22,6 +22,7 @@ import {
 import { StatusMessage } from "@/components/ui/primitives/StatusMessage";
 import { Text } from "@/components/ui/primitives/Text";
 import { showToast } from "@/lib/feedback/toast";
+import { surfaceHref } from "@/lib/routes";
 import type { MemberPresentation } from "../../../_lib/entities/member/presentation";
 import type { ReferenceRecord } from "../../../_lib/entities/record/domain";
 import {
@@ -61,7 +62,7 @@ export function RecordCollectionClientRoot({
 	return (
 		<div className="grid gap-4">
 			{simulateFailure ? (
-				<div className="flex items-center justify-between gap-3 rounded-lg border border-warning/25 bg-warning/10 px-4 py-3">
+				<div className="flex items-center justify-between gap-3 rounded-lg border border-warning-accent/25 bg-warning-accent/10 px-4 py-3">
 					<Text tone="muted" variant="support">
 						Mutation failure mode is active. Optimistic changes will roll back.
 					</Text>
@@ -181,7 +182,9 @@ export function RecordCollectionClientRoot({
 					/>
 				}
 				getRowAriaLabel={(record) => `Open ${record.title}`}
-				getRowHref={(record) => `/dashboard/records/${record.id}`}
+				getRowHref={(record) =>
+					surfaceHref("dashboard.record", { recordId: record.id })
+				}
 				getRowKey={(record) => record.id}
 				header={
 					<Card.Header

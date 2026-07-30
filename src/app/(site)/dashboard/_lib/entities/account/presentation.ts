@@ -1,3 +1,4 @@
+import { hrefFor } from "@/lib/routes";
 import { formatMemberJoinedDate } from "../member/presentation";
 import type { AccountEntity } from "./domain";
 
@@ -35,7 +36,7 @@ export function getAccountPresentation(account: AccountEntity) {
 		organizationId: account.organization.id,
 		organizationLabel: account.organization.name,
 		organizationSlug: account.organization.slug,
-		profileHref: "/dashboard/profile",
+		profileHref: hrefFor("dashboard.profile"),
 		role: account.membership.role,
 	};
 }

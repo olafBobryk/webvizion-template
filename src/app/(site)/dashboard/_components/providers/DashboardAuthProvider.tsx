@@ -177,7 +177,7 @@ export function DashboardAuthGate({ children }: { children: React.ReactNode }) {
 
 	React.useEffect(() => {
 		if (!initializing && !user) {
-			router.replace(hrefFor("login"));
+			router.replace(hrefFor("auth.login"));
 		}
 	}, [initializing, router, user]);
 

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Icon } from "@/components/ui/icons/Icon";
 import { ProfilePicture } from "@/components/ui/misc";
 import { Dropdown } from "@/components/ui/primitives/dropdown";
+import { hrefFor } from "@/lib/routes";
 import { getAccountPresentation } from "../../_lib/entities/account/presentation";
 import { AccountIdentity } from "../entities/account/AccountIdentity";
 import { useDashboardAuth } from "../providers/DashboardAuthProvider";
@@ -21,7 +22,7 @@ export function DashboardAccountMenu() {
 
 	async function handleSignOut() {
 		await logout();
-		router.replace("/login");
+		router.replace(hrefFor("auth.login"));
 		router.refresh();
 	}
 
@@ -47,13 +48,13 @@ export function DashboardAccountMenu() {
 					layout: "presentation",
 				},
 				{
-					href: "/dashboard/settings",
+					href: hrefFor("dashboard.settings"),
 					id: "account-settings",
 					label: "Account settings",
 					leadingIcon: <Icon name="gear" size="sm" />,
 				},
 				{
-					href: "/dashboard/organization",
+					href: hrefFor("dashboard.organization"),
 					id: "organization",
 					label: "Organization",
 					leadingIcon: <Icon name="building" size="sm" />,

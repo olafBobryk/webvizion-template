@@ -4,6 +4,7 @@ import {
 	withSafeContinuation,
 } from "@/lib/auth/continuation";
 import { applicationAdapters, resolveCurrentSession } from "@/lib/auth/server";
+import { hrefFor, surfaceHref } from "@/lib/routes";
 import { OrganizationSelectionCard } from "../../_components/organization/OrganizationSelectionCard";
 
 export default async function SelectOrganizationPage({
@@ -15,16 +16,24 @@ export default async function SelectOrganizationPage({
 	const next = getSafeContinuationPath(query.next);
 	const resolution = await resolveCurrentSession();
 	if (resolution.status === "anonymous") {
-		redirect(withSafeContinuation("/login", next));
+		redirect(withSafeContinuation(hrefFor("auth.login"), next));
 	}
 	if (resolution.status === "membership-required") {
 		redirect(
-			`/login?message=membership-required&next=${encodeURIComponent(next)}`,
+			surfaceHref(
+				"auth.login",
+				{},
+				{
+					search: { message: "membership-required", next },
+				},
+			),
 		);
 	}
 	if (resolution.status === "resolved") {
 		if (query.switch !== "1") redirect(next);
-		redirect(`/dashboard/organization/switch?next=${encodeURIComponent(next)}`);
+		redirect(
+			surfaceHref("dashboard.organization.switch", {}, { search: { next } }),
+		);
 	}
 
 	const choices = await Promise.all(

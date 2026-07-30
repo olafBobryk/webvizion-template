@@ -25,7 +25,7 @@ export function ImageInspectModal({
 	src,
 	alt = "Preview image",
 	onClose,
-	shareUrl, //TODO: Figure out what needs to be on supabase for a share to happen
+	shareUrl,
 	onShare,
 }: ImageInspectModalProps) {
 	const [isSharing, setIsSharing] = React.useState(false);

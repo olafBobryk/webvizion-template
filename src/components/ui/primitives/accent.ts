@@ -11,7 +11,8 @@ const accentSurfaceClassNames = {
 	info: "border-primary/20 bg-primary/5 ring-primary/20",
 	neutral: "border-border/70 bg-muted/40",
 	success: "border-success/20 bg-success/5 ring-success/20",
-	warning: "border-warning/25 bg-warning/5 ring-warning/20",
+	warning:
+		"border-warning-accent/25 bg-warning-accent/5 ring-warning-accent/20",
 } satisfies Record<AccentTone, string>;
 
 const accentSlotClassNames = {
@@ -19,7 +20,7 @@ const accentSlotClassNames = {
 	info: "bg-primary/5",
 	neutral: "bg-muted/45",
 	success: "bg-success/5",
-	warning: "bg-warning/5",
+	warning: "bg-warning-accent/5",
 } satisfies Record<AccentTone, string>;
 
 const solidAccentSurfaceClassNames = {
@@ -27,7 +28,8 @@ const solidAccentSurfaceClassNames = {
 	info: "border-primary/20 bg-[var(--accent-background)] ring-primary/20",
 	neutral: "border-border/70 bg-[var(--accent-background)]",
 	success: "border-success/20 bg-[var(--accent-background)] ring-success/20",
-	warning: "border-warning/25 bg-[var(--accent-background)] ring-warning/20",
+	warning:
+		"border-warning-accent/25 bg-[var(--accent-background)] ring-warning-accent/20",
 } satisfies Record<AccentTone, string>;
 
 const solidAccentSlotClassNames = {

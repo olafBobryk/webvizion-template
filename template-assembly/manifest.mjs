@@ -4,9 +4,8 @@ export const assemblyGeneratedPaths = new Set([
 	"next.config.ts",
 	"package-lock.json",
 	"package.json",
-	"src/config/routes.ts",
+	"src/config/surfaces.ts",
 	"src/lib/api/index.ts",
-	"src/lib/routes.ts",
 	"tsconfig.json",
 ]);
 
@@ -70,6 +69,7 @@ export const assemblyCoreScripts = new Set([
 	"verify:smoke",
 	"verify:modals",
 	"verify:surface-contracts",
+	"verify:route-surfaces",
 	"verify:component-skeletons",
 	"verify:route-skeletons",
 	"verify",

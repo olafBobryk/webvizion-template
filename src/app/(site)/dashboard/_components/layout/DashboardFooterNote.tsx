@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { focusRing } from "@/components/ui/foundations/focus";
 import { Text } from "@/components/ui/primitives/Text";
+import { hrefFor } from "@/lib/routes";
 
 type DashboardFooterNoteProps = {
 	children?: ReactNode;
@@ -31,7 +32,7 @@ function DashboardFooterNoteRoot({
 			variant="caption"
 		>
 			Looking for something specific and cannot find it?{" "}
-			<DashboardFooterNoteLink href="/dashboard/support">
+			<DashboardFooterNoteLink href={hrefFor("dashboard.support")}>
 				Contact support
 			</DashboardFooterNoteLink>
 			. {children}

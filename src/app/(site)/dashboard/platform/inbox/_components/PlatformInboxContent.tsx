@@ -26,6 +26,7 @@ import {
 import { Button } from "@/components/ui/primitives/Button";
 import { Card } from "@/components/ui/primitives/Card";
 import { Text } from "@/components/ui/primitives/Text";
+import { surfaceHref } from "@/lib/routes";
 import { SupportStatusChip } from "../../_components/PlatformStatusChip";
 
 type StatusFilter = "all" | SupportRequestStatus;
@@ -122,7 +123,9 @@ export function PlatformInboxContent({
 						render: (request) => (
 							<Button
 								aria-label={`Open ${request.subject}`}
-								href={`/dashboard/platform/inbox/${encodeURIComponent(request.id)}`}
+								href={surfaceHref("dashboard.platform.inbox.request", {
+									id: request.id,
+								})}
 								leadingIcon="arrow-right"
 								size="icon-sm"
 								variant="ghost"
@@ -141,7 +144,7 @@ export function PlatformInboxContent({
 				}
 				getRowAriaLabel={(request) => `Open ${request.subject}`}
 				getRowHref={(request) =>
-					`/dashboard/platform/inbox/${encodeURIComponent(request.id)}`
+					surfaceHref("dashboard.platform.inbox.request", { id: request.id })
 				}
 				getRowKey={(request) => request.id}
 				header={

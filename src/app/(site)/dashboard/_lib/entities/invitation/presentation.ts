@@ -1,4 +1,5 @@
 import type { OrganizationInvitation } from "@/lib/auth/contracts";
+import { hrefFor, surfaceHref } from "@/lib/routes";
 import { formatMemberJoinedDate } from "../member/presentation";
 
 export function getInvitationPresentation(
@@ -9,7 +10,17 @@ export function getInvitationPresentation(
 	return {
 		emailLabel: invitation.email,
 		expiresAtLabel: formatMemberJoinedDate(invitation.expiresAt),
-		href: `/invitation?invitation=${encodeURIComponent(invitation.id)}&token=${encodeURIComponent(invitation.tokenHash)}&next=${encodeURIComponent("/dashboard")}`,
+		href: surfaceHref(
+			"auth.invitation",
+			{},
+			{
+				search: {
+					invitation: invitation.id,
+					next: hrefFor("dashboard.overview"),
+					token: invitation.tokenHash,
+				},
+			},
+		),
 		id: invitation.id,
 		roleLabel: invitation.role === "admin" ? "Admin" : "Member",
 		sentAtLabel: formatMemberJoinedDate(invitation.createdAt),

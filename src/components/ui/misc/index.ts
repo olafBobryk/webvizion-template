@@ -20,8 +20,6 @@ export {
 	ChipText,
 	type ChipTextProps,
 	type ChipTone,
-	chipCanvasTokens,
-	getChipCanvasMetrics,
 } from "./Chip";
 export { CopyField } from "./CopyField";
 export { HealthCheckIndicator } from "./HealthCheckIndicator";

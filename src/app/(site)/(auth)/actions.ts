@@ -14,6 +14,7 @@ import {
 	selectCurrentOrganization,
 	signInWithFixturePassword,
 } from "@/lib/auth/server";
+import { hrefFor, surfaceHref } from "@/lib/routes";
 
 function readFormString(formData: FormData, name: string) {
 	const value = formData.get(name);
@@ -32,11 +33,11 @@ function redirectAfterSignIn(
 	next: string,
 ): never {
 	if (resolution.status === "organization-selection-required") {
-		redirect(withSafeContinuation("/select-organization", next));
+		redirect(withSafeContinuation(hrefFor("auth.select-organization"), next));
 	}
 	if (resolution.status === "membership-required") {
-		if (next.startsWith("/invitation")) redirect(next);
-		redirect(authRedirect("/login", next, "membership-required"));
+		if (next.startsWith(hrefFor("auth.invitation"))) redirect(next);
+		redirect(authRedirect(hrefFor("auth.login"), next, "membership-required"));
 	}
 	redirect(next);
 }
@@ -54,7 +55,7 @@ export async function signInAction(formData: FormData) {
 			throw error;
 		}
 		const publicError = toPublicAuthError(error);
-		redirect(authRedirect("/login", next, publicError.code));
+		redirect(authRedirect(hrefFor("auth.login"), next, publicError.code));
 	}
 }
 
@@ -82,7 +83,8 @@ export async function requestUnavailableAuthMethodAction(formData: FormData) {
 		throw new AuthDomainError("adapter-method-unavailable");
 	} catch (error) {
 		const publicError = toPublicAuthError(error);
-		const returnTo = readFormString(formData, "returnTo") || "/login";
+		const returnTo =
+			readFormString(formData, "returnTo") || hrefFor("auth.login");
 		redirect(authRedirect(returnTo, next, publicError.code));
 	}
 }
@@ -97,7 +99,9 @@ export async function selectOrganizationAction(formData: FormData) {
 			throw error;
 		}
 		const publicError = toPublicAuthError(error);
-		redirect(authRedirect("/select-organization", next, publicError.code));
+		redirect(
+			authRedirect(hrefFor("auth.select-organization"), next, publicError.code),
+		);
 	}
 }
 
@@ -105,12 +109,16 @@ export async function acceptInvitationAction(formData: FormData) {
 	const invitationId = readFormString(formData, "invitation");
 	const tokenHash = readFormString(formData, "token");
 	const next = getSafeContinuationPath(readFormString(formData, "next"));
-	const invitationPath = `/invitation?invitation=${encodeURIComponent(
-		invitationId,
-	)}&token=${encodeURIComponent(tokenHash)}&next=${encodeURIComponent(next)}`;
+	const invitationPath = surfaceHref(
+		"auth.invitation",
+		{},
+		{
+			search: { invitation: invitationId, next, token: tokenHash },
+		},
+	);
 	const resolution = await resolveCurrentSession();
 	if (resolution.status === "anonymous") {
-		redirect(withSafeContinuation("/login", invitationPath));
+		redirect(withSafeContinuation(hrefFor("auth.login"), invitationPath));
 	}
 
 	try {
@@ -124,7 +132,9 @@ export async function acceptInvitationAction(formData: FormData) {
 			const refreshed =
 				await applicationAdapters.organizations.resolveSession(sessionId);
 			if (refreshed.status === "organization-selection-required") {
-				redirect(withSafeContinuation("/select-organization", next));
+				redirect(
+					withSafeContinuation(hrefFor("auth.select-organization"), next),
+				);
 			}
 		}
 		redirect(next);

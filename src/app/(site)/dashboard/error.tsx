@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/primitives/Button";
+import { hrefFor } from "@/lib/routes";
 import { DashboardStatusFrame } from "./_components/layout/DashboardStatusFrame";
 
 export default function DashboardErrorPage({ reset }: { reset: () => void }) {
@@ -11,7 +12,7 @@ export default function DashboardErrorPage({ reset }: { reset: () => void }) {
 					<Button onClick={reset} variant="primary">
 						Try again
 					</Button>
-					<Button href="/dashboard" variant="secondary">
+					<Button href={hrefFor("dashboard.overview")} variant="secondary">
 						Go to overview
 					</Button>
 				</div>

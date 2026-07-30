@@ -4,14 +4,32 @@ import type { DropdownPositionStrategy, DropdownSide } from "./types";
 function resolveDropdownSide({
 	preferredSide,
 	measuredHeight,
+	measuredWidth,
 	availableAbove,
 	availableBelow,
+	availableLeft,
+	availableRight,
 }: {
 	preferredSide: DropdownSide;
 	measuredHeight: number;
+	measuredWidth: number;
 	availableAbove: number;
 	availableBelow: number;
+	availableLeft: number;
+	availableRight: number;
 }): DropdownSide {
+	if (preferredSide === "left" || preferredSide === "right") {
+		const preferredAvailable =
+			preferredSide === "left" ? availableLeft : availableRight;
+		const oppositeSide = preferredSide === "left" ? "right" : "left";
+		const oppositeAvailable =
+			oppositeSide === "left" ? availableLeft : availableRight;
+
+		if (measuredWidth <= preferredAvailable) return preferredSide;
+		if (oppositeAvailable > preferredAvailable) return oppositeSide;
+		return preferredSide;
+	}
+
 	const preferredAvailable =
 		preferredSide === "top" ? availableAbove : availableBelow;
 	const oppositeSide = preferredSide === "top" ? "bottom" : "top";
@@ -58,12 +76,81 @@ export function resolveAnchoredDropdownPosition({
 		0,
 		window.innerHeight - anchorRect.bottom - offset - collisionPadding,
 	);
+	const availableLeft = Math.max(
+		0,
+		anchorRect.left - offset - collisionPadding,
+	);
+	const availableRight = Math.max(
+		0,
+		window.innerWidth - anchorRect.right - offset - collisionPadding,
+	);
 	const resolvedSide = resolveDropdownSide({
 		availableAbove,
 		availableBelow,
+		availableLeft,
+		availableRight,
 		measuredHeight,
+		measuredWidth,
 		preferredSide: side,
 	});
+
+	if (resolvedSide === "left" || resolvedSide === "right") {
+		const availableWidth =
+			resolvedSide === "left" ? availableLeft : availableRight;
+		const maxWidth =
+			measuredWidth > availableWidth ? availableWidth : undefined;
+		const renderedWidth = maxWidth ?? measuredWidth;
+		const rawTop =
+			align === "end" ? anchorRect.bottom - measuredHeight : anchorRect.top;
+		const top = Math.min(
+			Math.max(rawTop, collisionPadding),
+			Math.max(
+				collisionPadding,
+				window.innerHeight - measuredHeight - collisionPadding,
+			),
+		);
+
+		if (positionStrategy === "fixed") {
+			return {
+				resolvedSide,
+				style: {
+					left:
+						resolvedSide === "left"
+							? Math.max(
+									collisionPadding,
+									anchorRect.left - renderedWidth - offset,
+								)
+							: Math.min(
+									anchorRect.right + offset,
+									window.innerWidth - collisionPadding - renderedWidth,
+								),
+					maxWidth,
+					overflowX: maxWidth === undefined ? undefined : "auto",
+					position: "fixed",
+					top,
+					width: explicitWidth,
+					zIndex,
+				} satisfies React.CSSProperties,
+			};
+		}
+
+		if (!wrapperRect) return undefined;
+		return {
+			resolvedSide,
+			style: {
+				left:
+					resolvedSide === "left"
+						? anchorRect.left - wrapperRect.left - renderedWidth - offset
+						: anchorRect.right - wrapperRect.left + offset,
+				maxWidth,
+				overflowX: maxWidth === undefined ? undefined : "auto",
+				position: "absolute",
+				top: top - wrapperRect.top,
+				width: explicitWidth,
+				zIndex,
+			} satisfies React.CSSProperties,
+		};
+	}
 	const availableHeight =
 		resolvedSide === "top" ? availableAbove : availableBelow;
 	const maxHeight =

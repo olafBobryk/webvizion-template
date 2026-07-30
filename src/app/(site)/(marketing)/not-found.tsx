@@ -11,7 +11,7 @@ export default function MarketingNotFoundPage() {
 					heading="Page not found"
 					body="The page you’re looking for doesn’t exist."
 					actions={
-						<Button variant="primary" href={hrefFor("home")}>
+						<Button variant="primary" href={hrefFor("marketing.home")}>
 							Go home
 						</Button>
 					}

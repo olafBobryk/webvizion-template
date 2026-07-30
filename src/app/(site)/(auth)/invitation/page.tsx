@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/primitives/Button";
 import { getSafeContinuationPath } from "@/lib/auth/continuation";
 import { toPublicAuthError } from "@/lib/auth/errors";
 import { applicationAdapters } from "@/lib/auth/server";
+import { hrefFor } from "@/lib/routes";
 import { AuthScreen } from "../_components/AuthScreen";
 import { acceptInvitationAction } from "../actions";
 
@@ -76,7 +77,11 @@ export default async function InvitationPage({
 						<Button className="w-full" type="submit" variant="primary">
 							Accept invitation
 						</Button>
-						<Button className="w-full" href="/login" variant="ghost">
+						<Button
+							className="w-full"
+							href={hrefFor("auth.login")}
+							variant="ghost"
+						>
 							Return to sign in
 						</Button>
 					</form>
@@ -84,7 +89,7 @@ export default async function InvitationPage({
 			) : (
 				<ErrorState
 					action={
-						<Button href="/login" size="sm" variant="secondary">
+						<Button href={hrefFor("auth.login")} size="sm" variant="secondary">
 							Return to sign in
 						</Button>
 					}

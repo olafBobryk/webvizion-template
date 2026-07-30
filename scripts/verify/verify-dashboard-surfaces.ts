@@ -373,11 +373,16 @@ assert.ok(
 assert.ok(!existsSync(resolve(root, "src/app/(site)/platform/layout.tsx")));
 assert.ok(!existsSync(resolve(root, "src/app/(site)/platform/page.tsx")));
 
-const globalRoutes = readFileSync(
-	resolve(root, "src/config/routes.ts"),
+const installedSurfaces = readFileSync(
+	resolve(root, "src/config/surfaces.ts"),
 	"utf8",
 );
-assert.ok(!globalRoutes.includes('dashboard: "/dashboard"'));
+assert.ok(installedSurfaces.includes("dashboardRouteSurfaceRegistry"));
+const marketingSurfaces = readFileSync(
+	resolve(root, "src/config/surfaces/marketing.ts"),
+	"utf8",
+);
+assert.ok(!marketingSurfaces.includes('family: "dashboard"'));
 
 const commandProvider = readFileSync(
 	resolve(

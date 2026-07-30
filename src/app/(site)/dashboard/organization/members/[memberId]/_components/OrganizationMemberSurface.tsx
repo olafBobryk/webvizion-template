@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/primitives/Button";
 import { Card } from "@/components/ui/primitives/Card";
 import { Text } from "@/components/ui/primitives/Text";
 import type { MembershipRole } from "@/lib/auth/contracts";
+import { hrefFor } from "@/lib/routes";
 import { DashboardEntityCommands } from "../../../../_components/commands/DashboardEntityCommands";
 import {
 	DashboardDetailField,
@@ -61,7 +62,11 @@ export function OrganizationMemberSurface({
 		<DashboardSection
 			actions={
 				isOwnProfile ? (
-					<Button href="/dashboard/settings" size="sm" variant="primary">
+					<Button
+						href={hrefFor("dashboard.settings")}
+						size="sm"
+						variant="primary"
+					>
 						Settings
 					</Button>
 				) : null
@@ -158,7 +163,7 @@ export function OrganizationMemberSurface({
 				Looking for something specific and cannot find it?{" "}
 				<Button
 					className="inline-flex align-baseline font-medium text-foreground underline decoration-border underline-offset-4 hover:decoration-foreground"
-					href="/dashboard/support"
+					href={hrefFor("dashboard.support")}
 					size="none"
 					variant="ghost"
 				>
@@ -167,7 +172,7 @@ export function OrganizationMemberSurface({
 				. Looking for settings?{" "}
 				<Button
 					className="inline-flex align-baseline font-medium text-foreground underline decoration-border underline-offset-4 hover:decoration-foreground"
-					href="/dashboard/settings"
+					href={hrefFor("dashboard.settings")}
 					size="none"
 					variant="ghost"
 				>
@@ -270,7 +275,7 @@ export function OrganizationMemberSurfaceSkeleton() {
 					Looking for something specific and cannot find it?{" "}
 					<Button
 						className="inline-flex align-baseline font-medium text-foreground underline decoration-border underline-offset-4 hover:decoration-foreground"
-						href="/dashboard/support"
+						href={hrefFor("dashboard.support")}
 						size="none"
 						variant="ghost"
 					>
@@ -279,7 +284,7 @@ export function OrganizationMemberSurfaceSkeleton() {
 					. Looking for settings?{" "}
 					<Button
 						className="inline-flex align-baseline font-medium text-foreground underline decoration-border underline-offset-4 hover:decoration-foreground"
-						href="/dashboard/settings"
+						href={hrefFor("dashboard.settings")}
 						size="none"
 						variant="ghost"
 					>

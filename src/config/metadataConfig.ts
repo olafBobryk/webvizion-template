@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
-import type { AppRouteId } from "@/config/routes";
+import type { RouteSurfaceFamily } from "@/lib/surfaces/routeSurface";
+
+type RouteSurfaceId = `${RouteSurfaceFamily}.${string}`;
 
 export type StaticPageMetadataConfig = {
 	absoluteTitle?: boolean;
@@ -34,13 +36,13 @@ export const siteMetadata = {
 } satisfies SiteMetadataConfig;
 
 export const staticPageMetadata = {
-	home: {
+	"marketing.home": {
 		title: siteMetadata.name,
 		description: siteMetadata.defaultDescription,
 		path: "/",
 		absoluteTitle: true,
 	},
-} satisfies Partial<Record<AppRouteId, StaticPageMetadataConfig>>;
+} satisfies Partial<Record<RouteSurfaceId, StaticPageMetadataConfig>>;
 
 export type StaticPageMetadataKey = keyof typeof staticPageMetadata;
 

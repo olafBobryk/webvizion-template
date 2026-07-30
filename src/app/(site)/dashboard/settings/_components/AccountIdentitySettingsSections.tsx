@@ -4,6 +4,7 @@ import { Icon } from "@/components/ui/icons/Icon";
 import { Chip } from "@/components/ui/misc";
 import { Button } from "@/components/ui/primitives/Button";
 import { Card } from "@/components/ui/primitives/Card";
+import { hrefFor } from "@/lib/routes";
 import { DashboardDetailField } from "../../_components/detail/DashboardDetailField";
 import { MemberRoleChip } from "../../_components/entities/member/MemberRoleChip";
 import { useDashboardAuth } from "../../_components/providers/DashboardAuthProvider";
@@ -25,7 +26,7 @@ function DashboardSettingsHeaderActionsRoot() {
 	return (
 		<div className="flex flex-wrap gap-2">
 			<Button
-				href="/dashboard/profile"
+				href={hrefFor("dashboard.profile")}
 				size="sm"
 				trailingIcon="external-link"
 				variant="primary"
@@ -34,7 +35,7 @@ function DashboardSettingsHeaderActionsRoot() {
 			</Button>
 			{canManage ? (
 				<Button
-					href="/dashboard/organization/settings"
+					href={hrefFor("dashboard.organization.settings")}
 					size="sm"
 					variant="ghost"
 				>

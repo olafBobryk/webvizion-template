@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/primitives/Button";
+import { hrefFor } from "@/lib/routes";
 import type { DashboardDebugState } from "../../_registry/debug";
 import { DashboardStatusFrame } from "../layout/DashboardStatusFrame";
 import { DashboardForcedLoadingView } from "./DashboardForcedLoadingView";
@@ -39,7 +40,9 @@ export function DashboardDebugStateView({
 	}
 	return (
 		<DashboardStatusFrame
-			action={<Button href="/dashboard">Return to overview</Button>}
+			action={
+				<Button href={hrefFor("dashboard.overview")}>Return to overview</Button>
+			}
 			description="The deterministic debug mode is showing the dashboard not-found treatment."
 			title="Page not found"
 		/>

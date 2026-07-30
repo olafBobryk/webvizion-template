@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
+import { surfaceHref } from "@/lib/routes";
 
 export default function DashboardMembersRedirectPage() {
-	redirect("/dashboard/administration#members");
+	redirect(surfaceHref("dashboard.administration", {}, { hash: "members" }));
 }

@@ -7,6 +7,31 @@ import path from "node:path";
 import process from "node:process";
 
 const root = process.cwd();
+const packageJson = JSON.parse(
+	readFileSync(path.join(root, "package.json"), "utf8"),
+);
+assert.equal(
+	typeof packageJson.scripts?.["verify:route-surfaces"],
+	"string",
+	"Projects must retain the focused verify:route-surfaces command.",
+);
+
+const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
+const routeSurfaceResult = spawnSync(
+	npmCommand,
+	["run", "verify:route-surfaces"],
+	{
+		cwd: root,
+		stdio: "inherit",
+	},
+);
+if (routeSurfaceResult.error) throw routeSurfaceResult.error;
+assert.equal(
+	routeSurfaceResult.status,
+	0,
+	"Installed route-surface verification failed.",
+);
+
 const dashboardRoot = path.join(root, "src/app/(site)/dashboard");
 const dashboardRegistry = path.join(
 	dashboardRoot,
@@ -28,9 +53,6 @@ if (!hasDashboard) {
 	process.exit(0);
 }
 
-const packageJson = JSON.parse(
-	readFileSync(path.join(root, "package.json"), "utf8"),
-);
 assert.equal(
 	typeof packageJson.scripts?.["verify:dashboard"],
 	"string",
@@ -42,7 +64,6 @@ assert.equal(
 	"Dashboard instances must retain the focused verify:dashboard-pages command.",
 );
 
-const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
 const result = spawnSync(npmCommand, ["run", "verify:dashboard"], {
 	cwd: root,
 	stdio: "inherit",

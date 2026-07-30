@@ -25,6 +25,7 @@ export function DropdownSurface({
 	collisionPadding = COLLISION_PADDING,
 	matchAnchorWidth = false,
 	offset = 8,
+	overflow = "hidden",
 	padding = "none",
 	portalTargetId,
 	positionStrategy = "absolute",
@@ -33,6 +34,7 @@ export function DropdownSurface({
 	side = "bottom",
 	style,
 	width = "auto",
+	zIndex = 110,
 	...props
 }: DropdownSurfaceProps) {
 	const panelRef = React.useRef<HTMLDivElement | null>(null);
@@ -71,10 +73,18 @@ export function DropdownSurface({
 			offset,
 			positionStrategy: "fixed",
 			side,
-			zIndex: 110,
+			zIndex,
 		});
 		setPositionStyle(position?.style);
-	}, [align, anchorRef, collisionPadding, matchAnchorWidth, offset, side]);
+	}, [
+		align,
+		anchorRef,
+		collisionPadding,
+		matchAnchorWidth,
+		offset,
+		side,
+		zIndex,
+	]);
 
 	React.useLayoutEffect(() => {
 		if (positionStrategy !== "fixed") {
@@ -105,7 +115,7 @@ export function DropdownSurface({
 					visibility: positionStyle
 						? (style?.visibility ?? "visible")
 						: "hidden",
-					zIndex: 110,
+					zIndex,
 					...positionStyle,
 				} satisfies React.CSSProperties)
 			: style;
@@ -119,6 +129,7 @@ export function DropdownSurface({
 				className,
 			)}
 			padding={padding}
+			overflow={overflow}
 			ref={setPanelNode}
 			shadow={shadow}
 			style={resolvedStyle}

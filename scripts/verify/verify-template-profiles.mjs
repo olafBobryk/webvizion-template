@@ -90,6 +90,101 @@ async function readJson(filePath) {
 	return JSON.parse(await fs.readFile(filePath, "utf8"));
 }
 
+async function collectTypeScriptFiles(directory) {
+	const files = [];
+	for (const entry of await fs.readdir(directory, { withFileTypes: true })) {
+		const absolutePath = path.join(directory, entry.name);
+		if (entry.isDirectory())
+			files.push(...(await collectTypeScriptFiles(absolutePath)));
+		else if (/\.tsx?$/.test(entry.name)) files.push(absolutePath);
+	}
+	return files;
+}
+
+async function assertGeneratedSurfaceContract(outputRoot, profileCase) {
+	const selectedSurfaces = new Set(
+		templateProfiles[profileCase.profileId]?.assembly?.surfaces ?? [],
+	);
+	const expectedFamilies = new Set();
+	if (selectedSurfaces.has("marketing")) expectedFamilies.add("marketing");
+	if (selectedSurfaces.has("dashboard")) {
+		expectedFamilies.add("auth");
+		expectedFamilies.add("dashboard");
+	}
+
+	const generatedRegistry = await fs.readFile(
+		path.join(outputRoot, "src/config/surfaces.ts"),
+		"utf8",
+	);
+	const registryFiles = {
+		auth: "src/config/surfaces/auth.ts",
+		dashboard: "src/config/surfaces/dashboard.ts",
+		marketing: "src/config/surfaces/marketing.ts",
+	};
+	const installedIds = new Set();
+
+	for (const [family, relativePath] of Object.entries(registryFiles)) {
+		const absolutePath = path.join(outputRoot, relativePath);
+		const expected = expectedFamilies.has(family);
+		const exists = await fs
+			.stat(absolutePath)
+			.then(() => true)
+			.catch(() => false);
+		if (exists !== expected) {
+			throw new Error(
+				`${profileCase.profileId}/${profileCase.content} ${family} registry installation mismatch.`,
+			);
+		}
+		const importMarker = `@/config/surfaces/${family}`;
+		if (generatedRegistry.includes(importMarker) !== expected) {
+			throw new Error(
+				`${profileCase.profileId}/${profileCase.content} generated registry has the wrong ${family} composition.`,
+			);
+		}
+		if (!exists) continue;
+		const source = await fs.readFile(absolutePath, "utf8");
+		for (const match of source.matchAll(/\bid:\s*["']([^"']+)["']/g)) {
+			if (
+				family === "marketing" &&
+				match[1] === "marketing.settings" &&
+				generatedRegistry.includes("marketingCoreSurfaceRegistry")
+			) {
+				continue;
+			}
+			installedIds.add(match[1]);
+		}
+	}
+
+	const srcRoot = path.join(outputRoot, "src");
+	for (const filePath of await collectTypeScriptFiles(srcRoot)) {
+		const source = await fs.readFile(filePath, "utf8");
+		const directReferencePattern =
+			/(?:surfaceId\s*:\s*|(?:hrefFor|surfaceHref)\(\s*)["']((?:auth|dashboard|marketing)\.[^"']+)["']/g;
+		for (const match of source.matchAll(directReferencePattern)) {
+			if (!installedIds.has(match[1])) {
+				throw new Error(
+					`${profileCase.profileId}/${profileCase.content} references unavailable surface ${match[1]} in ${path.relative(outputRoot, filePath)}.`,
+				);
+			}
+		}
+	}
+
+	if (expectedFamilies.has("marketing")) {
+		const fallbackSource = await fs.readFile(
+			path.join(outputRoot, "src/lib/marketing-content/fallback.ts"),
+			"utf8",
+		);
+		const expectedCtaId = expectedFamilies.has("auth")
+			? "auth.login"
+			: "marketing.contact";
+		if (!fallbackSource.includes(expectedCtaId)) {
+			throw new Error(
+				`${profileCase.profileId}/${profileCase.content} is missing hero CTA ${expectedCtaId}.`,
+			);
+		}
+	}
+}
+
 async function assertReceipt(outputRoot, profileCase) {
 	const receipt = await readJson(
 		path.join(outputRoot, ".template-profile.json"),
@@ -102,6 +197,60 @@ async function assertReceipt(outputRoot, profileCase) {
 	) {
 		throw new Error(
 			`Invalid profile receipt for ${profileCase.profileId}/${profileCase.content}.`,
+		);
+	}
+}
+
+async function assertInternalRouteShell(outputRoot, profileCase) {
+	const marketingInternalLayout = path.join(
+		outputRoot,
+		"src/app/(site)/(marketing)/internal/layout.tsx",
+	);
+	const standaloneInternalLayout = path.join(
+		outputRoot,
+		"src/app/(site)/(dev)/internal/layout.tsx",
+	);
+	const shouldUseMarketingShell =
+		templateProfiles[profileCase.profileId]?.assembly?.surfaces.includes(
+			"marketing",
+		) ?? false;
+	const expectedLayout = shouldUseMarketingShell
+		? marketingInternalLayout
+		: standaloneInternalLayout;
+	const unexpectedLayout = shouldUseMarketingShell
+		? standaloneInternalLayout
+		: marketingInternalLayout;
+
+	if (
+		!(await fs
+			.stat(expectedLayout)
+			.then(() => true)
+			.catch(() => false))
+	) {
+		throw new Error(
+			`Missing expected internal layout for ${profileCase.profileId}/${profileCase.content}.`,
+		);
+	}
+	if (
+		await fs
+			.stat(unexpectedLayout)
+			.then(() => true)
+			.catch(() => false)
+	) {
+		throw new Error(
+			`Internal routes were assembled beneath the wrong shell for ${profileCase.profileId}/${profileCase.content}.`,
+		);
+	}
+
+	const internalLayout = await fs.readFile(expectedLayout, "utf8");
+	if (shouldUseMarketingShell && internalLayout.includes("SiteShell")) {
+		throw new Error(
+			`Marketing internal layout duplicated the shell for ${profileCase.profileId}/${profileCase.content}.`,
+		);
+	}
+	if (!shouldUseMarketingShell && !internalLayout.includes("SiteShell")) {
+		throw new Error(
+			`Standalone internal layout lost its fallback shell for ${profileCase.profileId}/${profileCase.content}.`,
 		);
 	}
 }
@@ -332,6 +481,16 @@ async function main() {
 				await assertReceipt(outputRoot, profileCase);
 			}
 
+			await assertInternalRouteShell(integrationRoot, profileCase);
+			await assertGeneratedSurfaceContract(integrationRoot, profileCase);
+			run(
+				process.execPath,
+				[
+					path.join(templateRoot, "node_modules/tsx/dist/cli.mjs"),
+					"scripts/verify/verify-route-surfaces.ts",
+				],
+				integrationRoot,
+			);
 			if (!options.integration) continue;
 			runNpm(["ci", "--no-audit", "--no-fund"], integrationRoot);
 			if (profileId === "thin-start") {

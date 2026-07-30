@@ -1,3 +1,12 @@
+import type {
+	SiteLayoutDocument,
+	SiteLink,
+	SiteMenuGroup,
+	SiteNavLink,
+	SiteNavSection,
+	SiteSocialLink,
+} from "@/app/(site)/_components/layout/siteLayout";
+
 export type {
 	SiteLayoutDocument,
 	SiteLink as MarketingLink,
@@ -5,7 +14,7 @@ export type {
 	SiteNavLink as MarketingNavLink,
 	SiteNavSection as MarketingNavSection,
 	SiteSocialLink as MarketingSocialLink,
-} from "@/app/(site)/_components/layout/siteLayout";
+};
 
 export const marketingPageSlugs = ["home"] as const;
 
@@ -21,10 +30,7 @@ export type HomeHeroSectionBlock = MarketingSectionBase<"homeHero"> & {
 	descriptions: Array<{
 		text: string;
 	}>;
-	cta: {
-		label: string;
-		href: string;
-	};
+	cta: SiteLink;
 	services: HomeHeroServiceItem[];
 };
 

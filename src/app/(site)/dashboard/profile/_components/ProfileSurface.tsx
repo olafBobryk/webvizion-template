@@ -2,6 +2,7 @@ import { Icon } from "@/components/ui/icons/Icon";
 import { Chip } from "@/components/ui/misc";
 import { Button } from "@/components/ui/primitives/Button";
 import { Card } from "@/components/ui/primitives/Card";
+import { hrefFor } from "@/lib/routes";
 import {
 	DashboardDetailField,
 	DashboardDetailFieldSkeleton,
@@ -32,7 +33,11 @@ export function ProfileSurface({
 	return (
 		<DashboardSection
 			actions={
-				<Button href="/dashboard/settings" size="sm" variant="primary">
+				<Button
+					href={hrefFor("dashboard.settings")}
+					size="sm"
+					variant="primary"
+				>
 					Account settings
 				</Button>
 			}
@@ -109,7 +114,7 @@ export function ProfileSurface({
 			</Card>
 			<DashboardFooterNote>
 				Profile edits remain in{" "}
-				<DashboardFooterNoteLink href="/dashboard/settings">
+				<DashboardFooterNoteLink href={hrefFor("dashboard.settings")}>
 					Account settings
 				</DashboardFooterNoteLink>
 				.

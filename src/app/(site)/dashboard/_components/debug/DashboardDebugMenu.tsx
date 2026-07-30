@@ -4,6 +4,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Icon } from "@/components/ui/icons/Icon";
 import { Dropdown } from "@/components/ui/primitives/dropdown";
 import { showToast } from "@/lib/feedback";
+import { hrefFor, surfaceHref } from "@/lib/routes";
 import {
 	type DashboardDebugState,
 	dashboardDebugEnabled,
@@ -74,7 +75,15 @@ export function DashboardDebugMenu({
 			},
 		);
 		await signInFixture("operator@averlo.local");
-		window.location.assign("/dashboard?motion=off&reveal=off");
+		window.location.assign(
+			surfaceHref(
+				"dashboard.overview",
+				{},
+				{
+					search: { motion: "off", reveal: "off" },
+				},
+			),
+		);
 	}
 
 	const capabilityLabel = [...capabilities].sort().join(", ");
@@ -90,13 +99,25 @@ export function DashboardDebugMenu({
 				side="top"
 				options={[
 					{
-						href: "/dashboard/reference/entities?motion=off&reveal=off",
+						href: surfaceHref(
+							"dashboard.reference.entities",
+							{},
+							{
+								search: { motion: "off", reveal: "off" },
+							},
+						),
 						id: "entity-reference",
 						label: "Open entity reference",
 						leadingIcon: <Icon name="cards" size="sm" />,
 					},
 					{
-						href: "/dashboard/reference/skeletons?motion=off&reveal=off",
+						href: surfaceHref(
+							"dashboard.reference.skeletons",
+							{},
+							{
+								search: { motion: "off", reveal: "off" },
+							},
+						),
 						id: "skeleton-reference",
 						label: "Open skeleton reference",
 						leadingIcon: <Icon name="spinner" size="sm" />,
@@ -140,7 +161,13 @@ export function DashboardDebugMenu({
 						onSelect: () =>
 							void enterFixture(
 								"operator@averlo.local",
-								"/dashboard?motion=off&reveal=off",
+								surfaceHref(
+									"dashboard.overview",
+									{},
+									{
+										search: { motion: "off", reveal: "off" },
+									},
+								),
 							),
 						dividerBefore: true,
 					},
@@ -151,7 +178,18 @@ export function DashboardDebugMenu({
 						onSelect: () =>
 							void enterFixture(
 								"multi@averlo.local",
-								"/select-organization?switch=1&next=%2Fdashboard&motion=off&reveal=off",
+								surfaceHref(
+									"auth.select-organization",
+									{},
+									{
+										search: {
+											motion: "off",
+											next: hrefFor("dashboard.overview"),
+											reveal: "off",
+											switch: 1,
+										},
+									},
+								),
 							),
 					},
 					{

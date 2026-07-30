@@ -17,80 +17,111 @@ export function createProjectState(selectedSurfaceIds) {
 	};
 }
 
-export function renderRoutesFile(state) {
-	const lines = [`export const appRoutes = {`, `\thome: "/",`];
+export function renderSurfacesFile(state) {
+	const imports = [];
+	const registrySpreads = [];
+	const internalRouteLines = [];
 
-	if (state.hasMarketing) lines.push(`\tcontact: "/contact",`);
-	if (state.hasDemo) lines.push(`\tdemo: "/internal/demo",`);
+	if (state.hasMarketing) {
+		imports.push(
+			state.hasMarketingSettings
+				? 'import { marketingSurfaceRegistry } from "@/config/surfaces/marketing";'
+				: 'import { marketingCoreSurfaceRegistry } from "@/config/surfaces/marketing";',
+		);
+		registrySpreads.push(
+			state.hasMarketingSettings
+				? "\t...marketingSurfaceRegistry,"
+				: "\t...marketingCoreSurfaceRegistry,",
+		);
+	}
+	if (state.hasDashboard) {
+		imports.push(
+			'import { authSurfaceRegistry } from "@/config/surfaces/auth";',
+			'import { dashboardRouteSurfaceRegistry } from "@/config/surfaces/dashboard";',
+		);
+		registrySpreads.push(
+			"\t...authSurfaceRegistry,",
+			"\t...dashboardRouteSurfaceRegistry,",
+		);
+	}
+
+	if (state.hasDemo) internalRouteLines.push('\tdemo: "/internal/demo",');
+	if (state.hasDictionary) {
+		internalRouteLines.push(
+			'\tdictionary: "/internal/dictionary",',
+			'\tdictionaryRiveLogoReveal: "/internal/dictionary/loading-screens/rive-logo-reveal",',
+			'\tdictionarySpamProtectedForm: "/internal/dictionary/forms/spam-protected-form",',
+		);
+	}
 	if (state.hasIntelligence) {
-		lines.push(`\tintelligence: "/internal/intelligence",`);
+		internalRouteLines.push('\tintelligence: "/internal/intelligence",');
 	}
 	if (state.hasPlayground) {
-		lines.push(`\tplayground: "/internal/playground",`);
+		internalRouteLines.push('\tplayground: "/internal/playground",');
 	}
-	if (state.hasMarketing) lines.push(`\tsettings: "/settings",`);
-
-	if (state.hasDashboard) {
-		lines.push(`\tlogin: "/login",`);
-		lines.push(`\tsignInOptions: "/sign-in-options",`);
-		lines.push(`\tforgotPassword: "/forgot-password",`);
-		lines.push(`\tresetPassword: "/reset-password",`);
-		lines.push(`\tsetPassword: "/set-password",`);
-		lines.push(`\tinvitation: "/invitation",`);
-		lines.push(`\tselectOrganization: "/select-organization",`);
-	}
-
-	if (state.hasDictionary) {
-		lines.push(`\tdictionary: "/internal/dictionary",`);
-		lines.push(
-			`\tdictionaryRiveLogoReveal: "/internal/dictionary/loading-screens/rive-logo-reveal",`,
-		);
-		lines.push(
-			`\tdictionarySpamProtectedForm: "/internal/dictionary/forms/spam-protected-form",`,
-		);
-	}
-
 	if (state.hasReference) {
-		lines.push(`\treference: "/internal/reference",`);
-	}
-
-	lines.push(
-		`} as const;`,
-		"",
-		`export type AppRouteId = keyof typeof appRoutes;`,
-		"",
-	);
-
-	return lines.join("\n");
-}
-
-export function renderLibRoutesFile(state) {
-	const builderLines = [];
-
-	if (state.hasDashboard) {
-		builderLines.push(
-			'\tdashboardSubpage: (...segments: string[]) => `/dashboard/${segments.join("/")}`,',
-		);
-	}
-
-	if (state.hasDictionary) {
-		builderLines.push(
-			'\tdictionaryEntry: (...segments: string[]) => `/internal/dictionary/${segments.join("/")}`,',
-		);
+		internalRouteLines.push('\treference: "/internal/reference",');
 	}
 
 	return [
-		'import { appRoutes, type AppRouteId } from "@/config/routes";',
+		...imports,
+		'import { defineRouteSurfaceRegistry } from "@/lib/surfaces/routeSurface";',
 		"",
-		'export type { AppRouteId } from "@/config/routes";',
+		"export const appSurfaceRegistry = defineRouteSurfaceRegistry([",
+		...registrySpreads,
+		"] as const);",
 		"",
-		"export function hrefFor(routeId: AppRouteId) {",
-		"\treturn appRoutes[routeId];",
+		"export type AppSurface = (typeof appSurfaceRegistry)[number];",
+		'export type AppSurfaceId = AppSurface["id"];',
+		"",
+		"export const internalRoutes = {",
+		...internalRouteLines,
+		"} as const;",
+		"",
+		"export type InternalRouteId = keyof typeof internalRoutes;",
+		"",
+	].join("\n");
+}
+
+export function renderInternalLayoutFile(state) {
+	const shared = [
+		'import type { Metadata } from "next";',
+		'import { notFound } from "next/navigation";',
+		"",
+		"export const metadata: Metadata = {",
+		"\trobots: {",
+		"\t\tindex: false,",
+		"\t\tfollow: false,",
+		"\t},",
+		"};",
+		"",
+		"export default function DevOnlyInternalLayout({",
+		"\tchildren,",
+		"}: Readonly<{",
+		"\tchildren: React.ReactNode;",
+		"}>) {",
+		'\tif (process.env.NODE_ENV === "production") {',
+		"\t\tnotFound();",
+		"\t}",
+	];
+
+	if (state.hasMarketing) {
+		return [...shared, "", "\treturn children;", "}", ""].join("\n");
+	}
+
+	return [
+		...shared.slice(0, 2),
+		'import { SiteShell } from "@/app/(site)/_components/layout/SiteShell";',
+		'import { defaultSiteLayout } from "@/app/(site)/_components/layout/siteLayout";',
+		...shared.slice(2),
+		"",
+		"\treturn (",
+		"\t\t<SiteShell siteLayout={defaultSiteLayout}>",
+		'\t\t\t<div className="min-h-screen bg-background">{children}</div>',
+		"\t\t</SiteShell>",
+		"\t);",
 		"}",
 		"",
-		builderLines.length > 0
-			? ["export const routeBuilders = {", ...builderLines, "};", ""].join("\n")
-			: ["export const routeBuilders = {};", ""].join("\n"),
 	].join("\n");
 }
 

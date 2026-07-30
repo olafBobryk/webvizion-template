@@ -2,13 +2,14 @@ import { NextResponse } from "next/server";
 import { AuthDomainError, toPublicAuthError } from "@/lib/auth/errors";
 import { isPasswordRecoveryAvailable } from "@/lib/auth/passwordRecoveryCapability";
 import { requestPasswordRecovery } from "@/lib/auth/server";
+import { hrefFor } from "@/lib/routes";
 
 function getRecoveryUrl(request: Request) {
 	if (!isPasswordRecoveryAvailable()) {
 		throw new AuthDomainError("password-recovery-unavailable");
 	}
 	const origin = process.env.APP_ORIGIN || new URL(request.url).origin;
-	return new URL("/reset-password", origin).toString();
+	return new URL(hrefFor("auth.reset-password"), origin).toString();
 }
 
 export async function POST(request: Request) {

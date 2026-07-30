@@ -1,6 +1,7 @@
 import { Icon } from "@/components/ui/icons/Icon";
 import { Button } from "@/components/ui/primitives/Button";
 import { Card } from "@/components/ui/primitives/Card";
+import { hrefFor } from "@/lib/routes";
 import { DashboardSection } from "../../_components/layout/DashboardSection";
 import { PlatformOverviewLoading } from "./PlatformRouteLoading";
 
@@ -23,7 +24,7 @@ export function PlatformSurface() {
 				</Card.Header>
 				<Card.Content>
 					<Button
-						href="/dashboard/platform/inbox"
+						href={hrefFor("dashboard.platform.inbox")}
 						size="sm"
 						variant="secondary"
 					>
@@ -43,7 +44,7 @@ export function PlatformSurface() {
 				</Card.Header>
 				<Card.Content>
 					<Button
-						href="/dashboard/platform/reports"
+						href={hrefFor("dashboard.platform.reports")}
 						size="sm"
 						variant="secondary"
 					>

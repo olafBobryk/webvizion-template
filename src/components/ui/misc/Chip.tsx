@@ -62,37 +62,6 @@ export type ChipSkeletonProps = {
 	contentClassName?: string;
 };
 
-export const chipCanvasTokens = {
-	backgroundColor: "rgba(255,255,255,0.86)",
-	mutedBackgroundColor: "rgba(255,255,255,0.56)",
-	borderColor: "transparent",
-	mutedBorderColor: "transparent",
-	borderWidth: 1,
-	fontFamily: "Geist, Arial, sans-serif",
-	fontWeight: 500,
-	labelGap: 10,
-	paddingX: 10,
-	paddingY: 4,
-	textColor: "#111827",
-	mutedTextColor: "rgba(17,24,39,0.58)",
-} as const;
-
-export function getChipCanvasMetrics(textHeight: number) {
-	const height =
-		textHeight +
-		chipCanvasTokens.paddingY * 2 +
-		chipCanvasTokens.borderWidth * 2;
-
-	return {
-		borderRadius: height / 2,
-		height,
-		padding: [chipCanvasTokens.paddingX, chipCanvasTokens.paddingY] as [
-			number,
-			number,
-		],
-	};
-}
-
 const HELPER_PALETTE_SIZE = 8;
 
 const chipColorTokenValues: Record<string, string> = {

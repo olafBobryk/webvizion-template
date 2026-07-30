@@ -1,4 +1,4 @@
-import type { AppRouteId } from "@/config/routes";
+import type { StaticAppSurfaceId } from "@/lib/routes";
 
 export type MarketingPageSlug = "home";
 
@@ -7,13 +7,13 @@ export type HeaderIconName = "close" | "menu" | "search" | "dot";
 export type MarketingLink =
 	| {
 			label: string;
-			routeId: AppRouteId;
+			surfaceId: StaticAppSurfaceId;
 			href?: never;
 	  }
 	| {
 			label: string;
 			href: string;
-			routeId?: never;
+			surfaceId?: never;
 	  };
 
 export type MarketingNavSection = MarketingLink & {

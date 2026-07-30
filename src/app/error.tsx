@@ -2,7 +2,7 @@
 
 import { StatusErrorState } from "@/app/(site)/_components/status/StatusErrorState";
 import { Section } from "@/components/ui/primitives/Section";
-import { hrefFor } from "@/lib/routes";
+import { defaultSurfaceHref } from "@/lib/routes";
 
 export default function AppError({
 	error,
@@ -22,7 +22,7 @@ export default function AppError({
 				<StatusErrorState
 					error={error}
 					reset={reset}
-					href={hrefFor("home")}
+					href={defaultSurfaceHref}
 					hrefLabel="Go home"
 				/>
 			</Section>

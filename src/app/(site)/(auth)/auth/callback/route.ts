@@ -4,6 +4,7 @@ import {
 	withSafeContinuation,
 } from "@/lib/auth/continuation";
 import { resolveCurrentSession } from "@/lib/auth/server";
+import { hrefFor } from "@/lib/routes";
 
 export async function GET(request: Request) {
 	const requestUrl = new URL(request.url);
@@ -14,12 +15,15 @@ export async function GET(request: Request) {
 	}
 	if (resolution.status === "organization-selection-required") {
 		return NextResponse.redirect(
-			new URL(withSafeContinuation("/select-organization", next), requestUrl),
+			new URL(
+				withSafeContinuation(hrefFor("auth.select-organization"), next),
+				requestUrl,
+			),
 		);
 	}
 	return NextResponse.redirect(
 		new URL(
-			`${withSafeContinuation("/login", next)}&message=session-required`,
+			`${withSafeContinuation(hrefFor("auth.login"), next)}&message=session-required`,
 			requestUrl,
 		),
 	);

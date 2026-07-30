@@ -5,6 +5,7 @@ import { Chip } from "@/components/ui/misc";
 import { Button } from "@/components/ui/primitives/Button";
 import { Card } from "@/components/ui/primitives/Card";
 import { Text } from "@/components/ui/primitives/Text";
+import { hrefFor } from "@/lib/routes";
 import { DashboardDetailField } from "../../_components/detail/DashboardDetailField";
 import { OrganizationIdentity } from "../../_components/entities/organization/OrganizationIdentity";
 import { DashboardSection } from "../../_components/layout/DashboardSection";
@@ -80,7 +81,7 @@ export function OrganizationSurfaceSkeletonClient() {
 					Looking for something specific and cannot find it?{" "}
 					<Button
 						className="inline-flex align-baseline font-medium text-foreground underline decoration-border underline-offset-4 hover:decoration-foreground"
-						href="/dashboard/support"
+						href={hrefFor("dashboard.support")}
 						size="none"
 						variant="ghost"
 					>
@@ -89,7 +90,7 @@ export function OrganizationSurfaceSkeletonClient() {
 					. Looking for the account settings page?{" "}
 					<Button
 						className="inline-flex align-baseline font-medium text-foreground underline decoration-border underline-offset-4 hover:decoration-foreground"
-						href="/dashboard/settings"
+						href={hrefFor("dashboard.settings")}
 						size="none"
 						variant="ghost"
 					>

@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/primitives/Button";
 import { Card } from "@/components/ui/primitives/Card";
 import { requestPasswordRecovery } from "@/lib/api/auth";
 import { showToast } from "@/lib/feedback";
+import { hrefFor } from "@/lib/routes";
 import { DashboardDetailField } from "../../_components/detail/DashboardDetailField";
 import { useDashboardAuth } from "../../_components/providers/DashboardAuthProvider";
 import type { DashboardSettingsSnapshot } from "./settingsSnapshot";
@@ -165,7 +166,7 @@ function DashboardSignOutButton() {
 				success: "Signed out.",
 				error: "Unable to sign out.",
 			});
-			router.replace("/login");
+			router.replace(hrefFor("auth.login"));
 			router.refresh();
 		} catch {
 			// The shared promise toast already reports the failed mutation.

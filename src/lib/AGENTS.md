@@ -13,10 +13,10 @@ Shared non-UI application utilities. This folder is for transport, state helpers
 - `src/lib/api/createMockFetch.ts`: transport-level mock fetch implementation.
 - `src/lib/api/checkHealth.ts`: example endpoint wrapper built on the shared API client.
 - `src/lib/forms/guard.ts`: reusable server-side form guard helpers.
-- `src/lib/mock/createFakeFetcher.ts`: convenience fake fetcher built on top of `createMockFetch`.
 - `src/lib/feedback/toast.ts`: shared toast helpers.
 - `src/lib/modal.ts`: shared modal state helpers.
 - `src/lib/metadata.ts`: shared Next metadata factories backed by `src/config/metadataConfig.ts`.
+- `src/lib/surfaces/routeSurface.ts`: shared route-surface definition, matching, validation, and href materialization contract.
 
 ## New Feature Workflow
 For any new reusable lib feature:
@@ -38,12 +38,12 @@ For any new reusable lib feature:
 ## Demo Guidance
 - Demo project foundations through `src/app/(site)/(dev)/internal/demo/content.tsx`, usually under the matching utility area such as `lib/api` or related foundations pages.
 - Prefer showing one real wrapper function and one mock transport example over duplicating full API pages.
-- For fake calls, route the same endpoint wrapper through `createMockFetch(...)` or use `createFakeFetcher(...)` when a component just needs async list data.
+- For fake calls, route the same endpoint wrapper through `createMockFetch(...)`.
 
 ## Folder Index
 - `src/lib/api/`
 - `src/lib/forms/`
-- `src/lib/mock/`
+- `src/lib/surfaces/`
 - `src/lib/feedback/`
 - `src/lib/metadata.ts`
 

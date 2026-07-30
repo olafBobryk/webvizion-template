@@ -3,8 +3,6 @@
 
 import type { CountryCode } from "libphonenumber-js";
 import {
-	getCountries,
-	getCountryCallingCode,
 	isValidPhoneNumber,
 	parsePhoneNumberFromString,
 } from "libphonenumber-js/min";
@@ -17,21 +15,25 @@ import {
 	Dropdown,
 	useDropdownListNavigation,
 } from "@/components/ui/primitives/dropdown";
-import { dropdownListClassName } from "@/components/ui/primitives/dropdownStyles";
 import { Field } from "@/components/ui/primitives/Field";
 import {
 	InputFrame,
 	type InputFrameSize,
 	inputVariants,
 } from "@/components/ui/primitives/InputFrame";
-import { Listbox } from "@/components/ui/primitives/Listbox";
-import { Text } from "@/components/ui/primitives/Text";
+import { PhoneCountryListbox } from "./PhoneCountryListbox";
+import type {
+	CountryOption,
+	InternalCountryOption,
+} from "./phoneCountryOptions";
+import {
+	createInternalCountries,
+	filterCountryOptions,
+	matchCountryFromValue as findCountryFromValue,
+	normalizeDialCode,
+} from "./phoneCountryOptions";
 
-export type CountryOption = {
-	code: CountryCode; // "DO"
-	name: string; // "Dominican Republic"
-	dialCode: string; // "+1"
-};
+export type { CountryOption } from "./phoneCountryOptions";
 
 type PhoneValue = string | undefined; // E.164
 
@@ -72,35 +74,8 @@ type PhoneInputProps = {
 	countries?: CountryOption[]; // allow override/extension
 };
 
-type InternalCountryOption = {
-	code: CountryCode;
-	name: string;
-	dial_code: string;
-	flag: string;
-};
-
-const normalizeQuery = (value: string) =>
-	value.toLowerCase().replace(/[^a-z0-9]+/g, "");
-
 const isLetterKey = (value: string) => /^[a-zA-Z]$/.test(value);
 const isNumberKey = (value: string) => /^[0-9]$/.test(value);
-const normalizeDialCode = (value: string) =>
-	value.replace(/\s+/g, "").replace(/^00/, "+");
-const getFlagEmoji = (code: string) =>
-	code
-		.toUpperCase()
-		.replace(/./g, (char) => String.fromCodePoint(127397 + char.charCodeAt(0)));
-
-const getCountrySearchText = (countryItem: InternalCountryOption) =>
-	`${countryItem.name} ${countryItem.code} ${countryItem.dial_code}`;
-
-const getMatchRank = (query: string, countryItem: InternalCountryOption) => {
-	const text = normalizeQuery(getCountrySearchText(countryItem));
-	if (text === query) return 0;
-	if (text.startsWith(query)) return 1;
-	if (text.includes(query)) return 2;
-	return 3;
-};
 
 const defaultValidate = (value: PhoneValue, country?: CountryCode) => {
 	if (!value) return null;
@@ -196,25 +171,10 @@ function PhoneInputRoot({
 		}
 	}, []);
 
-	const internalCountries: InternalCountryOption[] = React.useMemo(() => {
-		if (countries && countries.length > 0) {
-			return countries.map((item) => ({
-				code: item.code,
-				name: item.name,
-				dial_code: item.dialCode,
-				flag: getFlagEmoji(item.code),
-			}));
-		}
-
-		return getCountries()
-			.map((code) => ({
-				code,
-				name: displayNames?.of(code) ?? code,
-				dial_code: `+${getCountryCallingCode(code)}`,
-				flag: getFlagEmoji(code),
-			}))
-			.sort((a, b) => a.name.localeCompare(b.name));
-	}, [countries, displayNames]);
+	const internalCountries: InternalCountryOption[] = React.useMemo(
+		() => createInternalCountries(countries, displayNames),
+		[countries, displayNames],
+	);
 
 	const selectedCountry =
 		internalCountries.find((item) => item.code === selectedCountryCode) ?? null;
@@ -237,41 +197,13 @@ function PhoneInputRoot({
 			.filter(Boolean)
 			.join(" ") || undefined;
 
-	const normalizedQuery = normalizeQuery(searchQuery);
-	const filteredCountries = React.useMemo(() => {
-		if (!normalizedQuery) return internalCountries;
-		return internalCountries
-			.filter((countryItem) =>
-				normalizeQuery(getCountrySearchText(countryItem)).includes(
-					normalizedQuery,
-				),
-			)
-			.map((countryItem, index) => ({ countryItem, index }))
-			.sort((a, b) => {
-				const rank =
-					getMatchRank(normalizedQuery, a.countryItem) -
-					getMatchRank(normalizedQuery, b.countryItem);
-				if (rank !== 0) return rank;
-				return a.countryItem.name.localeCompare(b.countryItem.name);
-			})
-			.map((entry) => entry.countryItem);
-	}, [internalCountries, normalizedQuery]);
+	const filteredCountries = React.useMemo(
+		() => filterCountryOptions(internalCountries, searchQuery),
+		[internalCountries, searchQuery],
+	);
 
 	const matchCountryFromValue = React.useCallback(
-		(nextValue: string) => {
-			const prefixMatch = nextValue.trim().match(/^\+?\d+/);
-			if (!prefixMatch) return null;
-			const rawPrefix = prefixMatch[0].startsWith("+")
-				? prefixMatch[0]
-				: `+${prefixMatch[0]}`;
-			return (
-				internalCountries
-					.slice()
-					.sort((a, b) => b.dial_code.length - a.dial_code.length)
-					.find((countryItem) => rawPrefix.startsWith(countryItem.dial_code)) ??
-				null
-			);
-		},
+		(nextValue: string) => findCountryFromValue(internalCountries, nextValue),
 		[internalCountries],
 	);
 
@@ -615,43 +547,21 @@ function PhoneInputRoot({
 					);
 				}}
 				renderMenu={({ close }) => (
-					<Listbox
-						options={filteredCountries.map((countryItem) => ({
-							key: countryItem.code,
-							value: countryItem.code,
-							selected: countryItem.code === selectedCountryCode,
-							content: (
-								<>
-									<span aria-hidden="true" className="text-[18px] leading-none">
-										{countryItem.flag}
-									</span>
-									<Text as="span" variant="body" className="min-w-0 truncate">
-										<span className="text-foreground">{countryItem.name}</span>
-										<span className="text-foreground/50">
-											{" "}
-											{countryItem.dial_code}
-										</span>
-									</Text>
-								</>
-							),
-						}))}
+					<PhoneCountryListbox
 						activeIndex={activeIndex}
+						countries={filteredCountries}
+						disabled={disabled}
+						listId={menuId}
+						listRef={listRef}
 						onActiveIndexChange={setActiveIndex}
-						onSelect={(_, index) => {
-							const option = filteredCountries[index];
-							if (!option) return;
-							handleCountrySelect(option.code);
+						onSelect={(countryOption) => {
+							handleCountrySelect(countryOption.code);
 							close({ restoreFocus: false });
 						}}
-						emptyState={<Text variant="body">No results</Text>}
-						listRef={listRef}
-						listId={menuId}
-						optionIdPrefix={menuId ? `${menuId}-option` : undefined}
-						listClassName={dropdownListClassName}
 						optionClassName={optionClassName}
 						optionActiveClassName={optionActiveClassName}
 						optionSelectedClassName={optionSelectedClassName}
-						disabled={disabled}
+						selectedCountryCode={selectedCountryCode}
 					/>
 				)}
 			/>
@@ -663,8 +573,4 @@ export const PhoneInput = Object.assign(PhoneInputRoot, {
 	Skeleton: InputSkeleton,
 });
 
-export const PHONE_COUNTRIES: CountryOption[] = getCountries().map((code) => ({
-	code,
-	name: code,
-	dialCode: `+${getCountryCallingCode(code)}`,
-}));
+export { PHONE_COUNTRIES } from "./phoneCountryOptions";

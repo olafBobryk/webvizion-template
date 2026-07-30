@@ -46,7 +46,7 @@ const INCLUDED_ROOTS = [
 	"src/app/(payload)",
 	"src/app/(site)/(marketing)",
 	"src/components",
-	"src/config/routes.ts",
+	"src/config/surfaces.ts",
 	"src/lib",
 	"src/payload",
 ];
@@ -60,7 +60,7 @@ const CONCEPTS = [
 		matches: [
 			"AGENTS.md",
 			"README.md",
-			"src/config/routes.ts",
+			"src/config/surfaces.ts",
 			"src/lib/routes.ts",
 			"scripts/dev-server.mjs",
 		],
@@ -130,7 +130,7 @@ const CONCEPTS = [
 			"template-surfaces",
 			"README.md",
 			"template-assembly/AGENTS.md",
-			"src/config/routes.ts",
+			"src/config/surfaces.ts",
 			"src/lib/marketing-content/fallback.ts",
 		],
 		keywords: ["assemble", "profile", "content", "surface", "template"],
@@ -169,7 +169,7 @@ const CONCEPTS = [
 		title: "Route Surfaces",
 		summary:
 			"Public, internal, dashboard, auth, and Payload route families exposed by the App Router tree.",
-		matches: ["src/app", "src/config/routes.ts", "src/lib/routes.ts"],
+		matches: ["src/app", "src/config/surfaces.ts", "src/lib/routes.ts"],
 		keywords: ["route", "layout", "page", "dashboard", "internal"],
 	},
 ];
@@ -185,7 +185,7 @@ const AGENT_MAP = {
 			title: "Route and internal marketing architecture",
 			aliases: ["routes", "internal-marketing", "marketing-routes"],
 			paths: [
-				"src/config/routes.ts",
+				"src/config/surfaces.ts",
 				"src/lib/routes.ts",
 				"src/app/(site)/(dev)/internal/layout.tsx",
 				"src/app/(site)/(marketing)/layout.tsx",
@@ -195,7 +195,7 @@ const AGENT_MAP = {
 				"template-assembly/project-files.mjs",
 			],
 			notes:
-				"Route IDs live in appRoutes, hrefFor resolves them, internal routes are standalone local-development surfaces that return 404 in production, and marketing layout/search/fallback consume lightweight public link data.",
+				"Installed route surfaces compose separate marketing, auth, and dashboard registries through a shared base contract. hrefFor resolves static surface IDs, surfaceHref builds parameterized destinations, and internal developer routes remain outside the product surface model.",
 		},
 		{
 			id: "ui-primitives",
@@ -278,7 +278,8 @@ const AGENT_MAP = {
 				"README.md",
 				"template-profiles/thin-start/AGENTS.md",
 				"scripts/verify/verify-smoke.mjs",
-				"src/config/routes.ts",
+				"src/config/surfaces.ts",
+				"src/lib/surfaces/routeSurface.ts",
 				"src/lib/routes.ts",
 				"src/lib/marketing-content/fallback.ts",
 			],
@@ -358,7 +359,9 @@ const AGENT_MAP = {
 				"scripts/record-template-intelligence-benchmark.mjs",
 				"scripts/clear-template-intelligence-benchmark.mjs",
 				"scripts/verify/verify-template-intelligence-benchmark.mjs",
-				"src/lib/template-intelligence/index.ts",
+				"src/lib/template-intelligence/artifacts.ts",
+				"src/lib/template-intelligence/benchmark-runs.ts",
+				"src/lib/template-intelligence/codex-turn-recording.ts",
 				"src/app/(site)/(dev)/internal/intelligence/page.tsx",
 			],
 			notes:
@@ -370,7 +373,7 @@ const AGENT_MAP = {
 			aliases: ["internal-surface", "authoring-surface", "new-surface"],
 			paths: [
 				"src/app/(site)/(dev)/internal/layout.tsx",
-				"src/config/routes.ts",
+				"src/config/surfaces.ts",
 				"src/lib/routes.ts",
 				"src/lib/marketing-content/fallback.ts",
 				"template-surfaces/index.mjs",
