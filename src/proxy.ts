@@ -1,14 +1,13 @@
 import { type NextRequest, NextResponse } from "next/server";
 
-const DEV_ONLY_PATH_PREFIXES = [
-	"/internal",
+const PRODUCTION_GUARDED_API_PATH_PREFIXES = [
 	"/api/debug",
 	"/api/dev",
 	"/api/internal",
 ];
 
-function isDevOnlyPath(pathname: string) {
-	return DEV_ONLY_PATH_PREFIXES.some(
+function isProductionGuardedApiPath(pathname: string) {
+	return PRODUCTION_GUARDED_API_PATH_PREFIXES.some(
 		(prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
 	);
 }
@@ -16,7 +15,7 @@ function isDevOnlyPath(pathname: string) {
 export function proxy(request: NextRequest) {
 	if (
 		process.env.NODE_ENV === "production" &&
-		isDevOnlyPath(request.nextUrl.pathname)
+		isProductionGuardedApiPath(request.nextUrl.pathname)
 	) {
 		return new NextResponse(null, { status: 404 });
 	}
@@ -32,7 +31,6 @@ export function proxy(request: NextRequest) {
 export const config = {
 	matcher: [
 		"/dashboard/:path*",
-		"/internal/:path*",
 		"/api/debug/:path*",
 		"/api/dev/:path*",
 		"/api/internal/:path*",

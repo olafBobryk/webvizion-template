@@ -14,12 +14,6 @@ import type {
 	Organization,
 	OrganizationMembership,
 } from "@/lib/auth/contracts";
-import { hrefFor } from "@/lib/routes";
-import {
-	DashboardBannedFallback,
-	DashboardLoadingFallback,
-	DashboardUnauthenticatedFallback,
-} from "../pages/DashboardAuthFallbacks";
 
 export type DashboardAuthContextValue = {
 	user: SessionUser | null;
@@ -169,29 +163,4 @@ export function useDashboardAuth() {
 		);
 	}
 	return context;
-}
-
-export function DashboardAuthGate({ children }: { children: React.ReactNode }) {
-	const router = useRouter();
-	const { user, initializing } = useDashboardAuth();
-
-	React.useEffect(() => {
-		if (!initializing && !user) {
-			router.replace(hrefFor("auth.login"));
-		}
-	}, [initializing, router, user]);
-
-	if (initializing) {
-		return <DashboardLoadingFallback />;
-	}
-
-	if (!user) {
-		return <DashboardUnauthenticatedFallback />;
-	}
-
-	if (user.isBanned) {
-		return <DashboardBannedFallback />;
-	}
-
-	return <>{children}</>;
 }

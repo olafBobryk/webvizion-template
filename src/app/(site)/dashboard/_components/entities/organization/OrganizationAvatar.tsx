@@ -24,7 +24,7 @@ const iconSize = {
 	xl: "lg",
 } as const satisfies Record<OrganizationAvatarSize, "lg" | "md" | "sm">;
 
-export function OrganizationAvatarRoot({
+function OrganizationAvatarRoot({
 	alt,
 	className,
 	colorIndex,

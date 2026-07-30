@@ -22,11 +22,11 @@ export const dropdownListClassName =
 export const dropdownEmptyStateClassName = "px-4 py-3";
 export const dropdownSurfaceClassName =
 	"overflow-hidden rounded-[10px] border border-border bg-card text-card-foreground shadow-[2px_4px_15px_-2px_rgba(1,1,3,0.05)]";
-export const dropdownOptionBaseClassName =
+const dropdownOptionBaseClassName =
 	"flex w-full min-w-0 items-center gap-2.5 !border-0 !bg-clip-border !px-[15px] !py-2.5 text-left text-sm text-foreground/80 !transition-none";
-export const dropdownPresentationOptionClassName =
+const dropdownPresentationOptionClassName =
 	"!h-auto !min-h-16 !gap-0 !px-3 !py-3";
-export const dropdownOptionRadiusClassName = "rounded-none";
+const dropdownOptionRadiusClassName = "rounded-none";
 
 export function getDropdownOptionClassName({
 	active,

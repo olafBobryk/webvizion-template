@@ -116,6 +116,15 @@ async function assertGeneratedSurfaceContract(outputRoot, profileCase) {
 		path.join(outputRoot, "src/config/surfaces.ts"),
 		"utf8",
 	);
+	const generatedSiteLayout = await fs.readFile(
+		path.join(outputRoot, "src/app/(site)/_components/layout/siteLayout.ts"),
+		"utf8",
+	);
+	if (generatedSiteLayout.includes("process.env.NODE_ENV")) {
+		throw new Error(
+			`${profileCase.profileId}/${profileCase.content} removes installed navigation in production.`,
+		);
+	}
 	const registryFiles = {
 		auth: "src/config/surfaces/auth.ts",
 		dashboard: "src/config/surfaces/dashboard.ts",
@@ -243,6 +252,14 @@ async function assertInternalRouteShell(outputRoot, profileCase) {
 	}
 
 	const internalLayout = await fs.readFile(expectedLayout, "utf8");
+	if (
+		internalLayout.includes('process.env.NODE_ENV === "production"') ||
+		internalLayout.includes("notFound()")
+	) {
+		throw new Error(
+			`Installed internal routes remain production-gated for ${profileCase.profileId}/${profileCase.content}.`,
+		);
+	}
 	if (shouldUseMarketingShell && internalLayout.includes("SiteShell")) {
 		throw new Error(
 			`Marketing internal layout duplicated the shell for ${profileCase.profileId}/${profileCase.content}.`,

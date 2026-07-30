@@ -41,7 +41,7 @@ export const inputPaddingXClasses = {
 	lg: "px-4",
 } as const;
 
-export const inputPaddingYClasses = {
+const inputPaddingYClasses = {
 	sm: "py-1",
 	md: "py-2.5",
 	lg: "py-3",
@@ -59,7 +59,7 @@ const inputFrameEndPaddingClasses = {
 	lg: "pr-4",
 } as const;
 
-export const inputSizeClasses = {
+const inputSizeClasses = {
 	sm: `${inputPaddingXClasses.sm} ${inputPaddingYClasses.sm} text-base md:text-sm`,
 	md: `${inputPaddingXClasses.md} ${inputPaddingYClasses.md} text-sm`,
 	lg: `${inputPaddingXClasses.lg} ${inputPaddingYClasses.lg} text-base`,

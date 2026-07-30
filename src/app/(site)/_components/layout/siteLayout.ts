@@ -97,6 +97,7 @@ const settingsLink = getAvailableSiteSurfaceLink(
 	"Settings",
 	"marketing.settings",
 );
+const contactLink = getAvailableSiteSurfaceLink("Contact", "marketing.contact");
 const dashboardLink: SiteLink = getAvailableSiteSurfaceLink(
 	"Dashboard",
 	"auth.login",
@@ -105,22 +106,20 @@ const dashboardLink: SiteLink = getAvailableSiteSurfaceLink(
 		label: "Dashboard",
 		href: "/",
 	};
-const canShowInternalRoutes = process.env.NODE_ENV !== "production";
-const demoLink = canShowInternalRoutes
-	? getAvailableInternalRouteLink("Demo", "demo")
-	: null;
-const intelligenceLink = canShowInternalRoutes
-	? getAvailableInternalRouteLink("Intelligence", "intelligence")
-	: null;
-const playgroundLink = canShowInternalRoutes
-	? getAvailableInternalRouteLink("Playground", "playground")
-	: null;
-const dictionaryLink = canShowInternalRoutes
-	? getAvailableInternalRouteLink("Dictionary", "dictionary")
-	: null;
-const referenceLink = canShowInternalRoutes
-	? getAvailableInternalRouteLink("Reference", "reference")
-	: null;
+const demoLink = getAvailableInternalRouteLink("Demo", "demo");
+const intelligenceLink = getAvailableInternalRouteLink(
+	"Intelligence",
+	"intelligence",
+);
+const playgroundLink = getAvailableInternalRouteLink(
+	"Playground",
+	"playground",
+);
+const dictionaryLink = getAvailableInternalRouteLink(
+	"Dictionary",
+	"dictionary",
+);
+const referenceLink = getAvailableInternalRouteLink("Reference", "reference");
 const internalRouteLinks = omitMissingLinks<SiteLink>([
 	demoLink,
 	intelligenceLink,
@@ -145,6 +144,7 @@ export const defaultSiteLayout: SiteLayoutDocument = {
 				link: homeLink,
 				links: omitMissingLinks<SiteLink>([
 					{ label: "Hero", href: "/#home-hero" },
+					contactLink,
 					settingsLink,
 				]),
 			},
@@ -166,6 +166,7 @@ export const defaultSiteLayout: SiteLayoutDocument = {
 					},
 				],
 			},
+			contactLink,
 			demoLink,
 			intelligenceLink,
 			playgroundLink,
@@ -180,7 +181,11 @@ export const defaultSiteLayout: SiteLayoutDocument = {
 			{
 				label: "Home",
 				link: homeLink,
-				links: [{ label: "Hero", href: "/#home-hero" }],
+				links: omitMissingLinks<SiteLink>([
+					{ label: "Hero", href: "/#home-hero" },
+					contactLink,
+					settingsLink,
+				]),
 			},
 			...omitMissingLinks([developerMenuGroup]),
 		],
@@ -200,6 +205,6 @@ export const defaultSiteLayout: SiteLayoutDocument = {
 		{ label: "You Tube", icon: "youtube", href: "" },
 	],
 	footer: {
-		navLinks: omitMissingLinks([homeLink, settingsLink]),
+		navLinks: omitMissingLinks([homeLink, contactLink, settingsLink]),
 	},
 };

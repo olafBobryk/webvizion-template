@@ -1,7 +1,11 @@
 import assert from "node:assert/strict";
-import { existsSync, readdirSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { relative, resolve } from "node:path";
-import { appSurfaceRegistry } from "../../src/config/surfaces";
+import {
+	defaultSiteLayout,
+	getSiteLinkHref,
+} from "../../src/app/(site)/_components/layout/siteLayout";
+import { appSurfaceRegistry, internalRoutes } from "../../src/config/surfaces";
 import { assertRouteSurfaceRegistry } from "../../src/lib/surfaces/routeSurface";
 
 const root = process.cwd();
@@ -38,6 +42,39 @@ function collectPages(directory: string) {
 }
 
 assertRouteSurfaceRegistry(appSurfaceRegistry);
+
+const siteLayoutSource = readFileSync(
+	resolve(appRoot, "(site)/_components/layout/siteLayout.ts"),
+	"utf8",
+);
+assert.doesNotMatch(
+	siteLayoutSource,
+	/process\.env\.NODE_ENV/,
+	"Installed navigation must not disappear from production builds.",
+);
+
+const headerMenuHrefs = new Set(
+	defaultSiteLayout.header.menuGroups.flatMap((group) => [
+		...(group.link ? [getSiteLinkHref(group.link)] : []),
+		...(group.links ?? []).map(getSiteLinkHref),
+	]),
+);
+const topLevelInternalHrefs = Object.values(internalRoutes).filter(
+	(href) => href.split("/").filter(Boolean).length === 2,
+);
+for (const href of topLevelInternalHrefs) {
+	assert.ok(
+		headerMenuHrefs.has(href),
+		`Installed internal route ${href} is missing from the header menu.`,
+	);
+}
+for (const surface of appSurfaceRegistry) {
+	if (surface.family !== "marketing" || surface.match !== "exact") continue;
+	assert.ok(
+		headerMenuHrefs.has(surface.href),
+		`Installed marketing route ${surface.href} is missing from the header menu.`,
+	);
+}
 
 for (const [family, familyRoot] of Object.entries(familyRoots)) {
 	const installedInRoutes = appSurfaceRegistry.some(

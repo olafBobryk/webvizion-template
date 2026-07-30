@@ -417,7 +417,7 @@ async function writeProjectDocs(destinationRoot, profile, content) {
 			"- Use `npm run dev:agent -- --random` for isolated automated previews.",
 			"- Do not run Next.js development commands directly.",
 			"- Keep generated build, environment, and local intelligence artifacts out of Git.",
-			"- Internal developer routes are local-only and must remain unavailable in production.",
+			"- Internal routes are profile-installed, noindex surfaces; do not add destinations that assembly did not select.",
 			"- Use the shared toast and confirmation-modal primitives for standard feedback and confirmation flows.",
 			"",
 		].join("\n"),

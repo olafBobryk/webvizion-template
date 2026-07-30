@@ -80,22 +80,20 @@ function omitMissingLinks<T>(items: Array<T | null>): T[] {
 	return items.filter((item): item is T => item !== null);
 }
 
-const canShowInternalRoutes = process.env.NODE_ENV !== "production";
-const demoLink = canShowInternalRoutes
-	? getAvailableInternalRouteLink("Demo", "demo")
-	: null;
-const intelligenceLink = canShowInternalRoutes
-	? getAvailableInternalRouteLink("Intelligence", "intelligence")
-	: null;
-const playgroundLink = canShowInternalRoutes
-	? getAvailableInternalRouteLink("Playground", "playground")
-	: null;
-const dictionaryLink = canShowInternalRoutes
-	? getAvailableInternalRouteLink("Dictionary", "dictionary")
-	: null;
-const referenceLink = canShowInternalRoutes
-	? getAvailableInternalRouteLink("Reference", "reference")
-	: null;
+const demoLink = getAvailableInternalRouteLink("Demo", "demo");
+const intelligenceLink = getAvailableInternalRouteLink(
+	"Intelligence",
+	"intelligence",
+);
+const playgroundLink = getAvailableInternalRouteLink(
+	"Playground",
+	"playground",
+);
+const dictionaryLink = getAvailableInternalRouteLink(
+	"Dictionary",
+	"dictionary",
+);
+const referenceLink = getAvailableInternalRouteLink("Reference", "reference");
 const internalRouteLinks = omitMissingLinks<SiteLink>([
 	demoLink,
 	intelligenceLink,

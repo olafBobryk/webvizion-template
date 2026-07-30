@@ -4,7 +4,7 @@ import { ProfilePicture, type ProfilePictureSize } from "@/components/ui/misc";
 
 export type MemberAvatarSize = Exclude<ProfilePictureSize, "2xl">;
 
-export function MemberAvatarRoot({
+function MemberAvatarRoot({
 	alt,
 	className,
 	colorIndex,

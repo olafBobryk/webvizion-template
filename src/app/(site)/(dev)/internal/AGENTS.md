@@ -7,6 +7,6 @@
 - Use `Panel` for generic preview canvases and visual test stages. Do not recreate surface background, border, radius, padding, or shadow recipes with raw utility classes.
 - Prefer subtraction: keep one page heading, remove repeated descriptions, avoid Card-in-Card composition unless the inner card is itself the component being demonstrated, and do not wrap groups only to create another border.
 - Component demos may preserve component-owned visual geometry, but their surrounding frames must use the shared design-system primitives.
-- Internal routes remain noindex and production-guarded through the parent layout. Do not weaken that boundary during presentation work.
+- Internal routes remain noindex. Their runtime availability is profile-driven: a selected internal surface stays reachable in production, while omitted surfaces fail closed because assembly removes both their routes and generated navigation entries. Production guards on `/api/debug`, `/api/dev`, and `/api/internal` remain separate and must not be weakened merely to expose the read-only page surfaces.
 - `defaultSiteLayout` must remain valid in assembled profiles that omit the marketing surface. It derives optional links from the installed app surface registry and generated internal-route map, then fails closed when a destination is absent.
 </INSTRUCTIONS>

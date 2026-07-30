@@ -38,44 +38,6 @@ export type RevealImageClipRevealTransition = {
 	ease: readonly [number, number, number, number];
 };
 
-export function getCornerClipRevealVariants({
-	finalRadius = 20,
-	origin = "bottom-left",
-	transition = {
-		duration: 1.18,
-		ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
-	},
-}: {
-	finalRadius?: number;
-	origin?: RevealImageClipRevealOrigin;
-	transition?: RevealImageClipRevealTransition;
-}): Variants {
-	return {
-		hidden: {
-			...cornerClipHiddenInsetValues[origin],
-			"--clip-radius": "0px",
-			clipPath: cornerClipPath,
-			opacity: 1,
-			scale: 1,
-			transition: {
-				...transition,
-				"--clip-radius": cornerClipRadiusTransition,
-			},
-		},
-		show: {
-			...cornerClipRevealedInsetValues,
-			"--clip-radius": `${finalRadius}px`,
-			clipPath: cornerClipPath,
-			opacity: 1,
-			scale: 1,
-			transition: {
-				...transition,
-				"--clip-radius": cornerClipRadiusTransition,
-			},
-		},
-	};
-}
-
 const cornerClipHiddenInsetValues: Record<
 	RevealImageClipRevealOrigin,
 	{

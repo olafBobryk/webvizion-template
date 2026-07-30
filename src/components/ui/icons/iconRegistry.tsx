@@ -42,7 +42,7 @@ const createLocalRegistry = (): IconRegistry => {
 	return Object.fromEntries(entries) as IconRegistry;
 };
 
-export const localIconRegistry = createLocalRegistry();
+const localIconRegistry = createLocalRegistry();
 
 export const createIconRegistry = (
 	overrides: Partial<IconRegistry>,

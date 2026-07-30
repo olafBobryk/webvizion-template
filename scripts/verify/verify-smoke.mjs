@@ -23,9 +23,11 @@ async function getExpectations() {
 		"src/app/(site)/(marketing)/(home)/page.tsx",
 	);
 	const hasDashboard = await pathExists("src/app/(site)/dashboard/page.tsx");
-	const hasIntelligence = await pathExists(
-		"src/app/(site)/(dev)/internal/intelligence/page.tsx",
-	);
+	const hasIntelligence =
+		(await pathExists("src/app/(site)/(dev)/internal/intelligence/page.tsx")) ||
+		(await pathExists(
+			"src/app/(site)/(marketing)/internal/intelligence/page.tsx",
+		));
 	const expectations = [
 		{
 			route: "/",
@@ -40,7 +42,7 @@ async function getExpectations() {
 	if (hasIntelligence) {
 		expectations.push({
 			route: "/internal/intelligence",
-			statuses: new Set([404]),
+			statuses: new Set([200]),
 		});
 	}
 
@@ -73,11 +75,6 @@ async function validateResponse(baseUrl, expectation) {
 			);
 		}
 		console.log(`ok ${expectation.route} ${response.status} -> ${location}`);
-		return;
-	}
-
-	if (response.status === 404) {
-		console.log(`ok ${expectation.route} 404 (production blocked)`);
 		return;
 	}
 

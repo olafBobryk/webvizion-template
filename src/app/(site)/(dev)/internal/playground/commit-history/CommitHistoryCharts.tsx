@@ -1,6 +1,7 @@
 "use client";
 
 import type * as React from "react";
+import { useEffect, useRef, useState } from "react";
 import {
 	CartesianGrid,
 	Legend,
@@ -157,15 +158,134 @@ function ChartCard({
 	);
 }
 
+const minimumVisibleCommits = 6;
+
+function getZoomedDomain({
+	commitCount,
+	domain,
+	progress,
+	scale,
+}: {
+	commitCount: number;
+	domain: [number, number];
+	progress: number;
+	scale: number;
+}): [number, number] {
+	const [start, end] = domain;
+	const maximumSpan = Math.max(0, commitCount - 1);
+	const minimumSpan = Math.min(minimumVisibleCommits - 1, maximumSpan);
+	const span = end - start;
+	const nextSpan = Math.round(
+		Math.min(maximumSpan, Math.max(minimumSpan, span * scale)),
+	);
+	if (nextSpan === span) return domain;
+
+	const focus = start + span * progress;
+	const nextStart = Math.round(
+		Math.min(maximumSpan - nextSpan, Math.max(0, focus - nextSpan * progress)),
+	);
+
+	return [nextStart, nextStart + nextSpan];
+}
+
+function useCommitHistoryZoom(commitCount: number) {
+	const chartsRef = useRef<HTMLDivElement>(null);
+	const [domain, setDomain] = useState<[number, number]>([
+		0,
+		Math.max(0, commitCount - 1),
+	]);
+
+	useEffect(() => {
+		setDomain([0, Math.max(0, commitCount - 1)]);
+	}, [commitCount]);
+
+	useEffect(() => {
+		const charts = chartsRef.current;
+		if (!charts || commitCount < 2) return;
+
+		function handleWheel(event: WheelEvent) {
+			if (!event.ctrlKey) return;
+
+			const target = event.target;
+			if (!(target instanceof Element)) return;
+			const chart = target.closest<HTMLElement>("[data-commit-history-chart]");
+			if (!chart) return;
+
+			event.preventDefault();
+
+			const bounds = chart.getBoundingClientRect();
+			const progress = Math.min(
+				1,
+				Math.max(0, (event.clientX - bounds.left) / bounds.width),
+			);
+			const scale = event.deltaY > 0 ? 1.25 : 0.8;
+
+			setDomain((currentDomain) =>
+				getZoomedDomain({
+					commitCount,
+					domain: currentDomain,
+					progress,
+					scale,
+				}),
+			);
+		}
+
+		charts.addEventListener("wheel", handleWheel, { passive: false });
+		return () => charts.removeEventListener("wheel", handleWheel);
+	}, [commitCount]);
+
+	const maximumSpan = Math.max(0, commitCount - 1);
+	const minimumSpan = Math.min(minimumVisibleCommits - 1, maximumSpan);
+	const currentSpan = domain[1] - domain[0];
+
+	return {
+		canReset: currentSpan < maximumSpan,
+		canZoomIn: currentSpan > minimumSpan,
+		canZoomOut: currentSpan < maximumSpan,
+		chartsRef,
+		domain,
+		reset: () => setDomain([0, maximumSpan]),
+		zoomIn: () =>
+			setDomain((currentDomain) =>
+				getZoomedDomain({
+					commitCount,
+					domain: currentDomain,
+					progress: 0.5,
+					scale: 0.8,
+				}),
+			),
+		zoomOut: () =>
+			setDomain((currentDomain) =>
+				getZoomedDomain({
+					commitCount,
+					domain: currentDomain,
+					progress: 0.5,
+					scale: 1.25,
+				}),
+			),
+	};
+}
+
 export function CommitHistoryCharts({
 	commits,
 }: {
 	commits: readonly CommitHistoryRecord[];
 }) {
-	const chartCommits = commits.map((commit) => ({
+	const chartCommits = commits.map((commit, index) => ({
 		...commit,
+		index,
 		removed: -commit.deletions,
 	}));
+	const {
+		canReset,
+		canZoomIn,
+		canZoomOut,
+		chartsRef,
+		domain,
+		reset,
+		zoomIn,
+		zoomOut,
+	} = useCommitHistoryZoom(chartCommits.length);
 	const startCommit = chartCommits[0];
 	const endCommit = chartCommits.at(-1);
 	const description =
@@ -206,12 +326,35 @@ export function CommitHistoryCharts({
 	return (
 		<>
 			{header}
-			<div className="grid w-full gap-5">
+			<fieldset className="m-0 flex min-w-0 flex-wrap justify-end gap-2 border-0 p-0">
+				<legend className="sr-only">Commit history chart zoom controls</legend>
+				<Button disabled={!canZoomIn} onClick={zoomIn} size="sm" type="button">
+					Zoom in
+				</Button>
+				<Button
+					disabled={!canZoomOut}
+					onClick={zoomOut}
+					size="sm"
+					type="button"
+				>
+					Zoom out
+				</Button>
+				<Button
+					disabled={!canReset}
+					onClick={reset}
+					size="sm"
+					type="button"
+					variant="ghost"
+				>
+					Reset zoom
+				</Button>
+			</fieldset>
+			<div ref={chartsRef} className="grid w-full gap-5">
 				<ChartCard
 					title="Line delta"
-					description="Added lines sit above zero; removed lines sit below it. Each point is one commit."
+					description="Added lines sit above zero; removed lines sit below it. Pinch the graph or use the controls to zoom horizontally."
 				>
-					<div className="h-80 w-full">
+					<div data-commit-history-chart className="h-80 w-full">
 						<ResponsiveContainer width="100%" height="100%">
 							<LineChart
 								data={chartCommits}
@@ -224,11 +367,16 @@ export function CommitHistoryCharts({
 								/>
 								<XAxis
 									axisLine={false}
-									dataKey="date"
+									allowDataOverflow
+									dataKey="index"
+									domain={domain}
 									minTickGap={46}
 									tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
-									tickFormatter={formatShortDate}
+									tickFormatter={(index) =>
+										formatShortDate(chartCommits[index]?.date ?? "")
+									}
 									tickLine={false}
+									type="number"
 								/>
 								<YAxis
 									axisLine={false}
@@ -269,9 +417,9 @@ export function CommitHistoryCharts({
 
 				<ChartCard
 					title="Cumulative net lines"
-					description="Running additions minus deletions since the repository's root commit."
+					description="Running additions minus deletions since the repository's root commit. Pinch the graph or use the controls to zoom horizontally."
 				>
-					<div className="h-80 w-full">
+					<div data-commit-history-chart className="h-80 w-full">
 						<ResponsiveContainer width="100%" height="100%">
 							<LineChart
 								data={chartCommits}
@@ -284,11 +432,16 @@ export function CommitHistoryCharts({
 								/>
 								<XAxis
 									axisLine={false}
-									dataKey="date"
+									allowDataOverflow
+									dataKey="index"
+									domain={domain}
 									minTickGap={46}
 									tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
-									tickFormatter={formatShortDate}
+									tickFormatter={(index) =>
+										formatShortDate(chartCommits[index]?.date ?? "")
+									}
 									tickLine={false}
+									type="number"
 								/>
 								<YAxis
 									axisLine={false}

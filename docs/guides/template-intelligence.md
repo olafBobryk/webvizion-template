@@ -2,8 +2,9 @@
 
 Template Intelligence is an internal authoring surface for maintainers and
 agents working inside this template. It generates a local map of repo concepts
-and renders it at `/internal/intelligence` during development. Internal routes
-remain unavailable in production.
+and renders it at `/internal/intelligence`. Internal route availability follows
+the selected profile in development and production, while the route remains
+noindex.
 
 The feature is template-owned infrastructure. Profiles include it explicitly
 through positive surface ownership; generated projects contain only the
@@ -168,9 +169,9 @@ unregistered pages, stale routes, invalid domain ownership, or ambiguous source
 roots, while intentionally dashboard-free profiles pass without retaining
 dashboard tooling.
 
-Like the rest of `/internal`, this page is a local developer surface. It is
-available through the isolated development server and always returns 404 in a
-production build.
+Like the rest of `/internal`, this page is a maintainer surface. Profiles that
+select Template Intelligence keep it available in development and production;
+profiles that omit it remove the route and its navigation entry during assembly.
 
 ## Understand-Anything Boundary
 

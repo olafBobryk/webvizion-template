@@ -129,7 +129,7 @@ needs scroll-performance measurement, add it intentionally after activation.
 ## Notes
 
 - Scoring uses a production-like local build against real page paths; internal
-  developer routes remain blocked in production mode.
+  developer routes remain available when their profile surface is installed.
 - The benchmark surface is process infrastructure only; it does not authorize
   page changes by itself.
 - Disposable loop runs keep `results.jsonl`, `latest-measurement.json`,

@@ -86,7 +86,6 @@ export function renderSurfacesFile(state) {
 export function renderInternalLayoutFile(state) {
 	const shared = [
 		'import type { Metadata } from "next";',
-		'import { notFound } from "next/navigation";',
 		"",
 		"export const metadata: Metadata = {",
 		"\trobots: {",
@@ -95,14 +94,11 @@ export function renderInternalLayoutFile(state) {
 		"\t},",
 		"};",
 		"",
-		"export default function DevOnlyInternalLayout({",
+		"export default function InternalLayout({",
 		"\tchildren,",
 		"}: Readonly<{",
 		"\tchildren: React.ReactNode;",
 		"}>) {",
-		'\tif (process.env.NODE_ENV === "production") {',
-		"\t\tnotFound();",
-		"\t}",
 	];
 
 	if (state.hasMarketing) {
@@ -110,10 +106,10 @@ export function renderInternalLayoutFile(state) {
 	}
 
 	return [
-		...shared.slice(0, 2),
+		...shared.slice(0, 1),
 		'import { SiteShell } from "@/app/(site)/_components/layout/SiteShell";',
 		'import { defaultSiteLayout } from "@/app/(site)/_components/layout/siteLayout";',
-		...shared.slice(2),
+		...shared.slice(1),
 		"",
 		"\treturn (",
 		"\t\t<SiteShell siteLayout={defaultSiteLayout}>",

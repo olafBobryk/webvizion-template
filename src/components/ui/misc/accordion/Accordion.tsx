@@ -51,7 +51,7 @@ function AccordionRoot(props: AccordionProps) {
 	return <AccordionClient {...props} />;
 }
 
-export function AccordionSkeleton({
+function AccordionSkeleton({
 	children,
 	className,
 	contentClassName,
@@ -123,7 +123,7 @@ export function AccordionSkeleton({
 	);
 }
 
-export function AccordionCardSkeleton({
+function AccordionCardSkeleton({
 	action,
 	actionClassName,
 	children,
