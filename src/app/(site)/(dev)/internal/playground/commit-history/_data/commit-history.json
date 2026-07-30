@@ -1646,10 +1646,19 @@
 			"subject": "Ship production updates",
 			"cumulativeNet": 96950,
 			"delta": 2806
+		},
+		{
+			"additions": 678,
+			"date": "2026-07-30",
+			"deletions": 597,
+			"hash": "8aced5ad0e2146470ed31314a88146fa96448649",
+			"subject": "Ship production updates",
+			"cumulativeNet": 97031,
+			"delta": 81
 		}
 	],
 	"endDate": "2026-07-30",
-	"head": "7f7f5de88c9f9e3ec19371c3ea4c1e2158d4a2e2",
+	"head": "8aced5ad0e2146470ed31314a88146fa96448649",
 	"startDate": "2025-08-24",
 	"version": 1
 }
