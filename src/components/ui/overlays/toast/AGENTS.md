@@ -1,40 +1,23 @@
 # Folder: `src/components/ui/overlays/toast`
 
-## Role
-Shared transient-feedback host for success, error, info, and loading toasts.
+## Ownership
 
-The cross-channel decision table and narrow `StatusMessage` boundary live in
-`docs/guides/components/feedback-and-status.md`. This file owns toast-specific
-implementation constraints.
+This folder owns the client-only transient-feedback host. The supported host
+and action contract lives at `UI/Overlays/Toast` in Storybook.
 
-## Use This Folder When
-- A user action needs temporary asynchronous feedback.
-- A mutation, save, upload, or background task should report progress or completion unobtrusively.
+## Dependency and host boundaries
 
-## Prefer These Files
-- `src/components/ui/overlays/toast/ToastHost.tsx`: app-wide toast renderer.
-- `src/lib/feedback/toast.ts`: paired toast API used by the host.
+- `ToastHost` mounts exactly once through `ToastClientMount` near the
+  application root.
+- `src/lib/feedback/toast.ts` is the paired dispatch API; UI consumers do not
+  create feature-local Sonner hosts or state.
+- The host may depend on focus and theme tokens but must not depend on route or
+  feature code.
 
-## Invariants
-- Mount the host once through `ToastClientMount` near the app root.
-- Prefer `showToast.success`, `showToast.error`, `showToast.loading`, `showToast.dismiss`, and `showToast.promise` over feature-local toast state.
-- Toasts are for transient feedback, not for replacing inline validation or modal confirmation.
-- Do not repeat a field error or durable replacement message in a toast. Field
-  and toast channels may coexist only when their messages are distinct.
-- The host should continue to respect reduced-motion settings.
-- Dismiss controls and interactive content inside toasts must preserve visible focus.
-- Initial page loads should not show toasts. Use skeletons or inline loading states for first render.
-- Toast copy should stay short, neutral, and server-driven when possible.
-- Toast titles are part of the shared pattern. `ToastHost` supplies defaults for success, error, loading, and info; pass `{ title }` to simple helpers only when the flow needs a more specific title.
+## Structural invariants
 
-## How To Use It
-- Use `showToast.promise` for async workflows that move from loading to success or error.
-- For promise flows, use `loadingTitle`, `successTitle`, and `errorTitle` when the default titles are too generic.
-- Use `showToast.loading` when a long-running, user-initiated process starts and update or dismiss it later.
-- Use inline field messaging through `Field` for form validation instead of showing validation toasts.
-- For mixed flows, fetch directly on initial load and switch to toast-wrapped fetches only for explicit user actions like apply, submit, retry, or manual refresh.
-
-## Avoid
-- Rebuilding a second toast system.
-- Using toasts for blocking decisions or complex recovery flows better handled by a modal or inline state.
-- Showing loading toasts during initial route entry or first content hydration.
+- Toast content, actions, cancel, and dismiss controls retain visible focus and
+  semantic Sonner roles.
+- Host animation continues to respect shared reduced-motion settings.
+- Default host titles and the simple, loading, dismissal, and promise dispatch
+  paths remain synchronized with the shared feedback facade.

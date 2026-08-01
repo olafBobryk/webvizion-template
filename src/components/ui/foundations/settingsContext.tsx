@@ -104,8 +104,12 @@ export function SettingsProvider({
 		defaultMotionDisabled,
 	);
 	const [resolvedAppearance, setResolvedAppearance] =
-		React.useState<ResolvedAppearance>(
-			resolveAppearance(defaultAppearance, false),
+		React.useState<ResolvedAppearance>(() =>
+			resolveAppearance(
+				defaultAppearance,
+				typeof window !== "undefined" &&
+					window.matchMedia("(prefers-color-scheme: dark)").matches,
+			),
 		);
 	const [smoothScrollDisabled, setSmoothScrollDisabled] = React.useState(
 		smoothScrollAvailable ? defaultSmoothScrollDisabled : true,
@@ -127,7 +131,7 @@ export function SettingsProvider({
 		setResolvedAppearance(nextResolvedAppearance);
 	}
 
-	React.useEffect(() => {
+	React.useLayoutEffect(() => {
 		if (!storageKey || !hasHydrated.current) return;
 		writeStoredSettings(storageKey, {
 			appearance,
@@ -149,16 +153,18 @@ export function SettingsProvider({
 		};
 	}, [textScale]);
 
-	React.useEffect(() => {
+	React.useLayoutEffect(() => {
 		const stored = storageKey ? readStoredSettings(storageKey) : null;
-		const nextAppearance = isAppearancePreference(stored?.appearance)
-			? stored.appearance
-			: (readLegacyAppearance() ?? defaultAppearance);
+		const nextAppearance = storageKey
+			? isAppearancePreference(stored?.appearance)
+				? stored.appearance
+				: (readLegacyAppearance() ?? defaultAppearance)
+			: defaultAppearance;
 		const documentResolvedAppearance =
 			document.documentElement.dataset.resolvedAppearance;
-		const nextResolvedAppearance = isResolvedAppearance(
-			documentResolvedAppearance,
-		)
+		const shouldUseDocumentAppearance =
+			Boolean(storageKey) && isResolvedAppearance(documentResolvedAppearance);
+		const nextResolvedAppearance = shouldUseDocumentAppearance
 			? documentResolvedAppearance
 			: resolveAppearance(
 					nextAppearance,
@@ -169,6 +175,7 @@ export function SettingsProvider({
 		setResolvedAppearance(nextResolvedAppearance);
 		applyDocumentAppearance({
 			appearance: nextAppearance,
+			atomic: true,
 			resolvedAppearance: nextResolvedAppearance,
 		});
 		if (typeof stored?.motionDisabled === "boolean") {

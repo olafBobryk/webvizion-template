@@ -8,13 +8,14 @@ import {
 } from "@/components/ui/primitives/dropdown";
 import { Text } from "@/components/ui/primitives/Text";
 
-type TooltipProps = {
+export type TooltipProps = {
 	content: React.ReactNode;
 	children: React.ReactNode;
 	className?: string;
 	contentClassName?: string;
 	align?: "start" | "end";
 	offset?: number;
+	width?: number;
 };
 
 export function Tooltip({
@@ -24,47 +25,72 @@ export function Tooltip({
 	contentClassName,
 	align = "start",
 	offset = 8,
+	width = 150,
 }: TooltipProps) {
+	const contentId = React.useId();
 	const renderTrigger = React.useCallback(
-		(props: DropdownTriggerRenderProps) => (
-			// biome-ignore lint/a11y/noStaticElementInteractions: hover and focus are delegated through Dropdown trigger props
-			<span
-				ref={props.ref as React.Ref<HTMLSpanElement>}
-				className={clsx("inline-flex", props.className, className)}
-				onMouseEnter={props.onRootMouseEnter}
-				onMouseLeave={props.onRootMouseLeave}
-				onFocus={props.onRootMouseEnter}
-				onBlur={props.onRootMouseLeave}
-			>
-				{children}
-			</span>
-		),
-		[children, className],
+		(props: DropdownTriggerRenderProps) => {
+			const describedChild = React.isValidElement(children)
+				? React.cloneElement(
+						children as React.ReactElement<{ "aria-describedby"?: string }>,
+						{
+							"aria-describedby": props.isOpen
+								? [
+										(children.props as { "aria-describedby"?: string })[
+											"aria-describedby"
+										],
+										contentId,
+									]
+										.filter(Boolean)
+										.join(" ")
+								: (children.props as { "aria-describedby"?: string })[
+										"aria-describedby"
+									],
+						},
+					)
+				: children;
+
+			return (
+				// biome-ignore lint/a11y/noStaticElementInteractions: hover and focus are delegated through Dropdown trigger props
+				<span
+					ref={props.ref as React.Ref<HTMLSpanElement>}
+					className={clsx("inline-flex", props.className, className)}
+					onMouseEnter={props.onRootMouseEnter}
+					onMouseLeave={props.onRootMouseLeave}
+					onFocus={props.onRootMouseEnter}
+					onBlur={props.onRootMouseLeave}
+				>
+					{describedChild}
+				</span>
+			);
+		},
+		[children, className, contentId],
 	);
 
 	return (
 		<Dropdown
 			renderTrigger={renderTrigger}
-			menuClassName={clsx(
-				"rounded-[10px] border border-border bg-background/95 px-3 py-2 text-xs text-foreground shadow-sm",
-				contentClassName,
+			menuElevation="panel"
+			menuClassName={clsx("px-3 py-2 text-xs", contentClassName)}
+			renderMenu={() => (
+				<div id={contentId} role="tooltip">
+					{typeof content === "string" ? (
+						<Text as="p" theme="inherit" tone="inherit" variant="body">
+							{content}
+						</Text>
+					) : (
+						content
+					)}
+				</div>
 			)}
-			renderMenu={() =>
-				typeof content === "string" ? (
-					<Text variant="body" tone="muted" as="p">
-						{content}
-					</Text>
-				) : (
-					content
-				)
-			}
 			openOnHover
 			pinOnClick={false}
 			autoFocusMenu={false}
+			positionStrategy="fixed"
 			align={align}
 			offset={offset}
 			menuMinWidth={0}
-			menuWidth={150}
+			menuWidth={width}
 		/>
 	);
 }

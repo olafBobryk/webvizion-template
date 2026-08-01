@@ -1,7 +1,3 @@
-export const dashboardDebugEnabled =
-	process.env.NODE_ENV !== "production" ||
-	process.env.NEXT_PUBLIC_DASHBOARD_DEBUG === "enabled";
-
 export const dashboardDebugStates = [
 	"loading",
 	"empty",

@@ -10,7 +10,6 @@ export const fullProfile = {
 	},
 	assembly: {
 		surfaces: [
-			"dashboardReferenceEntities",
 			"dashboard",
 			"marketing",
 			"demo",
@@ -29,7 +28,10 @@ export const fullProfile = {
 			"src/app/(site)/(marketing)/(home)/page.tsx",
 			"src/app/(site)/(auth)/login/page.tsx",
 			"src/app/(site)/dashboard/page.tsx",
+			"src/app/(site)/(marketing)/internal/demo/page.tsx",
 			"src/app/(site)/(marketing)/internal/layout.tsx",
+			"src/lib/component-catalog/componentCatalog.generated.ts",
+			"scripts/generate-component-catalog.mjs",
 			"src/proxy.ts",
 			"payload.config.ts",
 		],
@@ -37,6 +39,7 @@ export const fullProfile = {
 		forbiddenPackages: [],
 		commands: [
 			"npm run verify:static",
+			"npm run verify:site-layout",
 			"npm run build",
 			"npm run verify:smoke",
 		],

@@ -155,11 +155,11 @@ function createChipBackgroundStyle(recipe?: ChipBackgroundRecipe): ChipStyle {
 const toneClasses: Record<ChipTone, string> = {
 	plain: "bg-transparent text-foreground",
 	neutral: "bg-[var(--chip-background)] text-foreground/80",
-	primary: "bg-[var(--chip-background)] text-primary",
-	success: "bg-[var(--chip-background)] text-success",
+	primary: "bg-[var(--chip-background)] text-primary-text",
+	success: "bg-[var(--chip-background)] text-success-text",
 	warning: "bg-[var(--chip-background)] text-warning",
-	danger: "bg-[var(--chip-background)] text-danger",
-	helper: "bg-[var(--chip-background)] text-[color:var(--chip-accent)]",
+	danger: "bg-[var(--chip-background)] text-danger-text",
+	helper: "bg-[var(--chip-background)] text-foreground",
 };
 
 const interactiveToneClasses: Record<ChipTone, string> = {
@@ -214,7 +214,7 @@ function chipClassName(
 		customColor === "muted"
 			? "bg-[var(--chip-background)] text-muted-foreground"
 			: customColor
-				? "bg-[var(--chip-background)] text-[var(--chip-color)]"
+				? "bg-[var(--chip-background)] text-foreground"
 				: toneClasses[tone],
 		disabled
 			? "cursor-not-allowed opacity-50"

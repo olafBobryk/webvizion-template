@@ -1,0 +1,23 @@
+.dot {
+	display: inline-block;
+	opacity: 0.35;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.dot {
+		animation: thinking-dot-wave var(--motion-ambient-duration)
+			var(--motion-ambient-ease) infinite;
+	}
+}
+
+@keyframes thinking-dot-wave {
+	0%,
+	60%,
+	100% {
+		opacity: 0.35;
+	}
+
+	30% {
+		opacity: 1;
+	}
+}

@@ -98,15 +98,20 @@ export function LetterWave({
 	}
 
 	return renderText(
-		children.split("").map((char, index) => (
-			<span
-				// biome-ignore lint/suspicious/noArrayIndexKey: character position is the identity
-				key={index}
-				className="inline-block motion-safe:group-hover:animate-[letter-wave_280ms_ease_forwards]"
-				style={{ animationDelay: `${index * 22}ms` }}
-			>
-				{char === " " ? "\u00A0" : char}
+		<>
+			<span className="sr-only">{children}</span>
+			<span aria-hidden={true}>
+				{children.split("").map((char, index) => (
+					<span
+						// biome-ignore lint/suspicious/noArrayIndexKey: character position is the identity
+						key={index}
+						className="letter-wave-character inline-block"
+						style={{ animationDelay: `${index * 22}ms` }}
+					>
+						{char === " " ? "\u00A0" : char}
+					</span>
+				))}
 			</span>
-		)),
+		</>,
 	);
 }

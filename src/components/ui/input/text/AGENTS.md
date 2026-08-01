@@ -1,15 +1,26 @@
 # Folder: `src/components/ui/input/text`
 
-## Role
+## Ownership and boundary
 
-Text-like controls, including semantic email, password, phone, multiline, and hidden honeypot entry.
+This folder owns text, email, password, phone, multiline, and hidden honeypot
+entry. External consumers use supported exports from `@/components/ui/input`;
+Storybook owns their consumer contracts. Implementations import InputSkeleton
+directly and keep private support types out of the public barrel.
 
-## Public Surface
+## Private topology
 
-- External consumers import text-family components from `@/components/ui/input`.
-- Family implementations import `InputSkeleton` directly and keep their internal types private unless the public barrel deliberately exports them.
+- Password visibility, strength, and copy state remain internal to
+  PasswordInput.
+- `phoneCountryOptions.ts` owns country normalization, filtering, and dial-code
+  matching. `PhoneCountryListbox.tsx` privately owns country-menu rendering;
+  neither receives an independent catalogue identity.
 
-## Invariants
+## Structural invariants
 
-- Preserve `Field` and `InputFrame` ownership, real input semantics, browser autofill behavior, validation wiring, and visible focus.
-- Keep password visibility and strength behavior in `PasswordInput`, and country-aware behavior in `PhoneInput`; `phoneCountryOptions.ts` owns country normalization, filtering, and dial-code matching, while `PhoneCountryListbox.tsx` privately owns country-menu rendering.
+- Text-like controls retain `Field` and `InputFrame`, real input semantics,
+  browser autofill attributes, validation relationships, and visible focus.
+- Email and telephone inputs preserve their native types and input-mode hints.
+- PhoneInput keeps display text, selected country, and E.164 hidden form output
+  as distinct state channels.
+- SpamProtectionFields stays hidden, untabbable, ignored by accessibility APIs,
+  and available only as a honeypot form value; it is not a security boundary.

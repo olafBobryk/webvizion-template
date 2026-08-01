@@ -2,7 +2,7 @@ import type * as React from "react";
 import type { ButtonBaseProps } from "../Button";
 import type { DropdownOptionTone } from "../dropdownStyles";
 import type { ListboxOption } from "../Listbox";
-import type { PanelProps } from "../Panel";
+import type { FloatProps, SurfaceElevation } from "../surfaces";
 
 export type DropdownTriggerRenderProps = {
 	ref: React.Ref<HTMLElement>;
@@ -39,6 +39,7 @@ export type DropdownProps = {
 	className?: string;
 	collisionPadding?: number;
 	menuClassName?: string;
+	menuElevation?: SurfaceElevation;
 	portalTargetId?: string;
 	menuWidth?: number | "trigger";
 	menuMinWidth?: number;
@@ -59,7 +60,7 @@ export type DropdownSide = NonNullable<DropdownProps["side"]>;
 export type DropdownPositionStrategy = "absolute" | "fixed";
 type DropdownAnchorRef = { current: Element | null };
 
-export type DropdownSurfaceProps = PanelProps<"div"> & {
+export type DropdownSurfaceProps = FloatProps<"div"> & {
 	align?: "start" | "end";
 	anchorRef?: DropdownAnchorRef;
 	collisionPadding?: number;

@@ -123,7 +123,7 @@ function NumberInputRoot({
 				fullWidth
 				end={
 					unit ? (
-						<span className="whitespace-nowrap text-sm text-muted/70">
+						<span className="whitespace-nowrap text-sm text-muted-foreground">
 							{unit}
 						</span>
 					) : null

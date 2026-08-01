@@ -85,6 +85,8 @@ export type TextVariant = NonNullable<
 	VariantProps<typeof textVariants>["variant"]
 >;
 
+export type TextSkeletonDensity = "default" | "compact";
+
 type BaseProps = {
 	as?: "span" | "p" | "div" | "label" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 	className?: string;
@@ -133,6 +135,7 @@ type TextSkeletonProps = Omit<
 			| "h5"
 			| "h6";
 		children?: React.ReactNode;
+		density?: TextSkeletonDensity;
 		textClassName?: string;
 	};
 
@@ -144,6 +147,7 @@ function TextSkeleton({
 	interactive,
 	className,
 	textClassName,
+	density = "default",
 	children,
 	...rest
 }: TextSkeletonProps) {
@@ -152,6 +156,8 @@ function TextSkeleton({
 			as={as === "span" || as === "label" ? "span" : "div"}
 			className={clsx(
 				"w-fit max-w-full",
+				density === "compact" &&
+					"!bg-transparent before:pointer-events-none before:absolute before:inset-x-0 before:inset-y-px before:rounded-[inherit] before:bg-muted/80",
 				textVariants({
 					variant,
 					tone,
@@ -160,6 +166,7 @@ function TextSkeleton({
 					className: clsx(className, textClassName),
 				}),
 			)}
+			data-skeleton-density={density}
 			{...rest}
 		>
 			<span>{children ?? "Loading"}</span>

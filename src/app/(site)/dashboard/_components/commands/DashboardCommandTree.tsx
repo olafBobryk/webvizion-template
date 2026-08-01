@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/primitives/Button";
 import { getDropdownOptionClassName } from "@/components/ui/primitives/dropdownStyles";
 import type { DashboardContextualCommand } from "./DashboardCommandContracts";
 
-type DashboardCommandTreeNode = {
+export type DashboardCommandTreeNode = {
 	children: DashboardCommandTreeNode[];
 	command: DashboardContextualCommand;
 	directlyMatched: boolean;
@@ -107,21 +107,25 @@ export function dashboardCommandMatches(
 
 export function DashboardCommandTree({
 	activeCommandId,
+	depth = 0,
 	executeCommand,
 	nodes,
 	onActiveCommandChange,
 }: {
 	activeCommandId?: string;
+	depth?: number;
 	executeCommand: (command: DashboardContextualCommand) => void;
 	nodes: DashboardCommandTreeNode[];
 	onActiveCommandChange: (commandId: string) => void;
 }) {
 	return (
-		<div className="grid gap-1">
-			{nodes.map((node) => (
+		<div className="grid gap-0.5" data-command-tree-level={depth}>
+			{nodes.map((node, index) => (
 				<DashboardCommandTreeItem
 					activeCommandId={activeCommandId}
+					depth={depth}
 					executeCommand={executeCommand}
+					isLast={index === nodes.length - 1}
 					key={node.command.id}
 					onActiveCommandChange={onActiveCommandChange}
 					treeNode={node}
@@ -133,32 +137,42 @@ export function DashboardCommandTree({
 
 function DashboardCommandTreeItem({
 	activeCommandId,
+	depth,
 	executeCommand,
+	isLast,
 	onActiveCommandChange,
 	treeNode,
 }: {
 	activeCommandId?: string;
+	depth: number;
 	executeCommand: (command: DashboardContextualCommand) => void;
+	isLast: boolean;
 	onActiveCommandChange: (commandId: string) => void;
 	treeNode: DashboardCommandTreeNode;
 }) {
 	const { command, directlyMatched } = treeNode;
 	const isActive = activeCommandId === command.id;
+	const isNested = depth > 0;
 	const rowContent = (
 		<>
 			<span
 				className={[
-					"grid size-9 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors motion-interactive",
+					"relative z-10 mt-0.5 grid shrink-0 place-items-center rounded-lg border border-border/60 bg-muted/45 text-muted-foreground transition-colors motion-interactive",
+					isNested ? "size-7" : "size-8",
 					directlyMatched
-						? "group-hover:text-foreground group-focus-visible:text-foreground group-data-[active=true]:text-foreground"
+						? "group-hover:border-border group-hover:bg-muted group-hover:text-foreground group-focus-visible:text-foreground group-data-[active=true]:border-border group-data-[active=true]:bg-background/70 group-data-[active=true]:text-foreground"
 						: undefined,
 				]
 					.filter(Boolean)
 					.join(" ")}
+				data-command-icon-well=""
 			>
-				<Icon className="!size-[18px]" name={command.icon ?? "search"} />
+				<Icon
+					className={isNested ? "!size-3.5" : "!size-4"}
+					name={command.icon ?? "search"}
+				/>
 			</span>
-			<span className="grid min-w-0 gap-0.5">
+			<span className="grid min-w-0 gap-0.5 py-0.5">
 				<span className="block truncate font-medium text-foreground">
 					{command.label}
 				</span>
@@ -168,48 +182,103 @@ function DashboardCommandTreeItem({
 			</span>
 		</>
 	);
+	const row = directlyMatched ? (
+		<Button
+			align="left"
+			aria-selected={isActive}
+			className={getDropdownOptionClassName({
+				active: isActive,
+				selected: isActive,
+				className:
+					"group !min-h-12 !items-start !rounded-lg !px-2 !py-1.5 motion-interactive",
+			})}
+			contentClassName="gap-2.5"
+			data-active={isActive ? "true" : undefined}
+			data-command-result=""
+			id={getDashboardCommandOptionId(command.id)}
+			onClick={() => executeCommand(command)}
+			onMouseDown={(event) => event.preventDefault()}
+			onMouseMove={() => onActiveCommandChange(command.id)}
+			role="option"
+			size="none"
+			tabIndex={-1}
+			type="button"
+			variant="ghost"
+		>
+			{rowContent}
+		</Button>
+	) : (
+		<div className="flex min-h-12 items-start gap-2.5 rounded-lg bg-muted/35 px-2 py-1.5 text-left text-sm">
+			{rowContent}
+		</div>
+	);
 	return (
-		<div className="grid gap-1" role="presentation">
-			{directlyMatched ? (
-				<Button
-					align="left"
-					aria-selected={isActive}
-					className={getDropdownOptionClassName({
-						active: isActive,
-						selected: isActive,
-						className:
-							"group !items-start !rounded-md !py-2 !pr-3 !pl-2 motion-interactive",
-					})}
-					contentClassName="gap-3"
-					data-active={isActive ? "true" : undefined}
-					data-command-result=""
-					id={getDashboardCommandOptionId(command.id)}
-					onClick={() => executeCommand(command)}
-					onMouseDown={(event) => event.preventDefault()}
-					onMouseMove={() => onActiveCommandChange(command.id)}
-					role="option"
-					size="none"
-					tabIndex={-1}
-					type="button"
-					variant="ghost"
+		<div
+			className={
+				isNested
+					? "relative grid grid-cols-[1.25rem_minmax(0,1fr)] grid-rows-[auto_auto_0.125rem]"
+					: "relative grid grid-rows-[auto_auto_0.125rem]"
+			}
+			data-command-depth={depth}
+			data-command-tree-item=""
+			role="presentation"
+		>
+			{isNested && isLast ? (
+				<div
+					aria-hidden="true"
+					className="relative col-start-1 row-start-1"
+					data-command-tree-elbow=""
 				>
-					{rowContent}
-				</Button>
-			) : (
-				<div className="flex items-start gap-3 rounded-md py-2 pr-3 pl-2 text-left text-sm">
-					{rowContent}
+					<span
+						className="absolute left-0 top-0 h-[calc(50%+1px)] w-4 rounded-bl-md border-b border-l border-foreground/40"
+						data-command-tree-elbow-incoming=""
+					/>
 				</div>
-			)}
+			) : null}
+			{isNested && !isLast ? (
+				<span
+					aria-hidden="true"
+					className="absolute -bottom-0.5 left-0 top-0 w-px bg-foreground/40"
+					data-command-tree-continuation-rail=""
+				/>
+			) : null}
+			<div
+				className={
+					isNested
+						? "relative col-start-2 row-start-1 min-w-0"
+						: "relative row-start-1 min-w-0"
+				}
+				data-command-tree-row=""
+			>
+				{row}
+			</div>
 			{treeNode.children.length > 0 ? (
-				<div className="relative ml-4 grid gap-1 pl-5 before:absolute before:bottom-1 before:left-0 before:top-0 before:w-px before:bg-border">
+				<div
+					className={
+						isNested
+							? "relative col-start-2 row-start-2 ml-[1.8125rem] min-w-0 pt-1.5"
+							: "relative row-start-2 ml-[1.9375rem] min-w-0 pt-1.5"
+					}
+					data-command-tree-branch=""
+				>
+					<span
+						aria-hidden="true"
+						className="absolute left-0 top-1 h-0.5 w-px bg-foreground/40"
+						data-command-tree-branch-rail=""
+					/>
 					<DashboardCommandTree
 						activeCommandId={activeCommandId}
+						depth={depth + 1}
 						executeCommand={executeCommand}
 						nodes={treeNode.children}
 						onActiveCommandChange={onActiveCommandChange}
 					/>
 				</div>
 			) : null}
+			<div
+				aria-hidden="true"
+				className={isNested ? "col-start-2 row-start-3" : "row-start-3"}
+			/>
 		</div>
 	);
 }

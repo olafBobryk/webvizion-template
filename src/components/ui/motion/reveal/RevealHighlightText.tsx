@@ -37,7 +37,7 @@ export function RevealHighlightText({
 	highlight,
 	as = "span",
 	className,
-	highlightClassName = "text-primary",
+	highlightClassName = "text-primary-text",
 	charDelay = 0.018,
 	dir = "auto",
 	variant,

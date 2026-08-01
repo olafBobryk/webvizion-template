@@ -1,8 +1,32 @@
 import {
-	defaultSiteLayout,
 	getAvailableSiteSurfaceLink,
+	type SiteLayoutDocument,
+	type SiteLink,
+	type SiteMenuGroup,
+	type SiteNavLink,
 } from "@/app/(site)/_components/layout/siteLayout";
+import { getMarketingSiteLinks, publicSocialLinks } from "./links";
 import type { MarketingPageDocument, MarketingPageSlug } from "./types";
+
+function omitMissingLinks<T>(items: Array<T | null>): T[] {
+	return items.filter((item): item is T => item !== null);
+}
+
+const siteLinks = getMarketingSiteLinks();
+const internalRouteLinks = omitMissingLinks<SiteLink>([
+	siteLinks.demo,
+	siteLinks.intelligence,
+	siteLinks.playground,
+	siteLinks.dictionary,
+	siteLinks.reference,
+]);
+const developerMenuGroup: SiteMenuGroup | null =
+	internalRouteLinks.length > 0
+		? {
+				label: "Development",
+				links: internalRouteLinks,
+			}
+		: null;
 
 const fallbackHeroCta =
 	getAvailableSiteSurfaceLink("Dashboard", "auth.login") ??
@@ -31,7 +55,7 @@ export const fallbackHomePage: MarketingPageDocument = {
 			services: [
 				{
 					id: "demo",
-					title: "Demo",
+					title: "Component Sweep",
 					description:
 						"Browse live primitives, states, and skeletons before composing them into a product.",
 					surfaceIds: ["demo", "demoPrimitives"],
@@ -80,4 +104,74 @@ export const fallbackMarketingPages = {
 	home: fallbackHomePage,
 } satisfies Record<MarketingPageSlug, MarketingPageDocument>;
 
-export const fallbackSiteLayout = defaultSiteLayout;
+export const fallbackSiteLayout: SiteLayoutDocument = {
+	header: {
+		cta: siteLinks.dashboard,
+		menuGroups: [
+			{
+				label: "Start",
+				link: siteLinks.home,
+				links: omitMissingLinks<SiteLink>([
+					{ label: "Hero", href: "/#home-hero" },
+					siteLinks.contact,
+					siteLinks.settings,
+				]),
+			},
+			...omitMissingLinks([developerMenuGroup]),
+		],
+		mobile: {
+			closeAriaLabel: "Close navigation",
+			menuLabel: "Menu",
+			openAriaLabel: "Open navigation",
+		},
+		navLinks: omitMissingLinks<SiteNavLink>([
+			{
+				...siteLinks.home,
+				sections: [
+					{
+						label: "Hero",
+						href: "/#home-hero",
+						description: "Primary home page introduction.",
+					},
+				],
+			},
+			siteLinks.contact,
+			siteLinks.demo,
+			siteLinks.intelligence,
+			siteLinks.playground,
+			siteLinks.settings,
+		]),
+		search: {
+			ariaLabel: "Search pages",
+			clearLabel: "Clear",
+			noResultsText: "No matching pages",
+		},
+		searchGroups: [
+			{
+				label: "Home",
+				link: siteLinks.home,
+				links: omitMissingLinks<SiteLink>([
+					{ label: "Hero", href: "/#home-hero" },
+					siteLinks.contact,
+					siteLinks.settings,
+				]),
+			},
+			...omitMissingLinks([developerMenuGroup]),
+		],
+		topNavLinks: omitMissingLinks([
+			siteLinks.home,
+			siteLinks.demo,
+			siteLinks.intelligence,
+			siteLinks.playground,
+			siteLinks.settings,
+		]),
+	},
+	socialLinks: publicSocialLinks,
+	footer: {
+		navLinks: omitMissingLinks([
+			siteLinks.home,
+			siteLinks.contact,
+			siteLinks.settings,
+		]),
+	},
+};

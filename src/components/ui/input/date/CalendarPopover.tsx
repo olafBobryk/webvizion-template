@@ -6,11 +6,11 @@ import clsx from "clsx";
 import * as React from "react";
 import { focusRing } from "@/components/ui/foundations/focus";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
 import {
 	Dropdown,
 	type DropdownPositionStrategy,
 } from "@/components/ui/primitives/dropdown";
+import { Card } from "@/components/ui/primitives/surfaces";
 import {
 	addDays,
 	addMonths,
@@ -312,18 +312,18 @@ export function CalendarPopover({
 				dropdownPositionStrategy === "absolute" && "left-0 top-full",
 				"!w-[18.875rem]",
 				"!max-w-[calc(100vw-2rem)]",
-				"!overflow-visible !rounded-none !border-0 !bg-transparent !shadow-none",
 			)}
 			data-calendar-mode={mode}
 			data-slot="calendar-popover"
+			elevation="panel"
 			overflow="visible"
+			radius="none"
 			portalTargetId={dropdownPortalTargetId}
 			positionStrategy={dropdownPositionStrategy}
 			ref={panelRef}
 			role="dialog"
-			shadow="none"
 		>
-			<Card className="w-full" shadow="lg" size="sm">
+			<Card className="w-full" elevation="float" size="sm">
 				<Card.Header>
 					<div className="flex w-full items-center justify-between gap-2">
 						<button

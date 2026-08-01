@@ -2,7 +2,7 @@
 
 import { SelectInput, TextAreaInput, TextInput } from "@/components/ui/input";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 import { DashboardSection } from "../../_components/layout/DashboardSection";
 
@@ -12,21 +12,19 @@ export function SupportSurfaceSkeletonView() {
 			<DashboardSection contentClassName="grid gap-5" title="Support">
 				{["Email support", "Contact support"].map((title, index) => (
 					<Card key={title}>
-						<Card.Header>
-							<Card.Title>
-								<Text.Skeleton variant="headingXs">{title}</Text.Skeleton>
-							</Card.Title>
-							<Card.Description>
+						<Card.Heading
+							action={
+								index === 0 ? (
+									<Button.Skeleton size="sm">Open email</Button.Skeleton>
+								) : null
+							}
+							description={
 								<Text.Skeleton variant="support">
 									Support request description
 								</Text.Skeleton>
-							</Card.Description>
-							{index === 0 ? (
-								<Card.Action>
-									<Button.Skeleton size="sm">Open email</Button.Skeleton>
-								</Card.Action>
-							) : null}
-						</Card.Header>
+							}
+							title={<Text.Skeleton variant="headingXs">{title}</Text.Skeleton>}
+						/>
 						<Card.Content className="grid gap-4">
 							{index === 0 ? (
 								<Text.Skeleton variant="body">

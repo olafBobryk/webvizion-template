@@ -1,5 +1,12 @@
 # Agent Instructions
 
+## Legacy Orchestration Is Transitional and Default-Off
+
+- The orchestration capability under `template-assembly/capabilities/orchestration/` is a dormant compatibility installer, not an active template subsystem.
+- Do not add new product, documentation, assembly, or agent-workflow coupling to this legacy system.
+- A replacement orchestration system is under development. Remove this capability once that replacement is accepted; preserve this note until removal so the intent is not lost.
+- Canonical main and generated projects must remain orchestration-free unless a user explicitly selects or installs the capability.
+
 ## Template Intelligence Baseline
 
 - Before substantial planning or implementation work, prefer the lightweight local map: `npm run intelligence:generate`, then `npm run intelligence:query -- <topic>` for relevant topics.
@@ -24,6 +31,11 @@
 - Preview servers use a random isolated port and `.next-preview-*` build
   directory. Treat the printed URL as the source of truth for review links
   after each restart.
+- Storybook is a paired but separate Vite process. Start it only with
+  `npm run storybook:preview` after a healthy `npm run dev`; it reuses one
+  worktree-owned instance recorded in `.codex/storybook-preview.json`.
+  Never run raw `storybook dev`, choose a Storybook port, or assume `6006`.
+  Use `npm run storybook:status` to discover the Storybook UI and MCP URLs.
 - For section-scoped UI review, report a direct section-anchor URL on the
   verified preview. If the expected anchor is missing, say
   `section anchor missing`, name the expected section id, and provide the nearest
@@ -49,6 +61,12 @@
 
 ## Halo UI Primitives
 
+- Before reading implementation source for a UI change, run
+  `npm run design-system:evidence -- --target <source> --owner <owner-story>`.
+  Repeat `--target` and `--owner` as needed. The command reads governing
+  policies, then owner stories, then implementation sources and stores an
+  ignored, privacy-safe receipt under `.codex/design-system-evidence/`. Include
+  that receipt path in delegated handoffs so evidence order is auditable.
 - Cross-cutting component usage conventions are indexed at
   `docs/guides/components/README.md`. Read the matching guide before building or
   reviewing forms, feedback, loading states, overlays, responsive behavior, or

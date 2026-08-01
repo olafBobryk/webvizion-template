@@ -1,6 +1,6 @@
 import { Chip } from "@/components/ui/misc";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { internalHrefFor } from "@/lib/routes";
 import {
 	InternalPage,
@@ -20,9 +20,7 @@ export default function SpamProtectedFormDictionaryPage() {
 			<SpamProtectedFormPreview />
 
 			<Card>
-				<Card.Header>
-					<Card.Title>Implementation notes</Card.Title>
-				</Card.Header>
+				<Card.Heading title="Implementation notes" />
 				<Card.Content className="grid gap-5">
 					<div className="flex flex-wrap gap-2">
 						{manifest.adaptationPoints.map((point) => (

@@ -1,4 +1,5 @@
 import type { IconName } from "@/components/ui/icons/Icon";
+import { templateCapabilities } from "@/config/capabilities";
 import {
 	type DashboardRouteSurface,
 	type DashboardSurfaceId,
@@ -12,6 +13,7 @@ export type { DashboardSurfaceId } from "@/config/surfaces/dashboard";
 
 export type DashboardCapability =
 	| "dashboard.view"
+	| "assistant.use"
 	| "records.read"
 	| "records.write"
 	| "organization.read"
@@ -20,6 +22,7 @@ export type DashboardCapability =
 	| "debug.use";
 
 export const dashboardCapabilityLabels = {
+	"assistant.use": "Use Assistant",
 	"dashboard.view": "Dashboard",
 	"debug.use": "Debug tools",
 	"organization.manage": "Manage organization",
@@ -29,18 +32,20 @@ export const dashboardCapabilityLabels = {
 	"records.write": "Manage records",
 } satisfies Record<DashboardCapability, string>;
 
-export type DashboardLayoutWidth = "standard" | "wide";
+export type DashboardLayoutWidth = "standard" | "wide" | "workspace";
 export type DashboardSidebarTier = "primary" | "secondary" | "utility";
 
 export type DashboardDomainAreaId =
 	| "dashboard-core"
 	| "product"
+	| "assistant"
 	| "account"
 	| "organization"
 	| "platform"
 	| "reference";
 
 export const dashboardDomainAreaLabels = {
+	assistant: "Assistant",
 	"dashboard-core": "Dashboard core",
 	product: "Product",
 	account: "Account",
@@ -70,6 +75,7 @@ type DashboardSurfaceMetadata = {
 	layoutWidth: DashboardLayoutWidth;
 	parentId?: DashboardSurfaceId;
 	sidebar: boolean;
+	sidebarSupplementEndpoint?: string;
 	sidebarTier: DashboardSidebarTier;
 	sourceRoots?: readonly string[];
 };
@@ -121,6 +127,45 @@ const dashboardSurfaceMetadataRegistry = [
 			"src/app/(site)/dashboard/_lib/fixtures/reference-records.core.ts",
 			"src/app/(site)/dashboard/_lib/fixtures/reference-records.server.ts",
 		],
+	},
+	{
+		capability: "assistant.use",
+		commands: [],
+		description: "Work with the organization Assistant and its approved tools.",
+		domainArea: "assistant",
+		icon: "sparkle",
+		id: "dashboard.assistant",
+		label: "Assistant",
+		layoutWidth: "workspace",
+		sidebar: true,
+		sidebarSupplementEndpoint: "/api/assistant/threads",
+		sidebarTier: "primary",
+		sourceRoots: ["src/components/domain/assistant", "src/lib/assistant"],
+	},
+	{
+		capability: "assistant.use",
+		commands: [],
+		description: "Browse, pin, rename, and remove Assistant conversations.",
+		domainArea: "assistant",
+		icon: "chat",
+		id: "dashboard.assistant.conversations",
+		label: "Conversations",
+		layoutWidth: "standard",
+		sidebar: false,
+		sidebarTier: "primary",
+	},
+	{
+		capability: "assistant.use",
+		commands: [],
+		description: "Continue an Assistant conversation.",
+		domainArea: "assistant",
+		icon: "chat",
+		id: "dashboard.assistant.thread",
+		label: "Conversation",
+		layoutWidth: "workspace",
+		parentId: "dashboard.assistant",
+		sidebar: false,
+		sidebarTier: "primary",
 	},
 	{
 		capability: "records.read",
@@ -334,12 +379,12 @@ const dashboardSurfaceMetadataRegistry = [
 	{
 		capability: "debug.use",
 		commands: [],
-		description: "Review live and skeleton entity presentation contracts.",
+		description: "Browse internal dashboard presentation references.",
 		domainArea: "reference",
 		icon: "cards",
-		id: "dashboard.reference.entities",
-		label: "Entity reference",
-		layoutWidth: "wide",
+		id: "dashboard.reference",
+		label: "Reference",
+		layoutWidth: "standard",
 		parentId: "dashboard.overview",
 		sidebar: false,
 		sidebarTier: "utility",
@@ -353,22 +398,28 @@ const dashboardSurfaceMetadataRegistry = [
 		id: "dashboard.reference.skeletons",
 		label: "Skeleton reference",
 		layoutWidth: "wide",
-		parentId: "dashboard.overview",
+		parentId: "dashboard.reference",
 		sidebar: false,
 		sidebarTier: "utility",
 	},
 ] as const satisfies readonly DashboardSurfaceMetadata[];
 
 export const dashboardSurfaceRegistry: readonly DashboardSurface[] =
-	dashboardRouteSurfaceRegistry.map((routeSurface) => {
-		const metadata = dashboardSurfaceMetadataRegistry.find(
-			(candidate) => candidate.id === routeSurface.id,
-		);
-		if (!metadata) {
-			throw new Error(`Missing dashboard metadata for ${routeSurface.id}.`);
-		}
-		return { ...routeSurface, ...metadata } as DashboardSurface;
-	});
+	dashboardRouteSurfaceRegistry
+		.filter(
+			(routeSurface) =>
+				templateCapabilities.assistant ||
+				!routeSurface.id.startsWith("dashboard.assistant"),
+		)
+		.map((routeSurface) => {
+			const metadata = dashboardSurfaceMetadataRegistry.find(
+				(candidate) => candidate.id === routeSurface.id,
+			);
+			if (!metadata) {
+				throw new Error(`Missing dashboard metadata for ${routeSurface.id}.`);
+			}
+			return { ...routeSurface, ...metadata } as DashboardSurface;
+		});
 
 export type DashboardDomainAreaInventoryItem = {
 	id: DashboardDomainAreaId;
@@ -455,11 +506,6 @@ export function getDashboardDomainAreasForEditedPaths(
 	);
 }
 
-export const dashboardFeatureConfig = {
-	organizationSwitcher:
-		process.env.NEXT_PUBLIC_DASHBOARD_ORGANIZATION_SWITCHER === "enabled",
-} as const;
-
 export function getDashboardCapabilities(
 	role: MembershipRole,
 	platformRole: PlatformRole | null = null,
@@ -469,6 +515,7 @@ export function getDashboardCapabilities(
 		"records.read",
 		"organization.read",
 	]);
+	if (templateCapabilities.assistant) capabilities.add("assistant.use");
 	if (role === "owner" || role === "admin") {
 		capabilities.add("records.write");
 		capabilities.add("organization.manage");
@@ -500,11 +547,8 @@ export function getDashboardSurfaceById(id: DashboardSurfaceId) {
 export function getVisibleDashboardSurfaces(
 	capabilities: ReadonlySet<DashboardCapability>,
 ) {
-	return dashboardSurfaceRegistry.filter(
-		(surface) =>
-			hasDashboardCapability(capabilities, surface.capability) &&
-			(surface.id !== "dashboard.organization.switch" ||
-				dashboardFeatureConfig.organizationSwitcher),
+	return dashboardSurfaceRegistry.filter((surface) =>
+		hasDashboardCapability(capabilities, surface.capability),
 	);
 }
 
@@ -551,33 +595,46 @@ export function getDashboardSurfaceTrail(
 
 export function getDashboardNavigationCommands(
 	capabilities: ReadonlySet<DashboardCapability>,
+	{
+		canSwitchOrganizations,
+	}: {
+		canSwitchOrganizations: boolean;
+	},
 ) {
-	return getVisibleDashboardSurfaces(capabilities).flatMap((surface) => {
-		const parentHref = surface.parentId
-			? getDashboardSurfaceById(surface.parentId)?.href
-			: null;
-		return [
-			{
-				description: surface.description,
-				href: surface.href.includes("[")
-					? (parentHref ?? hrefFor("dashboard.overview"))
-					: surface.href,
-				icon: surface.icon,
-				id: `navigate.${surface.id}`,
-				keywords: [surface.label, "navigate", "open"],
-				label: surface.label,
-				parentId: surface.parentId ? `navigate.${surface.parentId}` : undefined,
-			},
-			...surface.commands
-				.filter((command) =>
-					hasDashboardCapability(capabilities, command.capability),
-				)
-				.map(({ search, surfaceId, ...command }) => ({
-					...command,
-					href: surfaceHref(surfaceId, {}, { search }),
+	return getVisibleDashboardSurfaces(capabilities)
+		.filter(
+			(surface) =>
+				surface.id !== "dashboard.organization.switch" ||
+				canSwitchOrganizations,
+		)
+		.flatMap((surface) => {
+			const parentHref = surface.parentId
+				? getDashboardSurfaceById(surface.parentId)?.href
+				: null;
+			return [
+				{
+					description: surface.description,
+					href: surface.href.includes("[")
+						? (parentHref ?? hrefFor("dashboard.overview"))
+						: surface.href,
 					icon: surface.icon,
-					parentId: `navigate.${surface.id}`,
-				})),
-		];
-	});
+					id: `navigate.${surface.id}`,
+					keywords: [surface.label, "navigate", "open"],
+					label: surface.label,
+					parentId: surface.parentId
+						? `navigate.${surface.parentId}`
+						: undefined,
+				},
+				...surface.commands
+					.filter((command) =>
+						hasDashboardCapability(capabilities, command.capability),
+					)
+					.map(({ search, surfaceId, ...command }) => ({
+						...command,
+						href: surfaceHref(surfaceId, {}, { search }),
+						icon: surface.icon,
+						parentId: `navigate.${surface.id}`,
+					})),
+			];
+		});
 }

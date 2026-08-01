@@ -4,8 +4,8 @@ import * as React from "react";
 import * as Markdown from "@/components/composites/markdown";
 import { Icon } from "@/components/ui/icons/Icon";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
 import { Dropdown } from "@/components/ui/primitives/dropdown";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 import { showToast } from "@/lib/feedback/toast";
 import type { MemberPresentation } from "../../../_lib/entities/member/presentation";
@@ -73,12 +73,10 @@ function RecordDetailContentRoot({
 	return (
 		<div className="grid gap-5">
 			<Card>
-				<Card.Header>
-					<Card.Title>Record details</Card.Title>
-					<Card.Description>
-						Field metadata comes from the record-owned presentation definition.
-					</Card.Description>
-				</Card.Header>
+				<Card.Heading
+					description="Field metadata comes from the record-owned presentation definition."
+					title="Record details"
+				/>
 				<Card.Content>
 					<dl className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
 						<DashboardDetailField
@@ -140,14 +138,9 @@ function RecordDetailContentRoot({
 			</Card>
 
 			<Card>
-				<Card.Header>
-					<Card.Title>Description</Card.Title>
-					<Card.Description>
-						Rendered with the shared Markdown renderer and edited in a focused
-						dashboard modal.
-					</Card.Description>
-					{canWrite ? (
-						<Card.Action>
+				<Card.Heading
+					action={
+						canWrite ? (
 							<DashboardMarkdownEditorModalButton
 								description="Markdown supports organization-member mentions."
 								initialMarkdown={record.descriptionMarkdown}
@@ -174,9 +167,11 @@ function RecordDetailContentRoot({
 								}}
 								title={`Edit ${presentation.title} description`}
 							/>
-						</Card.Action>
-					) : null}
-				</Card.Header>
+						) : null
+					}
+					description="Rendered with the shared Markdown renderer and edited in a focused dashboard modal."
+					title="Description"
+				/>
 				<Card.Content>
 					{record.descriptionMarkdown ? (
 						<Markdown.Render
@@ -258,12 +253,10 @@ function RecordDetailContentSkeleton({
 	return (
 		<div className="grid gap-5">
 			<Card>
-				<Card.Header>
-					<Card.Title>Record details</Card.Title>
-					<Card.Description>
-						Field metadata comes from the record-owned presentation definition.
-					</Card.Description>
-				</Card.Header>
+				<Card.Heading
+					description="Field metadata comes from the record-owned presentation definition."
+					title="Record details"
+				/>
 				<Card.Content>
 					<dl className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
 						<DashboardDetailField.Skeleton
@@ -316,18 +309,13 @@ function RecordDetailContentSkeleton({
 			</Card>
 
 			<Card>
-				<Card.Header>
-					<Card.Title>Description</Card.Title>
-					<Card.Description>
-						Rendered with the shared Markdown renderer and edited in a focused
-						dashboard modal.
-					</Card.Description>
-					{canWrite ? (
-						<Card.Action>
-							<DashboardMarkdownEditorModalButton.Skeleton />
-						</Card.Action>
-					) : null}
-				</Card.Header>
+				<Card.Heading
+					action={
+						canWrite ? <DashboardMarkdownEditorModalButton.Skeleton /> : null
+					}
+					description="Rendered with the shared Markdown renderer and edited in a focused dashboard modal."
+					title="Description"
+				/>
 				<Card.Content>
 					<Markdown.Render.Skeleton
 						density="compact"

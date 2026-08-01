@@ -11,7 +11,7 @@ import {
 import * as React from "react";
 import { TextInput } from "@/components/ui/input";
 import { Button } from "@/components/ui/primitives/Button";
-import { Panel } from "@/components/ui/primitives/Panel";
+import { Float } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 
 export function MarkdownLinkDialog() {
@@ -94,12 +94,10 @@ export function MarkdownLinkDialog() {
 
 	if (displayState.type === "preview") {
 		return (
-			<Panel
-				background="card"
+			<Float
 				border="default"
 				className="markdown-editor-link-dialog fixed z-[120] flex items-center gap-2"
 				padding="sm"
-				shadow="lg"
 				style={{ ...style, width: "18rem" }}
 			>
 				<Text className="min-w-0 flex-1 truncate" variant="support">
@@ -130,17 +128,15 @@ export function MarkdownLinkDialog() {
 				>
 					Remove
 				</Button>
-			</Panel>
+			</Float>
 		);
 	}
 
 	return (
-		<Panel
-			background="card"
+		<Float
 			border="default"
 			className="markdown-editor-link-dialog fixed z-[120] grid gap-3"
 			padding="sm"
-			shadow="lg"
 			style={{ ...style, width: "20rem" }}
 		>
 			<form
@@ -183,6 +179,6 @@ export function MarkdownLinkDialog() {
 					</Button>
 				</div>
 			</form>
-		</Panel>
+		</Float>
 	);
 }

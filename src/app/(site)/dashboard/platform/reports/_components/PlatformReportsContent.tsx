@@ -30,7 +30,7 @@ import {
 	TextInput,
 } from "@/components/ui/input";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 import { surfaceHref } from "@/lib/routes";
 import {
@@ -91,7 +91,7 @@ export function PlatformReportsContent({
 						render: (report) => (
 							<MemberIdentity
 								presentation={getPlatformMemberPresentation(report)}
-								variant="compact"
+								variant="default"
 							/>
 						),
 					},

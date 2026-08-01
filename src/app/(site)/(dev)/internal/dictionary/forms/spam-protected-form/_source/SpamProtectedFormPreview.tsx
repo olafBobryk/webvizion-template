@@ -8,12 +8,12 @@ import {
 	TextInput,
 } from "@/components/ui/input";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
 import { Field } from "@/components/ui/primitives/Field";
 import {
 	InputFrame,
 	inputVariants,
 } from "@/components/ui/primitives/InputFrame";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 import { submitSpamProtectedExample } from "@/lib/api";
 import { showToast } from "@/lib/feedback";
@@ -135,13 +135,10 @@ export function SpamProtectedFormPreview() {
 
 	return (
 		<Card>
-			<Card.Header>
-				<Card.Title>Working preview</Card.Title>
-				<Card.Description>
-					Submit once to set the cooldown cookie, then submit again within 60
-					seconds to see the server-side throttle response.
-				</Card.Description>
-			</Card.Header>
+			<Card.Heading
+				description="Submit once to set the cooldown cookie, then submit again within 60\n\t\t\t\t\tseconds to see the server-side throttle response."
+				title="Working preview"
+			/>
 			<Card.Content>
 				<form
 					ref={formRef}

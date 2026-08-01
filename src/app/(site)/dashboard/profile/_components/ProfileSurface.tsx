@@ -1,25 +1,19 @@
 import { Icon } from "@/components/ui/icons/Icon";
 import { Chip } from "@/components/ui/misc";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { hrefFor } from "@/lib/routes";
-import {
-	DashboardDetailField,
-	DashboardDetailFieldSkeleton,
-} from "../../_components/detail/DashboardDetailField";
-import {
-	AccountIdentity,
-	AccountIdentitySkeleton,
-} from "../../_components/entities/account/AccountIdentity";
+import { DashboardDetailField } from "../../_components/detail/DashboardDetailField";
+import { AccountIdentity } from "../../_components/entities/account/AccountIdentity";
 import {
 	DashboardFooterNote,
 	DashboardFooterNoteLink,
 } from "../../_components/layout/DashboardFooterNote";
 import { DashboardSection } from "../../_components/layout/DashboardSection";
-import { DashboardLoadingStatus } from "../../_components/loading/DashboardLoadingStatus";
 import type { AccountPresentation } from "../../_lib/entities/account/presentation";
 import type { DashboardCapability } from "../../_registry/surfaceRegistry";
 import { dashboardCapabilityLabels } from "../../_registry/surfaceRegistry";
+import { ProfileSurfaceSkeletonClient } from "./ProfileSurfaceSkeleton.client";
 
 export function ProfileSurface({
 	capabilities,
@@ -45,17 +39,15 @@ export function ProfileSurface({
 			title="Profile"
 		>
 			<Card>
-				<Card.Header>
-					<Card.Title className="inline-flex items-center gap-2">
+				<Card.Heading
+					description="The profile shown across the application."
+					leading={
 						<Icon className="text-muted-foreground" name="user" size="sm" />
-						Account identity
-					</Card.Title>
-					<Card.Description>
-						The profile shown across the application.
-					</Card.Description>
-				</Card.Header>
+					}
+					title="Account identity"
+				/>
 				<Card.Content className="grid gap-5">
-					<AccountIdentity presentation={presentation} />
+					<AccountIdentity avatarSize="xl" presentation={presentation} />
 					<dl className="grid gap-4 border-t border-border/70 pt-5 sm:grid-cols-2">
 						<DashboardDetailField
 							copyLabel="Copy email address"
@@ -73,15 +65,13 @@ export function ProfileSurface({
 				</Card.Content>
 			</Card>
 			<Card>
-				<Card.Header>
-					<Card.Title className="inline-flex items-center gap-2">
+				<Card.Heading
+					description="Access resolved for the active organization."
+					leading={
 						<Icon className="text-muted-foreground" name="shield" size="sm" />
-						Organization access
-					</Card.Title>
-					<Card.Description>
-						Access resolved for the active organization.
-					</Card.Description>
-				</Card.Header>
+					}
+					title="Organization access"
+				/>
 				<Card.Content>
 					<dl className="grid gap-4 sm:grid-cols-2">
 						<DashboardDetailField
@@ -124,84 +114,5 @@ export function ProfileSurface({
 }
 
 export function ProfileSurfaceSkeleton() {
-	return (
-		<DashboardLoadingStatus label="Loading profile">
-			<DashboardSection
-				actions={
-					<Button.Skeleton size="sm" variant="primary">
-						Account settings
-					</Button.Skeleton>
-				}
-				contentClassName="grid gap-5"
-				title="Profile"
-			>
-				<Card>
-					<Card.Header>
-						<Card.Title className="inline-flex items-center gap-2">
-							<Icon className="text-muted-foreground" name="user" size="sm" />
-							Account identity
-						</Card.Title>
-						<Card.Description>
-							The profile shown across the application.
-						</Card.Description>
-					</Card.Header>
-					<Card.Content className="grid gap-5">
-						<AccountIdentitySkeleton />
-						<dl className="grid gap-4 border-t border-border/70 pt-5 sm:grid-cols-2">
-							<DashboardDetailFieldSkeleton
-								copyable
-								icon={<Icon name="mail" size="sm" />}
-								label="Email"
-								value="account@example.com"
-							/>
-							<DashboardDetailFieldSkeleton
-								icon={<Icon name="calendar" size="sm" />}
-								label="Joined"
-								value="20 Jul 2026"
-							/>
-						</dl>
-					</Card.Content>
-				</Card>
-				<Card>
-					<Card.Header>
-						<Card.Title className="inline-flex items-center gap-2">
-							<Icon className="text-muted-foreground" name="shield" size="sm" />
-							Organization access
-						</Card.Title>
-						<Card.Description>
-							Access resolved for the active organization.
-						</Card.Description>
-					</Card.Header>
-					<Card.Content>
-						<dl className="grid gap-4 sm:grid-cols-2">
-							<DashboardDetailFieldSkeleton
-								icon={<Icon name="building" size="sm" />}
-								label="Organization"
-								value="Averlo Template"
-							/>
-							<DashboardDetailFieldSkeleton
-								icon={<Icon name="shield" size="sm" />}
-								label="Organization role"
-								truncateValue={false}
-							>
-								<Chip.Skeleton>Owner</Chip.Skeleton>
-							</DashboardDetailFieldSkeleton>
-							<DashboardDetailFieldSkeleton
-								className="sm:col-span-2"
-								icon={<Icon name="check" size="sm" />}
-								label="Permissions"
-								truncateValue={false}
-							>
-								<span className="flex flex-wrap gap-2">
-									<Chip.Skeleton>Dashboard</Chip.Skeleton>
-									<Chip.Skeleton>Manage organization</Chip.Skeleton>
-									<Chip.Skeleton>Manage records</Chip.Skeleton>
-								</span>
-							</DashboardDetailFieldSkeleton>
-						</dl>
-					</Card.Content>
-				</Card>
-			</DashboardSection>
-		</DashboardLoadingStatus>
-	);
+	return <ProfileSurfaceSkeletonClient />;
 }

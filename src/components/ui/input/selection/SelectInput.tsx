@@ -28,6 +28,8 @@ export type SelectOption<T> = {
 	label: string;
 	symbol?: string;
 	icon?: IconProp;
+	/** Replaces only the open listbox row using its intrinsic-height presentation layout. */
+	dropdownContent?: React.ReactNode;
 	searchText?: string;
 	disabled?: boolean;
 };
@@ -394,13 +396,17 @@ function SelectInputRoot<T>({
 				renderMenu={({ close }) => (
 					<Listbox
 						options={filteredOptions.map((option) => {
+							const hasDropdownContent = option.dropdownContent !== undefined;
 							const optionIcon = renderOptionIcon(option.icon, "sm");
 							return {
 								key: `${option.value}`,
 								value: option.value,
 								selected: option.value === value,
 								disabled: option.disabled,
-								content: (
+								layout: hasDropdownContent ? "presentation" : undefined,
+								content: hasDropdownContent ? (
+									option.dropdownContent
+								) : (
 									<>
 										{optionIcon ? (
 											<span className="flex shrink-0 items-center">

@@ -68,7 +68,9 @@ export function ConfirmationModal({
 		<>
 			<ModalHeader
 				closeDisabled={isSubmitting}
-				leadingIcon={<Icon name="warning" size="sm" className="text-danger" />}
+				leadingIcon={
+					<Icon name="warning" size="sm" className="text-danger-text" />
+				}
 			>
 				<ModalTitle>{title}</ModalTitle>
 				<ModalDescription>{description}</ModalDescription>

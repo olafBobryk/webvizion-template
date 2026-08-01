@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { Card, type CardProps } from "@/components/ui/primitives/Card";
+import { Card, type CardProps } from "@/components/ui/primitives/surfaces";
 
 export type ModalCardMaxWidth = "md" | "lg" | "xl" | "2xl" | "4xl";
 
@@ -29,9 +29,9 @@ export function ModalCard({
 			)}
 			display="flex"
 			gap="none"
+			elevation="overlay"
 			overflow="hidden"
 			padding="none"
-			shadow="xl"
 			{...props}
 		/>
 	);

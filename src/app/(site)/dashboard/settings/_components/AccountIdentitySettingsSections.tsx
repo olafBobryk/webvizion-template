@@ -3,7 +3,7 @@
 import { Icon } from "@/components/ui/icons/Icon";
 import { Chip } from "@/components/ui/misc";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { hrefFor } from "@/lib/routes";
 import { DashboardDetailField } from "../../_components/detail/DashboardDetailField";
 import { MemberRoleChip } from "../../_components/entities/member/MemberRoleChip";
@@ -86,15 +86,13 @@ function AccountDetailsSettingsSectionRoot({
 
 	return (
 		<Card className="scroll-mt-24" id="account-details">
-			<Card.Header>
-				<Card.Title className="inline-flex items-center gap-2">
+			<Card.Heading
+				description="Read-only account identity and organization membership details."
+				leading={
 					<Icon className="text-muted-foreground" name="user" size="sm" />
-					Account details
-				</Card.Title>
-				<Card.Description>
-					Read-only account identity and organization membership details.
-				</Card.Description>
-			</Card.Header>
+				}
+				title="Account details"
+			/>
 			<Card.Content>
 				<dl className="grid gap-4 sm:grid-cols-2">
 					<DashboardDetailField
@@ -152,15 +150,13 @@ function AccountDetailsSettingsSectionSkeleton({
 
 	return (
 		<Card className="scroll-mt-24" id="account-details">
-			<Card.Header>
-				<Card.Title className="inline-flex items-center gap-2">
+			<Card.Heading
+				description="Read-only account identity and organization membership details."
+				leading={
 					<Icon className="text-muted-foreground" name="user" size="sm" />
-					Account details
-				</Card.Title>
-				<Card.Description>
-					Read-only account identity and organization membership details.
-				</Card.Description>
-			</Card.Header>
+				}
+				title="Account details"
+			/>
 			<Card.Content>
 				<dl className="grid gap-4 sm:grid-cols-2">
 					<DashboardDetailField.Skeleton

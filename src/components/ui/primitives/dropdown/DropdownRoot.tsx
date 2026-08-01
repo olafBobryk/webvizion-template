@@ -8,7 +8,7 @@ import * as React from "react";
 import { resolveMotionTransition } from "@/components/ui/foundations/motionTiming";
 import Portal from "@/components/ui/overlays/Portal";
 import { useMotionAllowed } from "@/hooks/useMotionAllowed";
-import { dropdownSurfaceClassName } from "../dropdownStyles";
+import { getDropdownSurfaceClassName } from "../dropdownStyles";
 import { COLLISION_PADDING, DEFAULT_MENU_MIN_WIDTH } from "./constants";
 import { resolveAnchoredDropdownPosition } from "./positioning";
 import type { DropdownProps, DropdownSide } from "./types";
@@ -32,6 +32,7 @@ export function DropdownRoot({
 	className,
 	collisionPadding = COLLISION_PADDING,
 	menuClassName,
+	menuElevation = "float",
 	portalTargetId,
 	menuWidth,
 	menuMinWidth = DEFAULT_MENU_MIN_WIDTH,
@@ -405,7 +406,7 @@ export function DropdownRoot({
 	);
 
 	const baseMenuClassName = [
-		dropdownSurfaceClassName,
+		getDropdownSurfaceClassName(menuElevation),
 		"w-fit z-[91]",
 		positionStrategy === "fixed" ? "fixed" : "absolute",
 	]
@@ -420,6 +421,9 @@ export function DropdownRoot({
 			{isOpen ? (
 				<motion.div
 					ref={setMenuNode}
+					data-elevation={menuElevation}
+					data-slot="float"
+					data-surface-role="float"
 					key="dropdown-menu"
 					initial={{ opacity: 0, y: menuMotionY }}
 					animate={{ opacity: 1, y: 0 }}
@@ -439,6 +443,9 @@ export function DropdownRoot({
 	) : isOpen ? (
 		<div
 			ref={setMenuNode}
+			data-elevation={menuElevation}
+			data-slot="float"
+			data-surface-role="float"
 			key="dropdown-menu"
 			style={menuStyle}
 			className={resolvedMenuClassName}

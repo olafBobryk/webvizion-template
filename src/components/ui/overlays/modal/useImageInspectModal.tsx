@@ -7,6 +7,7 @@ import { useModal } from "./useModal";
 export type OpenImageInspectOptions = {
 	src: string;
 	alt?: string;
+	unoptimized?: boolean;
 	shareUrl?: string;
 	onShare?: () => void | Promise<void>;
 	portalTargetId?: string;
@@ -19,6 +20,7 @@ export function useImageInspectModal(defaultPortalTargetId?: string) {
 		({
 			src,
 			alt,
+			unoptimized,
 			shareUrl,
 			onShare,
 			portalTargetId,
@@ -30,6 +32,7 @@ export function useImageInspectModal(defaultPortalTargetId?: string) {
 					<ImageInspectModal
 						src={src}
 						alt={alt}
+						unoptimized={unoptimized}
 						shareUrl={shareUrl}
 						onShare={onShare}
 						onClose={close}

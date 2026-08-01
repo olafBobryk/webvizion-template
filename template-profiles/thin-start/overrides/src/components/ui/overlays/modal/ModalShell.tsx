@@ -4,14 +4,7 @@ import clsx from "clsx";
 import * as React from "react";
 import Portal from "@/components/ui/overlays/Portal";
 import { Button } from "@/components/ui/primitives/Button";
-import {
-	CardAction,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 
 type ModalShellProps = {
 	ariaLabel?: string;
@@ -231,12 +224,12 @@ export function ModalHeader({
 	const resolvedCloseDisabled =
 		closeDisabled || Boolean(modalContext?.isSubmitting);
 	return (
-		<CardHeader className={clsx("border-b px-5 py-4", className)} {...props}>
+		<Card.Header className={clsx("border-b px-5 py-4", className)} {...props}>
 			<ModalHeaderContext.Provider value={{ leadingIcon }}>
 				{children}
 			</ModalHeaderContext.Provider>
 			{actions || (showCloseButton && closeHandler) ? (
-				<CardAction className="inline-flex items-center gap-1">
+				<Card.Action className="inline-flex items-center gap-1">
 					{actions}
 					{showCloseButton && closeHandler ? (
 						<Button
@@ -251,9 +244,9 @@ export function ModalHeader({
 							<span aria-hidden>×</span>
 						</Button>
 					) : null}
-				</CardAction>
+				</Card.Action>
 			) : null}
-		</CardHeader>
+		</Card.Header>
 	);
 }
 
@@ -262,7 +255,7 @@ export function ModalContent({
 	...props
 }: React.ComponentPropsWithoutRef<"div">) {
 	return (
-		<CardContent
+		<Card.Content
 			className={clsx(
 				"min-h-0 overflow-y-auto overscroll-contain px-5 py-4",
 				className,
@@ -277,7 +270,7 @@ export function ModalFooter({
 	...props
 }: React.ComponentPropsWithoutRef<"div">) {
 	return (
-		<CardFooter
+		<Card.Footer
 			className={clsx("justify-end gap-2 px-5 py-4", className)}
 			{...props}
 		/>
@@ -289,13 +282,13 @@ export function ModalTitle({
 	className,
 	leadingIcon,
 	...props
-}: React.ComponentProps<typeof CardTitle> & {
+}: React.ComponentProps<typeof Card.Title> & {
 	leadingIcon?: React.ReactNode;
 }) {
 	const headerContext = React.useContext(ModalHeaderContext);
 	const resolvedLeadingIcon = leadingIcon ?? headerContext?.leadingIcon;
 	return (
-		<CardTitle
+		<Card.Title
 			className={clsx("inline-flex items-center gap-2 text-base", className)}
 			{...props}
 		>
@@ -305,12 +298,12 @@ export function ModalTitle({
 				</span>
 			) : null}
 			{children}
-		</CardTitle>
+		</Card.Title>
 	);
 }
 
 export function ModalDescription(
-	props: React.ComponentProps<typeof CardDescription>,
+	props: React.ComponentProps<typeof Card.Description>,
 ) {
-	return <CardDescription {...props} />;
+	return <Card.Description {...props} />;
 }

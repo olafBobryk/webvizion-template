@@ -35,7 +35,6 @@ export const READ_ONLY_SCOPE = [
 	"scripts/_lib/local-production-preview.mjs",
 	"docs/guides/scroll-performance.md",
 	"scripts/scroll-performance/fixtures/scroll-performance-runs.example.jsonl",
-	"docs/orchestration",
 ];
 
 function normalizePath(value) {

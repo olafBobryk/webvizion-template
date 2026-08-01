@@ -33,6 +33,7 @@ export type EditableTextFieldProps = {
 	saveAriaLabel?: string;
 	cancelAriaLabel?: string;
 	className?: string;
+	displayClassName?: string;
 	inputClassName?: string;
 };
 
@@ -61,6 +62,7 @@ function EditableTextFieldRoot({
 	className,
 	description,
 	disabled,
+	displayClassName,
 	editAriaLabel,
 	error,
 	id,
@@ -179,7 +181,7 @@ function EditableTextFieldRoot({
 	const displayContent = (
 		<Text
 			as="span"
-			className="min-w-0 truncate"
+			className={clsx("min-w-0 truncate", displayClassName)}
 			tone={value ? "default" : "muted"}
 			variant="body"
 		>

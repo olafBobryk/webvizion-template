@@ -29,6 +29,7 @@ export type FileInputUploadedItem = {
 	status: "uploaded";
 	tag?: FilePreviewTag;
 	type?: string;
+	unoptimized?: boolean;
 	url: string;
 };
 
@@ -60,6 +61,7 @@ export type FileInputProps = {
 	required?: boolean;
 	/** Bump to clear pending files and the native input while retaining uploaded items. */
 	resetSignal?: number;
+	showAddControl?: boolean;
 };
 
 type PendingPreview = {
@@ -165,6 +167,7 @@ function FileInputRoot({
 	previewHeight = 105,
 	required = false,
 	resetSignal,
+	showAddControl = true,
 }: FileInputProps) {
 	const generatedId = React.useId();
 	const inputId = id ?? inputName ?? generatedId;
@@ -192,7 +195,7 @@ function FileInputRoot({
 		[descriptionId, messageId].filter(Boolean).join(" ") || undefined;
 	const isEditable = mode === "edit";
 	const isAtCapacity = !multiple && items.length > 0;
-	const showAdd = isEditable && !isAtCapacity;
+	const showAdd = isEditable && !isAtCapacity && showAddControl;
 	const tone = fieldError ? "error" : "default";
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: recreate object URLs only when the controlled pending-file signature changes
@@ -409,7 +412,8 @@ function FileInputRoot({
 								}
 								className={clsx(
 									"aspect-video shrink-0 rounded-md! border border-dashed border-border!",
-									isDragging && "border-primary! bg-primary/5 text-primary",
+									isDragging &&
+										"border-primary! bg-primary/5 text-primary-text",
 								)}
 								contentClassName="h-full w-full flex-col gap-2"
 								disabled={disabled}

@@ -27,7 +27,7 @@ import {
 	TextAreaInput,
 } from "@/components/ui/input";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 import { showToast } from "@/lib/feedback";
 import { hrefFor } from "@/lib/routes";
@@ -148,19 +148,17 @@ export function PlatformReportDetailContent({
 						</Card.Content>
 					</Card>
 					<Card>
-						<Card.Header>
-							<Card.Title>Reporter context</Card.Title>
-							<Card.Description>
-								Identity and organization facts are resolved server-side.
-							</Card.Description>
-						</Card.Header>
+						<Card.Heading
+							description="Identity and organization facts are resolved server-side."
+							title="Reporter context"
+						/>
 						<Card.Content>
 							<dl className="grid gap-5 sm:grid-cols-2">
 								<DashboardDetailField
 									label="Reporter"
 									truncateValue={false}
 									value={
-										<MemberIdentity presentation={member} variant="compact" />
+										<MemberIdentity presentation={member} variant="default" />
 									}
 								/>
 								<DashboardDetailField
@@ -183,12 +181,10 @@ export function PlatformReportDetailContent({
 					</Card>
 				</div>
 				<Card as="form" className="self-start" onSubmit={handleSubmit}>
-					<Card.Header>
-						<Card.Title>Report triage</Card.Title>
-						<Card.Description>
-							Adding a note to a new report automatically marks it Triaged.
-						</Card.Description>
-					</Card.Header>
+					<Card.Heading
+						description="Adding a note to a new report automatically marks it Triaged."
+						title="Report triage"
+					/>
 					<Card.Content className="grid gap-4">
 						<SelectInput
 							disabled={isSubmitting}

@@ -1,34 +1,25 @@
 # Folder: `src/components/ui/icons`
 
-## Role
-Central icon rendering system and registry infrastructure for the component library.
+## Ownership
 
-## Use This Folder When
-- A component needs an icon from the shared library.
-- You need consistent icon sizing or animation behavior.
-- A new icon source needs to be registered centrally.
+This folder owns named icon rendering and registry composition. The supported
+consumer contract lives at `UI/Icons/Icon and Registry` in Storybook.
 
-## Prefer These Files
-- `src/components/ui/icons/Icon.tsx`: default icon renderer.
-- `src/components/ui/icons/customRegistry.tsx`: built-in icon name map.
-- `src/components/ui/icons/iconRegistry.tsx`: registry extension utilities.
-- `src/components/ui/icons/phosphorRegistry.tsx`: Phosphor icon bindings.
+## Dependency and runtime boundaries
 
-## Invariants
-- Use `Icon` instead of inline SVG for standard library icons.
-- Icon sizing should stay on the shared `sm`, `md`, and `lg` scale unless there is a clear reason to pass explicit dimensions from a parent component.
-- Visual icon animation should remain opt-in and should respect reduced motion where the component already expects that behavior.
-- Directional RTL mirroring should remain opt-in with `mirrorInRtl`; do not automatically flip every left/right icon because some controls represent physical direction.
-- Icons are decorative in most button and control contexts. Keep them `aria-hidden` unless the icon itself is the accessible content.
-- Focus visibility belongs to the control containing the icon, not the icon wrapper.
-- If SVG is inlined in JSX or TSX, use camelCase attribute names like `clipPath`, `strokeWidth`, `colorInterpolationFilters`, `stopColor`, `stopOpacity`, and `maskType`.
+- `Icon` and registry providers are client boundaries. Raw custom and Phosphor
+  registry maps are implementation inputs, not independent public owners.
+- `createIconRegistry` merges local icons with provider overrides; consumers do
+  not bypass `IconProvider` to read or mutate the raw maps.
+- Icons may depend on shared motion and skeleton infrastructure but must not
+  acquire feature dependencies.
 
-## How To Use It
-- Use named icons through `Icon` whenever the library already provides the symbol.
-- If a feature needs a new reusable icon, add it centrally rather than embedding the SVG only once in page code.
-- When extending the registry, make the registration reusable for the rest of the library.
+## Structural invariants
 
-## Avoid
-- Mixing multiple icon-rendering approaches across the codebase.
-- Treating an icon as the sole accessible label for a button without explicit naming on the button itself.
-- Using kebab-case SVG attribute names in JSX.
+- Control icons are decorative by default. Accessible naming and visible focus
+  belong to the containing control.
+- RTL mirroring remains explicit through `mirrorInRtl`; physical directions are
+  never flipped globally.
+- Reusable SVGs enter the registry rather than being duplicated in feature JSX.
+  Inline JSX SVG attributes use React camelCase names.
+- Missing-icon diagnostics remain development-only and deduplicated by name.

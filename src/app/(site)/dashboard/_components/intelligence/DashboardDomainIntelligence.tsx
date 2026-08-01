@@ -1,5 +1,5 @@
 import { Chip } from "@/components/ui/misc";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 import {
 	getDashboardDomainAreaInventory,
@@ -53,13 +53,10 @@ export function DashboardDomainOverview({
 
 	return (
 		<Card>
-			<Card.Header>
-				<Card.Title>Dashboard domain coverage</Card.Title>
-				<Card.Description>
-					Current registered product areas and the local turns that edited them.
-					Unselected or removed surfaces are excluded automatically.
-				</Card.Description>
-			</Card.Header>
+			<Card.Heading
+				description="Current registered product areas and the local turns that edited them.\n\t\t\t\t\tUnselected or removed surfaces are excluded automatically."
+				title="Dashboard domain coverage"
+			/>
 			<Card.Content className="grid gap-5">
 				<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 					{inventory.map((area) => {

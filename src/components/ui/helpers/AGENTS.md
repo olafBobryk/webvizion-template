@@ -1,29 +1,21 @@
 # Folder: `src/components/ui/helpers`
 
-## Role
-Small reusable helpers that standardize repeated interaction details.
+## Ownership
 
-## Use This Folder When
-- The UI needs a stateful icon transition.
-- A higher-level component already depends on a helper here and the same pattern should be reused.
-- Multiple components need consistent copy-to-clipboard behavior.
+This folder owns small reusable interaction helpers used by higher-level UI.
+Consumer contracts live under `UI/Helpers/*` in Storybook.
 
-## Prefer These Files
-- `src/components/ui/helpers/IconSwap.tsx`: shared icon transition helper for toggled or stateful icons.
-- `src/components/ui/helpers/useCopyAction.tsx`: shared copy-to-clipboard behavior + icon swap.
+## Dependency and runtime boundaries
 
-## Invariants
-- Use `IconSwap` whenever a control flips between icons based on state, such as show or hide password, plus or minus, copy feedback, or similar toggles.
-- Keep the accessible name on the parent button or control. `IconSwap` is visual, not the accessibility label.
-- Focus visibility belongs to the surrounding interactive element, not the icon animation wrapper.
-- Avoid one-off opacity, rotation, or scale stacks when `IconSwap` already solves the transition.
+- Helpers may compose foundations, icons, and primitives but must not depend on
+  inputs, overlays, or feature code.
+- Stateful helpers remain client components and keep their timers and cleanup
+  inside the owning hook.
 
-## How To Use It
-- Use `items` plus `activeIndex` to map component state to icon state.
-- Use per-item active or inactive classes when the transition needs rotation or scaling.
-- Pair `IconSwap` with `Button` or another real control that already has focus and keyboard semantics.
-- Use `useCopyAction` when multiple controls need copy behavior plus the same copied feedback icon.
+## Structural invariants
 
-## Avoid
-- Making icon-only state changes without an accessible label on the parent control.
-- Copying icon transition code into multiple components.
+- `IconSwap` owns only the visual state transition. The surrounding control
+  owns its accessible name, keyboard semantics, and focus treatment.
+- `useCopyAction` owns clipboard execution, copied-state timing, and cleanup;
+  `CopyStatusIcon` owns only the corresponding decorative icon state.
+- Do not fork either helper into component-local animation or clipboard state.

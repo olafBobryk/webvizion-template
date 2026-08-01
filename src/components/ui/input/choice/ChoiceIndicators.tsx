@@ -89,11 +89,10 @@ export function ChoiceIndicatorToggle({
 	className,
 	size = "default",
 }: ChoiceIndicatorBaseProps & { size?: ChoiceIndicatorSize }) {
-	return (
+	const indicator = (
 		<div
 			className={clsx(
-				"choice-field-indicator relative shrink-0 overflow-hidden rounded-full transition-colors motion-micro",
-				size === "compact" ? "h-5 min-w-[34px]" : "h-[26px] min-w-[42px]",
+				"choice-field-indicator relative h-[26px] min-w-[42px] shrink-0 overflow-hidden rounded-full transition-colors motion-micro",
 				focusRing.peerDefault,
 				focusRing.peerError,
 				disabled ? "opacity-60" : "opacity-100",
@@ -105,17 +104,27 @@ export function ChoiceIndicatorToggle({
 		>
 			<div
 				className={clsx(
-					size === "compact"
-						? "absolute left-0.5 rounded-full transition-[background-color,translate,box-shadow] motion-interactive"
-						: "absolute left-1 rounded-full transition-[background-color,translate,box-shadow] motion-interactive",
-					size === "compact" ? "top-0.5 size-4" : "top-1 h-[18px] w-[22px]",
+					"absolute left-1 top-1 h-[18px] w-[22px] rounded-full transition-[background-color,translate,box-shadow] motion-interactive",
 					checked
-						? size === "compact"
-							? "translate-x-[calc(34px-1.25rem)] bg-primary-foreground shadow-sm"
-							: "translate-x-[calc(20px-0.5rem)] bg-primary-foreground shadow-sm"
+						? "translate-x-[calc(20px-0.5rem)] bg-primary-foreground shadow-sm"
 						: "translate-x-0 bg-white shadow-sm dark:bg-muted-foreground",
 				)}
 			/>
+		</div>
+	);
+
+	if (size === "default") return indicator;
+
+	return (
+		<div className="relative h-5 min-w-[34px] shrink-0">
+			<div className="absolute left-1/2 top-1/2 h-[26px] w-[42px] -translate-x-1/2 -translate-y-1/2">
+				<div
+					className="h-[26px] w-[42px] origin-center"
+					style={{ transform: `scale(${10 / 13})` }}
+				>
+					{indicator}
+				</div>
+			</div>
 		</div>
 	);
 }

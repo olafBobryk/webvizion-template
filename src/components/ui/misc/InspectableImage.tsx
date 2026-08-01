@@ -27,6 +27,7 @@ export function InspectableImage({
 		openImageInspect({
 			src: imageProps.src as string,
 			alt: imageProps.alt,
+			unoptimized: imageProps.unoptimized,
 			shareUrl: inspectShareUrl,
 			onShare: inspectOnShare,
 			portalTargetId: inspectPortalTargetId,
@@ -34,6 +35,7 @@ export function InspectableImage({
 	}, [
 		imageProps.src,
 		imageProps.alt,
+		imageProps.unoptimized,
 		inspectShareUrl,
 		inspectOnShare,
 		inspectPortalTargetId,

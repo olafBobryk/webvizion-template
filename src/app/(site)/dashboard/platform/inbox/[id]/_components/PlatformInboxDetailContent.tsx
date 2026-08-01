@@ -26,7 +26,7 @@ import {
 	TextAreaInput,
 } from "@/components/ui/input";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 import { showToast } from "@/lib/feedback";
 import { hrefFor } from "@/lib/routes";
@@ -104,15 +104,11 @@ export function PlatformInboxDetailContent({
 			<div className="grid min-w-0 gap-5 xl:grid-cols-[minmax(0,1fr)_22rem]">
 				<div className="grid min-w-0 gap-5">
 					<Card>
-						<Card.Header>
-							<Card.Title>Support message</Card.Title>
-							<Card.Description>
-								Submitted from the authenticated dashboard support form.
-							</Card.Description>
-							<Card.Action>
-								<SupportStatusChip status={supportRequest.status} />
-							</Card.Action>
-						</Card.Header>
+						<Card.Heading
+							action={<SupportStatusChip status={supportRequest.status} />}
+							description="Submitted from the authenticated dashboard support form."
+							title="Support message"
+						/>
 						<Card.Content>
 							<Text className="whitespace-pre-wrap break-words" variant="body">
 								{supportRequest.message}
@@ -120,15 +116,13 @@ export function PlatformInboxDetailContent({
 						</Card.Content>
 					</Card>
 					<Card>
-						<Card.Header>
-							<Card.Title>Requester context</Card.Title>
-							<Card.Description>
-								Identity and organization facts resolved by the server.
-							</Card.Description>
-						</Card.Header>
+						<Card.Heading
+							description="Identity and organization facts resolved by the server."
+							title="Requester context"
+						/>
 						<Card.Content className="grid gap-5">
 							<div className="grid gap-4 sm:grid-cols-2">
-								<MemberIdentity presentation={member} variant="compact" />
+								<MemberIdentity presentation={member} variant="default" />
 								<OrganizationIdentity presentation={organization} />
 							</div>
 							<dl className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -153,12 +147,10 @@ export function PlatformInboxDetailContent({
 					</Card>
 				</div>
 				<Card as="form" className="self-start" onSubmit={handleSubmit}>
-					<Card.Header>
-						<Card.Title>Inbox triage</Card.Title>
-						<Card.Description>
-							Add an internal note and update the fixture status.
-						</Card.Description>
-					</Card.Header>
+					<Card.Heading
+						description="Add an internal note and update the fixture status."
+						title="Inbox triage"
+					/>
 					<Card.Content className="grid gap-4">
 						<SelectInput
 							disabled={isSubmitting}

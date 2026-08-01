@@ -1,4 +1,8 @@
 import { focusRing } from "@/components/ui/foundations/focus";
+import {
+	type SurfaceElevation,
+	surfaceChromeStyles,
+} from "@/components/ui/primitives/surfaces/surfaceStyles";
 
 export type DropdownOptionTone = "default" | "warning" | "danger";
 
@@ -20,10 +24,15 @@ export const dropdownListWrapperClassName = "flex flex-col gap-0 p-0";
 export const dropdownListClassName =
 	"flex max-h-[252px] flex-col gap-0 overflow-y-auto p-0";
 export const dropdownEmptyStateClassName = "px-4 py-3";
-export const dropdownSurfaceClassName =
-	"overflow-hidden rounded-[10px] border border-border bg-card text-card-foreground shadow-[2px_4px_15px_-2px_rgba(1,1,3,0.05)]";
+export function getDropdownSurfaceClassName(
+	elevation: SurfaceElevation = "float",
+) {
+	return `${surfaceChromeStyles({ background: "float", border: "subtle", elevation, radius: "float" })} overflow-hidden`;
+}
+
+export const dropdownSurfaceClassName = getDropdownSurfaceClassName();
 const dropdownOptionBaseClassName =
-	"flex w-full min-w-0 items-center gap-2.5 !border-0 !bg-clip-border !px-[15px] !py-2.5 text-left text-sm text-foreground/80 !transition-none";
+	"flex w-full min-w-0 items-center gap-2.5 !border-0 !bg-clip-border !px-[15px] !py-2.5 text-left text-sm text-foreground !transition-none";
 const dropdownPresentationOptionClassName =
 	"!h-auto !min-h-16 !gap-0 !px-3 !py-3";
 const dropdownOptionRadiusClassName = "rounded-none";
@@ -54,8 +63,10 @@ export function getDropdownOptionClassName({
 			: undefined,
 		tone === "danger"
 			? [
-					"!text-danger",
-					disabled ? undefined : "[&&]:hover:!bg-danger/10 hover:!text-danger",
+					"!text-danger-text",
+					disabled
+						? undefined
+						: "[&&]:hover:!bg-danger/10 hover:!text-danger-text",
 				]
 					.filter(Boolean)
 					.join(" ")
@@ -71,7 +82,7 @@ export function getDropdownOptionClassName({
 					.join(" ")
 			: undefined,
 		active && !disabled && tone === "danger"
-			? "[&&]:!bg-danger/10 !text-danger"
+			? "[&&]:!bg-danger/10 !text-danger-text"
 			: undefined,
 		active && !disabled && tone === "warning"
 			? "[&&]:!bg-warning-accent/10 !text-warning"

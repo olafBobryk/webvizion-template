@@ -13,8 +13,7 @@ import {
 	YAxis,
 } from "recharts";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
-import { Panel } from "@/components/ui/primitives/Panel";
+import { Card, Float, Panel } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 import { InternalPageHeader } from "../../_components/InternalPage";
 
@@ -70,12 +69,10 @@ function CommitTooltip({ active, mode, payload }: CommitTooltipProps) {
 	if (!active || !commit) return null;
 
 	return (
-		<Panel
-			background="surface"
-			border="ring"
+		<Float
+			background="panel"
+			border="subtle"
 			padding="sm"
-			radius="sm"
-			shadow="lg"
 			className="max-w-80 gap-2"
 		>
 			<div className="flex items-center justify-between gap-4">
@@ -113,7 +110,7 @@ function CommitTooltip({ active, mode, payload }: CommitTooltipProps) {
 					/>
 				</div>
 			)}
-		</Panel>
+		</Float>
 	);
 }
 
@@ -149,10 +146,7 @@ function ChartCard({
 }) {
 	return (
 		<Card>
-			<Card.Header>
-				<Card.Title as="h2">{title}</Card.Title>
-				<Card.Description>{description}</Card.Description>
-			</Card.Header>
+			<Card.Heading description={description} title={title} titleAs="h2" />
 			<Card.Content className="pt-2">{children}</Card.Content>
 		</Card>
 	);
@@ -313,7 +307,7 @@ export function CommitHistoryCharts({
 		return (
 			<>
 				{header}
-				<Panel background="muted" border="subtle" padding="md" radius="md">
+				<Panel background="muted" border="subtle" padding="md">
 					<Text variant="body" tone="muted">
 						No commit history has been generated yet. Run npm run
 						chart:commit-line-delta.

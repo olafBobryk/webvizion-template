@@ -8,6 +8,15 @@ import path from "node:path";
 import process from "node:process";
 import { assembleTemplateProfile } from "../template-assembly/assembler.mjs";
 import {
+	getCapabilitySurfaces,
+	normalizeCapabilities,
+	readEffectiveCapabilities,
+} from "../template-assembly/capabilities/index.mjs";
+import {
+	assertInstalledOrchestrationCapability,
+	assertNoOrchestrationCapability,
+} from "../template-assembly/capabilities/orchestration/index.mjs";
+import {
 	getProfileContentMode,
 	getProfileVerificationCommands,
 	getTemplateProfile,
@@ -25,6 +34,7 @@ let activeProfile;
 
 function parseArgs(argv) {
 	const options = {
+		capabilities: [],
 		content: undefined,
 		dryRun: false,
 		force: false,
@@ -56,12 +66,20 @@ function parseArgs(argv) {
 			}
 			options.output = value;
 			index += 1;
+		} else if (arg === "--with") {
+			const value = argv[index + 1];
+			if (!value || value.startsWith("--")) {
+				throw new Error("--with requires a capability name.");
+			}
+			options.capabilities.push(value);
+			index += 1;
 		} else if (arg === "--dry-run") options.dryRun = true;
 		else if (arg === "--force") options.force = true;
 		else if (arg === "--help") options.help = true;
 		else throw new Error(`Unknown flag: ${arg}`);
 	}
 
+	options.capabilities = normalizeCapabilities(options.capabilities);
 	return options;
 }
 
@@ -76,6 +94,7 @@ Flags:
   --profile <id>    Select the template profile (default: full)
   --content <mode>  Select static or payload-ready content (profile default when omitted)
   --output <path>   Materialize at a custom directory
+	  --with <name>     Enable an opt-in capability; repeatable (assistant, orchestration)
   --dry-run         Print the positive assembly plan without changing files
   --force           Replace a verified output with the same profile and content
   --help            Show this help text
@@ -139,6 +158,18 @@ async function assertReplaceableOutput(outputRoot, options) {
 			`Refusing to replace ${displayPath(outputRoot)} because its content marker is ${marker.content}, not ${options.content}.`,
 		);
 	}
+	const effectiveCapabilities = await readEffectiveCapabilities(
+		outputRoot,
+		marker,
+	);
+	if (
+		JSON.stringify(effectiveCapabilities) !==
+		JSON.stringify(options.capabilities)
+	) {
+		throw new Error(
+			`Refusing to replace ${displayPath(outputRoot)} because its effective capabilities are ${effectiveCapabilities.join(", ") || "none"}, not ${options.capabilities.join(", ") || "none"}.`,
+		);
+	}
 }
 
 function formatWorkspace(destinationRoot) {
@@ -194,7 +225,7 @@ async function assertNoParkedImports(destinationRoot) {
 	}
 }
 
-async function validateProfile(destinationRoot, content) {
+async function validateProfile(destinationRoot, content, capabilities) {
 	const requiredFiles = activeProfile.verification.requiredFiles.filter(
 		(requiredFile) =>
 			content === "payload-ready" || requiredFile !== "payload.config.ts",
@@ -241,6 +272,11 @@ async function validateProfile(destinationRoot, content) {
 			);
 		}
 	}
+	if (capabilities.includes("orchestration")) {
+		await assertInstalledOrchestrationCapability(destinationRoot);
+	} else {
+		await assertNoOrchestrationCapability(destinationRoot);
+	}
 	await assertNoParkedImports(destinationRoot);
 }
 
@@ -265,6 +301,7 @@ async function writeReceipt(destinationRoot, options, assemblyResult) {
 		schemaVersion: 2,
 		profile: activeProfile.id,
 		content: options.content,
+		capabilities: options.capabilities,
 		mode: "materialized-workspace",
 		sourceCommit: currentCommit(),
 		sourceDirty: isSourceDirty(),
@@ -283,13 +320,17 @@ async function writeReceipt(destinationRoot, options, assemblyResult) {
 }
 
 function printPlan(options, destinationRoot) {
-	const selectedSurfaces = activeProfile.assembly.surfaces.filter(
+	const selectedSurfaces = [
+		...activeProfile.assembly.surfaces,
+		...getCapabilitySurfaces(activeProfile, options.capabilities),
+	].filter(
 		(surface) => options.content === "payload-ready" || surface !== "payload",
 	);
 	console.log("\nTemplate project assembly plan");
 	console.log("==============================");
 	console.log(`- profile: ${activeProfile.id}`);
 	console.log(`- content: ${options.content}`);
+	console.log(`- capabilities: ${options.capabilities.join(", ") || "none"}`);
 	console.log(`- destination: ${displayPath(destinationRoot)}`);
 	console.log(
 		`- selected surfaces: ${selectedSurfaces.join(", ") || "core only"}`,
@@ -319,9 +360,11 @@ async function materializeWorkspace(options, destinationRoot) {
 		destinationRoot,
 		profile: activeProfile,
 		content: options.content,
+		capabilities: options.capabilities,
+		sourceCommit: currentCommit(),
 	});
 	formatWorkspace(destinationRoot);
-	await validateProfile(destinationRoot, options.content);
+	await validateProfile(destinationRoot, options.content, options.capabilities);
 	await writeReceipt(destinationRoot, options, assemblyResult);
 	formatReceipt(destinationRoot);
 }

@@ -5,7 +5,7 @@ import type { AppearancePreference } from "@/components/ui/foundations/appearanc
 import type { useSettingsContext } from "@/components/ui/foundations/settingsContext";
 import { Icon } from "@/components/ui/icons/Icon";
 import { RadioInput, ToggleInput } from "@/components/ui/input";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 
 export type SettingsSection = {
 	id: string;
@@ -93,15 +93,13 @@ function AccessibilitySettingsCard({
 
 	return (
 		<Card className="scroll-mt-24" id="accessibility">
-			<Card.Header>
-				<Card.Title className="inline-flex items-center gap-2">
+			<Card.Heading
+				description="Appearance, motion, scrolling, and text preferences."
+				leading={
 					<Icon className="text-muted-foreground" name="sliders" size="sm" />
-					Accessibility
-				</Card.Title>
-				<Card.Description>
-					Appearance, motion, scrolling, and text preferences.
-				</Card.Description>
-			</Card.Header>
+				}
+				title="Accessibility"
+			/>
 			<Card.Content className="grid gap-5">
 				<AppearanceSettingsControl settings={settings} />
 				<ToggleInput

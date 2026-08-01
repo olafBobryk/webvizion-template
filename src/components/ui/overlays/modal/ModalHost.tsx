@@ -3,6 +3,7 @@
 
 import { AnimatePresence } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { usePortalScopeId } from "@/components/ui/overlays/Portal";
 import {
 	closeModal as dispatchClose,
 	MODAL_CLOSE_ALL_EVENT,
@@ -19,12 +20,14 @@ type ActiveModal = {
 	id: string;
 	render: ModalRenderFn;
 	options?: OpenModalOptions;
+	scopeId?: string | null;
 };
 
 const modalHostBaseLayerIndex = 80;
 
 export function ModalHost() {
 	const [modals, setModals] = useState<ActiveModal[]>([]);
+	const scopeId = usePortalScopeId();
 
 	const removeModal = useCallback((id: string) => {
 		setModals((prev) => prev.filter((modal) => modal.id !== id));
@@ -42,11 +45,16 @@ export function ModalHost() {
 
 	useEffect(() => {
 		const handleOpen = (event: Event) => {
-			const { id, render, options } = (event as CustomEvent<ActiveModal>)
-				.detail;
+			const {
+				id,
+				render,
+				options,
+				scopeId: eventScopeId,
+			} = (event as CustomEvent<ActiveModal>).detail;
+			if ((eventScopeId ?? null) !== scopeId) return;
 			setModals((prev) => [
 				...prev,
-				{ closeDisabled: false, id, render, options },
+				{ closeDisabled: false, id, render, options, scopeId: eventScopeId },
 			]);
 		};
 
@@ -69,7 +77,7 @@ export function ModalHost() {
 			);
 			window.removeEventListener(MODAL_CLOSE_ALL_EVENT, handleCloseAll);
 		};
-	}, [removeModal]);
+	}, [removeModal, scopeId]);
 
 	return (
 		<AnimatePresence>

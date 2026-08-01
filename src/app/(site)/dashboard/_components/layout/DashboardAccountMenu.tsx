@@ -38,12 +38,7 @@ export function DashboardAccountMenu() {
 				{
 					id: "account",
 					href: accountPresentation.profileHref,
-					label: (
-						<AccountIdentity
-							presentation={accountPresentation}
-							variant="compact"
-						/>
-					),
+					label: <AccountIdentity presentation={accountPresentation} />,
 					dividerAfter: true,
 					layout: "presentation",
 				},

@@ -1,21 +1,20 @@
 # Folder: `src/components/ui/input/editable`
 
-## Role
+## Ownership and boundary
 
-Reusable display-to-edit field composites. These components own the transition between a readable value, a real form control, validation, pending mutation state, and focus restoration.
+This folder owns reusable display-to-edit field state. External consumers use
+`@/components/ui/input`; the `UI/Input/Editable/EditableTextField` Storybook
+owner holds its consumer contract.
 
-## Public Surface
-
-- Import `EditableTextField` from `@/components/ui/input`.
-- Use `presentation="field"` for a stable input shell and `presentation="inline"` only for deliberate title or rename interactions.
-- Use `EditableTextField.Skeleton` with the same presentation as the live component.
-
-## Invariants
+## Structural invariants
 
 - Keep `Field` mounted across display, edit, pending, and error states.
-- Field presentation keeps `InputFrame` mounted so view and edit geometry do not shift.
-- Stay in edit mode while saving. Disable Cancel and conflicting input while pending.
-- Validation and mutation errors remain inline through `Field`; callers own mutation toasts.
-- Escape cancels, Enter submits, and Save or Cancel returns focus to the display trigger.
-- Do not add caller-controlled Button variants, typography variants, animation systems, or layout internals. Add a semantic presentation only when a real reusable use case exists.
-- Do not move editable mutation state into the structural `Field` primitive or the ordinary `TextInput`.
+- Field presentation keeps `InputFrame` mounted so display and edit geometry do
+  not shift.
+- Mutation, validation, draft, and focus-restoration state remain inside
+  EditableTextField rather than moving into structural `Field` or ordinary
+  TextInput.
+- Pending state keeps the edit topology mounted and disables conflicting
+  controls. Errors remain inline through `Field`.
+- New presentation modes require a distinct reusable semantic use case; callers
+  do not control internal button variants, typography, animation, or layout.

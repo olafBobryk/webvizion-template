@@ -1,15 +1,16 @@
 # Folder: `src/components/ui/input/numeric`
 
-## Role
+## Ownership and boundary
 
-Typed, unit-bound, and range-style numeric controls.
+This folder owns typed, fixed-unit, and range-style numeric controls. External
+consumers use `@/components/ui/input`; Storybook owns the consumer contracts.
+Family implementations import their owning siblings directly.
 
-## Public Surface
+## Structural invariants
 
-- External consumers import `NumberInput`, `UnitNumberInput`, and `SliderInput` from `@/components/ui/input`.
-- Components inside this family import their owning siblings directly.
-
-## Invariants
-
-- Preserve native number and range semantics, validation, focus treatment, and shared `Field` plus `InputFrame` geometry.
-- Keep unit presentation separate from numeric value ownership.
+- Preserve real number and range inputs, native min/max/step semantics, and
+  `Field` plus `InputFrame` topology.
+- Unit presentation remains separate from numeric value ownership.
+- SliderInput keeps its range control, progress track, numeric field, and unit
+  vertically aligned inside one InputFrame. The visible custom track never
+  replaces the native range input.

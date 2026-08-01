@@ -6,12 +6,11 @@ import {
 	MemberAvatarSkeleton,
 } from "./MemberAvatar";
 
-export type MemberIdentityVariant = "actor" | "compact" | "profile";
+export type MemberIdentityVariant = "actor" | "default";
 
 const defaultAvatarSize = {
 	actor: "sm",
-	compact: "md",
-	profile: "xl",
+	default: "md",
 } satisfies Record<MemberIdentityVariant, MemberAvatarSize>;
 
 function MemberIdentityRoot({
@@ -19,7 +18,7 @@ function MemberIdentityRoot({
 	className,
 	href = false,
 	presentation,
-	variant = "profile",
+	variant = "default",
 }: {
 	avatarSize?: MemberAvatarSize;
 	className?: string;
@@ -27,22 +26,23 @@ function MemberIdentityRoot({
 	presentation: MemberIdentityPresentation;
 	variant?: MemberIdentityVariant;
 }) {
-	const profile = variant === "profile";
 	const actor = variant === "actor";
+	const resolvedAvatarSize = avatarSize ?? defaultAvatarSize[variant];
 	const avatar = (
 		<MemberAvatar
 			alt={presentation.avatarAlt}
 			colorIndex={presentation.avatarColorIndex}
 			imageUrl={presentation.avatarUrl}
 			initials={presentation.initials}
-			size={avatarSize ?? defaultAvatarSize[variant]}
+			size={resolvedAvatarSize}
 		/>
 	);
 	return (
 		<EntityIdentity
 			avatar={avatar}
+			avatarSize={resolvedAvatarSize}
 			className={className}
-			primaryAs={profile ? "h2" : "span"}
+			primaryAs="span"
 			primaryHref={href ? presentation.href : undefined}
 			primaryLabel={presentation.displayLabel}
 			secondaryLabel={actor ? undefined : presentation.emailLabel}
@@ -56,7 +56,7 @@ export function MemberIdentitySkeleton({
 	className,
 	displayLabel = "Example member",
 	emailLabel = "member@example.com",
-	variant = "profile",
+	variant = "default",
 }: {
 	avatarSize?: MemberAvatarSize;
 	className?: string;
@@ -65,14 +65,13 @@ export function MemberIdentitySkeleton({
 	href?: boolean;
 	variant?: MemberIdentityVariant;
 }) {
-	const profile = variant === "profile";
+	const resolvedAvatarSize = avatarSize ?? defaultAvatarSize[variant];
 	return (
 		<EntityIdentity.Skeleton
-			avatar={
-				<MemberAvatarSkeleton size={avatarSize ?? defaultAvatarSize[variant]} />
-			}
+			avatar={<MemberAvatarSkeleton size={resolvedAvatarSize} />}
+			avatarSize={resolvedAvatarSize}
 			className={className}
-			primaryAs={profile ? "h2" : "span"}
+			primaryAs="span"
 			primaryLabel={displayLabel}
 			secondaryLabel={variant === "actor" ? undefined : emailLabel}
 			variant={variant}

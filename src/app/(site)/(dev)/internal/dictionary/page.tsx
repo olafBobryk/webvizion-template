@@ -1,6 +1,6 @@
 import { Chip } from "@/components/ui/misc";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 import { type InternalRouteId, internalHrefFor } from "@/lib/routes";
 import { InternalPage, InternalPageHeader } from "../_components/InternalPage";
@@ -71,12 +71,11 @@ export default function DictionaryIndexPage() {
 						<div className="grid gap-4 lg:grid-cols-2">
 							{family.entries.map((entry) => (
 								<Card key={entry.manifest.id}>
-									<Card.Header>
-										<Card.Title as="h3">{entry.manifest.title}</Card.Title>
-										<Card.Description>
-											{entry.manifest.summary}
-										</Card.Description>
-									</Card.Header>
+									<Card.Heading
+										description={entry.manifest.summary}
+										title={entry.manifest.title}
+										titleAs="h3"
+									/>
 									<Card.Content className="flex flex-col gap-4">
 										<div className="flex flex-col gap-2">
 											<Text variant="caption" tone="muted">

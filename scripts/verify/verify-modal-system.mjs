@@ -15,6 +15,9 @@ const modalContract = read("src/lib/modal.ts");
 const commandSurface = readIfPresent(
 	"src/app/(site)/dashboard/_components/commands/DashboardCommandProvider.tsx",
 );
+const commandPalette = readIfPresent(
+	"src/app/(site)/dashboard/_components/commands/DashboardCommandPalette.tsx",
+);
 const confirmation = read(
 	"src/components/ui/overlays/modal/ConfirmationModal.tsx",
 );
@@ -28,10 +31,18 @@ const thinShell = readIfPresent(
 	"template-profiles/thin-start/overrides/src/components/ui/overlays/modal/ModalShell.tsx",
 );
 
-assert.doesNotMatch(modalShell, /from "@\/components\/ui\/primitives\/Panel"/);
+assert.doesNotMatch(
+	modalShell,
+	/from "@\/components\/ui\/primitives\/(?:Panel|Card)"/,
+);
+assert.match(
+	modalShell,
+	/import \{ Card \} from "@\/components\/ui\/primitives\/surfaces"/,
+);
 assert.doesNotMatch(modalShell, /<Panel\b/);
 assert.match(modalShell, /data-modal-shell=""/);
 assert.match(modalCard, /<Card\b/);
+assert.match(modalCard, /elevation="overlay"/);
 assert.match(modalCard, /gap="none"/);
 assert.match(modalCard, /padding="none"/);
 assert.match(
@@ -51,8 +62,18 @@ for (const removedEscapeHatch of [
 	assert.doesNotMatch(modalContract, new RegExp(removedEscapeHatch));
 }
 
-if (commandSurface)
-	assert.match(commandSurface, /<ModalShell[\s\S]*?<ModalCard/);
+if (commandSurface) {
+	assert.match(
+		commandSurface,
+		/const \{ closeModal, openModal \} = useModal\(\)/,
+	);
+	assert.match(commandSurface, /openModal\([\s\S]*?<DashboardCommandSession/);
+	assert.match(commandSurface, /cardProps: \{[\s\S]*?maxWidth: "2xl"/);
+}
+if (commandPalette) {
+	assert.doesNotMatch(commandPalette, /<ModalShell|<ModalCard/);
+	assert.match(commandPalette, /role="combobox"/);
+}
 for (const resource of [confirmation, imageInspect, fileInspect].filter(
 	Boolean,
 )) {

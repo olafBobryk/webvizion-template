@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/overlays/modal/ModalShell";
 import { useModal } from "@/components/ui/overlays/modal/useModal";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import type { SessionUser } from "@/lib/api/auth";
 import { showToast } from "@/lib/feedback";
 import { AccountIdentity } from "../../_components/entities/account/AccountIdentity";
@@ -67,13 +67,8 @@ function ProfileSettingsSectionRoot() {
 
 	return (
 		<Card className="scroll-mt-24" id="profile">
-			<Card.Header>
-				<Card.Title className="inline-flex items-center gap-2">
-					<Icon className="text-muted-foreground" name="user" size="sm" />
-					Profile
-				</Card.Title>
-				<Card.Description>Profile settings</Card.Description>
-				<Card.Action>
+			<Card.Heading
+				action={
 					<Button
 						leadingIcon="pencil"
 						onClick={openProfileEditor}
@@ -83,10 +78,15 @@ function ProfileSettingsSectionRoot() {
 					>
 						Edit profile
 					</Button>
-				</Card.Action>
-			</Card.Header>
+				}
+				description="Profile settings"
+				leading={
+					<Icon className="text-muted-foreground" name="user" size="sm" />
+				}
+				title="Profile"
+			/>
 			<Card.Content>
-				<AccountIdentity presentation={accountPresentation} />
+				<AccountIdentity avatarSize="xl" presentation={accountPresentation} />
 			</Card.Content>
 		</Card>
 	);
@@ -103,20 +103,21 @@ function ProfileSettingsSectionSkeleton() {
 
 	return (
 		<Card className="scroll-mt-24" id="profile">
-			<Card.Header>
-				<Card.Title className="inline-flex items-center gap-2">
-					<Icon className="text-muted-foreground" name="user" size="sm" />
-					Profile
-				</Card.Title>
-				<Card.Description>Profile settings</Card.Description>
-				<Card.Action>
+			<Card.Heading
+				action={
 					<Button.Skeleton leadingIcon size="sm" variant="ghost">
 						Edit profile
 					</Button.Skeleton>
-				</Card.Action>
-			</Card.Header>
+				}
+				description="Profile settings"
+				leading={
+					<Icon className="text-muted-foreground" name="user" size="sm" />
+				}
+				title="Profile"
+			/>
 			<Card.Content>
 				<AccountIdentity.Skeleton
+					avatarSize="xl"
 					displayLabel={accountPresentation.displayLabel}
 					emailLabel={accountPresentation.emailLabel}
 				/>

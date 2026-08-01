@@ -6,15 +6,7 @@ import * as React from "react";
 import { spring } from "@/components/ui/foundations/spring";
 import { Icon } from "@/components/ui/icons/Icon";
 import { Button } from "@/components/ui/primitives/Button";
-import {
-	Card,
-	CardAction,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 import { useMotionAllowed } from "@/hooks/useMotionAllowed";
 import type {
@@ -27,7 +19,17 @@ import type {
 	AccordionProps,
 	AccordionStateProps,
 	AccordionTitleProps,
+	AccordionTriggerRenderProps,
 } from "./Accordion.shared";
+
+const {
+	Action: CardAction,
+	Content: CardContent,
+	Description: CardDescription,
+	Footer: CardFooter,
+	Header: CardHeader,
+	Title: CardTitle,
+} = Card;
 
 type DisclosureState = {
 	contentId: string;
@@ -154,6 +156,7 @@ export function AccordionClient({
 	iconClassName,
 	onOpenChange,
 	open,
+	renderTrigger,
 	title,
 	titleClassName,
 	triggerClassName,
@@ -166,6 +169,13 @@ export function AccordionClient({
 		onOpenChange,
 		open,
 	});
+	const triggerProps = {
+		"aria-controls": state.contentId,
+		"aria-expanded": state.isOpen,
+		disabled: state.disabled,
+		onClick: state.handleToggle,
+		type: "button" as const,
+	} satisfies AccordionTriggerRenderProps;
 
 	return (
 		<div
@@ -176,52 +186,53 @@ export function AccordionClient({
 			)}
 			data-open={state.isOpen ? "true" : "false"}
 		>
-			<Button
-				align="left"
-				aria-controls={state.contentId}
-				aria-expanded={state.isOpen}
-				className={clsx(
-					"!min-h-0 w-full !rounded-md !border-0 !px-0 !py-2.5 hover:!bg-transparent hover:opacity-70 disabled:!opacity-100",
-					buttonClassName,
-					triggerClassName,
-				)}
-				contentClassName="w-full gap-1.5"
-				disabled={disabled}
-				onClick={state.handleToggle}
-				size="none"
-				variant="ghost"
-			>
-				{icon ? (
-					<span
-						className={clsx(
-							"grid size-6 shrink-0 place-items-center text-muted-foreground [&_svg]:size-3.5",
-							iconClassName,
-						)}
-					>
-						{icon}
-					</span>
-				) : null}
-				<span className="grid min-w-0 flex-1 gap-0.5">
-					<Text
-						as="span"
-						className={clsx("font-medium", titleClassName)}
-						variant="support"
-					>
-						{title}
-					</Text>
-					{description ? (
-						<Text as="span" tone="muted" variant="caption">
-							{description}
-						</Text>
-					) : null}
-				</span>
-				<span
-					aria-hidden
-					className="grid size-6 shrink-0 place-items-center text-muted-foreground transition-transform motion-micro group-data-[open=true]/accordion:rotate-180"
+			{renderTrigger ? (
+				renderTrigger(triggerProps)
+			) : (
+				<Button
+					align="left"
+					className={clsx(
+						"!min-h-0 w-full !rounded-md !border-0 !px-0 !py-2.5 hover:!bg-transparent hover:opacity-70 disabled:!opacity-100",
+						buttonClassName,
+						triggerClassName,
+					)}
+					contentClassName="w-full gap-1.5"
+					size="none"
+					{...triggerProps}
+					variant="ghost"
 				>
-					<Icon name="chevron-down" size="sm" />
-				</span>
-			</Button>
+					{icon ? (
+						<span
+							className={clsx(
+								"grid size-6 shrink-0 place-items-center text-muted-foreground [&_svg]:size-3.5",
+								iconClassName,
+							)}
+						>
+							{icon}
+						</span>
+					) : null}
+					<span className="grid min-w-0 flex-1 gap-0.5">
+						<Text
+							as="span"
+							className={clsx("font-medium", titleClassName)}
+							variant="support"
+						>
+							{title}
+						</Text>
+						{description ? (
+							<Text as="span" tone="muted" variant="caption">
+								{description}
+							</Text>
+						) : null}
+					</span>
+					<span
+						aria-hidden
+						className="grid size-6 shrink-0 place-items-center text-muted-foreground transition-transform motion-micro group-data-[open=true]/accordion:rotate-180"
+					>
+						<Icon name="chevron-down" size="sm" />
+					</span>
+				</Button>
+			)}
 			<CollapsibleRegion state={state}>
 				<div className={clsx("border-t-0 px-0 py-3", contentClassName)}>
 					{children}

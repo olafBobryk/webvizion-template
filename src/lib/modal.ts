@@ -19,6 +19,7 @@ type ModalOpenEventDetail = {
 	id: string;
 	render: ModalRenderFn;
 	options?: OpenModalOptions;
+	scopeId?: string | null;
 };
 
 type ModalCloseEventDetail = { id: string };
@@ -32,6 +33,7 @@ export const MODAL_CLOSE_ALL_EVENT = "app-modal-close-all";
 export function openModal(
 	render: ModalRenderFn,
 	options?: OpenModalOptions,
+	scopeId?: string | null,
 ): string {
 	if (typeof window === "undefined") return "";
 
@@ -40,7 +42,7 @@ export function openModal(
 
 	window.dispatchEvent(
 		new CustomEvent<ModalOpenEventDetail>(MODAL_OPEN_EVENT, {
-			detail: { id, render, options },
+			detail: { id, render, options, scopeId },
 		}),
 	);
 

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/primitives/Button";
-import { Panel } from "@/components/ui/primitives/Panel";
 import { Section } from "@/components/ui/primitives/Section";
+import { Panel } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 
 export default function ContactPage() {

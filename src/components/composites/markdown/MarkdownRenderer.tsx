@@ -9,6 +9,10 @@ import {
 } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
+import {
+	Streamdown,
+	type Components as StreamdownComponents,
+} from "streamdown";
 import { focusRing } from "@/components/ui/foundations/focus";
 import { ChoiceIndicatorMulti } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/misc";
@@ -34,6 +38,7 @@ export type MarkdownRendererProps = {
 	density?: MarkdownContentDensity;
 	markdown: string;
 	resolveUserMention?: (memberId: string) => ReactNode;
+	streaming?: boolean;
 	variant?: MarkdownRendererVariant;
 };
 
@@ -54,6 +59,12 @@ const markdownSkeletonLineKeys = [
 	"delta",
 	"echo",
 	"foxtrot",
+];
+
+const markdownRemarkPlugins = [
+	remarkGfm,
+	remarkSafeUnderline,
+	remarkUserMentions,
 ];
 
 const isMarkdownImageElement = (
@@ -364,11 +375,49 @@ function createMarkdownComponents(
 	};
 }
 
+function MarkdownSegment({
+	components,
+	markdown,
+	streaming,
+}: {
+	components: Components;
+	markdown: string;
+	streaming: boolean;
+}) {
+	if (streaming) {
+		return (
+			<Streamdown
+				animated={false}
+				className="markdown-streaming-engine"
+				components={components as StreamdownComponents}
+				controls={false}
+				linkSafety={{ enabled: false }}
+				mode="streaming"
+				parseIncompleteMarkdown
+				rehypePlugins={[]}
+				remarkPlugins={markdownRemarkPlugins}
+			>
+				{markdown}
+			</Streamdown>
+		);
+	}
+
+	return (
+		<ReactMarkdown
+			components={components}
+			remarkPlugins={markdownRemarkPlugins}
+		>
+			{markdown}
+		</ReactMarkdown>
+	);
+}
+
 function MarkdownRendererRoot({
 	className,
 	density = "default",
 	markdown,
 	resolveUserMention,
+	streaming = false,
 	variant = "contained",
 }: MarkdownRendererProps) {
 	const segments = splitMarkdownByButtonDirectives(markdown);
@@ -399,14 +448,13 @@ function MarkdownRendererRoot({
 				if (segment.markdown.trim().length === 0) return null;
 
 				return (
-					<ReactMarkdown
+					<MarkdownSegment
 						// biome-ignore lint/suspicious/noArrayIndexKey: Segment order is derived from static markdown source.
 						key={`markdown-${index}`}
-						remarkPlugins={[remarkGfm, remarkSafeUnderline, remarkUserMentions]}
 						components={markdownComponents}
-					>
-						{segment.markdown}
-					</ReactMarkdown>
+						markdown={segment.markdown}
+						streaming={streaming}
+					/>
 				);
 			})}
 		</div>

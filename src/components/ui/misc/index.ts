@@ -10,6 +10,7 @@ export {
 	type AccordionProps,
 	type AccordionSkeletonProps,
 	type AccordionTitleProps,
+	type AccordionTriggerRenderProps,
 } from "./accordion/Accordion";
 export {
 	Chip,
@@ -50,6 +51,7 @@ export {
 	type SocialIconName,
 	type SocialLink,
 	SocialLinks,
+	type SocialLinksProps,
 } from "./SocialLinks";
 export {
 	ModalStepIndicator,
@@ -67,4 +69,4 @@ export {
 	StateIndicator,
 	type StateIndicatorProps,
 } from "./state/State";
-export { Tooltip } from "./Tooltip";
+export { Tooltip, type TooltipProps } from "./Tooltip";

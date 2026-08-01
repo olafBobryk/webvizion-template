@@ -53,10 +53,10 @@ type AccentStyle = CSSProperties & {
 };
 
 const accentForegroundClassNames = {
-	danger: "text-danger",
-	info: "text-primary",
+	danger: "text-danger-text",
+	info: "text-primary-text",
 	neutral: "text-muted-foreground",
-	success: "text-success",
+	success: "text-success-text",
 	warning: "text-warning",
 } satisfies Record<AccentTone, string>;
 

@@ -1,17 +1,23 @@
-import { ProfilePicture } from "@/components/ui/misc";
+import { ProfilePicture, type ProfilePictureSize } from "@/components/ui/misc";
 import type { AccountPresentation } from "../../../_lib/entities/account/presentation";
 import { EntityIdentity } from "../EntityIdentity";
 
+export type AccountIdentityVariant = "actor" | "default";
+export type AccountIdentityAvatarSize = Exclude<ProfilePictureSize, "2xl">;
+
 function AccountIdentityRoot({
+	avatarSize,
 	className,
 	presentation,
-	variant = "profile",
+	variant = "default",
 }: {
+	avatarSize?: AccountIdentityAvatarSize;
 	className?: string;
 	presentation: AccountPresentation;
-	variant?: "compact" | "profile";
+	variant?: AccountIdentityVariant;
 }) {
-	const profile = variant === "profile";
+	const actor = variant === "actor";
+	const resolvedAvatarSize = avatarSize ?? (actor ? "sm" : "md");
 	return (
 		<EntityIdentity
 			avatar={
@@ -20,35 +26,40 @@ function AccountIdentityRoot({
 					fallback={presentation.initials}
 					helperIndex={presentation.avatarColorIndex}
 					name={presentation.displayLabel}
-					size={profile ? "xl" : "md"}
+					size={resolvedAvatarSize}
 					src={presentation.avatarUrl}
 				/>
 			}
+			avatarSize={resolvedAvatarSize}
 			className={className}
-			primaryAs={profile ? "h2" : "span"}
+			primaryAs="span"
 			primaryLabel={presentation.displayLabel}
-			secondaryLabel={presentation.emailLabel}
+			secondaryLabel={actor ? undefined : presentation.emailLabel}
 			variant={variant}
 		/>
 	);
 }
 
 export function AccountIdentitySkeleton({
+	avatarSize,
 	displayLabel = "Example account",
 	emailLabel = "account@example.com",
-	variant = "profile",
+	variant = "default",
 }: {
+	avatarSize?: AccountIdentityAvatarSize;
 	displayLabel?: string;
 	emailLabel?: string;
-	variant?: "compact" | "profile";
+	variant?: AccountIdentityVariant;
 }) {
-	const profile = variant === "profile";
+	const actor = variant === "actor";
+	const resolvedAvatarSize = avatarSize ?? (actor ? "sm" : "md");
 	return (
 		<EntityIdentity.Skeleton
-			avatar={<ProfilePicture loading size={profile ? "xl" : "md"} />}
-			primaryAs={profile ? "h2" : "span"}
+			avatar={<ProfilePicture loading size={resolvedAvatarSize} />}
+			avatarSize={resolvedAvatarSize}
+			primaryAs="span"
 			primaryLabel={displayLabel}
-			secondaryLabel={emailLabel}
+			secondaryLabel={actor ? undefined : emailLabel}
 			variant={variant}
 		/>
 	);

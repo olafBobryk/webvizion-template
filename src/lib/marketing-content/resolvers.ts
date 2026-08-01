@@ -1,4 +1,5 @@
-import { fallbackMarketingPages, fallbackSiteLayout } from "./fallback";
+import { fallbackMarketingPages } from "./fallback";
+import { getConfiguredSiteLayout } from "./source";
 import type {
 	MarketingPageDocument,
 	MarketingPageSlug,
@@ -33,5 +34,5 @@ export async function getMarketingPage(
 }
 
 export async function getSiteLayout(): Promise<SiteLayoutDocument> {
-	return limitSiteLayoutMenuGroups(fallbackSiteLayout);
+	return limitSiteLayoutMenuGroups(await getConfiguredSiteLayout());
 }

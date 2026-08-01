@@ -1,9 +1,11 @@
 /** biome-ignore-all lint/suspicious/noUnknownAtRules: Tailwind at-rules are expected here. */
 @import "@mdxeditor/editor/style.css";
 @import "tailwindcss";
+/* Canonical design-system tokens and shared motion utilities. */
 @import "../components/ui/foundations/library.css";
 /* Full-only editor styling is colocated with the Markdown editor composite. */
 @import "../components/composites/markdown/MarkdownEditor.css";
+@source "../../node_modules/streamdown/dist/*.js";
 
 @layer components {
 	.marketing-section-review-frame {
@@ -105,6 +107,14 @@
 }
 
 .markdown-content > :last-child {
+	margin-bottom: 0;
+}
+
+.markdown-content > .markdown-streaming-engine > :first-child {
+	margin-top: 0;
+}
+
+.markdown-content > .markdown-streaming-engine > :last-child {
 	margin-bottom: 0;
 }
 

@@ -1,6 +1,7 @@
+import { templateCapabilities } from "@/config/capabilities";
 import { defineRouteSurfaceRegistry } from "@/lib/surfaces/routeSurface";
 
-export const dashboardRouteSurfaceRegistry = defineRouteSurfaceRegistry([
+const dashboardRouteSurfaceDefinitions = [
 	{
 		family: "dashboard",
 		href: "/dashboard",
@@ -17,6 +18,24 @@ export const dashboardRouteSurfaceRegistry = defineRouteSurfaceRegistry([
 		family: "dashboard",
 		href: "/dashboard/records/[recordId]",
 		id: "dashboard.record",
+		match: "pattern",
+	},
+	{
+		family: "dashboard",
+		href: "/dashboard/assistant",
+		id: "dashboard.assistant",
+		match: "exact",
+	},
+	{
+		family: "dashboard",
+		href: "/dashboard/assistant/conversations",
+		id: "dashboard.assistant.conversations",
+		match: "exact",
+	},
+	{
+		family: "dashboard",
+		href: "/dashboard/assistant/[threadId]",
+		id: "dashboard.assistant.thread",
 		match: "pattern",
 	},
 	{
@@ -99,8 +118,8 @@ export const dashboardRouteSurfaceRegistry = defineRouteSurfaceRegistry([
 	},
 	{
 		family: "dashboard",
-		href: "/dashboard/reference/entities",
-		id: "dashboard.reference.entities",
+		href: "/dashboard/reference",
+		id: "dashboard.reference",
 		match: "exact",
 	},
 	{
@@ -109,7 +128,15 @@ export const dashboardRouteSurfaceRegistry = defineRouteSurfaceRegistry([
 		id: "dashboard.reference.skeletons",
 		match: "exact",
 	},
-] as const);
+] as const;
+
+export const dashboardRouteSurfaceRegistry = defineRouteSurfaceRegistry(
+	dashboardRouteSurfaceDefinitions.filter(
+		(surface) =>
+			templateCapabilities.assistant ||
+			!surface.id.startsWith("dashboard.assistant"),
+	),
+);
 
 export type DashboardRouteSurface =
 	(typeof dashboardRouteSurfaceRegistry)[number];

@@ -76,7 +76,7 @@ export function getAvailableSiteSurfaceLink(
 	return isStaticAppSurfaceId(surfaceId) ? { label, surfaceId } : null;
 }
 
-function getAvailableInternalRouteLink(
+export function getAvailableInternalRouteLink(
 	label: string,
 	internalRouteId: string,
 ): SiteLink | null {
@@ -89,24 +89,15 @@ function omitMissingLinks<T>(items: Array<T | null>): T[] {
 	return items.filter((item): item is T => item !== null);
 }
 
-const homeLink: SiteLink = getAvailableSiteSurfaceLink(
-	"Home",
-	"marketing.home",
-) ?? { label: "Home", href: "/" };
-const settingsLink = getAvailableSiteSurfaceLink(
-	"Settings",
-	"marketing.settings",
-);
-const contactLink = getAvailableSiteSurfaceLink("Contact", "marketing.contact");
+const homeLink: SiteLink = { label: "Home", href: "/" };
 const dashboardLink: SiteLink = getAvailableSiteSurfaceLink(
 	"Dashboard",
 	"auth.login",
-) ??
-	getAvailableSiteSurfaceLink("Dashboard", "marketing.home") ?? {
-		label: "Dashboard",
-		href: "/",
-	};
-const demoLink = getAvailableInternalRouteLink("Demo", "demo");
+) ?? {
+	label: "Dashboard",
+	href: "/",
+};
+const demoLink = getAvailableInternalRouteLink("Component Sweep", "demo");
 const intelligenceLink = getAvailableInternalRouteLink(
 	"Intelligence",
 	"intelligence",
@@ -138,73 +129,33 @@ const developerMenuGroup: SiteMenuGroup | null =
 export const defaultSiteLayout: SiteLayoutDocument = {
 	header: {
 		cta: dashboardLink,
-		menuGroups: [
-			{
-				label: "Start",
-				link: homeLink,
-				links: omitMissingLinks<SiteLink>([
-					{ label: "Hero", href: "/#home-hero" },
-					contactLink,
-					settingsLink,
-				]),
-			},
-			...omitMissingLinks([developerMenuGroup]),
-		],
+		menuGroups: omitMissingLinks([developerMenuGroup]),
 		mobile: {
 			closeAriaLabel: "Close navigation",
 			menuLabel: "Menu",
 			openAriaLabel: "Open navigation",
 		},
 		navLinks: omitMissingLinks<SiteNavLink>([
-			{
-				...homeLink,
-				sections: [
-					{
-						label: "Hero",
-						href: "/#home-hero",
-						description: "Primary home page introduction.",
-					},
-				],
-			},
-			contactLink,
+			homeLink,
 			demoLink,
 			intelligenceLink,
 			playgroundLink,
-			settingsLink,
 		]),
 		search: {
 			ariaLabel: "Search pages",
 			clearLabel: "Clear",
 			noResultsText: "No matching pages",
 		},
-		searchGroups: [
-			{
-				label: "Home",
-				link: homeLink,
-				links: omitMissingLinks<SiteLink>([
-					{ label: "Hero", href: "/#home-hero" },
-					contactLink,
-					settingsLink,
-				]),
-			},
-			...omitMissingLinks([developerMenuGroup]),
-		],
+		searchGroups: omitMissingLinks([developerMenuGroup]),
 		topNavLinks: omitMissingLinks([
 			homeLink,
 			demoLink,
 			intelligenceLink,
 			playgroundLink,
-			settingsLink,
 		]),
 	},
-	socialLinks: [
-		{ label: "X", icon: "x", href: "" },
-		{ label: "Instagram", icon: "instagram", href: "" },
-		{ label: "LinkedIn", icon: "linked-in", href: "" },
-		{ label: "Meta", icon: "meta", href: "" },
-		{ label: "You Tube", icon: "youtube", href: "" },
-	],
+	socialLinks: [],
 	footer: {
-		navLinks: omitMissingLinks([homeLink, contactLink, settingsLink]),
+		navLinks: [homeLink],
 	},
 };

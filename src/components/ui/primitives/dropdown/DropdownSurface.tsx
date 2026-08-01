@@ -3,8 +3,7 @@
 import clsx from "clsx";
 import * as React from "react";
 import Portal from "@/components/ui/overlays/Portal";
-import { dropdownSurfaceClassName } from "../dropdownStyles";
-import { Panel } from "../Panel";
+import { Float } from "../surfaces";
 import { COLLISION_PADDING } from "./constants";
 import { resolveAnchoredDropdownPosition } from "./positioning";
 import type { DropdownSurfaceProps } from "./types";
@@ -30,7 +29,7 @@ export function DropdownSurface({
 	portalTargetId,
 	positionStrategy = "absolute",
 	ref,
-	shadow = "lg",
+	elevation = "float",
 	side = "bottom",
 	style,
 	width = "auto",
@@ -120,10 +119,8 @@ export function DropdownSurface({
 				} satisfies React.CSSProperties)
 			: style;
 	const panel = (
-		<Panel
-			background="card"
+		<Float
 			className={clsx(
-				dropdownSurfaceClassName,
 				"dropdown-panel-enter z-50 min-w-48",
 				positionStrategy === "fixed" ? "fixed" : "absolute mt-2",
 				className,
@@ -131,7 +128,7 @@ export function DropdownSurface({
 			padding={padding}
 			overflow={overflow}
 			ref={setPanelNode}
-			shadow={shadow}
+			elevation={elevation}
 			style={resolvedStyle}
 			width={width}
 			{...props}

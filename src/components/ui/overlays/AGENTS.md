@@ -1,31 +1,22 @@
 # Folder: `src/components/ui/overlays`
 
-## Role
-Shared portal-backed overlay infrastructure.
+## Ownership
 
-## Use This Folder When
-- A UI surface needs to render outside normal layout flow.
-- You are working on modals, toasts, or portal-based dropdown foundations.
-- The solution needs the shared overlay stack instead of a feature-local one.
+This folder owns shared portal-backed overlay infrastructure. Consumer
+contracts live under `UI/Overlays/*` in Storybook.
 
-## Prefer These Files
-- `src/components/ui/overlays/Portal.tsx`: shared portal helper.
+## Dependency and runtime boundaries
 
-## Invariants
-- Overlay UI should route through the shared portal and host model.
-- Do not create multiple competing overlay systems in feature code.
-- Focus must be predictable around overlays: entering, trapping where necessary, and restoring on close.
-- Portal targets should be configured through the existing APIs rather than bypassing the overlay system.
+- `Portal` is the low-level DOM escape boundary. Modal and toast systems own
+  their specialized hosts and must not be reimplemented directly on Portal.
+- Overlay code may compose foundations, primitives, and shared UI, but must not
+  depend on feature-local state or route code.
+- Portal targets are resolved only after client mount and fall back to
+  `document.body`; direct scattered `createPortal` calls are forbidden.
 
-## How To Use It
-- Use `Portal` when a reusable component needs to render outside its parent stacking context.
-- For modal or toast behavior, prefer the specialized systems in the subfolders rather than consuming `Portal` directly in page code.
+## Structural invariants
 
-## Avoid
-- Ad hoc `createPortal` usage scattered through feature components when a shared overlay primitive already exists.
-- Overlay implementations that do not define a clear focus story.
-
-## See Also
-- `src/components/ui/overlays/modal/AGENTS.md`
-- `src/components/ui/overlays/toast/AGENTS.md`
-- `src/components/ui/primitives/AGENTS.md`
+- Application overlays participate in the shared portal and host model rather
+  than creating parallel stacks.
+- Overlay owners define focus entry, top-most behavior, dismissal, and focus
+  restoration where their interaction requires it.

@@ -44,6 +44,8 @@ export type ListboxOption<T> = {
 
 type ListboxProps<T> = {
 	options: ListboxOption<T>[];
+	ariaLabel?: string;
+	ariaLabelledby?: string;
 	activeIndex?: number;
 	onActiveIndexChange?: (index: number) => void;
 	onSelect?: (
@@ -101,6 +103,8 @@ function isTowardParentKey(key: string, direction: "ltr" | "rtl") {
 
 function ListboxLevel<T>({
 	options,
+	ariaLabel,
+	ariaLabelledby,
 	activeIndex,
 	onActiveIndexChange,
 	onSelect,
@@ -333,14 +337,14 @@ function ListboxLevel<T>({
 						controller.openChildren(levelPath, index, { focus: false });
 						return true;
 					};
-					const sharedAriaProps = hasChildren
-						? {
-								"aria-controls": childListId,
-								"aria-expanded": isChildOpen,
-								"aria-haspopup":
-									role === "menu" ? ("menu" as const) : ("listbox" as const),
-							}
-						: {};
+					const sharedAriaProps =
+						hasChildren && role === "menu"
+							? {
+									"aria-controls": childListId,
+									"aria-expanded": isChildOpen,
+									"aria-haspopup": "menu" as const,
+								}
+							: {};
 
 					if (option.unwrapped) {
 						const optionKey = String(option.key ?? index);
@@ -461,6 +465,8 @@ function ListboxLevel<T>({
 				ref={setListNode}
 				id={resolvedListId}
 				role="menu"
+				aria-label={ariaLabel}
+				aria-labelledby={ariaLabelledby}
 				tabIndex={resolvedListTabIndex}
 				aria-activedescendant={resolvedAriaActivedescendant}
 				onKeyDown={handleListKeyDown}
@@ -479,6 +485,8 @@ function ListboxLevel<T>({
 			ref={setListNode}
 			id={resolvedListId}
 			role="listbox"
+			aria-label={ariaLabel}
+			aria-labelledby={ariaLabelledby}
 			tabIndex={resolvedListTabIndex}
 			aria-activedescendant={resolvedAriaActivedescendant}
 			aria-multiselectable={multiselectable ? true : undefined}
@@ -562,7 +570,7 @@ export function Listbox<T>(props: ListboxProps<T>) {
 						positionStrategy="fixed"
 						ref={(node) => controller.registerSurface(childPath, node)}
 						role="presentation"
-						shadow="lg"
+						elevation="overlay"
 						side={direction === "rtl" ? "left" : "right"}
 						width="auto"
 						zIndex={110 + depth}

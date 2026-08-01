@@ -141,6 +141,7 @@ export function DropdownCollection<T>({
 			renderMenu={({ close }) => (
 				<Listbox
 					activeIndex={activeIndex}
+					ariaLabel={ariaLabel}
 					ariaActivedescendant={
 						activeIndex >= 0 ? `${listId}-option-${activeIndex}` : undefined
 					}

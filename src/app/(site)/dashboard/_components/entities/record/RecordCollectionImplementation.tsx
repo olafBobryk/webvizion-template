@@ -14,12 +14,12 @@ import {
 } from "@/components/ui/overlays/modal/ModalShell";
 import { useModal } from "@/components/ui/overlays/modal/useModal";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
 import {
 	Dropdown,
 	type DropdownMenuOption,
 } from "@/components/ui/primitives/dropdown";
 import { StatusMessage } from "@/components/ui/primitives/StatusMessage";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 import { showToast } from "@/lib/feedback/toast";
 import { surfaceHref } from "@/lib/routes";
@@ -187,23 +187,9 @@ export function RecordCollectionClientRoot({
 				}
 				getRowKey={(record) => record.id}
 				header={
-					<Card.Header
-						className={
-							canWrite
-								? "min-w-0 border-b !grid-cols-1 sm:!grid-cols-[1fr_auto]"
-								: "min-w-0 border-b"
-						}
-					>
-						<Card.Title className="inline-flex min-w-0 flex-wrap items-center gap-2">
-							<Icon name={recordPresentationDefinition.icon} size="sm" />
-							{recordPresentationDefinition.nouns.plural}
-						</Card.Title>
-						<Card.Description className="min-w-0 break-words">
-							Organization-scoped fixtures for {organizationName}. Sort any
-							presentation-owned column.
-						</Card.Description>
-						{canWrite ? (
-							<Card.Action className="!col-start-1 !row-span-1 !row-start-auto mt-2 justify-self-start sm:!col-start-2 sm:!row-span-2 sm:!row-start-1 sm:mt-0 sm:justify-self-end">
+					<Card.Heading
+						action={
+							canWrite ? (
 								<RecordCreateButton
 									autoOpen={searchParams.get("action") === "create"}
 									members={members}
@@ -212,9 +198,20 @@ export function RecordCollectionClientRoot({
 									}
 									simulateFailure={simulateFailure}
 								/>
-							</Card.Action>
-						) : null}
-					</Card.Header>
+							) : null
+						}
+						actionLayout="responsive"
+						description={
+							<>
+								Organization-scoped fixtures for {organizationName}. Sort any
+								presentation-owned column.
+							</>
+						}
+						leading={
+							<Icon name={recordPresentationDefinition.icon} size="sm" />
+						}
+						title={recordPresentationDefinition.nouns.plural}
+					/>
 				}
 				id="reference-records"
 				rows={records}

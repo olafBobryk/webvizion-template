@@ -3,7 +3,7 @@
 import { Icon } from "@/components/ui/icons/Icon";
 import { Chip } from "@/components/ui/misc";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 import { hrefFor } from "@/lib/routes";
 import { DashboardDetailField } from "../../_components/detail/DashboardDetailField";
@@ -35,21 +35,19 @@ export function OrganizationSurfaceSkeletonClient() {
 				title="Organization"
 			>
 				<Card>
-					<Card.Header>
-						<Card.Title className="inline-flex items-center gap-2">
+					<Card.Heading
+						description="The active organization for this dashboard session."
+						leading={
 							<Icon
 								className="text-muted-foreground"
 								name="building"
 								size="sm"
 							/>
-							Organization identity
-						</Card.Title>
-						<Card.Description>
-							The active organization for this dashboard session.
-						</Card.Description>
-					</Card.Header>
+						}
+						title="Organization identity"
+					/>
 					<Card.Content className="grid gap-5">
-						<OrganizationIdentity.Skeleton avatarSize="xl" variant="profile" />
+						<OrganizationIdentity.Skeleton avatarSize="xl" />
 						<dl className="grid gap-4 border-t border-border/70 pt-5 sm:grid-cols-2">
 							<DashboardDetailField.Skeleton
 								icon={<Icon name="building" size="sm" />}

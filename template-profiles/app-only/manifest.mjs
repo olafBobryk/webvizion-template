@@ -12,7 +12,6 @@ export const appOnlyProfile = {
 	},
 	assembly: {
 		surfaces: [
-			"dashboardReferenceEntities",
 			"dashboard",
 			"demo",
 			"intelligence",
@@ -34,7 +33,10 @@ export const appOnlyProfile = {
 			"src/app/(site)/(app-home)/page.tsx",
 			"src/app/(site)/(auth)/login/page.tsx",
 			"src/app/(site)/dashboard/page.tsx",
+			"src/app/(site)/(dev)/internal/demo/page.tsx",
 			"src/app/(site)/(dev)/internal/layout.tsx",
+			"src/lib/component-catalog/componentCatalog.generated.ts",
+			"scripts/generate-component-catalog.mjs",
 			"src/proxy.ts",
 		],
 		forbiddenPaths: [

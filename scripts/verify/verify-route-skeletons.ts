@@ -21,7 +21,7 @@ const scopedRoutes = [
 	"src/app/(site)/dashboard/organization/switch",
 	"src/app/(site)/dashboard/records",
 	"src/app/(site)/dashboard/records/[recordId]",
-	"src/app/(site)/dashboard/reference/entities",
+	"src/app/(site)/dashboard/reference",
 	"src/app/(site)/dashboard/reference/skeletons",
 	"src/app/(site)/dashboard/settings",
 ] as const;
@@ -54,14 +54,18 @@ const skeletonOwners = [
 	"src/app/(site)/dashboard/_components/data/DashboardTablePanel.tsx",
 	"src/app/(site)/dashboard/_components/detail/DashboardDetailField.tsx",
 	"src/app/(site)/dashboard/_components/detail/DashboardPropertyList.tsx",
+	"src/app/(site)/dashboard/_components/entities/EntitySelector.tsx",
 	"src/app/(site)/dashboard/_components/entities/member/MemberAvatarList.tsx",
 	"src/app/(site)/dashboard/_components/entities/account/AccountIdentity.tsx",
 	"src/app/(site)/dashboard/_components/entities/member/MemberIdentity.tsx",
 	"src/app/(site)/dashboard/_components/entities/member/MemberMention.tsx",
 	"src/app/(site)/dashboard/_components/entities/member/MemberRoleChip.tsx",
 	"src/app/(site)/dashboard/_components/entities/member/MemberSelector.tsx",
-	"src/app/(site)/dashboard/_components/entities/member/MemberSelectorDemo.tsx",
 	"src/app/(site)/dashboard/_components/entities/organization/OrganizationIdentity.tsx",
+	"src/app/(site)/dashboard/_components/entities/organization/OrganizationSelector.tsx",
+	"src/app/(site)/dashboard/_components/entities/record/RecordAvatar.tsx",
+	"src/app/(site)/dashboard/_components/entities/record/RecordIdentity.tsx",
+	"src/app/(site)/dashboard/_components/entities/record/RecordSelector.tsx",
 	"src/app/(site)/dashboard/_components/entities/record/RecordCollectionClient.tsx",
 	"src/app/(site)/dashboard/_components/entities/record/RecordDetailActions.tsx",
 	"src/app/(site)/dashboard/_components/entities/record/RecordDetailContent.tsx",
@@ -99,27 +103,27 @@ const forcedLoading = readFileSync(
 	),
 	"utf8",
 );
-for (const route of [
-	"/dashboard/profile",
-	"/dashboard/administration",
-	"/dashboard/settings",
-	"/dashboard/organization/settings",
-	"/dashboard/organization/switch",
-	"/dashboard/organization/members",
-	"/dashboard/organization",
-	"/dashboard/records",
-	"/dashboard/reference/entities",
-	"/dashboard/reference/skeletons",
+for (const surfaceId of [
+	"dashboard.profile",
+	"dashboard.administration",
+	"dashboard.platform",
+	"dashboard.platform.inbox.request",
+	"dashboard.platform.inbox",
+	"dashboard.platform.report",
+	"dashboard.platform.reports",
+	"dashboard.settings",
+	"dashboard.organization.settings",
+	"dashboard.organization.switch",
+	"dashboard.organization.member",
+	"dashboard.organization",
+	"dashboard.record",
+	"dashboard.records",
+	"dashboard.reference",
+	"dashboard.reference.skeletons",
 ]) {
 	assert.ok(
-		forcedLoading.includes(route),
-		`Forced loading registry must cover ${route}.`,
+		forcedLoading.includes(`case "${surfaceId}"`),
+		`Forced loading registry must cover ${surfaceId}.`,
 	);
 }
-assert.ok(
-	forcedLoading.includes("organization\\/members\\/[^/]+") &&
-		forcedLoading.includes("records\\/[^/]+"),
-	"Forced loading registry must cover member and record detail routes.",
-);
-
 console.log("Route skeleton coverage and ownership verification passed.");

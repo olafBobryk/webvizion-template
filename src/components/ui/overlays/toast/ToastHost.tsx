@@ -3,22 +3,28 @@
 import clsx from "clsx";
 import { Toaster, type ToasterProps } from "sonner";
 import { focusRing } from "@/components/ui/foundations/focus";
+import { surfaceChromeStyles } from "@/components/ui/primitives/surfaces/surfaceStyles";
 
 type ToastHostProps = {
 	position?: ToasterProps["position"];
 };
 
 const toastBaseClassName = clsx(
-	"group/card flex w-[var(--width)] items-center gap-2 rounded-md border p-4 text-sm shadow-lg",
-	"border-border bg-card text-card-foreground",
+	surfaceChromeStyles({
+		background: "float",
+		border: "subtle",
+		elevation: "float",
+		radius: "float",
+	}),
+	"group/card flex w-[var(--width)] items-center gap-2 p-4 text-sm",
 	focusRing.visibleDefault,
 );
 
 const toastIconClassName = clsx(
 	"relative flex size-4 shrink-0 items-center justify-start text-muted-foreground",
-	"group-data-[type=error]/card:text-danger",
-	"group-data-[type=info]/card:text-primary",
-	"group-data-[type=success]/card:text-success",
+	"group-data-[type=error]/card:text-danger-text",
+	"group-data-[type=info]/card:text-primary-text",
+	"group-data-[type=success]/card:text-success-text",
 	"group-data-[type=warning]/card:text-warning",
 );
 

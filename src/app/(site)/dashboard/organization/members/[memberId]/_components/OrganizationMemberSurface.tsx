@@ -1,7 +1,7 @@
 import { Icon } from "@/components/ui/icons/Icon";
 import { Chip } from "@/components/ui/misc";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 import type { MembershipRole } from "@/lib/auth/contracts";
 import { hrefFor } from "@/lib/routes";
@@ -79,17 +79,15 @@ export function OrganizationMemberSurface({
 				ownerId={`dashboard.member.${member.id}`}
 			/>
 			<Card>
-				<Card.Header>
-					<Card.Title className="flex items-center gap-2">
+				<Card.Heading
+					description="Access information visible to organization members."
+					leading={
 						<Icon className="text-muted-foreground" name="user" size="sm" />
-						Member details
-					</Card.Title>
-					<Card.Description>
-						Access information visible to organization members.
-					</Card.Description>
-				</Card.Header>
+					}
+					title="Member details"
+				/>
 				<Card.Content className="grid gap-5">
-					<MemberIdentity presentation={presentation} variant="profile" />
+					<MemberIdentity avatarSize="xl" presentation={presentation} />
 					<dl className="grid gap-4 border-t border-border/70 pt-5 sm:grid-cols-2">
 						<DashboardDetailField
 							copyValue={presentation.emailLabel}
@@ -117,15 +115,13 @@ export function OrganizationMemberSurface({
 			</Card>
 
 			<Card>
-				<Card.Header>
-					<Card.Title className="flex items-center gap-2">
+				<Card.Heading
+					description="Organization access assigned to this member."
+					leading={
 						<Icon className="text-muted-foreground" name="shield" size="sm" />
-						Role and permissions
-					</Card.Title>
-					<Card.Description>
-						Organization access assigned to this member.
-					</Card.Description>
-				</Card.Header>
+					}
+					title="Role and permissions"
+				/>
 				<Card.Content className="grid gap-5">
 					<dl className="grid gap-4 sm:grid-cols-2">
 						<DashboardDetailField
@@ -201,17 +197,15 @@ export function OrganizationMemberSurfaceSkeleton() {
 				}
 			>
 				<Card>
-					<Card.Header>
-						<Card.Title className="flex items-center gap-2">
+					<Card.Heading
+						description="Access information visible to organization members."
+						leading={
 							<Icon className="text-muted-foreground" name="user" size="sm" />
-							Member details
-						</Card.Title>
-						<Card.Description>
-							Access information visible to organization members.
-						</Card.Description>
-					</Card.Header>
+						}
+						title="Member details"
+					/>
 					<Card.Content className="grid gap-5">
-						<MemberIdentitySkeleton variant="profile" />
+						<MemberIdentitySkeleton avatarSize="xl" />
 						<dl className="grid gap-4 border-t border-border/70 pt-5 sm:grid-cols-2">
 							<DashboardDetailFieldSkeleton
 								copyable
@@ -238,15 +232,13 @@ export function OrganizationMemberSurfaceSkeleton() {
 					</Card.Content>
 				</Card>
 				<Card>
-					<Card.Header>
-						<Card.Title className="flex items-center gap-2">
+					<Card.Heading
+						description="Organization access assigned to this member."
+						leading={
 							<Icon className="text-muted-foreground" name="shield" size="sm" />
-							Role and permissions
-						</Card.Title>
-						<Card.Description>
-							Organization access assigned to this member.
-						</Card.Description>
-					</Card.Header>
+						}
+						title="Role and permissions"
+					/>
 					<Card.Content className="grid gap-5">
 						<dl className="grid gap-4 sm:grid-cols-2">
 							<DashboardDetailFieldSkeleton

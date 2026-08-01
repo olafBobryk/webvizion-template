@@ -35,6 +35,7 @@ const EXCLUDED_FILE_PATTERNS = [
 ];
 
 const INCLUDED_ROOTS = [
+	".storybook",
 	"AGENTS.md",
 	"README.md",
 	"docs",
@@ -72,6 +73,8 @@ const CONCEPTS = [
 		summary:
 			"Shared primitives, composites, domain components, demos, and dictionary entries that should be reused before local UI is invented.",
 		matches: [
+			".storybook/CatalogRules.mdx",
+			".storybook/catalog/ownerContract.ts",
 			"src/components",
 			"src/app/(site)/(dev)/internal/demo",
 			"src/app/(site)/(dev)/internal/dictionary",
@@ -136,15 +139,14 @@ const CONCEPTS = [
 		keywords: ["assemble", "profile", "content", "surface", "template"],
 	},
 	{
-		id: "dashboard-reference-entities",
-		title: "Dashboard Reference Entities",
+		id: "dashboard-entities",
+		title: "Dashboard Entities",
 		summary:
-			"Dashboard-owned member and record presentation examples with fetch-free factories, live/skeleton parity, fixture CRUD, and explicit assembly ownership.",
+			"Dashboard-owned entity facts, fetch-free presentation factories, live/skeleton renderers, fixture CRUD, and explicit assembly ownership.",
 		matches: [
 			"src/app/(site)/dashboard/_lib/entities/AGENTS.md",
 			"src/app/(site)/dashboard/_lib/entities",
 			"src/app/(site)/dashboard/_components/entities",
-			"src/app/(site)/dashboard/reference/entities",
 			"scripts/verify/verify-reference-entities.ts",
 		],
 		keywords: [
@@ -153,7 +155,7 @@ const CONCEPTS = [
 			"member",
 			"record",
 			"skeleton",
-			"dashboard.reference-entities",
+			"dashboard.entities",
 		],
 	},
 	{
@@ -198,10 +200,11 @@ const AGENT_MAP = {
 				"Installed route surfaces compose separate marketing, auth, and dashboard registries through a shared base contract. hrefFor resolves static surface IDs, surfaceHref builds parameterized destinations, and internal developer routes remain outside the product surface model.",
 		},
 		{
-			id: "ui-primitives",
-			title: "Shared UI component conventions and primitives",
+			id: "ui-system",
+			title: "Shared UI component catalogue and conventions",
 			aliases: [
 				"design-system",
+				"ui-primitives",
 				"component-conventions",
 				"forms",
 				"feedback",
@@ -212,6 +215,10 @@ const AGENT_MAP = {
 				"modal",
 			],
 			paths: [
+				".storybook/main.ts",
+				".storybook/preview.tsx",
+				".storybook/CatalogRules.mdx",
+				".storybook/catalog/ownerContract.ts",
 				"docs/guides/components/README.md",
 				"docs/guides/components/composition-and-public-apis.md",
 				"docs/guides/components/forms-and-submission.md",
@@ -231,7 +238,7 @@ const AGENT_MAP = {
 				"src/components/ui/overlays/modal/ConfirmationModal.tsx",
 			],
 			notes:
-				"Start with the component convention index and the guide matching the UX decision. Then read the nearest AGENTS file and inspect concrete owners only when implementation details are needed.",
+				"For UI catalogue authoring or migration, begin at Storybook UI/Guides/Catalog Rules, then edit the typed contract in the affected lowest owner's colocated story. Do not create a central owner registry or index: Storybook discovery is the catalogue. For ordinary UI selection, begin at the relevant Storybook owner. When callable Storybook tools are unavailable, read the nearest AGENTS files for structural governance, then inspect the colocated owner story before focused guides, facades, and source; raw exports are not automatically public. Template Intelligence routes to evidence but is not itself component API evidence. The internal demo no longer documents src/components/ui.",
 		},
 		{
 			id: "frontend-imports",
@@ -289,11 +296,7 @@ const AGENT_MAP = {
 		{
 			id: "frontend-entity-system",
 			title: "Dashboard-owned frontend entity system",
-			aliases: [
-				"entity-presentation",
-				"reference-entities",
-				"frontend-entity-policy",
-			],
+			aliases: ["entity-presentation", "frontend-entity-policy"],
 			paths: [
 				"src/app/(site)/dashboard/_lib/entities/AGENTS.md",
 				"src/app/(site)/dashboard/_lib/AGENTS.md",
@@ -301,10 +304,9 @@ const AGENT_MAP = {
 				"src/app/(site)/dashboard/_lib/presentation/contracts.ts",
 				"src/app/(site)/dashboard/_lib/entities/member/presentation.ts",
 				"src/app/(site)/dashboard/_lib/entities/record/presentation.ts",
-				"src/app/(site)/dashboard/reference/entities/page.tsx",
 			],
 			notes:
-				"Routes and adapters own data, authorization, persistence, and mutation. Presentation factories stay React-free and fetch-free; renderers import their owning factory directly and keep live/skeleton parity. Repository policy supersedes user-level skills.",
+				"Routes and adapters own data, authorization, persistence, and mutation. Presentation factories stay React-free and fetch-free; renderers import their owning factory directly and keep live/skeleton parity. Use task-local review surfaces for bounded design decisions instead of adding a permanent renderer registry. Repository policy supersedes user-level skills.",
 		},
 		{
 			id: "content-modes",

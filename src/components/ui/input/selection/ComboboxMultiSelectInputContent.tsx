@@ -75,6 +75,7 @@ export function ComboboxMultiSelectInputContent<T>({
 				{option.label}
 			</Text>
 			<Button
+				aria-label={`Remove ${option.label}`}
 				variant="ghost"
 				size="none"
 				className={clsx(

@@ -64,18 +64,21 @@ export function RevealText({
 			intensity={intensity}
 			expressive={expressive}
 		>
-			{chars.map((char, index) => (
-				<span
-					// biome-ignore lint/suspicious/noArrayIndexKey: stable positional index
-					key={index}
-					className="inline-block overflow-hidden"
-					style={{ verticalAlign: "bottom", lineHeight: "1.05em" }}
-				>
-					<motion.span className="inline-block" variants={charVariants}>
-						{char === " " ? "\u00A0" : char}
-					</motion.span>
-				</span>
-			))}
+			<span className="sr-only">{children}</span>
+			<span aria-hidden="true">
+				{chars.map((char, index) => (
+					<span
+						// biome-ignore lint/suspicious/noArrayIndexKey: stable positional index
+						key={index}
+						className="inline-block overflow-hidden"
+						style={{ verticalAlign: "bottom", lineHeight: "1.05em" }}
+					>
+						<motion.span className="inline-block" variants={charVariants}>
+							{char === " " ? "\u00A0" : char}
+						</motion.span>
+					</span>
+				))}
+			</span>
 		</RevealItem>
 	);
 }

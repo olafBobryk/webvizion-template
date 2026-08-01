@@ -31,7 +31,10 @@ export const marketingOnlyProfile = {
 	verification: {
 		requiredFiles: [
 			"src/app/(site)/(marketing)/(home)/page.tsx",
+			"src/app/(site)/(marketing)/internal/demo/page.tsx",
 			"src/app/(site)/(marketing)/internal/layout.tsx",
+			"src/lib/component-catalog/componentCatalog.generated.ts",
+			"scripts/generate-component-catalog.mjs",
 			"src/lib/marketing-content/fallback.ts",
 			"src/proxy.ts",
 			"payload.config.ts",
@@ -45,6 +48,7 @@ export const marketingOnlyProfile = {
 		forbiddenPackages: [],
 		commands: [
 			"npm run verify:static",
+			"npm run verify:site-layout",
 			"npm run build",
 			"npm run verify:smoke",
 		],

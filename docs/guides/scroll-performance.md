@@ -15,7 +15,7 @@ Run a fast single measurement against a page:
 
 ```bash
 npm run build
-npm run measure:scroll-performance -- --path /internal/demo/ui/primitives --output tmp/scroll-performance.json
+npm run measure:scroll-performance -- --path / --output tmp/scroll-performance.json
 ```
 
 For pages that need a specific element before measurement starts, add:
@@ -39,7 +39,7 @@ npm run setup:scroll-performance-autoresearch -- --tag home-hero --path / --muta
 Preview the setup without creating a worktree:
 
 ```bash
-npm run setup:scroll-performance-autoresearch -- --tag page-smoke --path /internal/demo/ui/primitives --mutable src/components/ui/primitives --dry-run
+npm run setup:scroll-performance-autoresearch -- --tag page-smoke --path / --mutable src/lib/marketing-content/sections --dry-run
 ```
 
 Score the accepted baseline or one committed candidate inside the worktree:

@@ -9,7 +9,7 @@ Reusable markdown rendering surfaces that compose design-system primitives into 
 - A small custom directive is needed without introducing route-specific registries.
 
 ## Current Contract
-- `Markdown.Render` accepts markdown, `default` or `compact` density, optional class styling, an optional generic mention resolver, and a semantic `contained` or `result` variant. `contained` is the default shared rounded editor-matching surface; `result` is shell-free and must sit beneath a clear caller-owned label. Default density belongs to site/document content; dashboard cards and modals opt into compact density.
+- `Markdown.Render` accepts markdown, `default` or `compact` density, optional class styling, an optional generic mention resolver, optional `streaming` incomplete-Markdown handling, and a semantic `contained` or `result` variant. `contained` is the default shared rounded editor-matching surface; `result` is shell-free and must sit beneath a clear caller-owned label. Default density belongs to site/document content; dashboard cards and modals opt into compact density.
 - `Markdown.Editor` is the controlled full-start authoring surface. It uses MDXEditor only as the document engine while application `Button`, `Icon`, `Dropdown`, `Listbox`, input, Panel, and modal primitives own the visible UI. It includes a width-aware toolbar, rich/source modes with in-place syntax repair, links, lists, tables, images, code, dividers, the generic button directive, optional mention insertion, and a field-owned `error` contract.
 - `Markdown.EditorModalForm` is the dashboard-ready modal composition. Keep editor-specific dialogs on the shared Card-owned modal host rather than introducing package or feature-local overlays.
 - Metadata, route titles, and page chrome do not belong in this renderer.
@@ -23,6 +23,8 @@ Reusable markdown rendering surfaces that compose design-system primitives into 
 
 ## Invariants
 - Keep markdown output grounded in design-system primitives.
+- ReactMarkdown owns completed rendering. Streamdown is a private parser used only when `Markdown.Render streaming` needs incomplete-Markdown recovery. Both engines must consume the same component map, remark transforms, density, wrapper, and semantic variant.
+- Keep Streamdown controls, icons, caret, animations, optional plugins, component types, and package classes out of the public API and visible output. Do not import its animation stylesheet. `Markdown.Render` remains presentation-authoritative and thin-profile compatible.
 - Route value-specific save failures through `Markdown.Editor error`. The editor
   owns the `Field` message plus `aria-invalid` and `aria-describedby`; callers
   must not add a sibling status banner for the same error.

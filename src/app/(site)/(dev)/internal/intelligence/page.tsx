@@ -1,6 +1,6 @@
 // biome-ignore-all assist/source/organizeImports: The dashboard import order is part of the surface-owned source contract.
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { StatusMessage } from "@/components/ui/primitives/StatusMessage";
 import { Text } from "@/components/ui/primitives/Text";
 import {
@@ -223,13 +223,10 @@ function ReadyState({
 			</div>
 
 			<Card className="mx-auto max-w-3xl text-center">
-				<Card.Header>
-					<Card.Title>Codex turn recording</Card.Title>
-					<Card.Description>
-						Inspect automatically observed local sessions and turns without
-						manual worker recording.
-					</Card.Description>
-				</Card.Header>
+				<Card.Heading
+					description="Inspect automatically observed local sessions and turns without\n\t\t\t\t\t\tmanual worker recording."
+					title="Codex turn recording"
+				/>
 				<Card.Content className="flex justify-center">
 					<Button
 						href="/internal/intelligence?view=benchmarks"
@@ -301,10 +298,7 @@ function BenchmarkState({
 					<div className="grid gap-4 lg:grid-cols-2">
 						{exampleRuns.map((run) => (
 							<Card key={`${run.taskId}:${run.strategy}`} size="sm">
-								<Card.Header>
-									<Card.Title>{run.strategy}</Card.Title>
-									<Card.Description>{run.taskName}</Card.Description>
-								</Card.Header>
+								<Card.Heading description={run.taskName} title={run.strategy} />
 								<Card.Content>
 									<Text variant="caption" tone="muted">
 										{run.shellCommands} shell · {run.semanticCalls} semantic ·{" "}
@@ -389,13 +383,10 @@ function BenchmarkState({
 					)}
 
 					<Card>
-						<Card.Header>
-							<Card.Title>Curated legacy observations</Card.Title>
-							<Card.Description>
-								Historical self-reported rows are preserved for review and never
-								mixed with automatic turn telemetry or strategy rankings.
-							</Card.Description>
-						</Card.Header>
+						<Card.Heading
+							description="Historical self-reported rows are preserved for review and never\n\t\t\t\t\t\t\t\tmixed with automatic turn telemetry or strategy rankings."
+							title="Curated legacy observations"
+						/>
 						<Card.Content className="grid gap-1">
 							<Text variant="headingMd">{legacyRuns.length}</Text>
 							<Text variant="caption" tone="muted">

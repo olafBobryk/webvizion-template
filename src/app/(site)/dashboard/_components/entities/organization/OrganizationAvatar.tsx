@@ -1,21 +1,10 @@
 "use client";
 
-import clsx from "clsx";
 import { Icon } from "@/components/ui/icons/Icon";
 import { ProfilePicture, type ProfilePictureSize } from "@/components/ui/misc";
-import {
-	type OrganizationIdentityVisual,
-	organizationPresentationConfig,
-} from "@/config/organization";
 
 export type OrganizationAvatarSize = Exclude<ProfilePictureSize, "2xl">;
-
-const iconFrameClassName = {
-	lg: "size-14",
-	md: "size-10",
-	sm: "size-8",
-	xl: "size-20",
-} satisfies Record<OrganizationAvatarSize, string>;
+export type OrganizationIdentityVisual = "icon" | "profile-picture";
 
 const iconSize = {
 	lg: "lg",
@@ -31,7 +20,7 @@ function OrganizationAvatarRoot({
 	imageUrl,
 	initials,
 	size = "md",
-	visual = organizationPresentationConfig.identityVisual,
+	visual = "profile-picture",
 }: {
 	alt: string;
 	className?: string;
@@ -43,17 +32,14 @@ function OrganizationAvatarRoot({
 }) {
 	if (visual === "icon") {
 		return (
-			<span
-				aria-label={alt}
-				className={clsx(
-					"inline-flex shrink-0 items-center justify-center text-muted-foreground",
-					iconFrameClassName[size],
-					className,
-				)}
-				role="img"
-			>
-				<Icon name="building" size={iconSize[size]} />
-			</span>
+			<ProfilePicture
+				alt={alt}
+				className={className}
+				fallback={<Icon name="building" size={iconSize[size]} />}
+				helperIndex={colorIndex}
+				name={alt}
+				size={size}
+			/>
 		);
 	}
 
@@ -73,26 +59,11 @@ function OrganizationAvatarRoot({
 export function OrganizationAvatarSkeleton({
 	className,
 	size = "md",
-	visual = organizationPresentationConfig.identityVisual,
 }: {
 	className?: string;
 	size?: OrganizationAvatarSize;
 	visual?: OrganizationIdentityVisual;
 }) {
-	if (visual === "icon") {
-		return (
-			<span
-				aria-hidden
-				className={clsx(
-					"inline-flex shrink-0 items-center justify-center text-muted-foreground",
-					iconFrameClassName[size],
-					className,
-				)}
-			>
-				<Icon.Skeleton size={iconSize[size]} />
-			</span>
-		);
-	}
 	return <ProfilePicture className={className} loading size={size} />;
 }
 

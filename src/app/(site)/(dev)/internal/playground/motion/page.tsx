@@ -5,8 +5,7 @@ import { MotionScope } from "@/components/ui/foundations/MotionProvider";
 import type { MotionMoment } from "@/components/ui/foundations/motionTiming";
 import * as Reveal from "@/components/ui/motion/reveal";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
-import { Panel } from "@/components/ui/primitives/Panel";
+import { Card, Panel } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 import {
 	InternalPage,
@@ -122,12 +121,12 @@ function PreviewPanel({
 }) {
 	return (
 		<Panel
-			background="surface"
+			background="panel"
 			border="subtle"
 			gap="sm"
 			padding="sm"
-			radius="sm"
-			shadow="none"
+			radius="float"
+			elevation="panel"
 			className={className}
 		>
 			{children}
@@ -147,8 +146,8 @@ function ColorBlock({
 			background="transparent"
 			border="subtle"
 			padding="sm"
-			radius="sm"
-			shadow="sm"
+			radius="float"
+			elevation="card"
 			className={`flex min-h-28 items-end ${className}`}
 		>
 			<span className="rounded bg-background/85 px-2 py-1 text-xs font-medium text-foreground">
@@ -292,15 +291,15 @@ function RevealApiQa() {
 					</Text>
 				</PreviewPanel>
 				<Panel
-					background="surface"
+					background="panel"
 					border="subtle"
 					overflow="hidden"
 					padding="none"
-					radius="sm"
-					shadow="none"
+					radius="float"
+					elevation="panel"
 				>
 					<Reveal.Image
-						src="/test/blob.png"
+						src="/test/placeholder-portrait.jpg"
 						alt="Reveal image demo"
 						fill
 						sizes="(min-width: 1280px) 50vw, 100vw"
@@ -458,15 +457,15 @@ function StructuralSequenceQa() {
 			<Reveal.Sequence key={runId} stagger={0.18}>
 				<div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
 					<Panel
-						background="surface"
+						background="panel"
 						border="subtle"
 						overflow="hidden"
 						padding="none"
-						radius="sm"
-						shadow="none"
+						radius="float"
+						elevation="panel"
 					>
 						<Reveal.Image
-							src="/test/mercury.png"
+							src="/test/placeholder-square.jpg"
 							alt="Structural sequence media"
 							fill
 							sizes="(min-width: 1024px) 50vw, 100vw"

@@ -1,11 +1,14 @@
 import { Icon } from "@/components/ui/icons/Icon";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { hrefFor } from "@/lib/routes";
+import { getDashboardSurfaceById } from "../_registry/surfaceRegistry";
 import { DashboardSection } from "./layout/DashboardSection";
 import { DashboardLoadingStatus } from "./loading/DashboardLoadingStatus";
 
-function OverviewContent() {
+const referenceSurface = getDashboardSurfaceById("dashboard.reference");
+
+function OverviewContent({ showReference }: { showReference: boolean }) {
 	return (
 		<DashboardSection
 			contentClassName="grid gap-4"
@@ -33,6 +36,15 @@ function OverviewContent() {
 				label="Open account settings"
 				title="Account"
 			/>
+			{showReference && referenceSurface ? (
+				<OverviewCard
+					description={referenceSurface.description}
+					href={referenceSurface.href}
+					icon={referenceSurface.icon}
+					label="Open reference"
+					title={referenceSurface.label}
+				/>
+			) : null}
 		</DashboardSection>
 	);
 }
@@ -52,13 +64,11 @@ function OverviewCard({
 }) {
 	return (
 		<Card>
-			<Card.Header>
-				<Card.Title className="inline-flex items-center gap-2">
-					<Icon name={icon} size="sm" />
-					{title}
-				</Card.Title>
-				<Card.Description>{description}</Card.Description>
-			</Card.Header>
+			<Card.Heading
+				description={description}
+				leading={<Icon name={icon} size="sm" />}
+				title={title}
+			/>
 			<Card.Content>
 				<Button href={href} size="sm" variant="secondary">
 					{label}
@@ -68,14 +78,22 @@ function OverviewCard({
 	);
 }
 
-export function OverviewSurface() {
-	return <OverviewContent />;
+export function OverviewSurface({
+	showReference = false,
+}: {
+	showReference?: boolean;
+}) {
+	return <OverviewContent showReference={showReference} />;
 }
 
-export function OverviewSurfaceSkeleton() {
+export function OverviewSurfaceSkeleton({
+	showReference = process.env.NODE_ENV !== "production",
+}: {
+	showReference?: boolean;
+}) {
 	return (
 		<DashboardLoadingStatus label="Loading dashboard overview">
-			<OverviewContent />
+			<OverviewContent showReference={showReference} />
 		</DashboardLoadingStatus>
 	);
 }

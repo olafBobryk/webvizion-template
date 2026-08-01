@@ -1,4 +1,5 @@
 import Logo from "@/components/branding/Logo";
+import { SocialLinks } from "@/components/ui/misc";
 import { Button } from "@/components/ui/primitives/Button";
 import type { SiteLayoutDocument } from "./siteLayout";
 import { getSiteLinkHref } from "./siteLayout";
@@ -35,18 +36,14 @@ export default function Footer({
 					))}
 				</div>
 				{socialLinks.length > 0 ? (
-					<div className="flex flex-wrap justify-center items-center flex-grow-0 flex-shrink-0 gap-2.5">
-						{socialLinks.map((item) => (
-							<Button
-								key={item.label}
-								variant="secondary"
-								className="w-[50px] h-[50px] !p-0 rounded-full"
-								iconSize={15}
-								leadingIcon={item.icon}
-								href={item.href}
-							/>
-						))}
-					</div>
+					<SocialLinks
+						className="flex-grow-0 flex-shrink-0 justify-center gap-2.5"
+						iconSize={15}
+						links={socialLinks}
+						presentation="footer"
+						size="icon"
+						variant="secondary"
+					/>
 				) : null}
 			</div>
 		</footer>

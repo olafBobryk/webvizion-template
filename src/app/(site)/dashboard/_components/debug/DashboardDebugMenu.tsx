@@ -5,10 +5,7 @@ import { Icon } from "@/components/ui/icons/Icon";
 import { Dropdown } from "@/components/ui/primitives/dropdown";
 import { showToast } from "@/lib/feedback";
 import { hrefFor, surfaceHref } from "@/lib/routes";
-import {
-	type DashboardDebugState,
-	dashboardDebugEnabled,
-} from "../../_registry/debug";
+import type { DashboardDebugState } from "../../_registry/debug";
 import type { DashboardCapability } from "../../_registry/surfaceRegistry";
 import { useDashboardAuth } from "../providers/DashboardAuthProvider";
 
@@ -35,7 +32,7 @@ export function DashboardDebugMenu({
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const { memberships, organization } = useDashboardAuth();
-	if (!dashboardDebugEnabled || !capabilities.has("debug.use")) return null;
+	if (!capabilities.has("debug.use")) return null;
 
 	function setDebugState(state: DashboardDebugState | null) {
 		const params = new URLSearchParams(searchParams.toString());
@@ -98,18 +95,6 @@ export function DashboardDebugMenu({
 				positionStrategy="fixed"
 				side="top"
 				options={[
-					{
-						href: surfaceHref(
-							"dashboard.reference.entities",
-							{},
-							{
-								search: { motion: "off", reveal: "off" },
-							},
-						),
-						id: "entity-reference",
-						label: "Open entity reference",
-						leadingIcon: <Icon name="cards" size="sm" />,
-					},
 					{
 						href: surfaceHref(
 							"dashboard.reference.skeletons",

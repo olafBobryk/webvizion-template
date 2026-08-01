@@ -3,7 +3,6 @@ import { getSafeContinuationPath } from "@/lib/auth/continuation";
 import { applicationAdapters } from "@/lib/auth/server";
 import { hrefFor } from "@/lib/routes";
 import { requireDashboardCapability } from "../../_registry/access.server";
-import { dashboardFeatureConfig } from "../../_registry/surfaceRegistry";
 import { OrganizationSwitchSurface } from "./_components/OrganizationSwitchSurface";
 
 export default async function DashboardOrganizationSwitchPage({
@@ -17,12 +16,6 @@ export default async function DashboardOrganizationSwitchPage({
 		hrefFor("dashboard.overview"),
 	);
 	const { context } = await requireDashboardCapability("organization.read");
-	if (
-		!dashboardFeatureConfig.organizationSwitcher ||
-		context.memberships.length <= 1
-	) {
-		redirect(hrefFor("dashboard.organization"));
-	}
 	const choices = (
 		await Promise.all(
 			context.memberships.map(async (membership) => ({
@@ -35,6 +28,7 @@ export default async function DashboardOrganizationSwitchPage({
 	).flatMap(({ membership, organization }) =>
 		organization ? [{ membership, organization }] : [],
 	);
+	if (choices.length <= 1) redirect(hrefFor("dashboard.organization"));
 
 	return (
 		<OrganizationSwitchSurface

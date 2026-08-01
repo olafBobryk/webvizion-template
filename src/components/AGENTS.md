@@ -31,7 +31,9 @@ its guide:
 1. Identify the UX pattern before page-specific styling.
 2. Search `primitives/`, `input/`, `misc/`, `overlays/`, and `composites/` for
    the highest-level existing owner.
-3. Read the relevant pattern guide and nearest folder `AGENTS.md`.
+3. For UI work, inspect the relevant Storybook owner documentation and examples,
+	then read the relevant pattern guide and nearest folder `AGENTS.md` for
+	structural invariants.
 4. Compose upward from library pieces rather than creating a page-local clone.
 5. Add a new reusable component only when extending an existing owner would
    harm reuse or coherence.
@@ -42,7 +44,8 @@ For a new reusable library feature:
 
 1. Implement it in its canonical owner folder.
 2. Update explicit exports and public types only where needed.
-3. Add a focused live example and copyable snippet to the internal demo.
+3. Add focused Storybook owner documentation, examples, and behavior tests for
+	public UI. Other component families follow their nearest catalogue policy.
 4. Record implementation constraints in the nearest `AGENTS.md`.
 5. Update a pattern guide only when a cross-cutting decision changes.
 6. Run focused checks, public-contract verification, profile verification, and
@@ -84,8 +87,10 @@ For a new reusable library feature:
 ## Documentation Ownership
 
 - Pattern guides own cross-cutting component-selection and UX decisions.
-- The nearest folder `AGENTS.md` owns local APIs, implementation constraints,
-  internal dependency direction, and profile differences.
-- Source code owns the executable contract; documentation must name real
-  components and paths.
+- Storybook owns availability, supported APIs, examples, and executable behavior
+	for public UI component families.
+- The nearest folder `AGENTS.md` owns implementation constraints, internal
+	dependency direction, server/client boundaries, and profile differences.
+- Public facades and source remain the final implementation contract;
+  documentation must name real components and paths.
 </INSTRUCTIONS>

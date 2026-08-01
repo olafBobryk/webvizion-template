@@ -1,37 +1,23 @@
 # Component Conventions
 
-This directory is the canonical review surface for cross-cutting component and
-UX conventions. Read the guide that matches the interaction being built before
-choosing a component. The nearest `AGENTS.md` remains canonical for a
-component's implementation details, public exports, and profile availability.
+These guides own decisions that cross multiple UI families. Storybook owns each
+public UI owner's availability, supported import, API, examples, exclusions,
+and executable behavior. The nearest `AGENTS.md` owns structural implementation
+invariants.
 
-## Start Here
+For catalogue work, begin at Storybook `UI/Guides/Catalog Rules`; for ordinary
+selection, begin at the relevant owner Docs page. Use these guides only when a
+decision spans owners.
 
-| If the work involves | Read |
+| Decision | Guide |
 | --- | --- |
-| Choosing a component, composing a family, or naming an API | [Composition and public APIs](./composition-and-public-apis.md) |
-| Inputs, validation, form submission, or mutation results | [Forms and submission](./forms-and-submission.md) |
-| Toasts, field errors, persistent notices, or action outcomes | [Feedback and status](./feedback-and-status.md) |
-| Loading, empty, error, retry, or skeleton states | [Loading and async states](./loading-and-async-states.md) |
-| Modals, confirmations, image inspection, or dismissal | [Overlays and confirmation](./overlays-and-confirmation.md) |
-| Focus, breakpoints, motion, keyboard shortcuts, or SVG rendering | [Interaction and responsive rendering](./interaction-and-responsive-rendering.md) |
-| Typography, panels, cards, sections, accents, or transparent surfaces | [Surfaces and presentation](./surfaces-and-presentation.md) |
+| Abstraction level, composition, or public boundary | [Composition and public APIs](./composition-and-public-apis.md) |
+| Form semantics, validation, or submission lifecycle | [Forms and submission](./forms-and-submission.md) |
+| Field, toast, notice, or region feedback | [Feedback and status](./feedback-and-status.md) |
+| Loading, skeleton, empty, error, or retry scope | [Loading and async states](./loading-and-async-states.md) |
+| Modal, confirmation, dropdown, inspection, or toast ownership | [Overlays and confirmation](./overlays-and-confirmation.md) |
+| Focus, responsive rendering, motion, shortcuts, or SVG | [Interaction and responsive rendering](./interaction-and-responsive-rendering.md) |
+| Typography, surfaces, structure, and semantic accents | [Surfaces and presentation](./surfaces-and-presentation.md) |
 
-## How Convention Ownership Works
-
-- These guides own decisions that apply across several component folders or to
-  component consumers elsewhere in the application.
-- `src/components/AGENTS.md` owns the library workflow and routes agents here.
-- A nearer `AGENTS.md` owns local implementation constraints and may narrow a
-  general rule for its component family.
-- Real source code owns the executable API. A guide must use real export names
-  and paths so readers can confirm the contract.
-
-## Review Order
-
-1. Review the decision tables first; they describe which component owns each
-   common situation.
-2. Change one convention family at a time so the resulting implementation audit
-   remains attributable.
-3. After the policy review, verify documentation against actual consumers,
-   demos, profile outputs, static checks, and visual behavior.
+Do not copy an owner's contract into these guides. Link to its Storybook page
+and keep only the cross-family decision.

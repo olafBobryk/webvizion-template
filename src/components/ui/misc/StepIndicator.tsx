@@ -44,7 +44,7 @@ export function StepIndicator<TStep extends string = string>({
 								className={clsx(
 									"h-8 px-2.5",
 									index < currentIndex &&
-										"bg-primary/10 text-primary hover:bg-primary/15",
+										"bg-primary/10 text-primary-text hover:bg-primary/15",
 								)}
 								disabled={step.disabled}
 								onClick={() => onStepChange(step.id)}

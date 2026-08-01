@@ -1,73 +1,62 @@
 # Surfaces and Presentation
 
-Shared primitives own typography, action hierarchy, containers, dividers, and
-semantic accents. Compose these owners instead of reproducing their classes in
-feature code.
+Use the shared **Page → Panel → Card → Float** vocabulary to describe how
+content sits in the interface. Structure and elevation are separate axes: a
+Card can rise to float or overlay elevation without becoming a Float.
 
-## Presentation Decisions
-
-| Need | Use |
+| Responsibility | Owner |
 | --- | --- |
-| Heading, label, supporting, or muted copy | `Text` |
-| Action or button-like link | `Button` |
-| Generic surface or grouped layout | `Panel` |
-| Structured header/content/action/footer surface | `Card` |
-| Page section and optional background media | `Section` |
-| Horizontal or vertical separation | `Divider` |
-| Compact label, source, filter, or status pill | `Chip` |
-| Persistent semantic context independent of the latest action | `StatusMessage` or `StatusMessage.Presence` |
+| Application canvas | Page (`--background`; no surface component) |
+| Broad grouping and layout | Panel |
+| Structured header/content/action/footer unit | Card |
+| Behavior-free temporary chrome | Float |
+| Portal, focus, dismissal, and modal context | Overlay owner composed around Card or Float |
+| Page-section flow and background media | Section |
+| Controls, compact status, and inset content | Their existing component owners |
 
-## Surface Ownership
+Import public surfaces only through the family facade:
 
-- `Panel` owns non-semantic surfaces, generic groups, and overlay roots.
-- `Card` is used only when its structured slots describe the content. Card slots
-  belong under a real Card root; do not imitate its data attributes on Panel.
-- `Card.Header` owns its standard bottom divider and spacing. Do not add a
-  caller-local `border-b` to ordinary card headers.
-- `Section.Background` owns decorative image, gradient, or node media behind
-  normal section flow. Mark it interactive only when it contains real controls.
-- `Divider` replaces ad hoc border elements and owns labeled-rule geometry.
-- Use the closed semantic accent contract instead of product-specific color
-  strings on shared surfaces.
-- Opaque panels publish their resolved surface through `--ui-surface-color`.
-  Descendants that pre-compose opaque fills consume it rather than assuming the
-  page background.
-- `--card` owns structured card fills; `--surface` owns generic surfaces and
-  overlays.
+```tsx
+import {
+  Card,
+  Float,
+  Panel,
+  type CardHeadingProps,
+  type CardProps,
+  type FloatProps,
+  type PanelProps,
+  type SurfaceBackground,
+  type SurfaceElevation,
+  type SurfaceRadius,
+} from "@/components/ui/primitives/surfaces";
+```
 
-## Typography and Actions
+## Cross-Family Rules
 
-- Visible copy uses `Text`, standard scaled text utilities, or a shared scaled
-  size token. Do not hardcode component-level font families or unscaled text
-  sizes.
-- `Button` owns loading geometry, icon layout, and visible focus. Loading keeps
-  content in flow and places the loader over it so dimensions do not change.
-- Use primary, secondary, and ghost for action hierarchy; reserve inverse for
-  controls on contextual high-contrast surfaces.
-- Express destructive meaning with `tone="danger"`, not a separate danger
-  appearance hierarchy.
-- Ghost interaction is opacity-only and does not paint a hover surface.
+- Use semantic backgrounds (`page`, `panel`, `card`, `float`, `muted`, or
+  `transparent`), radii (`none`, `float`, `panel`, or `card`), and elevations
+  (`panel`, `card`, `float`, or `overlay`).
+- Overlay is behavioral context, not a fifth surface primitive. Modal systems
+  own portals, focus trapping, dismissal, and placement; their visual content
+  is normally a Card at overlay elevation.
+- Float owns visual chrome only. Dropdowns, tooltips, and popovers provide the
+  interaction and positioning around it.
+- Persistent shell chrome uses Panel structure without acquiring content-card
+  spacing: headers use the Page background with no radius, while sidebars use
+  the Panel background with no radius. Both remain at Panel elevation.
+- Page headings, breadcrumbs, navigation rows, and footer flow are layout or
+  content, not additional surfaces. Their owning header, sidebar, or Section
+  provides the relevant context.
+- Do not introduce an Inset surface for controls, code, media, file previews,
+  or contained content. Those owners keep their existing presentation.
+- Semantic accents use the closed shared contract rather than product-specific
+  colors.
+- Transparent gradient borders keep border treatment on an outer wrapper and
+  surface fill on the inner owner, with aligned radii.
+- Stable wrappers remain intact when reveal or positioning depends on them.
+- Tinted backgrounds flow through the shared surface-tint helper.
+- Do not imitate another owner's slots, data attributes, typography recipe, or
+  surface-token responsibilities.
 
-## Transparent Surfaces
-
-- Keep gradient-border treatment on a transparent wrapper and interior fill on
-  the inner card or panel.
-- Align wrapper and inner radii.
-- Preserve a stable outer wrapper when reveal or positioning behavior depends
-  on it; do not collapse the structure with `asChild`.
-- Route tinted UI backgrounds through the shared surface-tint helper.
-
-## Avoid
-
-- Raw typography utility recipes repeated across components.
-- Panel elements imitating Card slots.
-- Combining border effect, fill, and transparency on one element when the
-  wrapper-plus-inner-surface pattern applies.
-- Product-specific colors in shared semantic surface APIs.
-- Caller-local backgrounds that bypass inherited surface composition.
-
-## Owner References
-
-- `src/components/ui/primitives/AGENTS.md`
-- `src/components/ui/foundations/AGENTS.md`
-- `src/components/ui/misc/AGENTS.md`
+Exact variants, compounds, examples, light/dark appearance, and observable
+guarantees live in Storybook at `UI/Primitives/Surfaces`.

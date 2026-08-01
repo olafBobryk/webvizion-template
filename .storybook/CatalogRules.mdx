@@ -1,0 +1,136 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="UI/Guides/Catalog Rules" />
+
+# Component catalogue rules
+
+These rules define how Averlo component families enter Storybook and how their
+contracts are divided between executable examples, repository policy, and
+implementation source.
+
+## 1. Stop recursive documentation
+
+The target of a Storybook migration is to remove recursive documentation, not
+to move it into another central inventory. Keep a consumer contract at the
+lowest-level UI owner that can state and execute it: the owner's colocated
+catalogue contract and story. The app-safe `*.catalog.tsx` contract exists
+beside the component, supplies the owner Docs page, and exposes fixed render
+adapters without importing Storybook.
+
+Do not maintain a separate owner index. Storybook navigation and callable
+documentation discovery are the catalogue. Higher-level stories and focused
+guides may link to a lower-level owner, but must not restate its availability,
+API, variants, exclusions, examples, or behavior.
+
+The app-native Component Sweep is the narrow exception for deterministic
+spatial review. A dependency-free generator scans installed `*.catalog.tsx`
+modules and emits static imports for `/internal/demo`. Each owner declares
+finite visual axes and a complete baseline; the route projects one axis at a
+time and never computes a Cartesian product. It must not contain a handwritten
+owner list or repeat imports, selection guidance, variants, exclusions, or
+guarantees. Removing an owner contract must remove its sweep entry after
+regeneration without another registry edit.
+
+The shared application catalogue module may define contract types and
+projection helpers; it must not contain owner content or a manual owner list.
+Storybook imports these contracts for Docs and tests, but application code must
+never import Storybook or story modules.
+
+## 2. One public owner
+
+Name the behavior a consumer searches for, then expose one owner documentation
+identity. Document supported compound members with `subcomponents` and owned
+stories. A source export does not establish public support.
+
+## 3. Inherit the application environment
+
+Every catalogue story inherits the real Averlo `SettingsProvider`,
+`MotionProvider`, `IconProvider`, and application-ready signal. Storybook has no
+loading-screen exit, so the shared preview marks the application ready before
+owners render; do not bypass that gate in individual motion stories. Use the
+Storybook Appearance toolbar to review the same owner under System, Light, and
+Dark appearance. That control must drive `SettingsProvider`; do not maintain a
+Storybook-only theme store or apply a story-local root `.dark` class.
+
+Stories inherit the toolbar selection by default. A story may pin its
+`appearance` global only when a specific light or dark environment is part of
+the behavior being demonstrated. Art-directed surfaces may still own explicit
+foreground/background contrast through their supported component APIs.
+
+## 4. Verification severity
+
+Semantic accessibility and behavior are blocking. Focus, ARIA relationships,
+keyboard navigation, selection, dismissal, controlled state, and callbacks must
+fail the story suite when they regress.
+
+Known visual-token debt may use story-scoped `a11y.test = "todo"`. This keeps
+the violation visible as a warning without weakening the rest of the owner.
+Never downgrade an entire family or the global Storybook default to accommodate
+one contrast case.
+
+## 5. Warning containment
+
+Storybook severity applies to a whole story, not an individual Axe rule. A
+warning story must therefore protect meaningful semantics with explicit `play`
+assertions or have a separate strict story that covers the same behavioral
+contract. Warning status is not an escape hatch for missing semantics.
+
+## 6. Put each rule in the layer that can enforce it
+
+| Kind of rule | Canonical home | Example |
+| --- | --- | --- |
+| Availability, supported import, selection, exclusion | Colocated owner story contract | Use `Dropdown.Panel`; do not import `DropdownSurface` |
+| Observable state or interaction | Story plus `play` test | Escape closes the deepest recursive menu |
+| Visual state with unresolved token debt | Story-scoped accessibility warning | A semantic tone remains visible while contrast work is pending |
+| Dependency direction, server/client boundary, implementation prohibition | Nearest `AGENTS.md` and verifier when practical | A server-safe skeleton must not cross a client-only module |
+| Agent discovery and fallback order | Averlo design-system skill | Owner story, then local policy, then facade/source |
+| Runtime truth | Public facade and implementation source | The actual exported compound and prop types |
+
+Move a rule out of `AGENTS.md` when Storybook can state and execute it. Keep only
+the short structural invariant in `AGENTS.md`, and point to the owner rather
+than duplicating examples there. If a rule is mechanically enforceable but not
+observable in a story, add a repository verifier instead of prose alone.
+
+Once the owner stories pass the migration gate, delete the superseded demo,
+fixture, navigation entry, and duplicated Markdown. A migrated family must not
+retain a second consumer catalogue as a transition mirror.
+
+## 7. Migrate in dependency order
+
+Migrate foundations before their consumers:
+
+1. UI primitives and foundations
+2. inputs, feedback, overlays, motion, and other public UI owners
+3. reusable composites
+4. dashboard and marketing surfaces
+5. complete pages
+
+Each migrated slice must reuse already-documented lower-level owners. Do not
+re-document their variants inside a higher-level surface.
+
+## Migration gate
+
+A family is migrated only when it has:
+
+- one stable public owner identity;
+- one exported typed app-safe contract in a colocated `*.catalog.tsx` module containing role,
+  supported import, selection guidance, and exclusions;
+- one owner-level teaching story that makes the component's practical breadth
+  inspectable without reading implementation source; focused assertion stories
+  do not substitute for this demonstration;
+- stories for behaviorally distinct states and supported compounds;
+- strict interaction or semantic evidence;
+- narrowly scoped warnings for acknowledged visual debt;
+- no implementation-only catalogue identities;
+- no central owner index or higher-level copy of the owner contract;
+- a nearest `AGENTS.md` containing only structural invariants that Storybook
+  cannot own;
+- removal of the superseded demo, fixture, navigation, and relationship copy;
+  and
+- successful focused story tests and a static Storybook build.
+
+Before deleting a prior demo, compare its representative variants, states,
+compositions, and failure cases against the lowest-owner stories. Port the
+useful demonstrations, not the old page structure. The result remains colocated
+with the owner: demo parity must not recreate a central inventory or a second
+catalogue.

@@ -3,6 +3,8 @@ import { existsSync } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { templateSurfaces } from "../template-surfaces/index.mjs";
+import { getCapabilitySurfaces } from "./capabilities/index.mjs";
+import { installOrchestrationCapability } from "./capabilities/orchestration/index.mjs";
 import {
 	assemblyCoreDependencies,
 	assemblyCoreDevDependencies,
@@ -10,15 +12,19 @@ import {
 	assemblyCoreScripts,
 	assemblyGeneratedPaths,
 	assemblyProjectDocs,
+	assemblyTemplateOnlyDevDependencies,
 	assemblyTemplateOnlyPaths,
 	assemblyTemplateOnlyRoots,
 	assemblyTemplateOnlyScripts,
+	isAssemblyTemplateOnlyFile,
 	isWithinPath,
 } from "./manifest.mjs";
 import {
 	createProjectState,
 	renderApiIndexFile,
+	renderCapabilitiesFile,
 	renderInternalLayoutFile,
+	renderMarketingContentSourceFile,
 	renderNextConfigFile,
 	renderSurfacesFile,
 	renderTsconfigFile,
@@ -53,6 +59,9 @@ function sourceFiles(sourceRoot) {
 
 function matchingSurfaces(relativePath) {
 	const candidates = [];
+	if (/\.catalog\.tsx$/.test(relativePath)) {
+		candidates.push({ surfaceKey: "demo", ownedPath: relativePath });
+	}
 	for (const [surfaceKey, surface] of Object.entries(templateSurfaces)) {
 		for (const ownedPath of surface.ownedPaths ?? []) {
 			if (isWithinPath(relativePath, ownedPath)) {
@@ -89,13 +98,16 @@ async function loadThinInventory(sourceRoot, profile) {
 	return new Set(JSON.parse(raw));
 }
 
-function selectedProfileSurfaces(profile, content) {
+function selectedProfileSurfaces(profile, content, capabilities = []) {
 	if (!profile.content?.supported.includes(content)) {
 		throw new Error(
 			`Profile ${profile.id} does not support ${content} content.`,
 		);
 	}
 	const selected = new Set(profile.assembly?.surfaces ?? []);
+	for (const surface of getCapabilitySurfaces(profile, capabilities)) {
+		selected.add(surface);
+	}
 	if (content === "static") selected.delete("payload");
 	for (const surfaceKey of selected) {
 		if (!templateSurfaces[surfaceKey]) {
@@ -120,7 +132,10 @@ async function buildCopyPlan(sourceRoot, profile, selectedSurfaces) {
 			omitted.push({ path: relativePath, reason: "generated" });
 			continue;
 		}
-		if (assemblyTemplateOnlyPaths.has(relativePath)) {
+		if (
+			assemblyTemplateOnlyPaths.has(relativePath) ||
+			isAssemblyTemplateOnlyFile(relativePath)
+		) {
 			omitted.push({ path: relativePath, reason: "template-only" });
 			continue;
 		}
@@ -252,6 +267,16 @@ function selectRecord(source, selectedNames) {
 	return sortedRecord(selected);
 }
 
+function normalizePackageScriptsForSurfaces(scripts, selectedSurfaces) {
+	if (selectedSurfaces.has("demo")) return scripts;
+	return Object.fromEntries(
+		Object.entries(scripts).map(([name, command]) => [
+			name,
+			command.replace(/^npm run catalog:generate && /, ""),
+		]),
+	);
+}
+
 export function assertPackageOwnership(pkg) {
 	const surfaceScripts = new Set(
 		Object.values(templateSurfaces).flatMap(
@@ -281,6 +306,7 @@ export function assertPackageOwnership(pkg) {
 	for (const name of Object.keys(pkg.devDependencies ?? {})) {
 		if (
 			!assemblyCoreDevDependencies.has(name) &&
+			!assemblyTemplateOnlyDevDependencies.has(name) &&
 			!surfaceDependencies.has(name)
 		) {
 			throw new Error(`Unclassified package devDependency: ${name}`);
@@ -301,7 +327,10 @@ async function writePackage(
 	const selected = selectedPackageEntries(profile, selectedSurfaces);
 	const pkg = {
 		...sourcePackage,
-		scripts: selectRecord(sourcePackage.scripts, selected.scripts),
+		scripts: normalizePackageScriptsForSurfaces(
+			selectRecord(sourcePackage.scripts, selected.scripts),
+			selectedSurfaces,
+		),
 		dependencies: selectRecord(
 			sourcePackage.dependencies,
 			selected.dependencies,
@@ -362,10 +391,18 @@ async function writeCentralFiles(
 		? "src/app/(site)/(marketing)/internal/layout.tsx"
 		: "src/app/(site)/(dev)/internal/layout.tsx";
 	const targets = [
+		["src/config/capabilities.ts", renderCapabilitiesFile(state)],
 		["src/config/surfaces.ts", renderSurfacesFile(state)],
 		["src/lib/api/index.ts", renderApiIndexFile(state)],
 		[internalLayoutPath, renderInternalLayoutFile(state)],
 	];
+	const marketingContentSource = renderMarketingContentSourceFile(state);
+	if (marketingContentSource) {
+		targets.push([
+			"src/lib/marketing-content/source.ts",
+			marketingContentSource,
+		]);
+	}
 	const nextConfig = renderNextConfigFile(state);
 	const tsconfig = renderTsconfigFile(state);
 	targets.push([
@@ -429,13 +466,19 @@ export async function assembleTemplateProfile({
 	destinationRoot,
 	profile,
 	content,
+	capabilities = [],
+	sourceCommit,
 }) {
 	if (!profile.assembly?.surfaces) {
 		throw new Error(
 			`Profile ${profile.id} has no assembly surface declaration.`,
 		);
 	}
-	const selectedSurfaces = selectedProfileSurfaces(profile, content);
+	const selectedSurfaces = selectedProfileSurfaces(
+		profile,
+		content,
+		capabilities,
+	);
 	const plan = await buildCopyPlan(sourceRoot, profile, selectedSurfaces);
 	for (const relativePath of plan.included) {
 		await copyFile(
@@ -447,11 +490,24 @@ export async function assembleTemplateProfile({
 	}
 	await applyProfileFiles(sourceRoot, destinationRoot, profile);
 	await writeCentralFiles(sourceRoot, destinationRoot, selectedSurfaces);
+	if (selectedSurfaces.has("demo")) {
+		execFileSync("node", ["scripts/generate-component-catalog.mjs"], {
+			cwd: destinationRoot,
+			stdio: "inherit",
+		});
+	}
 	await writePackage(sourceRoot, destinationRoot, profile, selectedSurfaces);
 	await writeProjectDocs(destinationRoot, profile, content);
+	if (capabilities.includes("orchestration")) {
+		await installOrchestrationCapability({
+			targetRoot: destinationRoot,
+			sourceCommit,
+		});
+	}
 	return {
 		includedFiles: plan.included.length,
 		omittedFiles: plan.omitted.length,
 		selectedSurfaces: [...plan.selectedSurfaces],
+		capabilities: [...capabilities],
 	};
 }

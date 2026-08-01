@@ -25,7 +25,7 @@ export type ProfilePictureSize = keyof typeof sizeMap;
 export type ProfilePictureProps = {
 	alt?: string;
 	className?: string;
-	fallback?: string;
+	fallback?: React.ReactNode;
 	helperIndex?: number;
 	loading?: boolean;
 	name?: string | null;
@@ -49,8 +49,15 @@ function ProfilePictureRoot({
 	const { px, className: sizeClass } = sizeMap[size];
 	const normalizedName = name?.trim();
 	const initial = normalizedName?.charAt(0).toUpperCase() || "?";
-	const fallbackLabel =
-		fallback ?? (normalizedName?.startsWith("Unknown") ? "?" : initial);
+	const fallbackIsText = typeof fallback === "string";
+	const fallbackLabel = fallbackIsText
+		? fallback
+		: normalizedName?.startsWith("Unknown")
+			? "?"
+			: initial;
+	const fallbackContent = fallbackIsText
+		? fallbackLabel
+		: (fallback ?? fallbackLabel);
 	const accessibleLabel =
 		alt ??
 		(normalizedName ? `${normalizedName} profile picture` : "Profile picture");
@@ -124,7 +131,7 @@ function ProfilePictureRoot({
 				className="flex size-full items-center justify-center text-[inherit]"
 				role="img"
 			>
-				{fallbackLabel}
+				{fallbackContent}
 			</span>
 		</Chip>
 	);
@@ -143,7 +150,7 @@ export const ProfilePicture = Object.assign(ProfilePictureRoot, {
 
 export type ProfilePictureStackItem = {
 	alt?: string;
-	fallback?: string;
+	fallback?: ProfilePictureProps["fallback"];
 	helperIndex?: number;
 	id: string;
 	name?: string | null;

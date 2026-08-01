@@ -53,7 +53,7 @@ export function ErrorState({
 			onAction={onAction}
 			action={action}
 			className={className}
-			iconClassName={clsx("text-danger", iconClassName)}
+			iconClassName={clsx("text-danger-text", iconClassName)}
 			titleClassName={titleClassName}
 			descriptionClassName={descriptionClassName}
 			actionClassName={actionClassName}

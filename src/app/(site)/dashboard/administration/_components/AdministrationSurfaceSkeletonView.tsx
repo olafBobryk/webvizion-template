@@ -1,7 +1,7 @@
 import { Icon } from "@/components/ui/icons/Icon";
 import { Chip } from "@/components/ui/misc";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 import { DashboardTablePanelSkeleton } from "../../_components/data/DashboardTablePanel";
 import { MemberIdentitySkeleton } from "../../_components/entities/member/MemberIdentity";
@@ -32,20 +32,16 @@ function InvitationTableSkeleton() {
 				},
 			]}
 			header={
-				<Card.Header className="min-w-0">
-					<Card.Title className="inline-flex min-w-0 items-center gap-2">
-						<Icon name="mail" size="sm" />
-						Pending invitations
-					</Card.Title>
-					<Card.Description className="min-w-0 break-words">
-						Fixture deliveries stay local and expose a copyable invitation link.
-					</Card.Description>
-					<Card.Action>
+				<Card.Heading
+					action={
 						<Button.Skeleton leadingIcon size="sm" variant="primary">
 							Invite member
 						</Button.Skeleton>
-					</Card.Action>
-				</Card.Header>
+					}
+					description="Fixture deliveries stay local and expose a copyable invitation link."
+					leading={<Icon name="mail" size="sm" />}
+					title="Pending invitations"
+				/>
 			}
 			id="pending-invitations"
 		>
@@ -122,15 +118,11 @@ function MembersTableSkeleton() {
 				},
 			]}
 			header={
-				<Card.Header className="min-w-0">
-					<Card.Title className="inline-flex min-w-0 items-center gap-2">
-						<Icon name="users" size="sm" />
-						Members
-					</Card.Title>
-					<Card.Description className="min-w-0 break-words">
-						Organization roles and access for active members.
-					</Card.Description>
-				</Card.Header>
+				<Card.Heading
+					description="Organization roles and access for active members."
+					leading={<Icon name="users" size="sm" />}
+					title="Members"
+				/>
 			}
 			id="members"
 		>
@@ -145,7 +137,7 @@ function MembersTableSkeleton() {
 						<MemberIdentitySkeleton
 							displayLabel={name}
 							emailLabel="member@example.com"
-							variant="compact"
+							variant="default"
 						/>
 					</td>
 					<td

@@ -14,7 +14,7 @@ import { PlatformReportSurfaceSkeleton } from "../../platform/reports/[id]/_comp
 import { ProfileSurfaceSkeleton } from "../../profile/_components/ProfileSurface";
 import { RecordsSurfaceSkeleton } from "../../records/_components/RecordsSurface";
 import { RecordSurfaceSkeleton } from "../../records/[recordId]/_components/RecordSurface";
-import { EntityReferenceSurfaceSkeleton } from "../../reference/entities/_components/EntityReferenceSurface";
+import { ReferenceSurfaceSkeleton } from "../../reference/_components/ReferenceSurface";
 import { ReferenceSkeletonsSurfaceSkeleton } from "../../reference/skeletons/_components/ReferenceSkeletonsSurface";
 import { SettingsSurfaceSkeleton } from "../../settings/_components/SettingsSurface";
 import { OverviewSurfaceSkeleton } from "../OverviewSurface";
@@ -49,8 +49,8 @@ export function DashboardForcedLoadingView({ pathname }: { pathname: string }) {
 			return <RecordSurfaceSkeleton />;
 		case "dashboard.records":
 			return <RecordsSurfaceSkeleton />;
-		case "dashboard.reference.entities":
-			return <EntityReferenceSurfaceSkeleton />;
+		case "dashboard.reference":
+			return <ReferenceSurfaceSkeleton />;
 		case "dashboard.reference.skeletons":
 			return <ReferenceSkeletonsSurfaceSkeleton />;
 		default:

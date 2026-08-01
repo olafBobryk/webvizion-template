@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, relative, resolve } from "node:path";
+import { dashboardContentShellProfiles } from "../../src/app/(site)/dashboard/_components/layout/DashboardContentShell";
 import { isOrganizationInvitationPending } from "../../src/app/(site)/dashboard/_lib/entities/invitation/presentation";
 import {
 	dashboardDebugStates,
@@ -41,7 +42,27 @@ const surfaceIds = new Set<string>();
 const surfaceHrefs = new Set<string>();
 const sourceRootOwners = new Map<string, string>();
 
+assert.deepEqual(Object.keys(dashboardContentShellProfiles).sort(), [
+	"standard",
+	"wide",
+	"workspace",
+]);
+assert.equal(
+	dashboardContentShellProfiles.standard.gutterClassName,
+	dashboardContentShellProfiles.wide.gutterClassName,
+	"Standard and wide dashboard layouts must share one gutter contract.",
+);
+assert.equal(
+	dashboardContentShellProfiles.standard.gutterClassName,
+	"px-4 sm:px-6",
+);
+assert.equal(dashboardContentShellProfiles.workspace.gutterClassName, "px-0");
+
 for (const surface of dashboardSurfaceRegistry) {
+	assert.ok(
+		surface.layoutWidth in dashboardContentShellProfiles,
+		`Missing dashboard content shell profile: ${surface.layoutWidth}`,
+	);
 	assert.ok(!surfaceIds.has(surface.id), `Duplicate surface id: ${surface.id}`);
 	assert.ok(
 		!surfaceHrefs.has(surface.href),
@@ -224,8 +245,15 @@ assert.equal(
 	"dashboard.organization.member",
 );
 assert.equal(
-	getDashboardSurface("/dashboard/reference/entities")?.id,
-	"dashboard.reference.entities",
+	getDashboardSurface("/dashboard/reference")?.id,
+	"dashboard.reference",
+);
+const referenceSurface = getDashboardSurfaceById("dashboard.reference");
+assert.equal(referenceSurface?.capability, "debug.use");
+assert.equal(referenceSurface?.sidebar, false);
+assert.equal(
+	getDashboardSurfaceById("dashboard.reference.skeletons")?.parentId,
+	"dashboard.reference",
 );
 assert.equal(getDashboardSurface("/dashboard/pages"), null);
 assert.equal(
@@ -260,6 +288,7 @@ assert.ok(memberSidebarIds.includes("dashboard.records"));
 assert.ok(!memberSidebarIds.includes("dashboard.organization.settings"));
 assert.ok(!memberSidebarIds.includes("dashboard.profile"));
 assert.ok(!memberSidebarIds.includes("dashboard.administration"));
+assert.ok(!memberSidebarIds.includes("dashboard.reference"));
 
 const adminSidebarIds = getDashboardSidebarGroups(adminCapabilities)
 	.flatMap((group) => group.surfaces)
@@ -276,10 +305,21 @@ assert.ok(!platformSidebarIds.includes("dashboard.platform"));
 assert.ok(!platformSidebarIds.includes("dashboard.platform.inbox"));
 assert.ok(!platformSidebarIds.includes("dashboard.platform.reports"));
 
-const memberCommands = getDashboardNavigationCommands(memberCapabilities);
-const adminCommands = getDashboardNavigationCommands(adminCapabilities);
+const memberCommands = getDashboardNavigationCommands(memberCapabilities, {
+	canSwitchOrganizations: false,
+});
+const adminCommands = getDashboardNavigationCommands(adminCapabilities, {
+	canSwitchOrganizations: false,
+});
+const multiOrganizationCommands = getDashboardNavigationCommands(
+	memberCapabilities,
+	{ canSwitchOrganizations: true },
+);
 const memberCommandIds = memberCommands.map((command) => command.id);
 const adminCommandIds = adminCommands.map((command) => command.id);
+const multiOrganizationCommandIds = multiOrganizationCommands.map(
+	(command) => command.id,
+);
 assert.ok(memberCommandIds.includes("navigate.dashboard.profile"));
 assert.ok(!memberCommandIds.includes("navigate.dashboard.administration"));
 assert.ok(!memberCommandIds.includes("administration.invite"));
@@ -288,6 +328,12 @@ assert.ok(adminCommandIds.includes("navigate.dashboard.administration"));
 assert.ok(adminCommandIds.includes("administration.invite"));
 assert.ok(!memberCommandIds.includes("records.create"));
 assert.ok(adminCommandIds.includes("records.create"));
+assert.ok(!memberCommandIds.includes("navigate.dashboard.organization.switch"));
+assert.ok(
+	multiOrganizationCommandIds.includes(
+		"navigate.dashboard.organization.switch",
+	),
+);
 
 assert.deepEqual(
 	getDashboardSurfaceTrail(
@@ -363,7 +409,7 @@ for (const routeFile of [
 	"src/app/(site)/dashboard/organization/members/page.tsx",
 	"src/app/(site)/dashboard/organization/members/[memberId]/page.tsx",
 	"src/app/(site)/dashboard/organization/settings/page.tsx",
-	"src/app/(site)/dashboard/reference/entities/page.tsx",
+	"src/app/(site)/dashboard/reference/page.tsx",
 ]) {
 	assert.ok(existsSync(resolve(root, routeFile)), `Missing ${routeFile}`);
 }
@@ -393,6 +439,63 @@ const commandProvider = readFileSync(
 );
 assert.ok(commandProvider.includes("return context.register"));
 assert.ok(commandProvider.includes("next.delete(token)"));
+
+const dashboardPage = readFileSync(
+	resolve(root, "src/app/(site)/dashboard/page.tsx"),
+	"utf8",
+);
+const overviewSurface = readFileSync(
+	resolve(root, "src/app/(site)/dashboard/_components/OverviewSurface.tsx"),
+	"utf8",
+);
+const referencePage = readFileSync(
+	resolve(root, "src/app/(site)/dashboard/reference/page.tsx"),
+	"utf8",
+);
+const dashboardFrame = readFileSync(
+	resolve(
+		root,
+		"src/app/(site)/dashboard/_components/layout/DashboardFrame.tsx",
+	),
+	"utf8",
+);
+const organizationSwitcher = readFileSync(
+	resolve(
+		root,
+		"src/app/(site)/dashboard/_components/layout/DashboardOrganizationSwitcher.tsx",
+	),
+	"utf8",
+);
+const organizationSwitchPage = readFileSync(
+	resolve(root, "src/app/(site)/dashboard/organization/switch/page.tsx"),
+	"utf8",
+);
+const fixtureResetRoute = readFileSync(
+	resolve(root, "src/app/api/debug/fixture/reset/route.ts"),
+	"utf8",
+);
+assert.ok(
+	dashboardPage.includes('capabilities.has("debug.use")') &&
+		overviewSurface.includes("showReference && referenceSurface"),
+	"Dashboard Overview must expose Reference only through the debug capability.",
+);
+assert.ok(
+	referencePage.includes('requireDashboardCapability("debug.use")'),
+	"Reference hub must deny callers without debug capability.",
+);
+assert.ok(
+	dashboardFrame.includes('capabilities.has("debug.use")'),
+	"Forced dashboard states must derive from the debug capability.",
+);
+assert.ok(
+	fixtureResetRoute.includes('process.env.NODE_ENV === "production"'),
+	"Fixture reset must remain unavailable in production.",
+);
+assert.ok(
+	organizationSwitcher.includes("choices.length > 1") &&
+		organizationSwitchPage.includes("choices.length <= 1"),
+	"Organization switching must derive from the resolved organization choices.",
+);
 
 assert.deepEqual(dashboardDebugStates, [
 	"loading",

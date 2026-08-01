@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/overlays/modal/ModalShell";
 import { useModal } from "@/components/ui/overlays/modal/useModal";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { requestPasswordRecovery } from "@/lib/api/auth";
 import { showToast } from "@/lib/feedback";
 import { hrefFor } from "@/lib/routes";
@@ -40,18 +40,14 @@ function SecuritySettingsSectionRoot({
 
 	return (
 		<Card className="scroll-mt-24" id="security-sign-in">
-			<Card.Header>
-				<Card.Title className="inline-flex items-center gap-2">
+			<Card.Heading
+				action={<DashboardSignOutButton />}
+				description="Password, recovery, identity, and session status for this account."
+				leading={
 					<Icon className="text-muted-foreground" name="lock" size="sm" />
-					Security and sign-in
-				</Card.Title>
-				<Card.Description>
-					Password, recovery, identity, and session status for this account.
-				</Card.Description>
-				<Card.Action>
-					<DashboardSignOutButton />
-				</Card.Action>
-			</Card.Header>
+				}
+				title="Security and sign-in"
+			/>
 			<Card.Content>
 				<dl className="grid">
 					<SignInMethodRow
@@ -102,18 +98,14 @@ function SecuritySettingsSectionSkeleton({
 
 	return (
 		<Card className="scroll-mt-24" id="security-sign-in">
-			<Card.Header>
-				<Card.Title className="inline-flex items-center gap-2">
+			<Card.Heading
+				action={<DashboardSignOutButton />}
+				description="Password, recovery, identity, and session status for this account."
+				leading={
 					<Icon className="text-muted-foreground" name="lock" size="sm" />
-					Security and sign-in
-				</Card.Title>
-				<Card.Description>
-					Password, recovery, identity, and session status for this account.
-				</Card.Description>
-				<Card.Action>
-					<DashboardSignOutButton />
-				</Card.Action>
-			</Card.Header>
+				}
+				title="Security and sign-in"
+			/>
 			<Card.Content>
 				<dl className="grid">
 					<SignInMethodRowSkeleton

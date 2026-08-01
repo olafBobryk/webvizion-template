@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/primitives/Button";
-import { Panel } from "@/components/ui/primitives/Panel";
+import { Panel } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 import type { LoadingScreenPhase } from "./_source/LoadingScreenMount";
 import RiveLoadingAnimation from "./_source/RiveLoadingAnimation";
@@ -20,11 +20,11 @@ export function LoadingScreenPreview() {
 	return (
 		<div className="flex flex-col gap-4">
 			<Panel
-				background="background"
+				background="page"
 				border="subtle"
 				overflow="hidden"
 				padding="md"
-				shadow="none"
+				elevation="panel"
 				className="py-10"
 			>
 				<div className="flex min-h-48 items-center justify-center">

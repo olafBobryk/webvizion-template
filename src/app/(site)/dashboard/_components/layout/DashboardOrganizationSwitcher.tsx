@@ -12,7 +12,6 @@ import {
 import { Dropdown } from "@/components/ui/primitives/dropdown";
 import { selectOrganization } from "@/lib/api/auth";
 import { showToast } from "@/lib/feedback/toast";
-import { dashboardFeatureConfig } from "../../_registry/surfaceRegistry";
 import { useDashboardAuth } from "../providers/DashboardAuthProvider";
 
 type OrganizationSwitcherChoice = {
@@ -24,17 +23,18 @@ export function DashboardOrganizationSwitcher({
 	collapsed,
 	mobileExpanded,
 	onNavigate,
+	placement = "body",
 }: {
 	collapsed: boolean;
 	mobileExpanded: boolean;
 	onNavigate: () => void;
+	placement?: "body" | "footer";
 }) {
 	const router = useRouter();
 	const { membership, organization, organizationChoices } = useDashboardAuth();
 	const [switchingOrganizationId, setSwitchingOrganizationId] = React.useState<
 		string | null
 	>(null);
-	const canSwitch = dashboardFeatureConfig.organizationSwitcher;
 	const currentPresentation = getOrganizationPresentation(
 		toOrganizationEntity(organization, membership.role),
 	);
@@ -46,6 +46,7 @@ export function DashboardOrganizationSwitcher({
 			),
 		}),
 	);
+	const canSwitch = choices.length > 1;
 	async function handleOrganizationSelect(organizationId: string) {
 		if (
 			organizationId === organization.id ||
@@ -80,6 +81,7 @@ export function DashboardOrganizationSwitcher({
 	function renderIdentity() {
 		return (
 			<OrganizationIdentity
+				avatarSize={placement === "footer" ? "sm" : "md"}
 				avatarClassName={clsx(
 					!mobileExpanded &&
 						"max-lg:group-focus-visible:ring-3 max-lg:group-focus-visible:ring-ring/30",
@@ -97,7 +99,7 @@ export function DashboardOrganizationSwitcher({
 					mobileExpanded ? "max-lg:grid" : "max-lg:hidden",
 					collapsed ? "lg:hidden" : "lg:grid",
 				)}
-				variant="compact"
+				variant="default"
 			/>
 		);
 	}
@@ -106,7 +108,8 @@ export function DashboardOrganizationSwitcher({
 		return (
 			<div
 				className={clsx(
-					"flex h-12 min-w-0 items-center px-2",
+					"flex min-w-0 items-center px-2",
+					placement === "footer" ? "h-10" : "h-12",
 					mobileExpanded ? "max-lg:justify-start" : "max-lg:justify-center",
 					collapsed ? "lg:justify-center" : "lg:justify-start",
 				)}
@@ -132,7 +135,7 @@ export function DashboardOrganizationSwitcher({
 					<OrganizationIdentity
 						className="w-full"
 						presentation={choice.presentation}
-						variant="compact"
+						variant="default"
 					/>
 				),
 				key: choice.id,
@@ -142,7 +145,8 @@ export function DashboardOrganizationSwitcher({
 			}))}
 			triggerButtonProps={{
 				className: clsx(
-					"h-14 w-full min-w-0 overflow-hidden px-2",
+					"w-full min-w-0 overflow-hidden px-2",
+					placement === "footer" ? "h-10" : "h-14",
 					mobileExpanded
 						? "max-lg:justify-start"
 						: "max-lg:justify-center max-lg:px-0 max-lg:focus-visible:border-transparent max-lg:focus-visible:ring-0 max-lg:aria-expanded:!bg-transparent max-lg:aria-expanded:hover:!bg-transparent",

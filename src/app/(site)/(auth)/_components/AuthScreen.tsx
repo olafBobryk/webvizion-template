@@ -1,6 +1,6 @@
 import { Icon, type IconName } from "@/components/ui/icons/Icon";
-import { Card } from "@/components/ui/primitives/Card";
 import { StatusMessage } from "@/components/ui/primitives/StatusMessage";
+import { Card } from "@/components/ui/primitives/surfaces";
 import {
 	AuthDomainError,
 	type AuthErrorCode,
@@ -40,13 +40,14 @@ export function AuthScreen({
 	const status = getMessage(message);
 	return (
 		<Card className="w-full">
-			<Card.Header>
-				<Card.Title as="h1" className="inline-flex items-center gap-2">
+			<Card.Heading
+				description={description}
+				leading={
 					<Icon className="text-muted-foreground" name={icon} size="sm" />
-					{title}
-				</Card.Title>
-				<Card.Description>{description}</Card.Description>
-			</Card.Header>
+				}
+				title={title}
+				titleAs="h1"
+			/>
 			<Card.Content className="grid gap-4">
 				{status ? (
 					<StatusMessage tone={status.tone}>{status.text}</StatusMessage>

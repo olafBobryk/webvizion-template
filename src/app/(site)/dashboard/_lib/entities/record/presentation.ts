@@ -1,3 +1,4 @@
+import type { AssistantToolState } from "@/lib/assistant/contracts";
 import { surfaceHref } from "@/lib/routes";
 import type {
 	DashboardColumnDefinition,
@@ -75,6 +76,7 @@ export function getRecordPresentation(record: ReferenceRecord) {
 		id: record.id,
 		ownerMemberId: record.ownerMemberId,
 		properties: record.properties,
+		searchText: `${title} ${record.slug} ${record.status}`,
 		slugLabel: record.slug || "Slug unavailable",
 		status: recordStatusPresentation[record.status],
 		statusLabel: recordStatusPresentation[record.status].shortLabel,
@@ -84,6 +86,224 @@ export function getRecordPresentation(record: ReferenceRecord) {
 }
 
 export type RecordPresentation = ReturnType<typeof getRecordPresentation>;
+
+export type RecordIdentityPresentation = Pick<
+	RecordPresentation,
+	"slugLabel" | "title"
+>;
+
+export const recordToolPresentationDefinition = {
+	record_archive: { label: "Archive record", tone: "warning" },
+	record_create: { label: "Create record", tone: "primary" },
+	record_delete: { label: "Delete record", tone: "danger" },
+	record_get: { label: "Get record", tone: "neutral" },
+	record_update: { label: "Update record", tone: "primary" },
+	records_list: { label: "List records", tone: "neutral" },
+} as const;
+
+export type RecordToolName = keyof typeof recordToolPresentationDefinition;
+
+export type RecordToolPresentation = {
+	description: string;
+	destructive: boolean;
+	error: string | null;
+	items: Array<{
+		descriptionMarkdown: string;
+		href: string | null;
+		id: string;
+		slugLabel: string;
+		status: DashboardVariantPresentation | null;
+		title: string;
+		updatedAtLabel: string | null;
+	}>;
+	input: unknown;
+	label: string;
+	state: AssistantToolState;
+	stateLabel: string;
+	tone: "danger" | "neutral" | "primary" | "success" | "warning";
+	toolName: RecordToolName;
+};
+
+export type RecordToolItem = RecordToolPresentation["items"][number];
+
+export type RecordToolProposalValue = {
+	descriptionMarkdown: string;
+	slugLabel: string;
+	status: DashboardVariantPresentation | null;
+	title: string;
+};
+
+export type RecordToolProposalPresentation = {
+	changedFields: readonly ("description" | "status" | "title")[];
+	current: RecordToolProposalValue | null;
+	proposed: RecordToolProposalValue | null;
+};
+
+const recordToolStateLabels = {
+	"approval-requested": "Approval required",
+	approved: "Approved",
+	completed: "Completed",
+	denied: "Declined",
+	error: "Failed",
+	"input-available": "Running",
+	"input-streaming": "Pending",
+} satisfies Record<AssistantToolState, string>;
+
+function asObject(value: unknown) {
+	return value && typeof value === "object" && !Array.isArray(value)
+		? (value as Record<string, unknown>)
+		: null;
+}
+
+function proposalStatus(value: unknown) {
+	return typeof value === "string" &&
+		Object.hasOwn(recordStatusPresentation, value)
+		? recordStatusPresentation[value as ReferenceRecordStatus]
+		: null;
+}
+
+export function getRecordToolProposalPresentation(input: {
+	current?: RecordToolItem | null;
+	input: unknown;
+	toolName: RecordToolName;
+}): RecordToolProposalPresentation {
+	const values = asObject(input.input) ?? {};
+	const current = input.current
+		? {
+				descriptionMarkdown: input.current.descriptionMarkdown,
+				slugLabel: input.current.slugLabel,
+				status: input.current.status,
+				title: input.current.title,
+			}
+		: null;
+	if (input.toolName === "record_delete") {
+		return { changedFields: [], current, proposed: null };
+	}
+	if (
+		!["record_create", "record_update", "record_archive"].includes(
+			input.toolName,
+		)
+	) {
+		return { changedFields: [], current, proposed: null };
+	}
+
+	const proposedStatus =
+		input.toolName === "record_archive"
+			? recordStatusPresentation.archived
+			: (proposalStatus(values.status) ??
+				current?.status ??
+				recordStatusPresentation.draft);
+	const proposed = {
+		descriptionMarkdown:
+			typeof values.descriptionMarkdown === "string"
+				? values.descriptionMarkdown
+				: (current?.descriptionMarkdown ?? ""),
+		slugLabel: current?.slugLabel ?? "New record",
+		status: proposedStatus,
+		title:
+			typeof values.title === "string" && values.title.trim()
+				? values.title.trim()
+				: (current?.title ?? "Untitled record"),
+	};
+	const changedFields = [
+		proposed.title !== current?.title ? "title" : null,
+		proposed.status?.shortLabel !== current?.status?.shortLabel
+			? "status"
+			: null,
+		proposed.descriptionMarkdown !== current?.descriptionMarkdown
+			? "description"
+			: null,
+	].filter(
+		(value): value is "description" | "status" | "title" => value !== null,
+	);
+	return { changedFields, current, proposed };
+}
+
+function toolItems(output: unknown) {
+	const result = asObject(output);
+	const values = Array.isArray(result?.items)
+		? result.items
+		: result?.record
+			? [result.record]
+			: [];
+	return values.flatMap((value) => {
+		const item = asObject(value);
+		if (!item || typeof item.id !== "string") return [];
+		const rawStatus = item.status;
+		const status =
+			typeof rawStatus === "string" &&
+			Object.hasOwn(recordStatusPresentation, rawStatus)
+				? recordStatusPresentation[rawStatus as ReferenceRecordStatus]
+				: null;
+		return [
+			{
+				descriptionMarkdown:
+					typeof item.descriptionMarkdown === "string"
+						? item.descriptionMarkdown
+						: "",
+				href: typeof item.url === "string" ? item.url : null,
+				id: item.id,
+				slugLabel:
+					typeof item.slug === "string" && item.slug.trim()
+						? item.slug.trim()
+						: item.id,
+				status,
+				title:
+					typeof item.title === "string" && item.title.trim()
+						? item.title.trim()
+						: item.id,
+				updatedAtLabel:
+					typeof item.updatedAt === "string"
+						? formatRecordDate(item.updatedAt)
+						: null,
+			},
+		];
+	});
+}
+
+export function getRecordToolPresentation(input: {
+	error?: string | null;
+	input: unknown;
+	output?: unknown;
+	state: AssistantToolState;
+	toolName: RecordToolName;
+}): RecordToolPresentation {
+	const definition = recordToolPresentationDefinition[input.toolName];
+	const values = asObject(input.input);
+	const recordId = typeof values?.id === "string" ? values.id : null;
+	const title = typeof values?.title === "string" ? values.title : null;
+	const isDelete = input.toolName === "record_delete";
+	const itemCount = toolItems(input.output).length;
+	const description =
+		input.state === "approval-requested"
+			? isDelete
+				? `Permanently delete ${title ?? recordId ?? "this record"}. This cannot be undone.`
+				: `${definition.label}: ${title ?? recordId ?? "review the proposed change"}.`
+			: (input.error ??
+				(input.toolName === "records_list" && input.state === "completed"
+					? `${itemCount} ${itemCount === 1 ? "record" : "records"} found in the current organization.`
+					: `${definition.label} ${recordId ? `for ${recordId}` : "in the current organization"}.`));
+	return {
+		description,
+		destructive: isDelete,
+		error: input.error ?? null,
+		items: toolItems(input.output),
+		input: input.input,
+		label: definition.label,
+		state: input.state,
+		stateLabel: recordToolStateLabels[input.state],
+		tone:
+			input.state === "error" || isDelete
+				? "danger"
+				: input.state === "completed"
+					? "success"
+					: input.state === "input-streaming" ||
+							input.state === "input-available"
+						? "neutral"
+						: definition.tone,
+		toolName: input.toolName,
+	};
+}
 
 export const recordFieldDefinitions = [
 	{

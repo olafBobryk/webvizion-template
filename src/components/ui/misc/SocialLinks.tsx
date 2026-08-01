@@ -1,12 +1,14 @@
 "use client";
 
+import type { IconWeight } from "@phosphor-icons/react";
 import clsx from "clsx";
 import type * as React from "react";
-import type { IconName } from "@/components/ui/icons/Icon";
+import { Icon, type IconName } from "@/components/ui/icons/Icon";
 import { Button } from "@/components/ui/primitives/Button";
 
 export type SocialIconName =
 	| "discord"
+	| "github"
 	| "instagram"
 	| "linkedin"
 	| "linked-in"
@@ -25,12 +27,14 @@ export type SocialLink = {
 	label: string;
 };
 
-type SocialLinksProps = {
+export type SocialLinksProps = {
 	buttonClassName?: string;
 	className?: string;
 	excludeIcons?: SocialIconName[];
 	iconSize?: number;
+	iconWeight?: IconWeight;
 	links: SocialLink[];
+	presentation?: "default" | "footer";
 	showLabels?: boolean;
 	size?: React.ComponentProps<typeof Button>["size"];
 	variant?: React.ComponentProps<typeof Button>["variant"];
@@ -38,6 +42,7 @@ type SocialLinksProps = {
 
 const socialIconAliases: Record<string, IconName> = {
 	discord: "discord",
+	github: "github",
 	instagram: "instagram",
 	linkedIn: "linked-in",
 	linkedin: "linked-in",
@@ -65,6 +70,7 @@ function getSocialIconName(link: SocialLink): IconName | null {
 		const hostname = new URL(link.href).hostname.replace(/^www\./, "");
 		const hostIcon = socialIconAliases[normalizeSocialToken(hostname)];
 		if (hostIcon) return hostIcon;
+		if (hostname.includes("github")) return "github";
 		if (hostname.includes("instagram")) return "instagram";
 		if (hostname.includes("tiktok")) return "tiktok";
 		if (hostname.includes("twitter") || hostname === "x.com") return "x";
@@ -91,7 +97,9 @@ function SocialLinksRoot({
 	className,
 	excludeIcons = [],
 	iconSize = 18,
+	iconWeight = "fill",
 	links,
+	presentation = "default",
 	showLabels = false,
 	size,
 	variant = "secondary",
@@ -114,6 +122,13 @@ function SocialLinksRoot({
 			{visibleLinks.map((link) => {
 				const external = link.external ?? isExternalHref(link.href);
 				const isIconOnly = !showLabels;
+				const leadingIcon = link.resolvedIcon ? (
+					<Icon
+						name={link.resolvedIcon}
+						weight={iconWeight}
+						style={{ width: `${iconSize}px`, height: `${iconSize}px` }}
+					/>
+				) : undefined;
 
 				return (
 					<Button
@@ -125,9 +140,11 @@ function SocialLinksRoot({
 						disabled={link.disabled}
 						target={external ? "_blank" : undefined}
 						rel={external ? "noreferrer" : undefined}
-						leadingIcon={link.resolvedIcon ?? undefined}
-						iconSize={iconSize}
-						className={buttonClassName}
+						leadingIcon={leadingIcon}
+						className={clsx(
+							presentation === "footer" && "!size-[50px] !p-0 rounded-full",
+							buttonClassName,
+						)}
 					>
 						{showLabels ? link.label : null}
 					</Button>
@@ -140,9 +157,13 @@ function SocialLinksRoot({
 function SocialLinksSkeleton({
 	className,
 	count = 4,
+	presentation = "default",
 	showLabels = false,
 	size,
-}: Pick<SocialLinksProps, "className" | "showLabels" | "size"> & {
+}: Pick<
+	SocialLinksProps,
+	"className" | "presentation" | "showLabels" | "size"
+> & {
 	count?: number;
 }) {
 	const resolvedSize = size ?? (showLabels ? "sm" : "icon");
@@ -150,7 +171,14 @@ function SocialLinksSkeleton({
 		<div className={clsx("flex flex-wrap items-center gap-2", className)}>
 			{Array.from({ length: count }, (_, index) => `social-${index + 1}`).map(
 				(key) => (
-					<Button.Skeleton key={key} size={resolvedSize} variant="secondary">
+					<Button.Skeleton
+						className={
+							presentation === "footer" ? "!size-[50px] !p-0" : undefined
+						}
+						key={key}
+						size={resolvedSize}
+						variant="secondary"
+					>
 						{showLabels ? "Social link" : undefined}
 					</Button.Skeleton>
 				),

@@ -69,7 +69,7 @@ function FieldRoot({
 									<span className="inline-flex items-center gap-1">
 										{label}
 										{required ? (
-											<span aria-hidden="true" className="text-danger">
+											<span aria-hidden="true" className="text-danger-text">
 												*
 											</span>
 										) : null}
@@ -102,9 +102,6 @@ function FieldRoot({
 						"transition-all motion-micro -mt-3 overflow-hidden",
 						message ? "max-h-7" : "max-h-0",
 					].join(" ")}
-					role={announceMessage ? "alert" : undefined}
-					aria-live={announceMessage ? "polite" : undefined}
-					aria-atomic={announceMessage ? "true" : undefined}
 				>
 					<Text
 						as="p"
@@ -113,12 +110,15 @@ function FieldRoot({
 						className={[
 							"transition-all motion-micro mt-3", // preserve the field gap only while visible
 							tone === "error"
-								? "!text-danger"
+								? "!text-danger-text"
 								: tone === "success"
-									? "!text-success"
+									? "!text-success-text"
 									: "text-transparent",
 						].join(" ")}
 						id={messageId}
+						role={announceMessage ? "alert" : undefined}
+						aria-live={announceMessage ? "polite" : undefined}
+						aria-atomic={announceMessage ? "true" : undefined}
 						aria-hidden={!hasMessage}
 					>
 						{message ?? "placeholder"}

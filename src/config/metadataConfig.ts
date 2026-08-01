@@ -1,3 +1,5 @@
+import "server-only";
+
 import type { Metadata } from "next";
 import type { RouteSurfaceFamily } from "@/lib/surfaces/routeSurface";
 
@@ -19,7 +21,7 @@ export type SiteMetadataConfig = {
 	name: string;
 };
 
-const siteBaseUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim() || undefined;
+const siteBaseUrl = process.env.SITE_URL?.trim() || undefined;
 
 export const siteMetadata = {
 	name: "Averlo Next Template",
@@ -28,7 +30,7 @@ export const siteMetadata = {
 		"An agent-ready Next.js template for lightweight design-system scaffolds.",
 	keywords: ["agency", "template"],
 	icons: {
-		icon: "/favicon-32x32.png",
+		icon: "/icon.svg",
 		shortcut: "/favicon.ico",
 		apple: "/apple-touch-icon.png",
 	},

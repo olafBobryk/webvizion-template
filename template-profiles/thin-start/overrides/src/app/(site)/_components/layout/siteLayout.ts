@@ -80,7 +80,7 @@ function omitMissingLinks<T>(items: Array<T | null>): T[] {
 	return items.filter((item): item is T => item !== null);
 }
 
-const demoLink = getAvailableInternalRouteLink("Demo", "demo");
+const demoLink = getAvailableInternalRouteLink("Component Sweep", "demo");
 const intelligenceLink = getAvailableInternalRouteLink(
 	"Intelligence",
 	"intelligence",

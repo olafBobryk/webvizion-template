@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/input";
 import { Chip } from "@/components/ui/misc";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 import { DashboardTablePanel } from "../../_components/data/DashboardTablePanel";
 import { DashboardDetailField } from "../../_components/detail/DashboardDetailField";
@@ -117,13 +117,10 @@ export function DashboardSkeletonReferenceClient({
 			title="Skeleton reference"
 		>
 			<Card>
-				<Card.Header>
-					<Card.Title>Representative route composition</Card.Title>
-					<Card.Description>
-						The authentication loading boundary delegates to its field and
-						action owners.
-					</Card.Description>
-				</Card.Header>
+				<Card.Heading
+					description="The authentication loading boundary delegates to its field and\n\t\t\t\t\t\taction owners."
+					title="Representative route composition"
+				/>
 				<Card.Content>
 					<div
 						className="mx-auto w-full max-w-md"
@@ -135,14 +132,10 @@ export function DashboardSkeletonReferenceClient({
 			</Card>
 
 			<Card>
-				<Card.Header>
-					<Card.Title>Pinned-source table correspondence</Card.Title>
-					<Card.Description>
-						The left table is live and sortable; the right is a static,
-						non-interactive loading comparison with identical copy and row
-						geometry.
-					</Card.Description>
-				</Card.Header>
+				<Card.Heading
+					description="The left table is live and sortable; the right is a static,\n\t\t\t\t\t\tnon-interactive loading comparison with identical copy and row\n\t\t\t\t\t\tgeometry."
+					title="Pinned-source table correspondence"
+				/>
 				<Card.Content className="grid gap-5 xl:grid-cols-2">
 					<div data-skeleton-source-normalized="table-live">
 						<NormalizedTableLive />
@@ -154,13 +147,10 @@ export function DashboardSkeletonReferenceClient({
 			</Card>
 
 			<Card>
-				<Card.Header>
-					<Card.Title>Input owners</Card.Title>
-					<Card.Description>
-						Live controls and their namespaced skeletons use the same field,
-						input, option, and typography geometry.
-					</Card.Description>
-				</Card.Header>
+				<Card.Heading
+					description="Live controls and their namespaced skeletons use the same field,\n\t\t\t\t\t\tinput, option, and typography geometry."
+					title="Input owners"
+				/>
 				<Card.Content className="grid gap-8 xl:grid-cols-2">
 					<Comparison title="EmailInput">
 						<EmailInput defaultValue="operator@averlo.local" label="Email" />
@@ -269,26 +259,20 @@ export function DashboardSkeletonReferenceClient({
 			</Card>
 
 			<Card>
-				<Card.Header>
-					<Card.Title>Presentation owners</Card.Title>
-					<Card.Description>
-						Avatar, identity, and detail owners reserve loaded geometry.
-					</Card.Description>
-				</Card.Header>
+				<Card.Heading
+					description="Avatar, identity, and detail owners reserve loaded geometry."
+					title="Presentation owners"
+				/>
 				<Card.Content className="grid gap-8 xl:grid-cols-2">
 					{member ? (
 						<Comparison title="MemberIdentity">
-							<MemberIdentity presentation={member} variant="profile" />
-							<MemberIdentity.Skeleton variant="profile" />
+							<MemberIdentity avatarSize="xl" presentation={member} />
+							<MemberIdentity.Skeleton avatarSize="xl" />
 						</Comparison>
 					) : null}
 					<Comparison title="OrganizationIdentity">
-						<OrganizationIdentity
-							avatarSize="xl"
-							presentation={organization}
-							variant="profile"
-						/>
-						<OrganizationIdentity.Skeleton avatarSize="xl" variant="profile" />
+						<OrganizationIdentity avatarSize="xl" presentation={organization} />
+						<OrganizationIdentity.Skeleton avatarSize="xl" />
 					</Comparison>
 					<Comparison title="DashboardDetailField">
 						<DashboardDetailField
@@ -322,26 +306,103 @@ export function DashboardSkeletonReferenceClient({
 	);
 }
 
+export function DashboardSkeletonReferenceLoadingComposition() {
+	return (
+		<DashboardSection
+			contentClassName="grid gap-5"
+			description="Side-by-side geometry review for component-owned and route-owned loading states."
+			title="Skeleton reference"
+		>
+			<Card>
+				<Card.Heading
+					description="The authentication loading boundary delegates to its field and\n\t\t\t\t\t\taction owners."
+					title="Representative route composition"
+				/>
+				<Card.Content>
+					<div className="mx-auto w-full max-w-md">
+						<LoginLoadingView />
+					</div>
+				</Card.Content>
+			</Card>
+
+			<Card>
+				<Card.Heading
+					description="Loading keeps both comparison columns at the same geometry."
+					title="Pinned-source table correspondence"
+				/>
+				<Card.Content className="grid gap-5 xl:grid-cols-2">
+					<NormalizedTableSkeleton />
+					<NormalizedTableSkeleton />
+				</Card.Content>
+			</Card>
+
+			<Card>
+				<Card.Heading
+					description="Component-owned skeletons reserve the field and input geometry."
+					title="Input owners"
+				/>
+				<Card.Content className="grid gap-8 xl:grid-cols-2">
+					<Comparison title="EmailInput">
+						<EmailInput.Skeleton label="Email" value="operator@averlo.local" />
+						<EmailInput.Skeleton label="Email" value="operator@averlo.local" />
+					</Comparison>
+					<Comparison title="SelectInput">
+						<SelectInput.Skeleton label="Role" value="Owner" />
+						<SelectInput.Skeleton label="Role" value="Owner" />
+					</Comparison>
+				</Card.Content>
+			</Card>
+
+			<Card>
+				<Card.Heading
+					description="Identity owners preserve their own loaded geometry."
+					title="Presentation owners"
+				/>
+				<Card.Content className="grid gap-8 xl:grid-cols-2">
+					<Comparison title="MemberIdentity">
+						<MemberIdentity.Skeleton avatarSize="xl" />
+						<MemberIdentity.Skeleton avatarSize="xl" />
+					</Comparison>
+					<Comparison title="OrganizationIdentity">
+						<OrganizationIdentity.Skeleton avatarSize="xl" />
+						<OrganizationIdentity.Skeleton avatarSize="xl" />
+					</Comparison>
+				</Card.Content>
+			</Card>
+
+			<div className="grid gap-5 xl:grid-cols-2">
+				<RecordCollectionClient.Skeleton
+					canWrite
+					organizationName="Example organization"
+					rowCount={3}
+				/>
+				<RecordCollectionClient.Skeleton
+					canWrite
+					organizationName="Example organization"
+					rowCount={3}
+				/>
+			</div>
+		</DashboardSection>
+	);
+}
+
 function NormalizedTableLive() {
 	return (
 		<DashboardTablePanel
 			columns={normalizedTableColumns}
 			getRowKey={(row) => row.item}
 			header={
-				<Card.Header className="min-w-0 !grid-cols-1 sm:!grid-cols-[1fr_auto]">
-					<Card.Title className="inline-flex min-w-0 flex-wrap items-center gap-2">
-						<Icon name="list" size="sm" />
-						Budget items
-					</Card.Title>
-					<Card.Description className="min-w-0 break-words">
-						Detailed records behind the current filters.
-					</Card.Description>
-					<Card.Action className="!col-start-1 !row-span-1 !row-start-auto mt-2 justify-self-start sm:!col-start-2 sm:!row-span-2 sm:!row-start-1 sm:mt-0 sm:justify-self-end">
+				<Card.Heading
+					action={
 						<Button size="sm" variant="secondary">
 							Export
 						</Button>
-					</Card.Action>
-				</Card.Header>
+					}
+					actionLayout="responsive"
+					description="Detailed records behind the current filters."
+					leading={<Icon name="list" size="sm" />}
+					title="Budget items"
+				/>
 			}
 			rows={normalizedTableRows}
 		/>
@@ -357,20 +418,17 @@ function NormalizedTableSkeleton() {
 				id,
 			}))}
 			header={
-				<Card.Header className="min-w-0 !grid-cols-1 sm:!grid-cols-[1fr_auto]">
-					<Card.Title className="inline-flex min-w-0 flex-wrap items-center gap-2">
-						<Icon name="list" size="sm" />
-						Budget items
-					</Card.Title>
-					<Card.Description className="min-w-0 break-words">
-						Detailed records behind the current filters.
-					</Card.Description>
-					<Card.Action className="!col-start-1 !row-span-1 !row-start-auto mt-2 justify-self-start sm:!col-start-2 sm:!row-span-2 sm:!row-start-1 sm:mt-0 sm:justify-self-end">
+				<Card.Heading
+					action={
 						<Button.Skeleton size="sm" variant="secondary">
 							Export
 						</Button.Skeleton>
-					</Card.Action>
-				</Card.Header>
+					}
+					actionLayout="responsive"
+					description="Detailed records behind the current filters."
+					leading={<Icon name="list" size="sm" />}
+					title="Budget items"
+				/>
 			}
 		>
 			{normalizedTableRows.map((row) => (

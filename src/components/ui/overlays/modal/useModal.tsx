@@ -2,6 +2,7 @@
 "use client";
 
 import { useCallback } from "react";
+import { usePortalScopeId } from "@/components/ui/overlays/Portal";
 import type { ModalRenderFn } from "@/lib/modal";
 import {
 	closeAllModals,
@@ -11,10 +12,11 @@ import {
 } from "@/lib/modal";
 
 export function useModal() {
+	const scopeId = usePortalScopeId();
 	const handleOpen = useCallback(
 		(render: ModalRenderFn, options?: OpenModalOptions) =>
-			openModal(render, options),
-		[],
+			openModal(render, options, scopeId),
+		[scopeId],
 	);
 
 	const handleClose = useCallback((id: string) => closeModal(id), []);

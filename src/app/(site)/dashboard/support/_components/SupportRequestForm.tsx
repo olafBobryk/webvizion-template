@@ -9,7 +9,7 @@ import {
 	TextInput,
 } from "@/components/ui/input";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 import { showToast } from "@/lib/feedback";
 import { OrganizationAvatar } from "../../_components/entities/organization/OrganizationAvatar";
@@ -97,12 +97,10 @@ export function SupportRequestForm() {
 
 	return (
 		<Card as="form" onSubmit={handleSubmit}>
-			<Card.Header>
-				<Card.Title>Contact support</Card.Title>
-				<Card.Description>
-					Save a fixture-only request for the platform team to review.
-				</Card.Description>
-			</Card.Header>
+			<Card.Heading
+				description="Save a fixture-only request for the platform team to review."
+				title="Contact support"
+			/>
 			<Card.Content className="grid gap-5">
 				<SpamProtectionFields />
 				<input

@@ -160,15 +160,31 @@ already occurred.
 
 ## Activation Checklist
 
-The current scaffold is Payload-ready, not Payload-powered. To activate Payload:
+The current scaffold is Payload-ready, not Payload-powered. It includes a
+guarded, published-only readback path for the shared site layout. The default
+`MARKETING_CONTENT_SOURCE=fallback` never initializes Payload. After database
+setup, seed and verify the global before selecting Payload:
+
+```bash
+npm run payload:seed:site-layout
+npm run payload:verify:site-layout
+```
+
+Only then set `MARKETING_CONTENT_SOURCE=payload`. In that mode missing Payload
+configuration, failed reads, unpublished or malformed content, and invalid
+required surface references fail the build/render instead of silently serving
+stale fallback content. Internal destinations store an installed `surfaceId`;
+fragments and external destinations store a direct `href`.
+
+To complete full Payload activation:
 
 1. Replace the `/admin` stub with Payload's real Next.js admin page.
 2. Replace the `/api/[...slug]` stub with Payload's real route handlers.
 3. Keep `payload.config.ts` wired through `@payload-config`.
 4. Refine the existing Payload collections, globals, and blocks for the site's
    editorial contract without replacing the established frontend layout model.
-5. Update `getMarketingPage()` and `getSiteLayout()` to read via the Payload
-   Local API on the server.
+5. Keep the existing guarded `getSiteLayout()` Local API readback and extend the
+   same source boundary to `getMarketingPage()` when page content is migrated.
 6. Map Payload documents into the existing `MarketingPageDocument`,
    `SiteLayoutDocument`, and typed section render contracts used by the
    marketing frontend.

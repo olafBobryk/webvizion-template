@@ -122,7 +122,7 @@ function printUsage() {
 	console.log(`Usage: npm run measure:scroll-performance -- [options]
 
 Options:
-  --path /internal/demo/ui/primitives     Page path to measure (default: ${DEFAULT_TARGET_PATH})
+  --path /                                Page path to measure (default: ${DEFAULT_TARGET_PATH})
   --ready-selector "[data-ready]"         Optional selector to wait for before scrolling
   --base-url http://127.0.0.1:3100        Attach to an existing production-like preview
   --runs 1|3                              Number of repeated runs (default: ${DEFAULT_RUNS})

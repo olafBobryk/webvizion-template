@@ -24,7 +24,7 @@ import {
 	TextInput,
 } from "@/components/ui/input";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 import { surfaceHref } from "@/lib/routes";
 import { SupportStatusChip } from "../../_components/PlatformStatusChip";
@@ -62,7 +62,7 @@ export function PlatformInboxContent({
 						render: (request) => (
 							<MemberIdentity
 								presentation={getPlatformMemberPresentation(request)}
-								variant="compact"
+								variant="default"
 							/>
 						),
 					},

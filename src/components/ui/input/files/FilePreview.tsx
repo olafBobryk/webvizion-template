@@ -45,11 +45,14 @@ type UploadedItem = {
 	url: string; // uploaded url
 	name?: string;
 	type?: string;
+	unoptimized?: boolean;
 	tag?: FilePreviewTag;
 	sortPriority?: number;
 };
 
 export type FilePreviewItem = PendingItem | UploadedItem;
+
+type PreviewShade = "dark" | "light";
 
 type Props = {
 	item: FilePreviewItem;
@@ -102,6 +105,15 @@ function FilePreviewRoot({
 	const isPdf =
 		fileType === "application/pdf" ||
 		(!fileType && (urlLooksLikePdf?.(item.url) ?? false));
+	const [sampledPreview, setSampledPreview] = React.useState<{
+		shade: PreviewShade;
+		url: string;
+	} | null>(null);
+	const previewShade = isPdf
+		? "light"
+		: sampledPreview?.url === item.url
+			? sampledPreview.shade
+			: undefined;
 	const name = "name" in item && item.name ? item.name : nameFromUrl(item.url);
 	const fileTypeLabel = isPdf
 		? (labels?.pdf ?? "PDF")
@@ -145,12 +157,17 @@ function FilePreviewRoot({
 					src={item.url}
 					alt={`file-${index}`}
 					disabled={isDisabled}
+					unoptimized={item.status === "uploaded" && item.unoptimized}
 					width={182}
 					height={105}
 					className="w-full h-full!"
+					onLoad={(event) => {
+						const shade = sampleMedianShade(event.currentTarget);
+						if (shade) setSampledPreview({ shade, url: item.url });
+					}}
 				/>
 			) : isPdf ? (
-				<div className="relative h-full w-full p-2">
+				<div className="relative h-full w-full">
 					<div className="h-full w-full overflow-hidden rounded-[3px] bg-white shadow-[inset_0_0_0_1px_rgba(25,27,37,0.12)]">
 						<object
 							data={pdfPreviewUrl(item.url)}
@@ -233,7 +250,14 @@ function FilePreviewRoot({
 					variant="secondary"
 					size="icon-sm"
 					trailingIcon="cross"
-					className="absolute! top-2! right-2 z-20"
+					data-preview-shade={previewShade}
+					className={clsx(
+						"absolute! top-2! right-2 z-20",
+						previewShade === "light" &&
+							"!bg-black !text-white hover:!bg-black/80",
+						previewShade === "dark" &&
+							"!bg-white !text-black hover:!bg-white/80",
+					)}
 					onClick={(e) => {
 						e.stopPropagation();
 						if (isPending) {
@@ -288,4 +312,39 @@ function nameFromUrl(url: string) {
 	} catch {
 		return url.split("/").pop() ?? url;
 	}
+}
+
+function sampleMedianShade(image: HTMLImageElement): PreviewShade | undefined {
+	try {
+		const canvas = document.createElement("canvas");
+		canvas.width = 16;
+		canvas.height = 16;
+		const context = canvas.getContext("2d", { willReadFrequently: true });
+		if (!context) return undefined;
+
+		context.drawImage(image, 0, 0, canvas.width, canvas.height);
+		const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+		const luminances: number[] = [];
+
+		for (let index = 0; index < pixels.length; index += 4) {
+			if (pixels[index + 3] < 128) continue;
+			const red = linearizeColorChannel(pixels[index] / 255);
+			const green = linearizeColorChannel(pixels[index + 1] / 255);
+			const blue = linearizeColorChannel(pixels[index + 2] / 255);
+			luminances.push(0.2126 * red + 0.7152 * green + 0.0722 * blue);
+		}
+
+		if (luminances.length === 0) return undefined;
+		luminances.sort((a, b) => a - b);
+		const median = luminances[Math.floor(luminances.length / 2)];
+		return median > 0.179 ? "light" : "dark";
+	} catch {
+		return undefined;
+	}
+}
+
+function linearizeColorChannel(channel: number) {
+	return channel <= 0.04045
+		? channel / 12.92
+		: ((channel + 0.055) / 1.055) ** 2.4;
 }

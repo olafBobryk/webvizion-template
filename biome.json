@@ -13,6 +13,7 @@
 			"!node_modules",
 			"!.next",
 			"!.codex",
+			"!template-assembly/capabilities/orchestration/root/_tools/orchestration.mjs",
 			"!test-results",
 			"!dist",
 			"!build"

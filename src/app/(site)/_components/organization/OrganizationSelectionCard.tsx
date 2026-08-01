@@ -4,8 +4,8 @@ import { getOrganizationPresentation } from "@/app/(site)/dashboard/_lib/entitie
 import { Icon, type IconName } from "@/components/ui/icons/Icon";
 import { Chip } from "@/components/ui/misc";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
 import { StatusMessage } from "@/components/ui/primitives/StatusMessage";
+import { Card } from "@/components/ui/primitives/surfaces";
 import type {
 	Organization,
 	OrganizationMembership,
@@ -146,19 +146,22 @@ function OrganizationSelectionCardSkeleton({
 		}));
 	return (
 		<Card className="w-full max-w-lg">
-			<Card.Header>
-				<Card.Title as="h1" className="inline-flex items-center gap-2">
-					{headingIcon ? (
-						<Icon
-							className="text-muted-foreground"
-							name={headingIcon}
-							size="sm"
-						/>
-					) : null}
-					{title}
-				</Card.Title>
-				<Card.Description>{description}</Card.Description>
-			</Card.Header>
+			<Card.Heading
+				description={description}
+				title={
+					<>
+						{headingIcon ? (
+							<Icon
+								className="text-muted-foreground"
+								name={headingIcon}
+								size="sm"
+							/>
+						) : null}
+						{title}
+					</>
+				}
+				titleAs="h1"
+			/>
 			<Card.Content>
 				<div className="divide-y divide-border/70">
 					{skeletonChoices.map((choice) => (

@@ -1,7 +1,7 @@
 import { Icon } from "@/components/ui/icons/Icon";
 import { Chip } from "@/components/ui/misc";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { hrefFor } from "@/lib/routes";
 import { DashboardDetailField } from "../../_components/detail/DashboardDetailField";
 import { OrganizationIdentity } from "../../_components/entities/organization/OrganizationIdentity";
@@ -45,21 +45,15 @@ export function OrganizationSurface({
 			title="Organization"
 		>
 			<Card>
-				<Card.Header>
-					<Card.Title className="inline-flex items-center gap-2">
+				<Card.Heading
+					description="The active organization for this dashboard session."
+					leading={
 						<Icon className="text-muted-foreground" name="building" size="sm" />
-						Organization identity
-					</Card.Title>
-					<Card.Description>
-						The active organization for this dashboard session.
-					</Card.Description>
-				</Card.Header>
+					}
+					title="Organization identity"
+				/>
 				<Card.Content className="grid gap-5">
-					<OrganizationIdentity
-						avatarSize="xl"
-						presentation={presentation}
-						variant="profile"
-					/>
+					<OrganizationIdentity avatarSize="xl" presentation={presentation} />
 					<dl className="grid gap-4 border-t border-border/70 pt-5 sm:grid-cols-2">
 						<DashboardDetailField
 							icon={<Icon name="building" size="sm" />}

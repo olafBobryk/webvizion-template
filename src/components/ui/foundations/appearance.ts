@@ -4,7 +4,7 @@ export type ResolvedAppearance = "light" | "dark";
 export const APP_SETTINGS_STORAGE_KEY = "averlo-ui-settings";
 export const PREVIOUS_DASHBOARD_SETTINGS_STORAGE_KEY =
 	"webvizion-dashboard-settings";
-export const DEFAULT_APPEARANCE: AppearancePreference = "system";
+export const DEFAULT_APPEARANCE: AppearancePreference = "light";
 
 const THEME_COLORS: Record<ResolvedAppearance, string> = {
 	dark: "#18181b",

@@ -1,19 +1,26 @@
-import type { OrganizationIdentityVisual } from "@/config/organization";
 import type { OrganizationPresentation } from "../../../_lib/entities/organization/presentation";
 import { EntityIdentity } from "../EntityIdentity";
 import {
 	OrganizationAvatar,
 	type OrganizationAvatarSize,
 	OrganizationAvatarSkeleton,
+	type OrganizationIdentityVisual,
 } from "./OrganizationAvatar";
+
+export type OrganizationIdentityVariant = "actor" | "default";
+
+const defaultAvatarSize = {
+	actor: "sm",
+	default: "md",
+} satisfies Record<OrganizationIdentityVariant, OrganizationAvatarSize>;
 
 function OrganizationIdentityRoot({
 	avatarClassName,
-	avatarSize = "md",
+	avatarSize,
 	className,
 	presentation,
 	textClassName,
-	variant = "compact",
+	variant = "default",
 	visual,
 }: {
 	avatarClassName?: string;
@@ -21,9 +28,11 @@ function OrganizationIdentityRoot({
 	className?: string;
 	presentation: OrganizationPresentation;
 	textClassName?: string;
-	variant?: "compact" | "profile";
+	variant?: OrganizationIdentityVariant;
 	visual?: OrganizationIdentityVisual;
 }) {
+	const actor = variant === "actor";
+	const resolvedAvatarSize = avatarSize ?? defaultAvatarSize[variant];
 	return (
 		<EntityIdentity
 			avatar={
@@ -33,13 +42,14 @@ function OrganizationIdentityRoot({
 					colorIndex={presentation.avatarColorIndex}
 					imageUrl={presentation.avatarUrl}
 					initials={presentation.initials}
-					size={avatarSize}
+					size={resolvedAvatarSize}
 					visual={visual}
 				/>
 			}
+			avatarSize={resolvedAvatarSize}
 			className={className}
 			primaryLabel={presentation.displayLabel}
-			secondaryLabel={presentation.secondaryLabel}
+			secondaryLabel={actor ? undefined : presentation.secondaryLabel}
 			textClassName={textClassName}
 			variant={variant}
 		/>
@@ -47,27 +57,31 @@ function OrganizationIdentityRoot({
 }
 
 function OrganizationIdentitySkeleton({
-	avatarSize = "md",
+	avatarSize,
 	className,
 	displayLabel = "Example organization",
 	secondaryLabel = "example · Member",
-	variant = "compact",
+	variant = "default",
 	visual,
 }: {
 	avatarSize?: OrganizationAvatarSize;
 	className?: string;
 	displayLabel?: string;
 	secondaryLabel?: string;
-	variant?: "compact" | "profile";
+	variant?: OrganizationIdentityVariant;
 	visual?: OrganizationIdentityVisual;
 }) {
+	const resolvedAvatarSize = avatarSize ?? defaultAvatarSize[variant];
 	return (
 		<EntityIdentity.Skeleton
-			avatar={<OrganizationAvatarSkeleton size={avatarSize} visual={visual} />}
+			avatar={
+				<OrganizationAvatarSkeleton size={resolvedAvatarSize} visual={visual} />
+			}
+			avatarSize={resolvedAvatarSize}
 			className={className}
 			primaryLabel={displayLabel}
 			secondaryClassName="max-w-36"
-			secondaryLabel={secondaryLabel}
+			secondaryLabel={variant === "actor" ? undefined : secondaryLabel}
 			variant={variant}
 		/>
 	);

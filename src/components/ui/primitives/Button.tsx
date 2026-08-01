@@ -39,7 +39,7 @@ const buttonStyles = cva(
 			tone: {
 				default: "",
 				danger:
-					"!text-danger focus-visible:!border-danger/40 focus-visible:!ring-danger/20",
+					"!text-danger-text focus-visible:!border-danger/40 focus-visible:!ring-danger/20",
 			},
 			size: {
 				none: "",

@@ -103,7 +103,7 @@ const IconRoot = ({
 				<span
 					className={[
 						iconSizeStyles({ size }),
-						"inline-flex items-center justify-center rounded-[4px] border border-dashed border-danger/50 text-[9px] leading-none text-danger/80",
+						"inline-flex items-center justify-center rounded-[4px] border border-dashed border-danger/50 text-[9px] leading-none text-danger-text/80",
 						frame === "none" ? className : undefined,
 					]
 						.filter(Boolean)

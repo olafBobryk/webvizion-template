@@ -23,11 +23,9 @@ for (const [, key, value] of markers) {
 		`Missing entity policy path ${value}`,
 	);
 }
-assert.ok(
-	policy.includes(
-		"<!-- entity-contract:optional-surface=dashboardReferenceEntities -->",
-	),
-);
+assert.equal(policy.includes("entity-contract:reference-"), false);
+assert.equal(policy.includes("entity-contract:optional-surface"), false);
+assert.ok(policy.includes("task-local finite-axis reviewer"));
 
 for (const relativePath of [
 	"src/app/(site)/dashboard/_lib/entities/account/presentation.ts",
@@ -53,6 +51,52 @@ const dashboardSourceFiles = [
 ];
 for (const sourcePath of dashboardSourceFiles) {
 	assert.ok(existsSync(resolve(root, sourcePath)));
+}
+
+const entitySelector = readFileSync(
+	resolve(
+		root,
+		"src/app/(site)/dashboard/_components/entities/EntitySelector.tsx",
+	),
+	"utf8",
+);
+assert.ok(
+	entitySelector.includes("<SelectInput") &&
+		entitySelector.includes('dropdownPositionStrategy="fixed"') &&
+		entitySelector.includes("renderOption(entity)") &&
+		entitySelector.includes("dropdownContent:"),
+	"EntitySelector must own plain selected text, fixed portal positioning, and caller-rendered presentation rows.",
+);
+assert.ok(
+	!entitySelector.includes("showSelectedIcon={") &&
+		entitySelector.includes('"showSelectedIcon"'),
+	"EntitySelector must prevent callers from placing entity presentation in the closed InputFrame.",
+);
+for (const [entity, identity] of [
+	["member", "Member"],
+	["organization", "Organization"],
+	["record", "Record"],
+] as const) {
+	const selector = readFileSync(
+		resolve(
+			root,
+			`src/app/(site)/dashboard/_components/entities/${entity}/${identity}Selector.tsx`,
+		),
+		"utf8",
+	);
+	assert.ok(
+		selector.includes("<EntitySelector") &&
+			selector.includes(`renderOption={`) &&
+			selector.includes(`<${identity}Identity`) &&
+			selector.includes('variant="default"'),
+		`${identity}Selector must compose EntitySelector and explicitly choose its default identity presentation.`,
+	);
+	assert.equal(
+		selector.includes("dropdownContent:") ||
+			selector.includes("showSelectedIcon"),
+		false,
+		`${identity}Selector must leave listbox mechanics and closed InputFrame presentation to EntitySelector.`,
+	);
 }
 
 const registry = readFileSync(

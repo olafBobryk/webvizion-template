@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 import { InternalPage, InternalPageHeader } from "../_components/InternalPage";
 

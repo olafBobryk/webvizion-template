@@ -10,7 +10,7 @@ import { getOrganizationPresentation } from "@/app/(site)/dashboard/_lib/entitie
 import { Icon } from "@/components/ui/icons/Icon";
 import { useModal } from "@/components/ui/overlays/modal/useModal";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { hrefFor } from "@/lib/routes";
 import { OrganizationEditModal } from "./OrganizationEditModal";
 
@@ -55,15 +55,8 @@ function OrganizationSettingsSectionRoot({
 	return (
 		<>
 			<Card>
-				<Card.Header>
-					<Card.Title className="inline-flex items-center gap-2">
-						<Icon className="text-muted-foreground" name="building" size="sm" />
-						Organization identity
-					</Card.Title>
-					<Card.Description>
-						Name, slug, and picture shown across the dashboard.
-					</Card.Description>
-					<Card.Action>
+				<Card.Heading
+					action={
 						<Button
 							leadingIcon="pencil"
 							onClick={openOrganizationEditor}
@@ -73,14 +66,15 @@ function OrganizationSettingsSectionRoot({
 						>
 							Edit organization
 						</Button>
-					</Card.Action>
-				</Card.Header>
+					}
+					description="Name, slug, and picture shown across the dashboard."
+					leading={
+						<Icon className="text-muted-foreground" name="building" size="sm" />
+					}
+					title="Organization identity"
+				/>
 				<Card.Content className="grid gap-5">
-					<OrganizationIdentity
-						avatarSize="xl"
-						presentation={presentation}
-						variant="profile"
-					/>
+					<OrganizationIdentity avatarSize="xl" presentation={presentation} />
 					<dl className="grid gap-4 sm:grid-cols-2">
 						<DashboardDetailField
 							icon={<Icon name="building" size="sm" />}
@@ -99,15 +93,8 @@ function OrganizationSettingsSectionRoot({
 			</Card>
 
 			<Card>
-				<Card.Header>
-					<Card.Title className="inline-flex items-center gap-2">
-						<Icon className="text-muted-foreground" name="users" size="sm" />
-						People and access
-					</Card.Title>
-					<Card.Description>
-						A quick view of members, pending invitations, and your role.
-					</Card.Description>
-					<Card.Action>
+				<Card.Heading
+					action={
 						<Button
 							href={hrefFor("dashboard.administration")}
 							size="sm"
@@ -115,8 +102,13 @@ function OrganizationSettingsSectionRoot({
 						>
 							Manage access
 						</Button>
-					</Card.Action>
-				</Card.Header>
+					}
+					description="A quick view of members, pending invitations, and your role."
+					leading={
+						<Icon className="text-muted-foreground" name="users" size="sm" />
+					}
+					title="People and access"
+				/>
 				<Card.Content>
 					<dl className="grid gap-4 sm:grid-cols-3">
 						<DashboardDetailField
@@ -154,22 +146,20 @@ export function OrganizationSettingsSectionSkeleton() {
 	return (
 		<>
 			<Card>
-				<Card.Header>
-					<Card.Title className="inline-flex items-center gap-2">
-						<Icon className="text-muted-foreground" name="building" size="sm" />
-						Organization identity
-					</Card.Title>
-					<Card.Description>
-						Name, slug, and picture shown across the dashboard.
-					</Card.Description>
-					<Card.Action>
+				<Card.Heading
+					action={
 						<Button.Skeleton leadingIcon size="sm" variant="ghost">
 							Edit organization
 						</Button.Skeleton>
-					</Card.Action>
-				</Card.Header>
+					}
+					description="Name, slug, and picture shown across the dashboard."
+					leading={
+						<Icon className="text-muted-foreground" name="building" size="sm" />
+					}
+					title="Organization identity"
+				/>
 				<Card.Content className="grid gap-5">
-					<OrganizationIdentity.Skeleton avatarSize="xl" variant="profile" />
+					<OrganizationIdentity.Skeleton avatarSize="xl" />
 					<dl className="grid gap-4 sm:grid-cols-2">
 						<DashboardDetailField.Skeleton
 							icon={<Icon name="building" size="sm" />}
@@ -187,20 +177,18 @@ export function OrganizationSettingsSectionSkeleton() {
 			</Card>
 
 			<Card>
-				<Card.Header>
-					<Card.Title className="inline-flex items-center gap-2">
-						<Icon className="text-muted-foreground" name="users" size="sm" />
-						People and access
-					</Card.Title>
-					<Card.Description>
-						A quick view of members, pending invitations, and your role.
-					</Card.Description>
-					<Card.Action>
+				<Card.Heading
+					action={
 						<Button.Skeleton size="sm" variant="primary">
 							Manage access
 						</Button.Skeleton>
-					</Card.Action>
-				</Card.Header>
+					}
+					description="A quick view of members, pending invitations, and your role."
+					leading={
+						<Icon className="text-muted-foreground" name="users" size="sm" />
+					}
+					title="People and access"
+				/>
 				<Card.Content>
 					<dl className="grid gap-4 sm:grid-cols-3">
 						<DashboardDetailField.Skeleton

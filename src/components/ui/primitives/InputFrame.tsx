@@ -7,10 +7,17 @@ import * as React from "react";
 import { focusRing } from "@/components/ui/foundations/focus";
 import { Skeleton } from "@/components/ui/misc/Skeleton";
 
+export const inputFrameChromeClassName =
+	"min-w-0 rounded-3xl border border-transparent bg-input/50 text-foreground";
+
 const inputFrameVariants = cva(
-	"flex min-w-0 items-stretch gap-2.5 rounded-3xl border border-transparent bg-input/50 text-foreground transition-[color,box-shadow,background-color] outline-none",
+	`flex items-stretch gap-2.5 transition-[color,box-shadow,background-color] outline-none ${inputFrameChromeClassName}`,
 	{
 		variants: {
+			presentation: {
+				default: "",
+				composer: "!rounded-2xl !bg-background",
+			},
 			size: {
 				sm: "h-9",
 				md: "min-h-[40px]",
@@ -29,6 +36,7 @@ const inputFrameVariants = cva(
 			},
 		},
 		defaultVariants: {
+			presentation: "default",
 			size: "sm",
 			tone: "default",
 		},
@@ -110,6 +118,7 @@ const InputFrameRoot = React.forwardRef<HTMLDivElement, InputFrameProps>(
 			children,
 			className,
 			contentClassName,
+			presentation,
 			size,
 			tone,
 			fullWidth,
@@ -124,6 +133,7 @@ const InputFrameRoot = React.forwardRef<HTMLDivElement, InputFrameProps>(
 				tone,
 				fullWidth: fullWidth ? true : undefined,
 				disabled,
+				presentation,
 			}),
 			start ? inputFrameStartPaddingClasses[size ?? "sm"] : undefined,
 			end ? inputFrameEndPaddingClasses[size ?? "sm"] : undefined,
@@ -170,12 +180,17 @@ export function InputFrameSkeleton({
 	size = "sm",
 	skeletonClassName,
 	start: _start,
+	presentation,
 	...rest
 }: InputFrameSkeletonProps) {
 	return (
 		<Skeleton
 			className={clsx(
-				inputFrameVariants({ size, fullWidth: fullWidth ? true : undefined }),
+				inputFrameVariants({
+					size,
+					fullWidth: fullWidth ? true : undefined,
+					presentation,
+				}),
 				"pointer-events-none select-none border-transparent !bg-muted/80 shadow-none",
 				radius === "textarea" ? "!rounded-2xl" : "!rounded-3xl",
 				className,

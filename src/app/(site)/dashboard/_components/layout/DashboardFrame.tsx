@@ -11,12 +11,10 @@ import {
 } from "@/components/ui/foundations/motionTiming";
 import { useModal } from "@/components/ui/overlays/modal/useModal";
 import { Button } from "@/components/ui/primitives/Button";
+import { Panel } from "@/components/ui/primitives/surfaces";
 import { useMotionAllowed } from "@/hooks/useMotionAllowed";
 import { hrefFor } from "@/lib/routes";
-import {
-	dashboardDebugEnabled,
-	isDashboardDebugState,
-} from "../../_registry/debug";
+import { isDashboardDebugState } from "../../_registry/debug";
 import {
 	getDashboardCapabilities,
 	getDashboardSurface,
@@ -30,8 +28,13 @@ import { DashboardDebugStateView } from "../debug/DashboardDebugStateView";
 import { ReportIssueModal } from "../feedback/ReportIssueModal";
 import { useDashboardAuth } from "../providers/DashboardAuthProvider";
 import { DashboardAccountMenu } from "./DashboardAccountMenu";
+import { DashboardContentShell } from "./DashboardContentShell";
 import { DashboardOrganizationSwitcher } from "./DashboardOrganizationSwitcher";
 import { DashboardSidebarNav } from "./DashboardSidebarNav";
+import {
+	DashboardSidebarShell,
+	getDashboardSidebarOffsetClassNames,
+} from "./DashboardSidebarShell";
 
 const forceLoadingStorageKey = "averlo-dashboard:force-loading";
 const footerLayoutTransition = resolveMotionTransition("overlay", {
@@ -101,7 +104,9 @@ function DashboardFooterActions({
 		<div
 			className={clsx(
 				"flex w-full items-center gap-1",
-				collapsed ? "flex-col" : "flex-row flex-wrap justify-start",
+				collapsed
+					? "flex-col justify-center"
+					: "flex-row flex-wrap justify-start",
 			)}
 		>
 			{actions.map((action) => (
@@ -151,23 +156,28 @@ export function DashboardFrame({
 }>) {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
-	const { membership, organization, user } = useDashboardAuth();
+	const { membership, organization, organizationChoices, user } =
+		useDashboardAuth();
 	const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
 	const [mobileSidebarOpen, setMobileSidebarOpen] = React.useState(false);
 	const [forceLoading, setForceLoading] = React.useState(false);
 	const surface = getDashboardSurface(pathname);
+	const layoutWidth = surface?.layoutWidth ?? "standard";
 	const capabilities = React.useMemo(
 		() => getDashboardCapabilities(membership.role, user?.platformRole ?? null),
 		[membership.role, user?.platformRole],
 	);
+	const debugEnabled = capabilities.has("debug.use");
 	const debugStateValue = searchParams.get("debug-state");
 	const debugState =
-		dashboardDebugEnabled && isDashboardDebugState(debugStateValue)
+		debugEnabled && isDashboardDebugState(debugStateValue)
 			? debugStateValue
-			: forceLoading
+			: debugEnabled && forceLoading
 				? "loading"
 				: null;
 	const currentRoute = `${pathname}${searchParams.size ? `?${searchParams.toString()}` : ""}`;
+	const sidebarOffsetClassNames =
+		getDashboardSidebarOffsetClassNames(sidebarCollapsed);
 
 	React.useEffect(() => {
 		try {
@@ -196,66 +206,13 @@ export function DashboardFrame({
 
 	return (
 		<DashboardCommandProvider
+			canSwitchOrganizations={organizationChoices.length > 1}
 			capabilities={capabilities}
 			organization={organization}
 		>
 			<div className="min-h-screen bg-background text-foreground">
-				{mobileSidebarOpen ? (
-					<button
-						aria-label="Close sidebar"
-						className="fixed inset-0 z-30 bg-black/35 backdrop-blur-[2px] lg:hidden"
-						onClick={() => setMobileSidebarOpen(false)}
-						type="button"
-					/>
-				) : null}
-				<aside
-					className={clsx(
-						"fixed inset-y-0 left-0 z-40 flex flex-col overflow-hidden border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-[width] motion-macro",
-						mobileSidebarOpen ? "w-[260px]" : "w-[64px]",
-						sidebarCollapsed ? "lg:w-[72px]" : "lg:w-[260px]",
-					)}
-					id="dashboard-sidebar"
-				>
-					<div
-						className={clsx(
-							"flex min-h-16 items-center gap-2 border-b border-sidebar-border/70 px-3",
-							mobileSidebarOpen ? "justify-between" : "justify-center",
-							sidebarCollapsed ? "lg:justify-center" : "lg:justify-between",
-						)}
-					>
-						{!sidebarCollapsed ? (
-							<Logo
-								className={clsx(
-									mobileSidebarOpen ? "inline-flex" : "max-lg:!hidden",
-								)}
-								href={hrefFor("dashboard.overview")}
-								size="sm"
-							/>
-						) : null}
-						<Button
-							aria-expanded={mobileSidebarOpen}
-							aria-label={
-								mobileSidebarOpen ? "Collapse sidebar" : "Open sidebar"
-							}
-							className="!size-10 !p-0 lg:hidden"
-							leadingIcon={mobileSidebarOpen ? "sidebar-collapse" : "menu"}
-							onClick={() => setMobileSidebarOpen((current) => !current)}
-							size="icon-sm"
-							variant="ghost"
-						/>
-						<Button
-							aria-expanded={!sidebarCollapsed}
-							aria-label={
-								sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"
-							}
-							className="!size-10 !p-0 max-lg:hidden"
-							leadingIcon={sidebarCollapsed ? "menu" : "sidebar-collapse"}
-							onClick={() => setSidebarCollapsed((current) => !current)}
-							size="icon-sm"
-							variant="ghost"
-						/>
-					</div>
-					<div className="min-h-0 flex-1 overflow-y-auto py-4">
+				<DashboardSidebarShell
+					body={
 						<div className="grid">
 							<div className="border-b border-sidebar-border/70 px-2 pb-4 lg:px-3">
 								<DashboardOrganizationSwitcher
@@ -272,41 +229,62 @@ export function DashboardFrame({
 								/>
 							</div>
 						</div>
-					</div>
-					<div className="border-t border-sidebar-border/70 p-3">
-						<div className="lg:hidden">
-							<DashboardFooterActions
-								collapsed={!mobileSidebarOpen}
-								currentRoute={currentRoute}
-								onNavigate={() => setMobileSidebarOpen(false)}
-								platformAdmin={user?.platformRole === "admin"}
+					}
+					brand={
+						<div className="flex translate-y-px items-center pl-3.5">
+							<Logo
+								className={clsx(
+									mobileSidebarOpen
+										? "inline-flex max-lg:-ml-1"
+										: "max-lg:!hidden",
+								)}
+								href={hrefFor("dashboard.overview")}
+								size="sm"
 							/>
 						</div>
-						<div className="max-lg:hidden">
-							<DashboardFooterActions
-								collapsed={sidebarCollapsed}
-								currentRoute={currentRoute}
-								onNavigate={() => undefined}
-								platformAdmin={user?.platformRole === "admin"}
-							/>
-						</div>
-					</div>
-				</aside>
-				<div
-					className={clsx(
-						"min-w-0 transition-[padding] motion-macro",
-						sidebarCollapsed
-							? "pl-[64px] lg:pl-[72px]"
-							: "pl-[64px] lg:pl-[260px]",
-					)}
-				>
-					<header
-						className={clsx(
-							"fixed right-0 top-0 z-30 border-b border-border/75 bg-background/84 backdrop-blur-xl transition-[left] motion-macro",
-							sidebarCollapsed
-								? "left-[64px] lg:left-[72px]"
-								: "left-[64px] lg:left-[260px]",
-						)}
+					}
+					collapsed={sidebarCollapsed}
+					footer={
+						<>
+							<div className="lg:hidden">
+								<DashboardFooterActions
+									collapsed={!mobileSidebarOpen}
+									currentRoute={currentRoute}
+									onNavigate={() => setMobileSidebarOpen(false)}
+									platformAdmin={user?.platformRole === "admin"}
+								/>
+							</div>
+							<div className="max-lg:hidden">
+								<DashboardFooterActions
+									collapsed={sidebarCollapsed}
+									currentRoute={currentRoute}
+									onNavigate={() => undefined}
+									platformAdmin={user?.platformRole === "admin"}
+								/>
+							</div>
+						</>
+					}
+					mobileOpen={mobileSidebarOpen}
+					onCollapsedChange={setSidebarCollapsed}
+					onMobileOpenChange={setMobileSidebarOpen}
+				/>
+				<div className={sidebarOffsetClassNames.content}>
+					<Panel
+						as="header"
+						background="page"
+						border="none"
+						className={sidebarOffsetClassNames.header}
+						data-shell-surface="dashboard-header"
+						display="block"
+						gap="none"
+						overflow="visible"
+						padding="none"
+						radius="none"
+						style={{
+							backgroundColor:
+								"color-mix(in oklab, var(--color-background) 84%, transparent)",
+						}}
+						width="auto"
 					>
 						<div className="flex min-h-16 items-center gap-3 px-4 sm:px-6">
 							<div className="flex min-w-0 flex-1 items-center justify-end">
@@ -316,37 +294,20 @@ export function DashboardFrame({
 								<DashboardAccountMenu />
 							</div>
 						</div>
-					</header>
-					<main
-						className={clsx(
-							"flex w-full flex-col gap-5 pb-8 pt-24",
-							surface?.layoutWidth === "wide"
-								? "min-w-0 px-4 sm:px-6"
-								: "mx-auto max-w-6xl px-4 sm:px-6 lg:px-8",
-						)}
-						id="dashboard-main"
-						tabIndex={-1}
+					</Panel>
+					<DashboardContentShell
+						layoutWidth={layoutWidth}
+						overlay={
+							debugState ? (
+								<DashboardDebugStateView
+									pathname={pathname}
+									state={debugState}
+								/>
+							) : undefined
+						}
 					>
-						<div className="relative min-h-[calc(100svh-8rem)] min-w-0">
-							<div
-								aria-hidden={debugState ? true : undefined}
-								className={clsx(
-									"min-w-0",
-									debugState && "invisible pointer-events-none",
-								)}
-							>
-								{children}
-							</div>
-							{debugState ? (
-								<div className="absolute inset-0 bg-background">
-									<DashboardDebugStateView
-										pathname={pathname}
-										state={debugState}
-									/>
-								</div>
-							) : null}
-						</div>
-					</main>
+						{children}
+					</DashboardContentShell>
 				</div>
 				<DashboardDebugMenu
 					capabilities={capabilities}

@@ -16,6 +16,7 @@ import { showToast } from "@/lib/feedback";
 type ImageInspectModalProps = {
 	src: string;
 	alt?: string;
+	unoptimized?: boolean;
 	onClose: () => void;
 	shareUrl?: string;
 	onShare?: () => void | Promise<void>;
@@ -24,6 +25,7 @@ type ImageInspectModalProps = {
 export function ImageInspectModal({
 	src,
 	alt = "Preview image",
+	unoptimized,
 	onClose,
 	shareUrl,
 	onShare,
@@ -70,6 +72,7 @@ export function ImageInspectModal({
 						fill
 						sizes="(min-width: 1024px) 56rem, calc(100vw - 2rem)"
 						priority
+						unoptimized={unoptimized}
 						className="h-full w-full"
 						contentClassName="h-full w-full"
 						imageClassName="object-contain select-none"

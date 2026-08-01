@@ -9,7 +9,7 @@ import {
 	TextInput,
 } from "@/components/ui/input";
 import { Button, type ButtonProps } from "@/components/ui/primitives/Button";
-import { Panel } from "@/components/ui/primitives/Panel";
+import { Panel } from "@/components/ui/primitives/surfaces";
 
 type DirectiveButtonVariant = NonNullable<ButtonProps["variant"]>;
 type DirectiveButtonTone = NonNullable<ButtonProps["tone"]>;

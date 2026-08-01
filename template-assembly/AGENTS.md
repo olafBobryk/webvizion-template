@@ -1,8 +1,8 @@
 # Positive project assembly
 
-- `create:project` positively selects a route profile and supported content capability. Do not restore exclusion flags, in-place mutation, or a second project-creation engine.
+- `create:project` positively selects a route profile, content mode, and explicit opt-in capabilities. Do not restore exclusion flags, in-place mutation, or a second project-creation engine.
 - Every source path, document, package, script, generated file, and surface has explicit core, surface, profile, or template-only ownership. Unclassified entries fail closed.
-- Generated projects contain selected project code and a schema-v2 receipt, never template profiles, inventories, or creation machinery.
+- Generated projects contain selected project code and a schema-v2 receipt, never template profiles, inventories, or creation machinery. Missing receipt capabilities normalize to `[]`; later capability markers remain outside the immutable receipt.
 - Shared source is canonical. Profile-specific replacements are explicit file-backed overrides; never embed component or application source in renderer strings.
 - Generated workspaces are disposable one-way outputs. Edit canonical source or an owned override, then reassemble.
 - Keep generated routes, API exports, configuration, package state, documentation ownership, and the receipt derived from the same selected surfaces.

@@ -1,9 +1,8 @@
 "use client";
 
-import { SelectInput } from "@/components/ui/input";
-import { Field } from "@/components/ui/primitives/Field";
 import type { MemberPresentation } from "../../../_lib/entities/member/presentation";
-import { MemberAvatar } from "./MemberAvatar";
+import { EntitySelector } from "../EntitySelector";
+import { MemberIdentity } from "./MemberIdentity";
 
 function MemberSelectorRoot({
 	description,
@@ -22,29 +21,25 @@ function MemberSelectorRoot({
 	onChange: (memberId: string) => void;
 	value: string | null;
 }) {
-	const options = members.map((member) => ({
-		icon: (
-			<MemberAvatar
-				alt=""
-				colorIndex={member.avatarColorIndex}
-				imageUrl={member.avatarUrl}
-				initials={member.initials}
-				size="sm"
-			/>
-		),
-		label: member.displayLabel,
-		searchText: member.searchText,
-		value: member.id,
-	}));
 	return (
-		<SelectInput
+		<EntitySelector
 			description={description}
 			disabled={disabled}
+			getOptionLabel={(member) => member.displayLabel}
+			getOptionSearchText={(member) => member.searchText}
+			getOptionValue={(member) => member.id}
+			items={members}
 			label={label}
 			name={name}
 			onChange={onChange}
-			options={options}
 			placeholder="Select a member"
+			renderOption={(member) => (
+				<MemberIdentity
+					className="w-full"
+					presentation={member}
+					variant="default"
+				/>
+			)}
 			value={value}
 		/>
 	);
@@ -58,9 +53,11 @@ function MemberSelectorSkeleton({
 	label?: string;
 }) {
 	return (
-		<Field.Skeleton description={description} fullWidth label={label}>
-			Example member
-		</Field.Skeleton>
+		<EntitySelector.Skeleton
+			description={description}
+			label={label}
+			value="Example member"
+		/>
 	);
 }
 

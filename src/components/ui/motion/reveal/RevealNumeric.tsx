@@ -110,10 +110,10 @@ export function NumericReveal({
 				ref={(node: HTMLElement | null) => {
 					ref.current = node;
 				}}
-				aria-label={finalText}
 				className={clsx("inline-flex items-baseline", resolvedClassName)}
 				{...rest}
 			>
+				<span className="sr-only">{finalText}</span>
 				<NumericCountUpText
 					active={shouldPlay || hasPlayed}
 					onComplete={handleDigitComplete}
@@ -156,10 +156,10 @@ export function NumericReveal({
 			ref={(node: HTMLElement | null) => {
 				ref.current = node;
 			}}
-			aria-label={finalText}
 			className={clsx("inline-flex items-baseline", resolvedClassName)}
 			{...rest}
 		>
+			<span className="sr-only">{finalText}</span>
 			{tokens.map((token) => {
 				if (token.digitIndex === null) {
 					return (

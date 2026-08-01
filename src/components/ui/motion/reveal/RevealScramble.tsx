@@ -365,7 +365,9 @@ export function ScrambleReveal({
 				)}
 				{...rest}
 			>
-				<span className="relative opacity-0">{finalText}</span>
+				<span className="relative opacity-0" aria-hidden="true">
+					{finalText}
+				</span>
 				<span
 					ref={(node: HTMLElement | null) => {
 						displayRef.current = node;

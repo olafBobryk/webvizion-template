@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { InternalPage, InternalPageHeader } from "../_components/InternalPage";
 
 const REFERENCE_LINKS = [

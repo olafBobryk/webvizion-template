@@ -1,13 +1,5 @@
 import type * as React from "react";
-import type {
-	CardAction,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardProps,
-	CardTitle,
-} from "@/components/ui/primitives/Card";
+import type { Card, CardProps } from "@/components/ui/primitives/surfaces";
 
 export type AccordionStateProps = {
 	defaultOpen?: boolean;
@@ -18,6 +10,14 @@ export type AccordionStateProps = {
 	open?: boolean;
 };
 
+export type AccordionTriggerRenderProps = {
+	"aria-controls": string;
+	"aria-expanded": boolean;
+	disabled: boolean;
+	onClick: () => void;
+	type: "button";
+};
+
 export type AccordionProps = AccordionStateProps & {
 	buttonClassName?: string;
 	children?: React.ReactNode;
@@ -26,6 +26,7 @@ export type AccordionProps = AccordionStateProps & {
 	description?: React.ReactNode;
 	icon?: React.ReactNode;
 	iconClassName?: string;
+	renderTrigger?: (props: AccordionTriggerRenderProps) => React.ReactNode;
 	title: React.ReactNode;
 	titleClassName?: string;
 	triggerClassName?: string;
@@ -51,27 +52,27 @@ export type AccordionCardProps = Omit<CardProps, "children"> &
 	};
 
 export type AccordionHeaderProps = React.ComponentPropsWithoutRef<
-	typeof CardHeader
+	typeof Card.Header
 >;
 
 export type AccordionTitleProps = React.ComponentPropsWithoutRef<
-	typeof CardTitle
+	typeof Card.Title
 >;
 
 export type AccordionDescriptionProps = React.ComponentPropsWithoutRef<
-	typeof CardDescription
+	typeof Card.Description
 >;
 
 export type AccordionActionProps = React.ComponentPropsWithoutRef<
-	typeof CardAction
+	typeof Card.Action
 >;
 
 export type AccordionContentProps = React.ComponentPropsWithoutRef<
-	typeof CardContent
+	typeof Card.Content
 >;
 
 export type AccordionFooterProps = React.ComponentPropsWithoutRef<
-	typeof CardFooter
+	typeof Card.Footer
 >;
 
 export type AccordionCardSkeletonProps = Omit<

@@ -41,93 +41,112 @@ function collectPages(directory: string) {
 	return pages;
 }
 
-assertRouteSurfaceRegistry(appSurfaceRegistry);
+async function main() {
+	assertRouteSurfaceRegistry(appSurfaceRegistry);
 
-const siteLayoutSource = readFileSync(
-	resolve(appRoot, "(site)/_components/layout/siteLayout.ts"),
-	"utf8",
-);
-assert.doesNotMatch(
-	siteLayoutSource,
-	/process\.env\.NODE_ENV/,
-	"Installed navigation must not disappear from production builds.",
-);
-
-const headerMenuHrefs = new Set(
-	defaultSiteLayout.header.menuGroups.flatMap((group) => [
-		...(group.link ? [getSiteLinkHref(group.link)] : []),
-		...(group.links ?? []).map(getSiteLinkHref),
-	]),
-);
-const topLevelInternalHrefs = Object.values(internalRoutes).filter(
-	(href) => href.split("/").filter(Boolean).length === 2,
-);
-for (const href of topLevelInternalHrefs) {
-	assert.ok(
-		headerMenuHrefs.has(href),
-		`Installed internal route ${href} is missing from the header menu.`,
+	const siteLayoutSource = readFileSync(
+		resolve(appRoot, "(site)/_components/layout/siteLayout.ts"),
+		"utf8",
 	);
-}
-for (const surface of appSurfaceRegistry) {
-	if (surface.family !== "marketing" || surface.match !== "exact") continue;
-	assert.ok(
-		headerMenuHrefs.has(surface.href),
-		`Installed marketing route ${surface.href} is missing from the header menu.`,
+	assert.doesNotMatch(
+		siteLayoutSource,
+		/process\.env\.NODE_ENV/,
+		"Installed navigation must not disappear from production builds.",
 	);
-}
 
-for (const [family, familyRoot] of Object.entries(familyRoots)) {
-	const installedInRoutes = appSurfaceRegistry.some(
-		(surface) => surface.family === family,
+	const marketingFallbackPath = resolve(
+		root,
+		"src/lib/marketing-content/fallback.ts",
 	);
-	assert.equal(
-		existsSync(familyRoot),
-		installedInRoutes,
-		`${family} route tree and installed surface registry must be added or removed together.`,
+	const navigationLayout = existsSync(marketingFallbackPath)
+		? (await import("../../src/lib/marketing-content/fallback"))
+				.fallbackSiteLayout
+		: defaultSiteLayout;
+
+	const installedShellHrefs = new Set(
+		defaultSiteLayout.header.menuGroups.flatMap((group) => [
+			...(group.link ? [getSiteLinkHref(group.link)] : []),
+			...(group.links ?? []).map(getSiteLinkHref),
+		]),
 	);
-}
-
-const registeredPages = new Set<string>();
-for (const surface of appSurfaceRegistry) {
-	const pagePath = pagePathForSurface(surface);
-	assert.ok(
-		existsSync(pagePath),
-		`Route surface ${surface.id} is missing ${normalize(relative(root, pagePath))}.`,
+	const marketingHeaderHrefs = new Set(
+		navigationLayout.header.menuGroups.flatMap((group) => [
+			...(group.link ? [getSiteLinkHref(group.link)] : []),
+			...(group.links ?? []).map(getSiteLinkHref),
+		]),
 	);
-	registeredPages.add(normalize(relative(appRoot, pagePath)));
-}
-
-const explicitPageExemptions = new Set([
-	"(site)/(marketing)/[...catchAll]/page.tsx",
-	"(site)/dashboard/[...catchAll]/page.tsx",
-	"(site)/dashboard/organization/members/page.tsx",
-	"(site)/dashboard/overview/page.tsx",
-]);
-
-for (const familyRoot of Object.values(familyRoots)) {
-	for (const pagePath of collectPages(familyRoot)) {
-		const relativePath = normalize(relative(appRoot, pagePath));
-		if (relativePath.startsWith("(site)/(marketing)/internal/")) continue;
+	const topLevelInternalHrefs = Object.values(internalRoutes).filter(
+		(href) => href.split("/").filter(Boolean).length === 2,
+	);
+	for (const href of topLevelInternalHrefs) {
 		assert.ok(
-			registeredPages.has(relativePath) ||
-				explicitPageExemptions.has(relativePath),
-			`Page requires one route-surface owner or explicit exemption: ${relativePath}`,
+			installedShellHrefs.has(href),
+			`Installed internal route ${href} is missing from the header menu.`,
 		);
 	}
-}
-
-for (const exemption of explicitPageExemptions) {
-	const familyInstalled = exemption.includes("/(marketing)/")
-		? existsSync(familyRoots.marketing)
-		: existsSync(familyRoots.dashboard);
-	if (familyInstalled) {
+	for (const surface of appSurfaceRegistry) {
+		if (surface.family !== "marketing" || surface.match !== "exact") continue;
 		assert.ok(
-			existsSync(resolve(appRoot, exemption)),
-			`Stale route-surface page exemption: ${exemption}`,
+			marketingHeaderHrefs.has(surface.href),
+			`Installed marketing route ${surface.href} is missing from the header menu.`,
 		);
 	}
+
+	for (const [family, familyRoot] of Object.entries(familyRoots)) {
+		const installedInRoutes = appSurfaceRegistry.some(
+			(surface) => surface.family === family,
+		);
+		assert.equal(
+			existsSync(familyRoot),
+			installedInRoutes,
+			`${family} route tree and installed surface registry must be added or removed together.`,
+		);
+	}
+
+	const registeredPages = new Set<string>();
+	for (const surface of appSurfaceRegistry) {
+		const pagePath = pagePathForSurface(surface);
+		assert.ok(
+			existsSync(pagePath),
+			`Route surface ${surface.id} is missing ${normalize(relative(root, pagePath))}.`,
+		);
+		registeredPages.add(normalize(relative(appRoot, pagePath)));
+	}
+
+	const explicitPageExemptions = new Set([
+		"(site)/(marketing)/[...catchAll]/page.tsx",
+		"(site)/dashboard/[...catchAll]/page.tsx",
+		"(site)/dashboard/organization/members/page.tsx",
+		"(site)/dashboard/overview/page.tsx",
+	]);
+
+	for (const familyRoot of Object.values(familyRoots)) {
+		for (const pagePath of collectPages(familyRoot)) {
+			const relativePath = normalize(relative(appRoot, pagePath));
+			if (relativePath.startsWith("(site)/(marketing)/internal/")) continue;
+			assert.ok(
+				registeredPages.has(relativePath) ||
+					explicitPageExemptions.has(relativePath),
+				`Page requires one route-surface owner or explicit exemption: ${relativePath}`,
+			);
+		}
+	}
+
+	for (const exemption of explicitPageExemptions) {
+		const familyInstalled = exemption.includes("/(marketing)/")
+			? existsSync(familyRoots.marketing)
+			: existsSync(familyRoots.dashboard);
+		if (familyInstalled) {
+			assert.ok(
+				existsSync(resolve(appRoot, exemption)),
+				`Stale route-surface page exemption: ${exemption}`,
+			);
+		}
+	}
+
+	console.log(
+		`Route-surface verification passed for ${appSurfaceRegistry.length} installed surfaces.`,
+	);
 }
 
-console.log(
-	`Route-surface verification passed for ${appSurfaceRegistry.length} installed surfaces.`,
-);
+void main();

@@ -9,7 +9,7 @@ type ToastHostProps = {
 };
 
 const toastBaseClassName = clsx(
-	"group/card flex w-[var(--width)] items-center gap-2 rounded-md border p-4 text-sm shadow-lg",
+	"group/card flex w-[var(--width)] items-center gap-2 rounded-md border p-4 text-sm shadow-md",
 	"border-border bg-card text-card-foreground",
 	focusRing.visibleDefault,
 );

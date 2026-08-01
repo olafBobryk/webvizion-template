@@ -8,6 +8,10 @@ import { performance } from "node:perf_hooks";
 import process from "node:process";
 import { assertPackageOwnership } from "../../template-assembly/assembler.mjs";
 import {
+	assertInstalledOrchestrationCapability,
+	assertNoOrchestrationCapability,
+} from "../../template-assembly/capabilities/orchestration/index.mjs";
+import {
 	getProfileVerificationCommands,
 	templateProfiles,
 } from "../../template-profiles/index.mjs";
@@ -90,6 +94,13 @@ async function readJson(filePath) {
 	return JSON.parse(await fs.readFile(filePath, "utf8"));
 }
 
+async function pathExists(filePath) {
+	return fs
+		.access(filePath)
+		.then(() => true)
+		.catch(() => false);
+}
+
 async function collectTypeScriptFiles(directory) {
 	const files = [];
 	for (const entry of await fs.readdir(directory, { withFileTypes: true })) {
@@ -99,6 +110,38 @@ async function collectTypeScriptFiles(directory) {
 		else if (/\.tsx?$/.test(entry.name)) files.push(absolutePath);
 	}
 	return files;
+}
+
+const removedPublicEnvironmentNames = [
+	["NEXT", "PUBLIC", "ORGANIZATION", "IDENTITY", "VISUAL"].join("_"),
+	["NEXT", "PUBLIC", "DASHBOARD", "ORGANIZATION", "SWITCHER"].join("_"),
+	["NEXT", "PUBLIC", "DASHBOARD", "DEBUG"].join("_"),
+	["NEXT", "PUBLIC", "SITE", "URL"].join("_"),
+];
+
+async function assertRemovedPublicEnvironmentAbsent(root, label) {
+	const candidateFiles = [
+		path.join(root, ".env.example"),
+		path.join(root, "README.md"),
+		path.join(root, "next-sitemap.config.js"),
+		...(await collectTypeScriptFiles(path.join(root, "src"))),
+	];
+	for (const filePath of candidateFiles) {
+		if (!(await pathExists(filePath))) continue;
+		const source = await fs.readFile(filePath, "utf8");
+		for (const environmentName of removedPublicEnvironmentNames) {
+			if (source.includes(environmentName)) {
+				throw new Error(
+					`${label} retains removed public environment variable ${environmentName} in ${path.relative(root, filePath)}.`,
+				);
+			}
+		}
+	}
+	if (await pathExists(path.join(root, "src/config/organization.ts"))) {
+		throw new Error(
+			`${label} retains the obsolete organization config module.`,
+		);
+	}
 }
 
 async function assertGeneratedSurfaceContract(outputRoot, profileCase) {
@@ -191,10 +234,44 @@ async function assertGeneratedSurfaceContract(outputRoot, profileCase) {
 				`${profileCase.profileId}/${profileCase.content} is missing hero CTA ${expectedCtaId}.`,
 			);
 		}
+
+		const contentSource = await fs.readFile(
+			path.join(outputRoot, "src/lib/marketing-content/source.ts"),
+			"utf8",
+		);
+		const hasPayload = profileCase.content === "payload-ready";
+		if (contentSource.includes("@/payload/siteLayoutSource") !== hasPayload) {
+			throw new Error(
+				`${profileCase.profileId}/${profileCase.content} generated the wrong marketing content source bridge.`,
+			);
+		}
+
+		const pkg = await readJson(path.join(outputRoot, "package.json"));
+		for (const scriptName of [
+			"payload:seed:site-layout",
+			"payload:verify:site-layout",
+			"verify:payload-site-layout",
+		]) {
+			if ((typeof pkg.scripts?.[scriptName] === "string") !== hasPayload) {
+				throw new Error(
+					`${profileCase.profileId}/${profileCase.content} has the wrong ${scriptName} installation state.`,
+				);
+			}
+		}
+
+		if (
+			profileCase.profileId !== "thin-start" &&
+			(!fallbackSource.includes("publicSocialLinks") ||
+				!fallbackSource.includes("getMarketingSiteLinks"))
+		) {
+			throw new Error(
+				`${profileCase.profileId}/${profileCase.content} does not compose its public shell from canonical marketing links.`,
+			);
+		}
 	}
 }
 
-async function assertReceipt(outputRoot, profileCase) {
+async function assertReceipt(outputRoot, profileCase, capabilities = []) {
 	const receipt = await readJson(
 		path.join(outputRoot, ".template-profile.json"),
 	);
@@ -202,11 +279,581 @@ async function assertReceipt(outputRoot, profileCase) {
 		receipt.profile !== profileCase.profileId ||
 		receipt.content !== profileCase.content ||
 		receipt.schemaVersion !== 2 ||
-		receipt.engine !== undefined
+		receipt.engine !== undefined ||
+		JSON.stringify(receipt.capabilities ?? []) !== JSON.stringify(capabilities)
 	) {
 		throw new Error(
 			`Invalid profile receipt for ${profileCase.profileId}/${profileCase.content}.`,
 		);
+	}
+}
+
+async function verifyOrchestrationCapability(templateRoot, tempRoot) {
+	const selectedRoot = path.join(tempRoot, "orchestration-selected");
+	run(
+		process.execPath,
+		[
+			"scripts/create-template-profile.mjs",
+			"--profile",
+			"full",
+			"--content",
+			"static",
+			"--with",
+			"orchestration",
+			"--with",
+			"orchestration",
+			"--output",
+			selectedRoot,
+		],
+		templateRoot,
+		{ silent: true },
+	);
+	await assertReceipt(selectedRoot, { profileId: "full", content: "static" }, [
+		"orchestration",
+	]);
+	await assertInstalledOrchestrationCapability(selectedRoot);
+	const selectedState = runNpm(
+		["run", "orchestration", "--", "state"],
+		selectedRoot,
+		{
+			silent: true,
+		},
+	);
+	if (!selectedState.stdout.includes("status: planning")) {
+		throw new Error(
+			"Selected orchestration capability did not read its own planning root.",
+		);
+	}
+
+	const lateRoot = path.join(tempRoot, "orchestration-late");
+	run(
+		process.execPath,
+		[
+			"scripts/create-template-profile.mjs",
+			"--profile",
+			"full",
+			"--content",
+			"static",
+			"--output",
+			lateRoot,
+		],
+		templateRoot,
+		{ silent: true },
+	);
+	const receiptPath = path.join(lateRoot, ".template-profile.json");
+	const immutableReceipt = await fs.readFile(receiptPath, "utf8");
+	for (const extraArgs of [["--dry-run"], []]) {
+		run(
+			process.execPath,
+			["scripts/install-orchestration.mjs", "--target", lateRoot, ...extraArgs],
+			templateRoot,
+			{ silent: true },
+		);
+	}
+	if ((await fs.readFile(receiptPath, "utf8")) !== immutableReceipt) {
+		throw new Error(
+			"Later orchestration installation changed the immutable receipt.",
+		);
+	}
+	await assertInstalledOrchestrationCapability(lateRoot);
+	run(
+		process.execPath,
+		["scripts/install-orchestration.mjs", "--target", lateRoot],
+		templateRoot,
+		{ silent: true },
+	);
+	await fs.appendFile(
+		path.join(lateRoot, "docs/ORCHESTRATION.md"),
+		"\nlocal divergence\n",
+	);
+	const divergentRerun = run(
+		process.execPath,
+		["scripts/install-orchestration.mjs", "--target", lateRoot],
+		templateRoot,
+		{ allowFailure: true, silent: true },
+	);
+	assertFailure(
+		divergentRerun,
+		"Divergent orchestration installation was treated as idempotent.",
+	);
+
+	const mismatchedForce = run(
+		process.execPath,
+		[
+			"scripts/create-template-profile.mjs",
+			"--profile",
+			"full",
+			"--content",
+			"static",
+			"--output",
+			lateRoot,
+			"--force",
+		],
+		templateRoot,
+		{ allowFailure: true, silent: true },
+	);
+	assertFailure(
+		mismatchedForce,
+		"Force regeneration ignored the later capability marker.",
+	);
+	run(
+		process.execPath,
+		[
+			"scripts/create-template-profile.mjs",
+			"--profile",
+			"full",
+			"--content",
+			"static",
+			"--with",
+			"orchestration",
+			"--output",
+			lateRoot,
+			"--force",
+		],
+		templateRoot,
+		{ silent: true },
+	);
+
+	const unknown = run(
+		process.execPath,
+		["scripts/create-template-profile.mjs", "--with", "unknown", "--dry-run"],
+		templateRoot,
+		{ allowFailure: true, silent: true },
+	);
+	assertFailure(unknown, "Unknown orchestration capability was accepted.");
+
+	const conflictRoot = path.join(tempRoot, "orchestration-conflict");
+	run(
+		process.execPath,
+		[
+			"scripts/create-template-profile.mjs",
+			"--profile",
+			"app-only",
+			"--content",
+			"static",
+			"--output",
+			conflictRoot,
+		],
+		templateRoot,
+		{ silent: true },
+	);
+	await fs.writeFile(
+		path.join(conflictRoot, "docs/ORCHESTRATION.md"),
+		"conflict\n",
+	);
+	const conflict = run(
+		process.execPath,
+		["scripts/install-orchestration.mjs", "--target", conflictRoot],
+		templateRoot,
+		{ allowFailure: true, silent: true },
+	);
+	assertFailure(
+		conflict,
+		"Partial orchestration installation was overwritten.",
+	);
+	await fs.rm(path.join(conflictRoot, "docs/ORCHESTRATION.md"));
+	const conflictPackagePath = path.join(conflictRoot, "package.json");
+	const conflictPackage = await readJson(conflictPackagePath);
+	conflictPackage.scripts.orchestration = "node conflicting-orchestration.mjs";
+	await fs.writeFile(
+		conflictPackagePath,
+		`${JSON.stringify(conflictPackage, null, "\t")}\n`,
+	);
+	const scriptConflict = run(
+		process.execPath,
+		["scripts/install-orchestration.mjs", "--target", conflictRoot],
+		templateRoot,
+		{ allowFailure: true, silent: true },
+	);
+	assertFailure(
+		scriptConflict,
+		"Conflicting orchestration script was overwritten.",
+	);
+
+	const unsafe = run(
+		process.execPath,
+		[
+			"scripts/install-orchestration.mjs",
+			"--target",
+			path.parse(tempRoot).root,
+		],
+		templateRoot,
+		{ allowFailure: true, silent: true },
+	);
+	assertFailure(unsafe, "Unsafe orchestration target was accepted.");
+
+	const oldReceiptRoot = path.join(tempRoot, "old-receipt");
+	run(
+		process.execPath,
+		[
+			"scripts/create-template-profile.mjs",
+			"--profile",
+			"app-only",
+			"--content",
+			"static",
+			"--output",
+			oldReceiptRoot,
+		],
+		templateRoot,
+		{ silent: true },
+	);
+	const oldReceipt = await readJson(
+		path.join(oldReceiptRoot, ".template-profile.json"),
+	);
+	delete oldReceipt.capabilities;
+	await fs.writeFile(
+		path.join(oldReceiptRoot, ".template-profile.json"),
+		`${JSON.stringify(oldReceipt, null, "\t")}\n`,
+	);
+	run(
+		process.execPath,
+		[
+			"scripts/create-template-profile.mjs",
+			"--profile",
+			"app-only",
+			"--content",
+			"static",
+			"--output",
+			oldReceiptRoot,
+			"--force",
+		],
+		templateRoot,
+		{ silent: true },
+	);
+	console.log("Orchestration capability checks passed.");
+}
+
+async function verifyAssistantCapability(templateRoot, tempRoot) {
+	const selectedRoot = path.join(tempRoot, "assistant-selected");
+	run(
+		process.execPath,
+		[
+			"scripts/create-template-profile.mjs",
+			"--profile",
+			"app-only",
+			"--content",
+			"static",
+			"--with",
+			"assistant",
+			"--output",
+			selectedRoot,
+		],
+		templateRoot,
+		{ silent: true },
+	);
+	await assertReceipt(
+		selectedRoot,
+		{ content: "static", profileId: "app-only" },
+		["assistant"],
+	);
+	for (const requiredPath of [
+		"src/app/(site)/dashboard/assistant",
+		"src/app/api/assistant",
+		"src/components/domain/assistant",
+		"src/lib/assistant",
+	]) {
+		if (!(await pathExists(path.join(selectedRoot, requiredPath)))) {
+			throw new Error(
+				`Selected Assistant capability is missing ${requiredPath}.`,
+			);
+		}
+	}
+	const selectedPackage = await readJson(
+		path.join(selectedRoot, "package.json"),
+	);
+	for (const dependency of [
+		"@ai-sdk/openai",
+		"@ai-sdk/react",
+		"ai",
+		"streamdown",
+	]) {
+		if (!selectedPackage.dependencies?.[dependency]) {
+			throw new Error(
+				`Selected Assistant capability is missing ${dependency}.`,
+			);
+		}
+	}
+
+	const rejected = run(
+		process.execPath,
+		[
+			"scripts/create-template-profile.mjs",
+			"--profile",
+			"marketing-only",
+			"--content",
+			"static",
+			"--with",
+			"assistant",
+			"--dry-run",
+		],
+		templateRoot,
+		{ allowFailure: true, silent: true },
+	);
+	assertFailure(
+		rejected,
+		"Dashboard-less profile accepted the Assistant capability.",
+	);
+	console.log("Assistant capability checks passed.");
+}
+
+async function assertNoAssistantCapability(outputRoot) {
+	for (const forbiddenPath of [
+		"src/app/(site)/dashboard/assistant",
+		"src/app/api/assistant",
+		"src/components/domain/assistant",
+		"src/lib/assistant",
+	]) {
+		if (await pathExists(path.join(outputRoot, forbiddenPath))) {
+			throw new Error(
+				`Default project unexpectedly contains Assistant path: ${forbiddenPath}`,
+			);
+		}
+	}
+	const pkg = await readJson(path.join(outputRoot, "package.json"));
+	for (const dependency of [
+		"@ai-sdk/openai",
+		"@ai-sdk/react",
+		"ai",
+		"streamdown",
+	]) {
+		if (pkg.dependencies?.[dependency] !== undefined) {
+			throw new Error(
+				`Default project unexpectedly contains Assistant dependency: ${dependency}`,
+			);
+		}
+	}
+}
+
+async function assertNoStorybook(outputRoot) {
+	for (const forbiddenPath of [
+		".storybook",
+		"vitest.config.mts",
+		"vitest.shims.d.ts",
+	]) {
+		if (await pathExists(path.join(outputRoot, forbiddenPath))) {
+			throw new Error(
+				`Generated project unexpectedly contains template-only Storybook path: ${forbiddenPath}`,
+			);
+		}
+	}
+
+	const sourceFiles = await collectTypeScriptFiles(
+		path.join(outputRoot, "src"),
+	);
+	const storyFile = sourceFiles.find((filePath) =>
+		/\.stories\.[cm]?[jt]sx?$/.test(filePath),
+	);
+	if (storyFile) {
+		throw new Error(
+			`Generated project unexpectedly contains a Storybook story: ${path.relative(outputRoot, storyFile)}`,
+		);
+	}
+	const obsoleteUiDemo = sourceFiles.find((filePath) =>
+		/internal\/demo\/_content\/pages\/ui(?:-|\.[cm]?[jt]sx?$)/.test(
+			filePath.replaceAll(path.sep, "/"),
+		),
+	);
+	if (obsoleteUiDemo) {
+		throw new Error(
+			`Generated project unexpectedly contains a superseded UI demo module: ${path.relative(outputRoot, obsoleteUiDemo)}`,
+		);
+	}
+
+	const pkg = await readJson(path.join(outputRoot, "package.json"));
+	for (const script of [
+		"storybook",
+		"storybook:preview",
+		"storybook:status",
+		"storybook:stop",
+		"measure:storybook-performance",
+		"verify:storybook-preview",
+		"build-storybook",
+		"test-storybook",
+		"test-storybook:ui:light",
+		"test-storybook:ui:dark",
+		"test-storybook:ui",
+		"verify:storybook-catalog",
+	]) {
+		if (pkg.scripts?.[script] !== undefined) {
+			throw new Error(
+				`Generated project unexpectedly contains Storybook script: ${script}`,
+			);
+		}
+	}
+	for (const dependency of [
+		"@chromatic-com/storybook",
+		"@storybook/addon-a11y",
+		"@storybook/addon-docs",
+		"@storybook/addon-mcp",
+		"@storybook/addon-vitest",
+		"@storybook/nextjs-vite",
+		"@vitest/browser-playwright",
+		"@vitest/coverage-v8",
+		"storybook",
+		"vite",
+		"vitest",
+	]) {
+		if (
+			pkg.dependencies?.[dependency] !== undefined ||
+			pkg.devDependencies?.[dependency] !== undefined
+		) {
+			throw new Error(
+				`Generated project unexpectedly contains Storybook dependency: ${dependency}`,
+			);
+		}
+	}
+}
+
+async function assertComponentSweep(outputRoot, profileCase) {
+	const selectedSurfaces = new Set(
+		templateProfiles[profileCase.profileId]?.assembly?.surfaces ?? [],
+	);
+	const hasDemo = selectedSurfaces.has("demo");
+	const catalogRoot = path.join(outputRoot, "src/lib/component-catalog");
+	const generatorPath = path.join(
+		outputRoot,
+		"scripts/generate-component-catalog.mjs",
+	);
+	const packageJson = await readJson(path.join(outputRoot, "package.json"));
+	const sourceFiles = await collectTypeScriptFiles(
+		path.join(outputRoot, "src"),
+	);
+	const catalogFiles = sourceFiles.filter((filePath) =>
+		/\.catalog\.tsx$/.test(filePath),
+	);
+
+	if (!hasDemo) {
+		for (const forbiddenPath of [catalogRoot, generatorPath]) {
+			if (await pathExists(forbiddenPath)) {
+				throw new Error(
+					`${profileCase.profileId}/${profileCase.content} unexpectedly contains Component Sweep machinery: ${path.relative(outputRoot, forbiddenPath)}`,
+				);
+			}
+		}
+		if (catalogFiles.length > 0) {
+			throw new Error(
+				`${profileCase.profileId}/${profileCase.content} unexpectedly contains ${catalogFiles.length} catalogue contracts.`,
+			);
+		}
+		for (const [name, command] of Object.entries(packageJson.scripts ?? {})) {
+			if (
+				name.startsWith("catalog:") ||
+				`${command}`.includes("catalog:generate")
+			) {
+				throw new Error(
+					`${profileCase.profileId}/${profileCase.content} retains an unselected catalogue script: ${name}`,
+				);
+			}
+		}
+		return;
+	}
+
+	for (const requiredPath of [catalogRoot, generatorPath]) {
+		if (!(await pathExists(requiredPath))) {
+			throw new Error(
+				`${profileCase.profileId}/${profileCase.content} is missing Component Sweep machinery: ${path.relative(outputRoot, requiredPath)}`,
+			);
+		}
+	}
+	if (
+		packageJson.scripts?.["catalog:generate"] === undefined ||
+		packageJson.scripts?.["verify:component-sweep"] === undefined
+	) {
+		throw new Error(
+			`${profileCase.profileId}/${profileCase.content} is missing Component Sweep scripts.`,
+		);
+	}
+	const expectedOwnerCount = selectedSurfaces.has("dashboard") ? 87 : 74;
+	if (catalogFiles.length !== expectedOwnerCount) {
+		throw new Error(
+			`${profileCase.profileId}/${profileCase.content} expected ${expectedOwnerCount} installed catalogue owners, found ${catalogFiles.length}.`,
+		);
+	}
+	run(
+		process.execPath,
+		["scripts/generate-component-catalog.mjs", "--check"],
+		outputRoot,
+		{
+			silent: true,
+		},
+	);
+	for (const filePath of [
+		...catalogFiles,
+		path.join(
+			outputRoot,
+			selectedSurfaces.has("marketing")
+				? "src/app/(site)/(marketing)/internal/demo/_components/ComponentSweep.tsx"
+				: "src/app/(site)/(dev)/internal/demo/_components/ComponentSweep.tsx",
+		),
+	]) {
+		const source = await fs.readFile(filePath, "utf8");
+		if (/@storybook|\.stories\./.test(source)) {
+			throw new Error(
+				`${profileCase.profileId}/${profileCase.content} Component Sweep imports Storybook: ${path.relative(outputRoot, filePath)}`,
+			);
+		}
+	}
+}
+
+async function verifyNestedProjectRootIsolation(templateRoot) {
+	const nestedRoot = path.join(
+		templateRoot,
+		".codex/tmp/orchestration-root-isolation",
+	);
+	const parentOrchestrationRoot = path.join(templateRoot, "docs/orchestration");
+	if (
+		await fs
+			.stat(parentOrchestrationRoot)
+			.then(() => true)
+			.catch(() => false)
+	) {
+		throw new Error(
+			"Canonical orchestration root must be absent before isolation verification.",
+		);
+	}
+	try {
+		await fs.rm(nestedRoot, { recursive: true, force: true });
+		run(
+			process.execPath,
+			[
+				"scripts/create-template-profile.mjs",
+				"--profile",
+				"app-only",
+				"--content",
+				"static",
+				"--with",
+				"orchestration",
+				"--output",
+				nestedRoot,
+			],
+			templateRoot,
+			{ silent: true },
+		);
+		await fs.rename(
+			path.join(nestedRoot, "docs/orchestration"),
+			path.join(nestedRoot, "docs/orchestration-disabled"),
+		);
+		await fs.mkdir(path.join(parentOrchestrationRoot, "_tools"), {
+			recursive: true,
+		});
+		await fs.writeFile(
+			path.join(parentOrchestrationRoot, "_tools/orchestration.mjs"),
+			'console.log("BORROWED_PARENT_ROOT");\n',
+		);
+		const result = run(
+			process.execPath,
+			["scripts/orchestration.mjs", "state"],
+			nestedRoot,
+			{ allowFailure: true, silent: true },
+		);
+		assertFailure(result, "Nested generated project borrowed the parent root.");
+		if (`${result.stdout}${result.stderr}`.includes("BORROWED_PARENT_ROOT")) {
+			throw new Error("Nested generated project borrowed the parent root.");
+		}
+		console.log("Nested generated-project root isolation passed.");
+	} finally {
+		await fs.rm(nestedRoot, { recursive: true, force: true });
+		await fs.rm(parentOrchestrationRoot, { recursive: true, force: true });
 	}
 }
 
@@ -462,6 +1109,10 @@ async function main() {
 	const timings = [];
 
 	try {
+		await assertRemovedPublicEnvironmentAbsent(
+			templateRoot,
+			"Canonical template",
+		);
 		for (const profileCase of PROFILE_CASES) {
 			const { profileId, content } = profileCase;
 			const profile = templateProfiles[profileId];
@@ -496,6 +1147,14 @@ async function main() {
 				);
 				timings.push(performance.now() - startedAt);
 				await assertReceipt(outputRoot, profileCase);
+				await assertNoOrchestrationCapability(outputRoot);
+				await assertNoAssistantCapability(outputRoot);
+				await assertNoStorybook(outputRoot);
+				await assertComponentSweep(outputRoot, profileCase);
+				await assertRemovedPublicEnvironmentAbsent(
+					outputRoot,
+					`${profileId}/${content}`,
+				);
 			}
 
 			await assertInternalRouteShell(integrationRoot, profileCase);
@@ -530,6 +1189,9 @@ async function main() {
 
 		await verifyCreationSafety(templateRoot, tempRoot);
 		await verifyOwnershipGuards(templateRoot, tempRoot);
+		await verifyOrchestrationCapability(templateRoot, tempRoot);
+		await verifyAssistantCapability(templateRoot, tempRoot);
+		await verifyNestedProjectRootIsolation(templateRoot);
 		console.log(
 			`assemble median materialization: ${Math.round(median(timings))}ms`,
 		);

@@ -1,27 +1,22 @@
 # Folder: `src/components/ui/time`
 
-## Role
-Shared presentation helpers for dates, relative time, and timezone-aware display.
+## Ownership
 
-## Use This Folder When
-- A page needs a formatted date label.
-- A feature needs relative time such as "2 hours ago".
-- You want date display to remain consistent across the app.
+This folder owns shared relative-time and timezone-aware calendar-date
+presentation. Consumer contracts live under `UI/Time/*` in Storybook.
 
-## Prefer These Files
-- `src/components/ui/time/DateAgo.tsx`: relative-time display.
-- `src/components/ui/time/DateIndicator.tsx`: formatted date display with timezone awareness.
+## Dependency and runtime boundaries
 
-## Invariants
-- Prefer these shared components over page-local date formatting where the UX should feel consistent.
-- Date display should remain centralized so timezone handling and typography stay predictable.
-- Time display components should continue to use `Text` rather than custom typographic markup.
-- If a time display becomes interactive, it must preserve visible focus through the surrounding control.
+- Time presentation depends on the `Text` primitive for typography and must not
+  depend on feature or route code.
+- `DateAgo` is a client component because it schedules relative-time refreshes;
+  it must clear its interval on unmount.
+- `DateIndicator` stays server-safe and resolves formatting through the shared
+  application timezone boundary.
 
-## How To Use It
-- Use `DateAgo` for feeds, activity history, and recent updates.
-- Use `DateIndicator` for explicit timestamps, schedule metadata, and more formal date presentation.
+## Structural invariants
 
-## Avoid
-- Mixing multiple date string formats across the UI without a product reason.
-- Rewriting timezone logic in page code when the shared component already covers the need.
+- Date parsing, relative-time thresholds, ordinal formatting, and timezone
+  resolution remain centralized in these owners.
+- Skeleton members continue to delegate to `Text.Skeleton`; they do not become
+  separate component identities.

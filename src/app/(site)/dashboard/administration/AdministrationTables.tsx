@@ -5,8 +5,8 @@ import { Chip } from "@/components/ui/misc";
 import { useConfirmationModal } from "@/components/ui/overlays/modal/useConfirmationModal";
 import { useModal } from "@/components/ui/overlays/modal/useModal";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
 import { Dropdown } from "@/components/ui/primitives/dropdown";
+import { Card } from "@/components/ui/primitives/surfaces";
 import {
 	refreshOrganizationInvitation,
 	removeOrganizationMembership,
@@ -110,15 +110,8 @@ export function PendingInvitationsTable({
 			}
 			getRowKey={(invitation) => invitation.id}
 			header={
-				<Card.Header className="min-w-0">
-					<Card.Title className="inline-flex min-w-0 items-center gap-2">
-						<Icon name="mail" size="sm" />
-						Pending invitations
-					</Card.Title>
-					<Card.Description className="min-w-0 break-words">
-						Fixture deliveries stay local and expose a copyable invitation link.
-					</Card.Description>
-					<Card.Action>
+				<Card.Heading
+					action={
 						<Button
 							leadingIcon="plus"
 							onClick={onInvite}
@@ -128,8 +121,11 @@ export function PendingInvitationsTable({
 						>
 							Invite member
 						</Button>
-					</Card.Action>
-				</Card.Header>
+					}
+					description="Fixture deliveries stay local and expose a copyable invitation link."
+					leading={<Icon name="mail" size="sm" />}
+					title="Pending invitations"
+				/>
 			}
 			id="pending-invitations"
 			rows={invitations}
@@ -259,7 +255,7 @@ export function MembersTable({
 					render: (member) => (
 						<MemberIdentity
 							presentation={getMemberPresentation(member)}
-							variant="compact"
+							variant="default"
 						/>
 					),
 				},
@@ -294,15 +290,11 @@ export function MembersTable({
 			]}
 			getRowKey={(member) => member.id}
 			header={
-				<Card.Header className="min-w-0">
-					<Card.Title className="inline-flex min-w-0 items-center gap-2">
-						<Icon name="users" size="sm" />
-						Members
-					</Card.Title>
-					<Card.Description className="min-w-0 break-words">
-						Organization roles and access for active members.
-					</Card.Description>
-				</Card.Header>
+				<Card.Heading
+					description="Organization roles and access for active members."
+					leading={<Icon name="users" size="sm" />}
+					title="Members"
+				/>
 			}
 			id="members"
 			rows={members}

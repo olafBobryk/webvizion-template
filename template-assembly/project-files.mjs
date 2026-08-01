@@ -4,10 +4,9 @@ export function createProjectState(selectedSurfaceIds) {
 	const selected = new Set(selectedSurfaceIds);
 
 	return {
+		hasAssistant: selected.has("assistant"),
 		hasMarketing: selected.has("marketing"),
 		hasDashboard: selected.has("dashboard"),
-		hasDashboardReferenceEntities:
-			selected.has("dashboard") && selected.has("dashboardReferenceEntities"),
 		hasDemo: selected.has("demo"),
 		hasIntelligence: selected.has("intelligence"),
 		hasPlayground: selected.has("playground"),
@@ -15,6 +14,35 @@ export function createProjectState(selectedSurfaceIds) {
 		hasReference: selected.has("reference"),
 		hasPayload: selected.has("payload"),
 	};
+}
+
+export function renderCapabilitiesFile(state) {
+	return [
+		"export const templateCapabilities = {",
+		`\tassistant: ${state.hasAssistant},`,
+		"} as const;",
+		"",
+	].join("\n");
+}
+
+export function renderMarketingContentSourceFile(state) {
+	if (!state.hasMarketing) return null;
+
+	if (state.hasPayload) {
+		return [
+			'export { getConfiguredSiteLayout } from "@/payload/siteLayoutSource";',
+			"",
+		].join("\n");
+	}
+
+	return [
+		'import { fallbackSiteLayout } from "./fallback";',
+		"",
+		"export async function getConfiguredSiteLayout() {",
+		"\treturn fallbackSiteLayout;",
+		"}",
+		"",
+	].join("\n");
 }
 
 export function renderSurfacesFile(state) {
@@ -45,7 +73,9 @@ export function renderSurfacesFile(state) {
 		);
 	}
 
-	if (state.hasDemo) internalRouteLines.push('\tdemo: "/internal/demo",');
+	if (state.hasDemo) {
+		internalRouteLines.push('\tdemo: "/internal/demo",');
+	}
 	if (state.hasDictionary) {
 		internalRouteLines.push(
 			'\tdictionary: "/internal/dictionary",',

@@ -1,6 +1,6 @@
 import { Chip } from "@/components/ui/misc";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { internalHrefFor } from "@/lib/routes";
 import {
 	InternalPage,
@@ -18,22 +18,17 @@ export default function RiveLogoRevealDictionaryPage() {
 			/>
 
 			<Card>
-				<Card.Header>
-					<Card.Title>Preview</Card.Title>
-					<Card.Description>
-						The mount contract is live; the final `.riv` asset remains an
-						integration step.
-					</Card.Description>
-				</Card.Header>
+				<Card.Heading
+					description="The mount contract is live; the final `.riv` asset remains an\n\t\t\t\t\t\tintegration step."
+					title="Preview"
+				/>
 				<Card.Content>
 					<LoadingScreenPreview />
 				</Card.Content>
 			</Card>
 
 			<Card>
-				<Card.Header>
-					<Card.Title>Implementation notes</Card.Title>
-				</Card.Header>
+				<Card.Heading title="Implementation notes" />
 				<Card.Content className="grid gap-5">
 					<div className="flex flex-wrap gap-2">
 						{manifest.adaptationPoints.map((point) => (

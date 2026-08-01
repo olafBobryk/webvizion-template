@@ -1,6 +1,6 @@
 import { Icon } from "@/components/ui/icons/Icon";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { hrefFor } from "@/lib/routes";
 import { DashboardSection } from "../../_components/layout/DashboardSection";
 import { PlatformOverviewLoading } from "./PlatformRouteLoading";
@@ -13,15 +13,11 @@ export function PlatformSurface() {
 			title="Platform"
 		>
 			<Card>
-				<Card.Header>
-					<Card.Title className="inline-flex items-center gap-2">
-						<Icon name="mail" size="sm" />
-						Inbox
-					</Card.Title>
-					<Card.Description>
-						Review support requests submitted from dashboard support.
-					</Card.Description>
-				</Card.Header>
+				<Card.Heading
+					description="Review support requests submitted from dashboard support."
+					leading={<Icon name="mail" size="sm" />}
+					title="Inbox"
+				/>
 				<Card.Content>
 					<Button
 						href={hrefFor("dashboard.platform.inbox")}
@@ -33,15 +29,11 @@ export function PlatformSurface() {
 				</Card.Content>
 			</Card>
 			<Card>
-				<Card.Header>
-					<Card.Title className="inline-flex items-center gap-2">
-						<Icon name="flag" size="sm" />
-						Reports
-					</Card.Title>
-					<Card.Description>
-						Review product reports captured from dashboard routes.
-					</Card.Description>
-				</Card.Header>
+				<Card.Heading
+					description="Review product reports captured from dashboard routes."
+					leading={<Icon name="flag" size="sm" />}
+					title="Reports"
+				/>
 				<Card.Content>
 					<Button
 						href={hrefFor("dashboard.platform.reports")}

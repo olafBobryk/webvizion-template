@@ -1,15 +1,7 @@
 import clsx from "clsx";
 import { Icon } from "@/components/ui/icons/Icon";
 import { Skeleton } from "@/components/ui/misc/Skeleton";
-import {
-	Card,
-	CardAction,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 import type {
 	AccordionActionProps,
@@ -22,6 +14,7 @@ import type {
 	AccordionProps,
 	AccordionSkeletonProps,
 	AccordionTitleProps,
+	AccordionTriggerRenderProps,
 } from "./Accordion.shared";
 import {
 	AccordionCardAction,
@@ -34,6 +27,15 @@ import {
 	AccordionClient,
 } from "./AccordionClient";
 
+const {
+	Action: CardAction,
+	Content: CardContent,
+	Description: CardDescription,
+	Footer: CardFooter,
+	Header: CardHeader,
+	Title: CardTitle,
+} = Card;
+
 export type {
 	AccordionActionProps,
 	AccordionCardProps,
@@ -45,6 +47,7 @@ export type {
 	AccordionProps,
 	AccordionSkeletonProps,
 	AccordionTitleProps,
+	AccordionTriggerRenderProps,
 };
 
 function AccordionRoot(props: AccordionProps) {

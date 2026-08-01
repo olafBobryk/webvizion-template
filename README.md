@@ -42,12 +42,46 @@ npm install
 npm run create:project -- --profile <profile> --content <content> --output ../my-project
 ```
 
+Legacy orchestration is intentionally absent by default. It can be selected
+during creation with repeatable capability flags:
+
+```sh
+npm run create:project -- --profile full --content static \
+  --with orchestration --output ../my-project
+```
+
+Or install the same capability later from this canonical template:
+
+```sh
+npm run orchestration:init -- --target ../my-project --dry-run
+npm run orchestration:init -- --target ../my-project
+```
+
+This compatibility capability is transitional and should not gain new coupling;
+a replacement orchestration system is under development and is expected to
+remove it.
+
 Then work from the generated project:
 
 ```sh
 cd ../my-project
 npm run dev
 ```
+
+### Storybook
+
+Storybook uses the same checkout and source environment as the isolated Next
+preview, but it remains a separate Vite process. Start the Next preview first,
+then let the managed command reuse or start the checkout's sole Storybook/MCP
+instance:
+
+```sh
+npm run storybook:preview
+```
+
+The command prints the Storybook and MCP URLs and records them in ignored
+`.codex/storybook-preview.json`. Use `npm run storybook:status` to rediscover
+them; do not run raw `storybook dev` or assume a fixed port.
 
 ## Choose a Profile
 
@@ -127,7 +161,7 @@ npm run dev
 ### Template Intelligence
 
 Generate the lightweight local map before substantial work, then query a focused
-topic such as `route-architecture`, `ui-primitives`, or `content-modes`:
+topic such as `route-architecture`, `ui-system`, or `content-modes`:
 
 ```sh
 npm run intelligence:generate
@@ -168,10 +202,15 @@ behavior, or expensive sections change; see
 | Script | Purpose |
 | --- | --- |
 | `npm run create:project` | Materialize a route profile into a project workspace. |
+| `npm run orchestration:init` | Explicitly install the transitional legacy orchestration capability. |
 | `npm run dev` | Start an isolated, prewarmed preview on a random port. |
 | `npm run dev:local` | Start the former local server flow on port 3000–3010. |
 | `npm run dev:agent` | Compatibility alias for `npm run dev`. |
 | `npm run dev:inspect` | Start a preview with the code-inspector sidecar enabled. |
+| `npm run storybook:preview` | Start or reuse the current checkout's paired Storybook/MCP server. |
+| `npm run storybook:status` | Show the paired preview and Storybook/MCP URLs. |
+| `npm run storybook:stop` | Stop only a Storybook server launched by the coordinator. |
+| `npm run measure:storybook-performance` | Capture a cold-cache developer-catalog baseline from the managed Storybook instance. |
 | `npm run verify:static` | Run static policy, formatting, and type checks. |
 | `npm run verify:profiles` | Materialize and verify every profile. |
 | `npm run build` | Create the production Next.js build. |

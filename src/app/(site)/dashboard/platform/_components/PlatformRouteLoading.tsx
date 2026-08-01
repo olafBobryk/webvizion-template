@@ -6,7 +6,7 @@ import { MemberIdentity } from "@/app/(site)/dashboard/_components/entities/memb
 import { DashboardSection } from "@/app/(site)/dashboard/_components/layout/DashboardSection";
 import { Icon } from "@/components/ui/icons/Icon";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 
 const rows = ["alpha", "bravo", "charlie"];
@@ -34,13 +34,11 @@ export function PlatformOverviewLoading() {
 			>
 				{platformDestinations.map((destination) => (
 					<Card key={destination.label}>
-						<Card.Header>
-							<Card.Title className="inline-flex items-center gap-2">
-								<Icon name={destination.icon} size="sm" />
-								{destination.label}
-							</Card.Title>
-							<Card.Description>{destination.description}</Card.Description>
-						</Card.Header>
+						<Card.Heading
+							description={destination.description}
+							leading={<Icon name={destination.icon} size="sm" />}
+							title={destination.label}
+						/>
 						<Card.Content>
 							<Button.Skeleton size="sm" variant="secondary">
 								Open {destination.label.toLowerCase()}
@@ -110,7 +108,7 @@ export function PlatformCollectionLoading({
 										key={column.id}
 									>
 										{index === 0 ? (
-											<MemberIdentity.Skeleton variant="compact" />
+											<MemberIdentity.Skeleton variant="default" />
 										) : action ? (
 											<Button.Skeleton leadingIcon size="icon-sm" />
 										) : (
@@ -152,18 +150,18 @@ export function PlatformDetailLoading({
 					<div className="grid gap-5">
 						{["Content", "Requester context"].map((cardTitle) => (
 							<Card key={cardTitle}>
-								<Card.Header>
-									<Card.Title>
-										<Text.Skeleton variant="headingXs">
-											{cardTitle}
-										</Text.Skeleton>
-									</Card.Title>
-									<Card.Description>
+								<Card.Heading
+									description={
 										<Text.Skeleton variant="support">
 											Platform management detail
 										</Text.Skeleton>
-									</Card.Description>
-								</Card.Header>
+									}
+									title={
+										<Text.Skeleton variant="headingXs">
+											{cardTitle}
+										</Text.Skeleton>
+									}
+								/>
 								<Card.Content className="grid gap-3">
 									<Text.Skeleton variant="body">
 										Fixture detail content and server-resolved context
@@ -173,11 +171,9 @@ export function PlatformDetailLoading({
 						))}
 					</div>
 					<Card className="self-start">
-						<Card.Header>
-							<Card.Title>
-								<Text.Skeleton variant="headingXs">Triage</Text.Skeleton>
-							</Card.Title>
-						</Card.Header>
+						<Card.Heading
+							title={<Text.Skeleton variant="headingXs">Triage</Text.Skeleton>}
+						/>
 						<Card.Content className="grid gap-4">
 							<div className="h-9 rounded-full bg-muted/80" />
 							<div className="h-28 rounded-2xl bg-muted/80" />

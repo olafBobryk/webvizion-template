@@ -4,7 +4,24 @@ import type { ReactNode } from "react";
 import { focusRing } from "@/components/ui/foundations/focus";
 import { Text, type TextVariant } from "@/components/ui/primitives/Text";
 
-export type EntityIdentityVariant = "actor" | "compact" | "profile";
+export type EntityIdentityVariant = "actor" | "default";
+export type EntityIdentityAvatarSize = "sm" | "md" | "lg" | "xl";
+
+const defaultPrimaryVariantByAvatarSize = {
+	lg: "support",
+	md: "caption",
+	sm: "caption",
+	xl: "headingXs",
+} satisfies Record<EntityIdentityAvatarSize, TextVariant>;
+
+function getPrimaryVariant(
+	variant: EntityIdentityVariant,
+	avatarSize?: EntityIdentityAvatarSize,
+): TextVariant {
+	return variant === "default" && avatarSize
+		? defaultPrimaryVariantByAvatarSize[avatarSize]
+		: "support";
+}
 
 const identityLayout = {
 	actor: {
@@ -12,15 +29,10 @@ const identityLayout = {
 		textClassName: "gap-0",
 		secondaryVariant: "caption",
 	},
-	compact: {
+	default: {
 		rootClassName: "gap-3",
 		textClassName: "gap-0",
 		secondaryVariant: "caption",
-	},
-	profile: {
-		rootClassName: "gap-3.5",
-		textClassName: "gap-0.5",
-		secondaryVariant: "support",
 	},
 } satisfies Record<
 	EntityIdentityVariant,
@@ -33,6 +45,7 @@ const identityLayout = {
 
 type EntityIdentityProps = {
 	avatar: ReactNode;
+	avatarSize?: EntityIdentityAvatarSize;
 	className?: string;
 	primaryAs?: "h2" | "span";
 	primaryHref?: string;
@@ -44,15 +57,17 @@ type EntityIdentityProps = {
 
 function EntityIdentityRoot({
 	avatar,
+	avatarSize,
 	className,
 	primaryAs = "span",
 	primaryHref,
 	primaryLabel,
 	secondaryLabel,
 	textClassName,
-	variant = "profile",
+	variant = "default",
 }: EntityIdentityProps) {
 	const layout = identityLayout[variant];
+	const primaryVariant = getPrimaryVariant(variant, avatarSize);
 	return (
 		<div
 			className={clsx(
@@ -72,19 +87,21 @@ function EntityIdentityRoot({
 				{primaryHref ? (
 					<Link
 						className={clsx(
-							"truncate rounded-sm text-sm font-normal leading-6 text-foreground outline-none",
+							"block min-w-0 rounded-sm text-foreground outline-none",
 							focusRing.visibleDefault,
 						)}
 						href={primaryHref}
 					>
-						{primaryLabel}
+						<Text as="span" className="block truncate" variant={primaryVariant}>
+							{primaryLabel}
+						</Text>
 					</Link>
 				) : primaryAs === "h2" ? (
-					<Text as="h2" className="truncate" variant="support">
+					<Text as="h2" className="truncate" variant={primaryVariant}>
 						{primaryLabel}
 					</Text>
 				) : (
-					<Text as="span" className="truncate" variant="support">
+					<Text as="span" className="truncate" variant={primaryVariant}>
 						{primaryLabel}
 					</Text>
 				)}
@@ -109,6 +126,7 @@ type EntityIdentitySkeletonProps = Omit<EntityIdentityProps, "primaryHref"> & {
 
 function EntityIdentitySkeleton({
 	avatar,
+	avatarSize,
 	className,
 	primaryAs = "span",
 	primaryClassName,
@@ -116,9 +134,10 @@ function EntityIdentitySkeleton({
 	secondaryClassName,
 	secondaryLabel,
 	textClassName,
-	variant = "profile",
+	variant = "default",
 }: EntityIdentitySkeletonProps) {
 	const layout = identityLayout[variant];
+	const primaryVariant = getPrimaryVariant(variant, avatarSize);
 	return (
 		<div
 			className={clsx(
@@ -138,7 +157,8 @@ function EntityIdentitySkeleton({
 				<Text.Skeleton
 					as={primaryAs}
 					className={clsx("max-w-48 truncate", primaryClassName)}
-					variant="support"
+					density="compact"
+					variant={primaryVariant}
 				>
 					{primaryLabel}
 				</Text.Skeleton>
@@ -146,6 +166,7 @@ function EntityIdentitySkeleton({
 					<Text.Skeleton
 						as="span"
 						className={clsx("max-w-56 truncate", secondaryClassName)}
+						density="compact"
 						tone="muted"
 						variant={layout.secondaryVariant}
 					>

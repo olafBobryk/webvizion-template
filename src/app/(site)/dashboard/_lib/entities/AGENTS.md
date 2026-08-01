@@ -13,8 +13,6 @@ These markers are verified repository contracts. Update them when a canonical en
 <!-- entity-contract:organization-presentation=src/app/(site)/dashboard/_lib/entities/organization/presentation.ts -->
 <!-- entity-contract:record-domain=src/app/(site)/dashboard/_lib/entities/record/domain.ts -->
 <!-- entity-contract:record-presentation=src/app/(site)/dashboard/_lib/entities/record/presentation.ts -->
-<!-- entity-contract:reference-demo=src/app/(site)/dashboard/reference/entities/page.tsx -->
-<!-- entity-contract:optional-surface=dashboardReferenceEntities -->
 
 ## Ownership
 
@@ -28,7 +26,7 @@ These markers are verified repository contracts. Update them when a canonical en
 
 - An entity implements only the profile, compact, actor, avatar, list, table, detail, selector, Command-K, Markdown mention, empty, and skeleton surfaces it actually needs.
 - Reuse the owning definitions wherever those surfaces appear. New renderers remain under their owning entity.
-- Loading counterparts use `Component.Skeleton`, preserve live geometry, and appear beside the live surface on the internal entity reference route.
+- Loading counterparts use `Component.Skeleton` and preserve live geometry wherever product or focused review surfaces render them.
 - Mutations stay route- or adapter-owned. Optimistic updates require rollback; destructive actions use the shared confirmation system and return `false` after recoverable failure.
 - Same-route modal completion performs one local update or refresh. Detail deletion uses replacement navigation and never combines navigation with refresh.
-- Run `npm run verify:frontend-entities` after changing an entity contract, renderer, mutation lifecycle, or canonical path.
+- Run `npm run verify:frontend-entities` after changing an entity contract, renderer, mutation lifecycle, or canonical path. Use a task-local finite-axis reviewer when a bounded design-space decision needs explicit human curation; do not make that reviewer a permanent entity contract.

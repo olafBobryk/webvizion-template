@@ -62,8 +62,10 @@ export function PhoneCountryListbox({
 			emptyState={<Text variant="body">No results</Text>}
 			listRef={listRef}
 			listId={listId}
+			listTabIndex={0}
 			optionIdPrefix={listId ? `${listId}-option` : undefined}
-			listClassName={dropdownListClassName}
+			className={dropdownListClassName}
+			listClassName="!max-h-none !overflow-visible"
 			optionClassName={optionClassName}
 			optionActiveClassName={optionActiveClassName}
 			optionSelectedClassName={optionSelectedClassName}

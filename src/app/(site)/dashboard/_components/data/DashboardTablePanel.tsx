@@ -3,7 +3,7 @@ import Link from "next/link";
 import { type Key, type ReactNode, useId } from "react";
 import { Icon } from "@/components/ui/icons/Icon";
 import { Button } from "@/components/ui/primitives/Button";
-import { Card } from "@/components/ui/primitives/Card";
+import { Card } from "@/components/ui/primitives/surfaces";
 import { DashboardTableResponsiveController } from "./DashboardTableResponsiveController";
 import { DashboardTableSortController } from "./DashboardTableSortController";
 
@@ -49,7 +49,7 @@ type DashboardTablePanelProps<Row> = {
 	getRowAriaLabel?: (row: Row, index: number) => string;
 	getRowHref?: (row: Row, index: number) => string | undefined;
 	getRowKey: (row: Row, index: number) => Key;
-	header: ReactNode;
+	header?: ReactNode;
 	id?: string;
 	rows: readonly Row[];
 	viewMoreHref?: string;
@@ -77,7 +77,7 @@ function DashboardTablePanelRoot<Row>({
 	);
 	return (
 		<Card
-			className={clsx("min-w-0 !gap-0 !pb-0", className)}
+			className={clsx("min-w-0 !gap-0 !pb-0", !header && "!pt-0", className)}
 			id={id}
 			overflow="visible"
 		>
@@ -270,7 +270,7 @@ type DashboardTablePanelSkeletonProps = {
 		kind?: "action" | "data";
 		responsivePriority?: number;
 	}[];
-	header: ReactNode;
+	header?: ReactNode;
 	id?: string;
 	viewMoreLabel?: ReactNode;
 };
@@ -288,7 +288,7 @@ export function DashboardTablePanelSkeleton({
 	const tableId = id ? `${id}-skeleton-table` : generatedId;
 	return (
 		<Card
-			className={clsx("min-w-0 !gap-0 !pb-0", className)}
+			className={clsx("min-w-0 !gap-0 !pb-0", !header && "!pt-0", className)}
 			id={id ? `${id}-skeleton` : undefined}
 			overflow="visible"
 		>

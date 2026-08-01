@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { Icon } from "@/components/ui/icons/Icon";
 import { Button } from "@/components/ui/primitives/Button";
-import { Panel } from "@/components/ui/primitives/Panel";
+import { Panel } from "@/components/ui/primitives/surfaces";
 import { Text, type TextProps } from "@/components/ui/primitives/Text";
 import {
 	InternalPage,
@@ -171,11 +171,11 @@ function ToastSample({
 }) {
 	return (
 		<Panel
-			background="surface"
+			background="panel"
 			border="default"
 			padding="sm"
-			radius="sm"
-			shadow="none"
+			radius="float"
+			elevation="panel"
 		>
 			<div className="flex min-w-0 items-start gap-3">
 				<StaticToastIndicator tone={sample.tone} />
