@@ -77,7 +77,7 @@ export function DashboardSidebarNav({
 	const activeTrail = getDashboardSurfaceTrail(pathname, capabilities);
 
 	return (
-		<nav aria-label="Dashboard navigation" className="grid gap-3 lg:gap-4">
+		<nav aria-label="Dashboard navigation" className="grid gap-2 lg:gap-3">
 			{groups.map((group, groupIndex) => {
 				const assistantSurfaces = group.surfaces.filter(
 					(surface) => surface.sidebarSupplementEndpoint,
@@ -91,7 +91,7 @@ export function DashboardSidebarNav({
 							className={clsx(
 								"grid gap-1",
 								groupIndex > 0 &&
-									"border-t border-sidebar-border/65 pt-3 lg:pt-4",
+									"border-t border-sidebar-border/65 pt-2 lg:pt-3",
 							)}
 							data-sidebar-tier={group.tier}
 						>
@@ -118,7 +118,7 @@ export function DashboardSidebarNav({
 						</div>
 						{assistantSurfaces.length > 0 ? (
 							<div
-								className="grid gap-1 border-t border-sidebar-border/65 pt-3 lg:pt-4"
+								className="grid gap-1 border-t border-sidebar-border/65 pt-2 lg:pt-3"
 								data-sidebar-tier="assistant"
 							>
 								{assistantSurfaces.map((surface) => {

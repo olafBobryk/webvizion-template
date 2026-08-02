@@ -214,14 +214,14 @@ export function DashboardFrame({
 				<DashboardSidebarShell
 					body={
 						<div className="grid">
-							<div className="border-b border-sidebar-border/70 px-2 pb-4 lg:px-3">
+							<div className="border-b border-sidebar-border/70 px-2 pb-3 lg:px-3">
 								<DashboardOrganizationSwitcher
 									collapsed={sidebarCollapsed}
 									mobileExpanded={mobileSidebarOpen}
 									onNavigate={() => setMobileSidebarOpen(false)}
 								/>
 							</div>
-							<div className="px-2 pt-4 lg:px-3">
+							<div className="px-2 pt-3 lg:px-3">
 								<DashboardSidebarNav
 									collapsed={sidebarCollapsed}
 									mobileExpanded={mobileSidebarOpen}
@@ -286,7 +286,7 @@ export function DashboardFrame({
 						}}
 						width="auto"
 					>
-						<div className="flex min-h-16 items-center gap-3 px-4 sm:px-6">
+						<div className="flex min-h-14 items-center gap-2 px-3 sm:px-5">
 							<div className="flex min-w-0 flex-1 items-center justify-end">
 								<DashboardCommandTrigger />
 							</div>

@@ -9,26 +9,26 @@ type DashboardContentShellProfile = {
 	mainClassName: string;
 };
 
-const dashboardPageGutterClassName = "px-4 sm:px-6";
+const dashboardPageGutterClassName = "px-3 sm:px-5";
 
 export const dashboardContentShellProfiles = {
 	standard: {
 		bodyClassName: "",
-		contentClassName: "min-h-[calc(100svh-8rem)]",
+		contentClassName: "min-h-[calc(100svh-6.5rem)]",
 		gutterClassName: dashboardPageGutterClassName,
-		mainClassName: "mx-auto max-w-6xl gap-5 pb-8 pt-24",
+		mainClassName: "mx-auto max-w-6xl gap-4 pb-6 pt-20",
 	},
 	wide: {
 		bodyClassName: "",
-		contentClassName: "min-h-[calc(100svh-8rem)]",
+		contentClassName: "min-h-[calc(100svh-6.5rem)]",
 		gutterClassName: dashboardPageGutterClassName,
-		mainClassName: "min-w-0 gap-5 pb-8 pt-24",
+		mainClassName: "min-w-0 gap-4 pb-6 pt-20",
 	},
 	workspace: {
 		bodyClassName: "h-full",
 		contentClassName: "min-h-0 flex-1",
 		gutterClassName: "px-0",
-		mainClassName: "h-svh min-h-0 overflow-hidden pb-0 pt-16",
+		mainClassName: "h-svh min-h-0 overflow-hidden pb-0 pt-14",
 	},
 } as const satisfies Record<DashboardLayoutWidth, DashboardContentShellProfile>;
 

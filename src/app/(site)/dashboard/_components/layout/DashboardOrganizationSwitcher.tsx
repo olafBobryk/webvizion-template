@@ -109,7 +109,7 @@ export function DashboardOrganizationSwitcher({
 			<div
 				className={clsx(
 					"flex min-w-0 items-center px-2",
-					placement === "footer" ? "h-10" : "h-12",
+					placement === "footer" ? "h-10" : "h-11",
 					mobileExpanded ? "max-lg:justify-start" : "max-lg:justify-center",
 					collapsed ? "lg:justify-center" : "lg:justify-start",
 				)}
@@ -146,7 +146,7 @@ export function DashboardOrganizationSwitcher({
 			triggerButtonProps={{
 				className: clsx(
 					"w-full min-w-0 overflow-hidden px-2",
-					placement === "footer" ? "h-10" : "h-14",
+					placement === "footer" ? "h-10" : "h-12",
 					mobileExpanded
 						? "max-lg:justify-start"
 						: "max-lg:justify-center max-lg:px-0 max-lg:focus-visible:border-transparent max-lg:focus-visible:ring-0 max-lg:aria-expanded:!bg-transparent max-lg:aria-expanded:hover:!bg-transparent",

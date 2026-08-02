@@ -800,10 +800,10 @@ for (const contract of [
 	/data-dashboard-sidebar-header/u,
 	/data-dashboard-sidebar-body/u,
 	/data-dashboard-sidebar-footer/u,
-	/"pl-\[64px\] lg:pl-\[80px\]"/u,
-	/"pl-\[64px\] lg:pl-\[260px\]"/u,
-	/"left-\[64px\] lg:left-\[80px\]"/u,
-	/"left-\[64px\] lg:left-\[260px\]"/u,
+	/"pl-\[56px\] lg:pl-\[72px\]"/u,
+	/"pl-\[56px\] lg:pl-\[240px\]"/u,
+	/"left-\[56px\] lg:left-\[72px\]"/u,
+	/"left-\[56px\] lg:left-\[240px\]"/u,
 ]) {
 	assert.match(sidebarShell, contract);
 }

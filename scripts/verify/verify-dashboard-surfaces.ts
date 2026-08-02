@@ -54,9 +54,13 @@ assert.equal(
 );
 assert.equal(
 	dashboardContentShellProfiles.standard.gutterClassName,
-	"px-4 sm:px-6",
+	"px-3 sm:px-5",
 );
+assert.match(dashboardContentShellProfiles.standard.mainClassName, /gap-4/u);
+assert.match(dashboardContentShellProfiles.standard.mainClassName, /pt-20/u);
+assert.match(dashboardContentShellProfiles.standard.mainClassName, /pb-6/u);
 assert.equal(dashboardContentShellProfiles.workspace.gutterClassName, "px-0");
+assert.match(dashboardContentShellProfiles.workspace.mainClassName, /pt-14/u);
 
 for (const surface of dashboardSurfaceRegistry) {
 	assert.ok(

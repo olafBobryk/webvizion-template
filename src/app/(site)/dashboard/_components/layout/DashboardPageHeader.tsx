@@ -14,7 +14,7 @@ function DashboardPageHeaderRoot({
 	title: React.ReactNode;
 }) {
 	return (
-		<div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+		<div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
 			<div className="grid min-w-0 gap-1">
 				<Text as="h1" className="min-w-0 truncate" variant="headingPage">
 					{title}
@@ -46,7 +46,7 @@ function DashboardPageHeaderSkeleton({
 	title?: React.ReactNode;
 }) {
 	return (
-		<div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+		<div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
 			<div className="grid min-w-0 gap-1">
 				<Text.Skeleton
 					as="h1"

@@ -18,7 +18,7 @@ export function DashboardSection({
 }) {
 	return (
 		<section
-			className={["grid min-w-0 gap-5", className].filter(Boolean).join(" ")}
+			className={["grid min-w-0 gap-4", className].filter(Boolean).join(" ")}
 		>
 			<DashboardSurfaceTrail />
 			{title ? (
