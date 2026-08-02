@@ -84,9 +84,9 @@ export function DashboardOrganizationSwitcher({
 				avatarSize={placement === "footer" ? "sm" : "md"}
 				avatarClassName={clsx(
 					!mobileExpanded &&
-						"max-lg:group-focus-visible:ring-3 max-lg:group-focus-visible:ring-ring/30",
+						"max-lg:!size-[min(2.5rem,100cqi)] max-lg:group-focus-visible:ring-3 max-lg:group-focus-visible:ring-ring/30",
 					collapsed &&
-						"lg:group-focus-visible:ring-3 lg:group-focus-visible:ring-ring/30",
+						"lg:!size-[min(2.5rem,100cqi)] lg:group-focus-visible:ring-3 lg:group-focus-visible:ring-ring/30",
 				)}
 				className={clsx(
 					"w-full",
@@ -108,7 +108,7 @@ export function DashboardOrganizationSwitcher({
 		return (
 			<div
 				className={clsx(
-					"flex min-w-0 items-center px-2",
+					"@container flex min-w-0 items-center px-2",
 					placement === "footer" ? "h-10" : "h-11",
 					mobileExpanded ? "max-lg:justify-start" : "max-lg:justify-center",
 					collapsed ? "lg:justify-center" : "lg:justify-start",
@@ -145,7 +145,7 @@ export function DashboardOrganizationSwitcher({
 			}))}
 			triggerButtonProps={{
 				className: clsx(
-					"w-full min-w-0 overflow-hidden px-2",
+					"@container w-full min-w-0 overflow-hidden px-2",
 					placement === "footer" ? "h-10" : "h-12",
 					mobileExpanded
 						? "max-lg:justify-start"

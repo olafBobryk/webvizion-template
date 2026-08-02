@@ -500,6 +500,11 @@ assert.ok(
 		organizationSwitchPage.includes("choices.length <= 1"),
 	"Organization switching must derive from the resolved organization choices.",
 );
+assert.ok(
+	organizationSwitcher.includes("!size-[min(2.5rem,100cqi)]") &&
+		organizationSwitcher.match(/@container/g)?.length === 2,
+	"Compact organization avatars must scale within their available rail container.",
+);
 
 assert.deepEqual(dashboardDebugStates, [
 	"loading",
