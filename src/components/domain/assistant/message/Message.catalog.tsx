@@ -4,12 +4,31 @@ import * as Assistant from "@/components/domain/assistant";
 import type {
 	AssistantMessage as AssistantMessageContract,
 	AssistantResponseMessage,
+	AssistantStagedAttachment,
 	AssistantSystemMessage,
 	AssistantUserMessage,
 } from "@/lib/assistant/contracts";
 import { defineCatalogOwnerContract } from "@/lib/component-catalog/contract";
 
 const createdAt = "2026-08-01T09:00:00.000Z";
+const userAttachment: AssistantStagedAttachment = {
+	accessUrl: "data:application/pdf;base64,",
+	contentType: "application/pdf",
+	createdAt,
+	filename: "launch-brief.pdf",
+	id: "attachment-user",
+	size: 84_000,
+	status: "ready",
+};
+const assistantAttachment: AssistantStagedAttachment = {
+	accessUrl: "data:text/plain;base64,",
+	contentType: "text/plain",
+	createdAt,
+	filename: "record-summary.txt",
+	id: "attachment-assistant",
+	size: 2_400,
+	status: "ready",
+};
 const userMessage: AssistantUserMessage = {
 	createdAt,
 	id: "message-user",
@@ -20,14 +39,7 @@ const userMessage: AssistantUserMessage = {
 			type: "text",
 		},
 		{
-			attachment: {
-				contentType: "application/pdf",
-				createdAt,
-				filename: "launch-brief.pdf",
-				id: "attachment-user",
-				size: 84_000,
-				status: "ready",
-			},
+			attachment: userAttachment,
 			id: "part-user-file",
 			type: "file",
 		},
@@ -56,14 +68,7 @@ const assistantMessage: AssistantResponseMessage = {
 			type: "text",
 		},
 		{
-			attachment: {
-				contentType: "text/plain",
-				createdAt,
-				filename: "record-summary.txt",
-				id: "attachment-assistant",
-				size: 2_400,
-				status: "ready",
-			},
+			attachment: assistantAttachment,
 			id: "part-assistant-file",
 			type: "file",
 		},

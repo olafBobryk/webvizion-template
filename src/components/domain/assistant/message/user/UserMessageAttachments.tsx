@@ -30,6 +30,20 @@ export function UserMessageAttachments({
 
 		Promise.allSettled(
 			attachments.map(async (attachment): Promise<FileInputItem> => {
+				const fixtureAccessUrl =
+					"accessUrl" in attachment && typeof attachment.accessUrl === "string"
+						? attachment.accessUrl
+						: null;
+				if (fixtureAccessUrl) {
+					return {
+						key: attachment.id,
+						name: attachment.filename,
+						status: "uploaded",
+						type: attachment.contentType,
+						unoptimized: true,
+						url: fixtureAccessUrl,
+					};
+				}
 				const response = await fetch(
 					`/api/assistant/files/${encodeURIComponent(attachment.id)}/access`,
 					{ method: "POST", signal: controller.signal },

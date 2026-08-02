@@ -238,11 +238,17 @@ const meta = {
 		globalThis.fetch = fn(
 			async (input: RequestInfo | URL, init?: RequestInit) => {
 				const url = String(input);
-				if (url.endsWith("/api/assistant/files/attachment-user/access")) {
+				if (
+					url.endsWith("/api/assistant/files/attachment-user/access") ||
+					url.endsWith("/api/assistant/files/attachment-assistant/access")
+				) {
+					const contentType = url.includes("attachment-user")
+						? "application/pdf"
+						: "text/plain";
 					return new Response(
 						JSON.stringify({
 							expiresAt: "2099-01-01T00:00:00.000Z",
-							url: "data:application/pdf;base64,",
+							url: `data:${contentType};base64,`,
 						}),
 						{ headers: { "Content-Type": "application/json" }, status: 200 },
 					);
@@ -301,7 +307,20 @@ export const RolePresentation: Story = {
 					Node.DOCUMENT_POSITION_FOLLOWING,
 			),
 		).toBe(true);
-		await expect(canvas.getByText("record-summary.txt")).toBeVisible();
+		const assistantFiles = await within(assistantArticle).findByRole("group", {
+			name: "File list",
+		});
+		await expect(assistantFiles).toBeVisible();
+		await expect(
+			within(assistantArticle).getByRole("button", {
+				name: "Open record-summary.txt",
+			}),
+		).toBeInTheDocument();
+		await expect(
+			within(assistantArticle).queryByRole("button", {
+				name: "Remove record-summary.txt",
+			}),
+		).toBeNull();
 		const toolTrigger = canvas.getByRole("button", {
 			name: "Record tool · 1 call · Pending",
 		});

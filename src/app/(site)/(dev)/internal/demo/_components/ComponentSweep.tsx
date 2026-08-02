@@ -6,13 +6,12 @@ import {
 	InternalPageHeader,
 } from "@/app/(site)/(dev)/internal/_components/InternalPage";
 import { PortalScope } from "@/components/ui/overlays/Portal";
+import Divider from "@/components/ui/primitives/Divider";
 import { Text } from "@/components/ui/primitives/Text";
 import { componentCatalog } from "@/lib/component-catalog/componentCatalog.generated";
 import {
 	type CatalogOwnerContract,
 	type CatalogProjectionRow,
-	type CatalogStage,
-	type CatalogSweepSpan,
 	projectCatalogTarget,
 } from "@/lib/component-catalog/contract";
 
@@ -38,19 +37,20 @@ const familyDescriptions: Record<string, string> = {
 const stageStyles = {
 	standard: "min-h-20",
 	wide: "min-h-28",
-	overlay: "min-h-[30rem]",
+	overlay:
+		"min-h-20 has-[[role=tooltip]]:min-h-40 has-[[role=dialog]]:min-h-[30rem] has-[[data-sonner-toast]]:min-h-[30rem]",
 } as const;
 
-const projectionGridStyles = {
-	single: "sm:grid-cols-2",
-	double: "sm:grid-cols-2 2xl:grid-cols-3",
-	full: "sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4",
+const projectionColumnStyles = {
+	standard: "flex-[1_1_14rem]",
+	wide: "flex-[1_1_24rem]",
+	overlay: "basis-full",
 } as const;
 
-const ownerGridStyles = {
-	single: "",
-	double: "xl:col-span-2",
-	full: "xl:col-span-2 2xl:col-span-3",
+const ownerColumnStyles = {
+	single: "flex-[1_1_24rem]",
+	double: "flex-[2_1_48rem]",
+	full: "basis-full",
 } as const;
 
 function getOwnerSpan(owner: CatalogOwnerContract, groupSize: number) {
@@ -63,13 +63,6 @@ function getOwnerSpan(owner: CatalogOwnerContract, groupSize: number) {
 		return "double";
 	}
 	return "single";
-}
-
-function getProjectionGridStyles(
-	stage: CatalogStage,
-	ownerSpan: CatalogSweepSpan,
-) {
-	return stage === "overlay" ? "grid-cols-1" : projectionGridStyles[ownerSpan];
 }
 
 function orderIndex(value: string, order: readonly string[]) {
@@ -224,7 +217,7 @@ function groupProjectionRows(rows: readonly CatalogProjectionRow[]) {
 
 export function ComponentSweep() {
 	return (
-		<InternalPage className="gap-12" maxWidth="none">
+		<InternalPage className="gap-12">
 			<InternalPageHeader
 				description={`${owners.length} owners and ${projectionCount} deterministic previews, rendered directly from application-safe catalogue contracts.`}
 				title="Component Sweep"
@@ -268,19 +261,21 @@ export function ComponentSweep() {
 									</Text>
 
 									<div
-										className="grid grid-flow-row-dense items-start gap-x-10 gap-y-12 xl:grid-cols-2 2xl:grid-cols-3"
+										className="flex flex-wrap items-start gap-x-10 gap-y-12"
 										data-component-sweep-owner-grid={group}
 									>
 										{groupOwners.map((owner) => {
 											const ownerSpan = getOwnerSpan(owner, groupOwners.length);
 											return (
 												<article
-													className={`grid min-w-0 gap-6 ${ownerGridStyles[ownerSpan]}`}
+													className={`grid min-w-0 scroll-mt-[calc(var(--site-header-height)+2rem)] gap-6 ${ownerColumnStyles[ownerSpan]}`}
 													data-component-sweep-owner={owner.id}
+													id={`component-sweep-${owner.id}`}
 													key={owner.id}
 												>
+													<Divider />
 													<header className="grid max-w-3xl gap-1">
-														<Text as="h4" variant="bodyStrong">
+														<Text as="h4" variant="headingXs">
 															{owner.name}
 														</Text>
 														<Text tone="muted" variant="support">
@@ -316,12 +311,12 @@ export function ComponentSweep() {
 																			</Text>
 																		) : null}
 																		<div
-																			className={`grid gap-x-6 gap-y-5 ${getProjectionGridStyles(target.stage, ownerSpan)}`}
+																			className="flex flex-wrap gap-x-6 gap-y-5"
 																			data-component-sweep-grid={target.stage}
 																		>
 																			{projection.rows.map((row) => (
 																				<div
-																					className="grid min-w-0 grid-cols-[minmax(0,1fr)] content-start gap-2"
+																					className={`grid min-w-0 grid-cols-[minmax(0,1fr)] content-start gap-2 ${projectionColumnStyles[target.stage]}`}
 																					data-component-sweep-preview={row.id}
 																					key={row.id}
 																				>

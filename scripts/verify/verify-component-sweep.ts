@@ -308,11 +308,13 @@ function run() {
 			"data-component-sweep-stage",
 			"data-component-sweep-grid",
 			"data-component-sweep-owner-grid",
-			"grid-flow-row-dense",
 			"owner.sweepSpan",
-			"sm:grid-cols-2",
-			"xl:grid-cols-2",
-			"2xl:grid-cols-3",
+			"flex flex-wrap items-start",
+			"flex flex-wrap gap-x-6 gap-y-5",
+			"flex-[1_1_14rem]",
+			"flex-[1_1_24rem]",
+			"flex-[2_1_48rem]",
+			"basis-full",
 		]) {
 			if (!routeSource.includes(required)) fail(`route is missing ${required}`);
 		}

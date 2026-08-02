@@ -1,44 +1,80 @@
 "use client";
 
-import { Chip } from "@/components/ui/misc";
-import { Button } from "@/components/ui/primitives/Button";
+import * as React from "react";
+import { FileInput, type FileInputItem } from "@/components/ui/input";
+import { Text } from "@/components/ui/primitives/Text";
 import type { AssistantAttachment } from "@/lib/assistant/contracts";
 
-function formatBytes(bytes: number) {
-	return bytes < 1024 * 1024
-		? `${Math.max(1, Math.round(bytes / 1024))} KB`
-		: `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-}
+const ignoreFileInputChanges = () => {};
 
 export function Attachment({
 	attachment,
-	onRemove,
 }: {
 	attachment: AssistantAttachment;
-	onRemove?: () => void;
 }) {
+	const [item, setItem] = React.useState<FileInputItem | null>(null);
+	const [failed, setFailed] = React.useState(false);
+
+	React.useEffect(() => {
+		const controller = new AbortController();
+		setItem(null);
+		setFailed(false);
+		const fixtureAccessUrl =
+			"accessUrl" in attachment && typeof attachment.accessUrl === "string"
+				? attachment.accessUrl
+				: null;
+		if (fixtureAccessUrl) {
+			setItem({
+				key: attachment.id,
+				name: attachment.filename,
+				status: "uploaded",
+				type: attachment.contentType,
+				unoptimized: true,
+				url: fixtureAccessUrl,
+			});
+			return () => controller.abort();
+		}
+
+		fetch(`/api/assistant/files/${encodeURIComponent(attachment.id)}/access`, {
+			method: "POST",
+			signal: controller.signal,
+		})
+			.then(async (response) => {
+				if (!response.ok) throw new Error("Attachment preview unavailable.");
+				const result = (await response.json()) as { url?: string };
+				if (!result.url) throw new Error("Attachment preview unavailable.");
+				setItem({
+					key: attachment.id,
+					name: attachment.filename,
+					status: "uploaded",
+					type: attachment.contentType,
+					unoptimized: true,
+					url: result.url,
+				});
+			})
+			.catch(() => {
+				if (!controller.signal.aborted) setFailed(true);
+			});
+
+		return () => controller.abort();
+	}, [attachment]);
+
+	if (!item) {
+		return failed ? (
+			<Text as="p" tone="muted" variant="caption">
+				Attachment preview unavailable.
+			</Text>
+		) : (
+			<FileInput.Skeleton count={1} label={null} mode="read" />
+		);
+	}
+
 	return (
-		<Chip
-			className="max-w-64"
-			contentMode="contents"
-			leadingIcon={
-				attachment.contentType === "application/pdf" ? "cards" : "image"
-			}
-		>
-			<span className="min-w-0 truncate">{attachment.filename}</span>
-			<span className="shrink-0 text-foreground/80">
-				{formatBytes(attachment.size)}
-			</span>
-			{onRemove ? (
-				<Button
-					aria-label={`Remove ${attachment.filename}`}
-					onClick={onRemove}
-					size="none"
-					variant="ghost"
-				>
-					×
-				</Button>
-			) : null}
-		</Chip>
+		<FileInput
+			items={[item]}
+			label={null}
+			mode="read"
+			onItemsChange={ignoreFileInputChanges}
+		/>
 	);
 }
