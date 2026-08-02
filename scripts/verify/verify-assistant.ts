@@ -148,6 +148,7 @@ assert.match(composer, /<Dropdown\.Listbox/u);
 assert.match(composer, /selected: mode === value/u);
 assert.match(composer, /tone: mode === "read_write" \? "warning"/u);
 assert.match(composer, /value === "read_write" \? "!text-warning"/u);
+assert.match(composer, /variant: "ghost"/u);
 assert.match(composer, /<Icon name=\{option\.icon\} size="sm" \/>/u);
 assert.match(composer, /triggerContent=\{<Icon name=\{current\.icon\} \/>\}/u);
 assert.match(composer, /activeIndex=\{busy \? 1 : 0\}/u);

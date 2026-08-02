@@ -151,6 +151,7 @@ function ToolModeMenu({
 			positionStrategy="fixed"
 			triggerButtonProps={{
 				className: value === "read_write" ? "!text-warning" : undefined,
+				variant: "ghost",
 			}}
 			triggerContent={<Icon name={current.icon} />}
 		/>

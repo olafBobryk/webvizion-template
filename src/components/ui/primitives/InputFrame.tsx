@@ -16,7 +16,7 @@ const inputFrameVariants = cva(
 		variants: {
 			presentation: {
 				default: "",
-				composer: "!rounded-2xl !bg-background",
+				composer: "!rounded-2xl !bg-input/50",
 			},
 			size: {
 				sm: "h-9",
