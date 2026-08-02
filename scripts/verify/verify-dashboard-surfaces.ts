@@ -504,11 +504,11 @@ assert.ok(
 	organizationSwitcher.includes(
 		'avatarSize={placement === "footer" ? "sm" : "md"}',
 	) &&
-		organizationSwitcher.includes("!size-[100cqi]") &&
+		organizationSwitcher.includes("!size-[min(2.5rem,calc(100cqi_-_4px))]") &&
 		organizationSwitcher.match(/@container/g)?.length === 2 &&
 		organizationSwitcher.includes("max-lg:px-0") &&
 		organizationSwitcher.includes("lg:px-0"),
-	"Compact organization avatars must occupy the same inset track as navigation rows.",
+	"Compact organization avatars must fit inside the navigation inset track with an md-size cap.",
 );
 
 assert.deepEqual(dashboardDebugStates, [

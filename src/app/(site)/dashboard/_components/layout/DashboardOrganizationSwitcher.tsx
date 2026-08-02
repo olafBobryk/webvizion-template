@@ -84,9 +84,9 @@ export function DashboardOrganizationSwitcher({
 				avatarSize={placement === "footer" ? "sm" : "md"}
 				avatarClassName={clsx(
 					!mobileExpanded &&
-						"max-lg:!size-[100cqi] max-lg:group-focus-visible:ring-3 max-lg:group-focus-visible:ring-ring/30",
+						"max-lg:!size-[min(2.5rem,calc(100cqi_-_4px))] max-lg:group-focus-visible:ring-3 max-lg:group-focus-visible:ring-ring/30",
 					collapsed &&
-						"lg:!size-[100cqi] lg:group-focus-visible:ring-3 lg:group-focus-visible:ring-ring/30",
+						"lg:!size-[min(2.5rem,calc(100cqi_-_4px))] lg:group-focus-visible:ring-3 lg:group-focus-visible:ring-ring/30",
 				)}
 				className={clsx(
 					"w-full",
