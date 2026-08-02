@@ -1817,10 +1817,19 @@
 			"subject": "fix: clear plugin and build warnings",
 			"cumulativeNet": 132822,
 			"delta": 41
+		},
+		{
+			"additions": 2089,
+			"date": "2026-08-02",
+			"deletions": 928,
+			"hash": "9cc78bb11f3bcb2bfdece880fa8f2238c7447226",
+			"subject": "Ship production updates",
+			"cumulativeNet": 133983,
+			"delta": 1161
 		}
 	],
 	"endDate": "2026-08-02",
-	"head": "d3bc7eb94db21054278f6a8a194867c2255296fe",
+	"head": "9cc78bb11f3bcb2bfdece880fa8f2238c7447226",
 	"startDate": "2025-08-24",
 	"version": 1
 }
