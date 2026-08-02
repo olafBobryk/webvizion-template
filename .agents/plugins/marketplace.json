@@ -1,0 +1,20 @@
+{
+	"name": "averlo-next-template",
+	"interface": {
+		"displayName": "Averlo Next Template"
+	},
+	"plugins": [
+		{
+			"name": "averlo-next",
+			"source": {
+				"source": "local",
+				"path": "./plugins/averlo-next"
+			},
+			"policy": {
+				"installation": "INSTALLED_BY_DEFAULT",
+				"authentication": "ON_INSTALL"
+			},
+			"category": "Developer Tools"
+		}
+	]
+}

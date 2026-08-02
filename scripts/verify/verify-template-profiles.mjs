@@ -101,6 +101,16 @@ async function pathExists(filePath) {
 		.catch(() => false);
 }
 
+async function assertNoTemplatePluginSource(outputRoot) {
+	for (const forbiddenPath of [".agents", "plugins"]) {
+		if (await pathExists(path.join(outputRoot, forbiddenPath))) {
+			throw new Error(
+				`Generated project unexpectedly contains template plugin source: ${forbiddenPath}`,
+			);
+		}
+	}
+}
+
 async function collectTypeScriptFiles(directory) {
 	const files = [];
 	for (const entry of await fs.readdir(directory, { withFileTypes: true })) {
@@ -1148,6 +1158,7 @@ async function main() {
 				timings.push(performance.now() - startedAt);
 				await assertReceipt(outputRoot, profileCase);
 				await assertNoOrchestrationCapability(outputRoot);
+				await assertNoTemplatePluginSource(outputRoot);
 				await assertNoAssistantCapability(outputRoot);
 				await assertNoStorybook(outputRoot);
 				await assertComponentSweep(outputRoot, profileCase);

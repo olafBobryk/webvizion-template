@@ -1,0 +1,7 @@
+interface:
+  display_name: "Averlo Next · Design System"
+  short_description: "Enforce all Storybook-backed Averlo UI"
+  default_prompt: "Use $averlo-next:design-system to discover the supported public UI owner in Storybook, consult Catalog Rules for catalogue migrations, enforce structural local invariants, and reject implementation-only APIs."
+
+policy:
+  allow_implicit_invocation: true

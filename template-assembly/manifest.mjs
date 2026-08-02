@@ -31,7 +31,9 @@ export const assemblyTemplateOnlyPaths = new Set([
 ]);
 
 export const assemblyTemplateOnlyRoots = [
+	".agents",
 	".storybook",
+	"plugins",
 	"template-assembly",
 	"template-profiles",
 	"template-surfaces",
