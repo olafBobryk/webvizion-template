@@ -1673,10 +1673,19 @@
 			"subject": "Ship production updates",
 			"cumulativeNet": 128265,
 			"delta": 57
+		},
+		{
+			"additions": 7,
+			"date": "2026-08-02",
+			"deletions": 2,
+			"hash": "4814b0c546d1b597177a35e2b53e497a8ed1cb5f",
+			"subject": "fix: cap marketing header links",
+			"cumulativeNet": 128270,
+			"delta": 5
 		}
 	],
 	"endDate": "2026-08-02",
-	"head": "42b2d625f9de1cf23d9cf37e7fc2253956120432",
+	"head": "4814b0c546d1b597177a35e2b53e497a8ed1cb5f",
 	"startDate": "2025-08-24",
 	"version": 1
 }
