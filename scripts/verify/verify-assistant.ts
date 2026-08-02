@@ -775,6 +775,7 @@ assert.match(sidebarBranch, /renderTrigger/u);
 assert.match(sidebarBranch, /export function DashboardSidebarItem/u);
 assert.match(sidebarBranch, /h-8 min-w-0 flex-1 items-center gap-1\.5/u);
 assert.match(sidebarBranch, /name=\{icon\} size="md"/u);
+assert.match(sidebarBranch, /name="chevron-down"\s+size="md"/u);
 assert.doesNotMatch(sidebarBranch, /DashboardSidebarLeafLink/u);
 assert.match(sidebarBranch, /aria-label=.*Collapse.*Expand/u);
 assert.match(sidebarBranch, /actions\?: React\.ReactNode/u);

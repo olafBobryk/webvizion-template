@@ -154,7 +154,7 @@ export function DashboardSidebarBranch({
 										triggerProps["aria-expanded"] && "rotate-180",
 									)}
 									name="chevron-down"
-									size="sm"
+									size="md"
 								/>
 							</Button>
 						}
