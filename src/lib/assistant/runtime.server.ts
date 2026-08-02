@@ -2,7 +2,7 @@ import "server-only";
 
 import { createOpenAI } from "@ai-sdk/openai";
 import { jsonSchema, stepCountIs, streamText, tool } from "ai";
-import { codexHarnessResponse } from "./codex-harness.server";
+import { codexHarnessResponse } from "@/lib/assistant/codex-harness.server";
 import {
 	type AssistantFixtureScenario,
 	type AssistantMessage,

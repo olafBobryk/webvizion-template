@@ -60,7 +60,7 @@ export function collectInventory(plan, markdown) {
 	const seenIds = new Set();
 	for (const story of allStories) {
 		if (seenIds.has(story.id))
-			throw new Error("Duplicate Storybook story ID: " + story.id);
+			throw new Error(`Duplicate Storybook story ID: ${story.id}`);
 		seenIds.add(story.id);
 	}
 
@@ -124,7 +124,7 @@ function parseArgs(argv) {
 		else if (argv[index] === "--input") options.input = argv[++index];
 		else if (argv[index] === "--out") options.out = argv[++index];
 		else if (argv[index] === "--help") options.help = true;
-		else throw new Error("Unknown argument: " + argv[index]);
+		else throw new Error(`Unknown argument: ${argv[index]}`);
 	}
 	return options;
 }
@@ -147,15 +147,15 @@ function main() {
 		options.out ?? join(base, "storybook-inventory.json"),
 	);
 	for (const path of [planPath, inputPath])
-		if (!existsSync(path)) throw new Error("Required file not found: " + path);
+		if (!existsSync(path)) throw new Error(`Required file not found: ${path}`);
 	const inventory = collectInventory(
 		JSON.parse(readFileSync(planPath, "utf8")),
 		readFileSync(inputPath, "utf8"),
 	);
 	mkdirSync(dirname(outputPath), { recursive: true });
-	writeFileSync(outputPath, JSON.stringify(inventory, null, 2) + "\n", "utf8");
+	writeFileSync(outputPath, `${JSON.stringify(inventory, null, 2)}\n`, "utf8");
 	process.stdout.write(
-		JSON.stringify(
+		`${JSON.stringify(
 			{
 				outputPath,
 				summary: inventory.summary,
@@ -164,7 +164,7 @@ function main() {
 			},
 			null,
 			2,
-		) + "\n",
+		)}\n`,
 	);
 	if (inventory.missing.length || inventory.ambiguous.length)
 		process.exitCode = 1;

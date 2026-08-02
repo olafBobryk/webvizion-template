@@ -164,6 +164,14 @@ const getCodeInspectorRules = (phase: string) => {
 	});
 };
 
+const getAssistantHarnessAliases = (phase: string): Record<string, string> =>
+	phase === PHASE_DEVELOPMENT_SERVER
+		? {}
+		: {
+				"@/lib/assistant/codex-harness.server":
+					"./src/lib/assistant/codex-harness.production.server.ts",
+			};
+
 const createNextConfig = (phase: string): NextConfig => ({
 	...getDevIsolationConfig(phase),
 	...(getDevAllowedOrigins(phase).length > 0
@@ -180,6 +188,7 @@ const createNextConfig = (phase: string): NextConfig => ({
 	outputFileTracingRoot: PROJECT_ROOT,
 	turbopack: {
 		root: PROJECT_ROOT,
+		resolveAlias: getAssistantHarnessAliases(phase),
 		rules: getCodeInspectorRules(phase),
 	},
 });

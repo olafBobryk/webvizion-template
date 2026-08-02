@@ -171,9 +171,27 @@ const codexHarness = readFileSync(
 	resolve(root, "src/lib/assistant/codex-harness.server.ts"),
 	"utf8",
 );
+const productionCodexHarness = readFileSync(
+	resolve(root, "src/lib/assistant/codex-harness.production.server.ts"),
+	"utf8",
+);
+const nextConfig = readFileSync(resolve(root, "next.config.ts"), "utf8");
 assert.match(runtimeAdapter, /requestedMode === "codex_harness"/u);
 assert.match(runtimeAdapter, /process\.env\.NODE_ENV === "production"/u);
+assert.match(
+	runtimeAdapter,
+	/import \{ codexHarnessResponse \} from "@\/lib\/assistant\/codex-harness\.server"/u,
+);
 assert.match(runtimeAdapter, /return codexHarnessResponse\(input\)/u);
+assert.match(
+	productionCodexHarness,
+	/The local Codex harness is disabled in production\./u,
+);
+assert.match(nextConfig, /"@\/lib\/assistant\/codex-harness\.server":/u);
+assert.match(
+	nextConfig,
+	/"\.\/src\/lib\/assistant\/codex-harness\.production\.server\.ts"/u,
+);
 assert.match(
 	runtimeAdapter,
 	/if \(input\.fixtureScenario\) return fixtureResponse\(input\)/u,
