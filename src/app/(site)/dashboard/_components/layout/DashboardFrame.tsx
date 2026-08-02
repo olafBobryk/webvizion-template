@@ -213,7 +213,7 @@ export function DashboardFrame({
 			<div className="min-h-screen bg-background text-foreground">
 				<DashboardSidebarShell
 					body={
-						<div className="grid">
+						<div className="grid min-w-0 grid-cols-[minmax(0,1fr)]">
 							<div className="border-b border-sidebar-border/70 px-2 pb-3 lg:px-3">
 								<DashboardOrganizationSwitcher
 									collapsed={sidebarCollapsed}

@@ -832,6 +832,7 @@ assert.match(dashboardFrame, /DashboardFooterActions/u);
 assert.match(dashboardFrame, /flex-col items-center justify-center/u);
 assert.match(dashboardFrame, /flex-row flex-wrap items-center justify-start/u);
 assert.match(dashboardFrame, /iconSize=\{16\}/u);
+assert.match(dashboardFrame, /grid-cols-\[minmax\(0,1fr\)\]/u);
 assert.match(dashboardFrame, /className="w-full lg:hidden"/u);
 assert.match(dashboardFrame, /className="w-full max-lg:hidden"/u);
 assert.match(dashboardFrame, /hrefFor\("dashboard\.support"\)/u);
