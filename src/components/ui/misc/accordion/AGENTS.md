@@ -5,10 +5,8 @@
 Component-owned implementation for the public `Accordion` composition.
 Storybook `UI/Misc/Accordion` owns its consumer contract and executable behavior.
 
-## Public Boundary
+## Public boundary
 
-- External consumers import `Accordion` and its public types from
-  `@/components/ui/misc`.
 - `Accordion.tsx` is the server-safe public owner inside this folder.
 - `AccordionClient.tsx` and `Accordion.shared.ts` are private implementation
   modules and use direct sibling imports.
@@ -21,5 +19,5 @@ Storybook `UI/Misc/Accordion` owns its consumer contract and executable behavior
   namespace.
 - Live and skeleton variants preserve matching outer geometry and the shared
   Card, Button, Text, icon, focus, and motion dependencies.
-- A custom `renderTrigger` attaches every supplied disclosure prop to the actual
-  disclosure button; sibling interactive elements do not receive those props.
+- A custom `renderTrigger` attaches disclosure props only to the actual
+  disclosure button, never sibling interactive elements.

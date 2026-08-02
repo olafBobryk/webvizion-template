@@ -35,7 +35,8 @@ const dropdownOptionBaseClassName =
 	"flex w-full min-w-0 items-center gap-2.5 !border-0 !bg-clip-border !px-[15px] !py-2.5 text-left text-sm text-foreground !transition-none";
 const dropdownPresentationOptionClassName =
 	"!h-auto !min-h-16 !gap-0 !px-3 !py-3";
-const dropdownOptionRadiusClassName = "rounded-none";
+const dropdownOptionRadiusClassName =
+	"rounded-none first:focus-visible:rounded-t-md last:focus-visible:rounded-b-md";
 
 export function getDropdownOptionClassName({
 	active,
@@ -56,7 +57,7 @@ export function getDropdownOptionClassName({
 		dropdownOptionRadiusClassName,
 		dividerBefore ? "!border-t !border-border" : undefined,
 		dividerAfter ? "!border-b !border-border" : undefined,
-		focusRing.visibleDefault,
+		focusRing.visibleInner,
 		selected && tone === "default" ? "!text-foreground" : undefined,
 		active && !disabled && tone === "default"
 			? "[&&]:!bg-foreground/5 !text-foreground"

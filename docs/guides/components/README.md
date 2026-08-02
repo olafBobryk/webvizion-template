@@ -18,6 +18,7 @@ decision spans owners.
 | Modal, confirmation, dropdown, inspection, or toast ownership | [Overlays and confirmation](./overlays-and-confirmation.md) |
 | Focus, responsive rendering, motion, shortcuts, or SVG | [Interaction and responsive rendering](./interaction-and-responsive-rendering.md) |
 | Typography, surfaces, structure, and semantic accents | [Surfaces and presentation](./surfaces-and-presentation.md) |
+| Repeatable design-system agent assessment | [Design-system agent benchmark](./design-system-agent-benchmark.md) |
 
 Do not copy an owner's contract into these guides. Link to its Storybook page
 and keep only the cross-family decision.

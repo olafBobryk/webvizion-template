@@ -54,6 +54,79 @@ type Story = StoryObj;
 
 const editProject = fn();
 const archiveProject = fn();
+const removeMemberAccess = fn();
+
+export const ContextualDestructiveAction: Story = {
+	tags: ["backport-canonical"],
+	parameters: {
+		backport: {
+			schemaVersion: 1,
+			target: "averlo-next-template",
+			canonicalStoryId: "ui-primitives-dropdown--contextual-destructive-action",
+			strategy: "adapt",
+			rationale:
+				"Keep secondary destructive row actions inside the contextual menu and prove keyboard access.",
+			source: {
+				repository: "synthetic:dropdown-backport-pilot",
+				storyId: "ui-primitives-dropdown--contextual-destructive-action",
+				fingerprint:
+					"sha256:3df7fcb4d3aa9140b7f2ac7685585e8fe982377cab43ba4ace6e496dfec7d594",
+			},
+		},
+		docs: {
+			description: {
+				story:
+					"Keep destructive actions in the contextual More menu when destruction is not the primary goal of the entire page. A directly visible destructive Button is reserved for a surface whose primary task is destructive.",
+			},
+		},
+	},
+	render: () => (
+		<div className="flex max-w-xl items-center justify-between rounded-xl border border-border bg-card p-4">
+			<div className="grid gap-0.5">
+				<strong>Avery Chen</strong>
+				<span className="text-sm text-muted-foreground">
+					Admin · Access active
+				</span>
+			</div>
+			<Dropdown.Menu
+				ariaLabel="Manage Avery Chen"
+				openOnHover={false}
+				options={[
+					{ id: "view", label: "View member" },
+					{
+						id: "remove",
+						label: "Remove access",
+						onSelect: removeMemberAccess,
+						tone: "danger",
+					},
+				]}
+			/>
+		</div>
+	),
+	play: async ({ canvas, canvasElement }) => {
+		removeMemberAccess.mockClear();
+		const body = within(canvasElement.ownerDocument.body);
+		await expect(
+			body.queryByRole("button", { name: "Remove access" }),
+		).not.toBeInTheDocument();
+		await expect(
+			body.queryByRole("menuitem", { name: "Remove access" }),
+		).not.toBeInTheDocument();
+		const trigger = canvas.getByRole("button", { name: "Manage Avery Chen" });
+		trigger.focus();
+		await expect(trigger).toHaveFocus();
+		await userEvent.keyboard("{Enter}");
+		const items = await body.findAllByRole("menuitem");
+		await expect(items.map((item) => item.textContent?.trim())).toEqual([
+			"View member",
+			"Remove access",
+		]);
+		const removeItem = body.getByRole("menuitem", { name: "Remove access" });
+		await expect(removeItem).toHaveClass("!text-danger-text");
+		await userEvent.click(removeItem);
+		await expect(removeMemberAccess).toHaveBeenCalledOnce();
+	},
+};
 
 export const MenuOrderingSelectionAndDismissal: Story = {
 	render: () => (
@@ -77,9 +150,9 @@ export const MenuOrderingSelectionAndDismissal: Story = {
 		editProject.mockClear();
 		const trigger = canvas.getByRole("button", { name: "Project actions" });
 		await userEvent.click(trigger);
-		const menu = await canvas.findByRole("menu", { name: "Project actions" });
-		await waitFor(() => expect(menu).toBeVisible());
 		const body = within(canvasElement.ownerDocument.body);
+		const menu = await body.findByRole("menu", { name: "Project actions" });
+		await waitFor(() => expect(menu).toBeVisible());
 		await expect(
 			body.getAllByRole("menuitem").map((item) => item.textContent?.trim()),
 		).toEqual(["Edit", "Details", "Archive", "Delete project"]);
@@ -87,18 +160,16 @@ export const MenuOrderingSelectionAndDismissal: Story = {
 		await userEvent.keyboard("{Escape}");
 		await waitFor(() =>
 			expect(
-				canvas.queryByRole("menu", { name: "Project actions" }),
+				body.queryByRole("menu", { name: "Project actions" }),
 			).not.toBeInTheDocument(),
 		);
 		await expect(trigger).toHaveFocus();
 		await userEvent.click(trigger);
-		await userEvent.click(
-			await canvas.findByRole("menuitem", { name: "Edit" }),
-		);
+		await userEvent.click(await body.findByRole("menuitem", { name: "Edit" }));
 		await expect(editProject).toHaveBeenCalledOnce();
 		await waitFor(() =>
 			expect(
-				canvas.queryByRole("menu", { name: "Project actions" }),
+				body.queryByRole("menu", { name: "Project actions" }),
 			).not.toBeInTheDocument(),
 		);
 	},
@@ -216,11 +287,12 @@ export const SelectableListbox: Story = {
 			triggerContent="Choose workspace"
 		/>
 	),
-	play: async ({ canvas }) => {
+	play: async ({ canvas, canvasElement }) => {
 		chooseWorkspace.mockClear();
 		await userEvent.click(canvas.getByRole("button", { name: "Workspace" }));
-		const listbox = await canvas.findByRole("listbox", { name: "Workspace" });
-		const studio = await canvas.findByRole("option", { name: "Studio" });
+		const body = within(canvasElement.ownerDocument.body);
+		const listbox = await body.findByRole("listbox", { name: "Workspace" });
+		const studio = await body.findByRole("option", { name: "Studio" });
 		await expect(listbox).not.toHaveAttribute("aria-activedescendant");
 		await userEvent.hover(studio);
 		await waitFor(() =>
@@ -234,7 +306,7 @@ export const SelectableListbox: Story = {
 		);
 		await waitFor(() =>
 			expect(
-				canvas.queryByRole("listbox", { name: "Workspace" }),
+				body.queryByRole("listbox", { name: "Workspace" }),
 			).not.toBeInTheDocument(),
 		);
 	},
@@ -329,6 +401,13 @@ export const RecursiveMenu: Story = {
 		const body = within(canvasElement.ownerDocument.body);
 		const rootMenu = await body.findByRole("menu", { name: "Share actions" });
 		await expect(rootMenu.closest(".fixed")).not.toBeNull();
+		await expect(body.getByRole("menuitem", { name: "Share" })).toHaveClass(
+			"focus-visible:ring-inset",
+			"first:focus-visible:rounded-t-md",
+		);
+		await expect(body.getByRole("menuitem", { name: "Duplicate" })).toHaveClass(
+			"last:focus-visible:rounded-b-md",
+		);
 		rootMenu.focus();
 		await userEvent.keyboard("{ArrowDown}{ArrowRight}");
 		await waitFor(() => expect(body.getAllByRole("menu")).toHaveLength(2));

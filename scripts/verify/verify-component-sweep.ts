@@ -6,12 +6,16 @@ import path from "node:path";
 import process from "node:process";
 import ts from "typescript";
 import { projectCatalogTarget } from "../../src/lib/component-catalog/contract";
+import {
+	componentExportSections,
+	resolveComponentExportSection,
+} from "../../src/lib/component-catalog/exportSections";
 
 const root = process.cwd();
 const srcRoot = path.join(root, "src");
 
 function fail(message: string): never {
-	throw new Error(`Component Sweep verification failed: ${message}`);
+	throw new Error(`Component Export verification failed: ${message}`);
 }
 
 function collect(directory: string, suffix: string): string[] {
@@ -132,6 +136,8 @@ function readContract(filePath: string) {
 	if (!contract) fail(`${relativePath} must export a literal catalogContract`);
 
 	const ownerId = string(property(contract, "id"), `${relativePath}.id`);
+	const family = string(property(contract, "family"), `${relativePath}.family`);
+	const group = string(property(contract, "group"), `${relativePath}.group`);
 	const sweepSpanNode = optionalProperty(contract, "sweepSpan");
 	if (sweepSpanNode) {
 		const sweepSpan = string(sweepSpanNode, `${relativePath}.sweepSpan`);
@@ -219,7 +225,7 @@ function readContract(filePath: string) {
 			: 1;
 	}
 	unique(targetIds, `${ownerId} target IDs`);
-	return { ownerId, projections };
+	return { family, group, ownerId, projections };
 }
 
 function verifyProjectionHelper() {
@@ -291,38 +297,72 @@ function run() {
 	}
 
 	const canonical = fs.existsSync(path.join(root, ".storybook"));
-	if (canonical && catalogFiles.length !== 89) {
-		fail(`canonical main must contain 89 owners, found ${catalogFiles.length}`);
-	}
-	const routePath = path.join(
+	const surfacePath = path.join(
 		root,
-		"src/app/(site)/(dev)/internal/demo/_components/ComponentSweep.tsx",
+		"src/lib/component-catalog/ComponentExportSurface.tsx",
 	);
-	if (fs.existsSync(routePath)) {
-		const routeSource = fs.readFileSync(routePath, "utf8");
+	if (fs.existsSync(surfacePath)) {
+		const surfaceSource = fs.readFileSync(surfacePath, "utf8");
 		for (const required of [
 			"componentCatalog.generated",
 			"projectCatalogTarget",
 			"PortalScope",
 			"CatalogPreviewIdScope",
-			"data-component-sweep-stage",
-			"data-component-sweep-grid",
-			"data-component-sweep-owner-grid",
-			"owner.sweepSpan",
-			"flex flex-wrap items-start",
-			"flex flex-wrap gap-x-6 gap-y-5",
-			"flex-[1_1_14rem]",
-			"flex-[1_1_24rem]",
-			"flex-[2_1_48rem]",
-			"basis-full",
+			"data-component-export-section",
+			"data-component-export-group",
+			"data-component-export-owner",
+			"data-component-export-stage",
+			"max-w-[1440px]",
+			"max-w-[640px]",
+			"max-w-[1248px]",
+			"px-24",
 		]) {
-			if (!routeSource.includes(required)) fail(`route is missing ${required}`);
+			if (!surfaceSource.includes(required)) {
+				fail(`export surface is missing ${required}`);
+			}
 		}
-		if (/\bPanel\b/.test(routeSource)) {
-			fail("route wraps catalogue previews in an additional Panel");
+		if (/\b(?:Card|Divider|Panel)\b/.test(surfaceSource)) {
+			fail("export surface contains decorative catalogue chrome");
 		}
-		if (/@storybook|\.stories\./.test(routeSource)) {
-			fail("route imports Storybook or a story module");
+		if (/@storybook|\.stories\./.test(surfaceSource)) {
+			fail("export surface imports Storybook or a story module");
+		}
+	} else {
+		fail("shared export surface is missing");
+	}
+
+	const appExportRoot = path.join(
+		root,
+		"src/app/(component-export)/internal/demo",
+	);
+	for (const requiredPath of ["layout.tsx", "page.tsx", "[section]/page.tsx"]) {
+		const filePath = path.join(appExportRoot, requiredPath);
+		if (!fs.existsSync(filePath)) fail(`route is missing ${requiredPath}`);
+		const source = fs.readFileSync(filePath, "utf8");
+		if (/@storybook|\.stories\./.test(source)) {
+			fail(`${requiredPath} imports Storybook or a story module`);
+		}
+	}
+	if (
+		fs.existsSync(
+			path.join(root, "src/app/(site)/(dev)/internal/demo/page.tsx"),
+		)
+	) {
+		fail("the obsolete site-shell demo route remains");
+	}
+
+	const storyPath = path.join(
+		root,
+		"src/lib/component-catalog/ComponentExportSurface.stories.tsx",
+	);
+	if (canonical) {
+		if (!fs.existsSync(storyPath))
+			fail("Storybook export organizer is missing");
+		const storySource = fs.readFileSync(storyPath, "utf8");
+		for (const section of componentExportSections) {
+			if (!storySource.includes(`sectionId=${JSON.stringify(section.id)}`)) {
+				fail(`Storybook export organizer is missing ${section.id}`);
+			}
 		}
 	}
 	const portalSource = fs.readFileSync(
@@ -344,19 +384,50 @@ function run() {
 		".storybook/catalog/StorybookPlayground.tsx",
 		".storybook/VisualAtlas.stories.tsx",
 		".storybook/catalog/VisualAtlas.tsx",
-		"src/app/(component-export)/internal/export/ui-input",
 		"src/config/componentExport.ts",
 	]) {
 		if (fs.existsSync(path.join(root, removedPath)))
 			fail(`${removedPath} remains`);
 	}
 	verifyProjectionHelper();
+	const exportContracts = contracts.filter(
+		(contract) => resolveComponentExportSection(contract) !== null,
+	);
+	if (canonical) {
+		const expectedSectionCounts = new Map([
+			["foundations", 5],
+			["icons", 1],
+			["helpers", 2],
+			["primitives", 10],
+			["input", 26],
+			["time", 2],
+			["misc", 18],
+			["overlays", 6],
+			["assistant", 2],
+			["utilities", 4],
+		]);
+		if (exportContracts.length !== 76) {
+			fail(
+				`canonical export must contain 76 owners, found ${exportContracts.length}`,
+			);
+		}
+		for (const [sectionId, expectedCount] of expectedSectionCounts) {
+			const actualCount = exportContracts.filter(
+				(contract) => resolveComponentExportSection(contract) === sectionId,
+			).length;
+			if (actualCount !== expectedCount) {
+				fail(
+					`${sectionId} expected ${expectedCount} owners, found ${actualCount}`,
+				);
+			}
+		}
+	}
 	const projectionCount = contracts.reduce(
 		(total, contract) => total + contract.projections,
 		0,
 	);
 	console.log(
-		`Component Sweep verification passed (${contracts.length} owners, ${projectionCount} one-axis previews).`,
+		`Component Export verification passed (${exportContracts.length} exported owners from ${contracts.length} catalogue owners, ${projectionCount} one-axis previews).`,
 	);
 }
 

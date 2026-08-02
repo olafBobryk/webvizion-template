@@ -18,14 +18,9 @@ Consumer contracts live under `UI/Overlays/Modal*` in Storybook.
   `ModalContent` owns standard modal scrolling.
 - Raw modal events in `@/lib/modal` are host plumbing, not consumer APIs.
 
-## Interaction invariants
+## State topology
 
-- Opening enters a modal focus context; only the top-most modal traps focus and
-  handles Escape; closing restores focus to the invoking control when possible.
-- Body scroll locking is reference-counted across stacked modals.
-- `useModalSubmission` synchronously rejects duplicate submissions and locks
-  Escape, backdrop, header-close, Cancel, and conflicting actions while pending.
-- The host render helper's `setCloseDisabled` state remains synchronized with
-  the shell so every close path observes the same lock.
-- Confirmation handlers may return `false` to keep their hosted modal mounted.
-  Modal step navigation must never submit until the final enabled step.
+- The modal shell owns the top-most focus context and reference-counted body
+  scroll lock across stacked modals.
+- Submission and close-disable state stay centralized so every hosted close
+  path observes the same lock. Modal step state must not submit early.

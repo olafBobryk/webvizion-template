@@ -24,6 +24,7 @@ function DropdownPanelContract(props: DropdownSurfaceProps) {
 DropdownPanelContract.displayName = "Dropdown.Panel";
 const editProject = () => undefined;
 const archiveProject = () => undefined;
+const removeMemberAccess = () => undefined;
 const factorySelection = () => undefined;
 const chooseWorkspace = () => undefined;
 function ControlledPanelExample() {
@@ -58,6 +59,31 @@ function ControlledPanelExample() {
 					</div>
 				</Dropdown.Panel>
 			) : null}
+		</div>
+	);
+}
+function ContextualDestructiveActionPreview() {
+	return (
+		<div className="flex max-w-xl items-center justify-between rounded-xl border border-border bg-card p-4">
+			<div className="grid gap-0.5">
+				<strong>Avery Chen</strong>
+				<span className="text-sm text-muted-foreground">
+					Admin · Access active
+				</span>
+			</div>
+			<Dropdown.Menu
+				ariaLabel="Manage Avery Chen"
+				openOnHover={false}
+				options={[
+					{ id: "view", label: "View member" },
+					{
+						id: "remove",
+						label: "Remove access",
+						onSelect: removeMemberAccess,
+						tone: "danger",
+					},
+				]}
+			/>
 		</div>
 	);
 }
@@ -244,6 +270,7 @@ export const catalogContract = defineCatalogOwnerContract({
 		'import { Dropdown } from "@/components/ui/primitives/dropdown";',
 	chooseWhen: [
 		"A menu, selectable list, specialized editable trigger, or controlled anchored panel needs shared positioning and dismissal.",
+		"A destructive action is contextual rather than the primary goal of the entire page; keep it inside the More menu and order it last.",
 	],
 	chooseInstead: [
 		"Use a finished SelectInput or combobox for ordinary form selection, and a shared modal for focused blocking content.",
@@ -254,6 +281,10 @@ export const catalogContract = defineCatalogOwnerContract({
 		"Page-local portal, dismissal, or recursive-cascade implementations.",
 	],
 	guarantees: [
+		{
+			label: "Contextual destructive action stays in the More menu",
+			storyId: "ui-primitives-dropdown--contextual-destructive-action",
+		},
 		{
 			label: "Menu ordering, selection, and dismissal",
 			storyId: "ui-primitives-dropdown--menu-ordering-selection-and-dismissal",
@@ -285,6 +316,14 @@ export const catalogContract = defineCatalogOwnerContract({
 	group: "Primitives",
 	sweepSpan: "full",
 	previewTargets: [
+		{
+			id: "contextual-destructive-action",
+			name: "Contextual destructive action",
+			baseline: {},
+			axes: [],
+			stage: "standard",
+			Render: ContextualDestructiveActionPreview,
+		},
 		{
 			id: "menu-ordering-selection-and-dismissal",
 			name: "Menu ordering, selection, and dismissal",

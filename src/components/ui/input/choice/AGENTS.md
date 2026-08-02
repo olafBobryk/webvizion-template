@@ -8,18 +8,14 @@ Storybook owners.
 
 ## Dependency direction
 
-- External consumers use supported exports from `@/components/ui/input`.
 - Family implementations import `ChoiceField` and `ChoiceIndicators` directly.
 - Do not add a separate `CheckboxInput`; MultiselectInput owns checkbox-style
   grouped input.
 
 ## Structural invariants
 
-- Keep the native input in the DOM. `ChoiceField` owns the label/input
-  relationship and Enter activation; the visible indicator remains a sibling
-  driven by peer/group state.
-- Focus lands on the real visually hidden input. Indicators consume the shared
-  peer focus tokens, including the error treatment.
+- Keep the native input in the DOM. The visible indicator remains a sibling
+  driven by peer/group state and consumes shared peer focus tokens.
 - Borderless indicator geometry stays integer-aligned: default radio and
   checkbox are 22px with 12px marks at 5px insets; compact checkbox is 18px
   with a 12px mark at 3px; default toggle is 42x26px with a 22x18px thumb at

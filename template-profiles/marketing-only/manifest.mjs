@@ -31,7 +31,7 @@ export const marketingOnlyProfile = {
 	verification: {
 		requiredFiles: [
 			"src/app/(site)/(marketing)/(home)/page.tsx",
-			"src/app/(site)/(marketing)/internal/demo/page.tsx",
+			"src/app/(component-export)/internal/demo/page.tsx",
 			"src/app/(site)/(marketing)/internal/layout.tsx",
 			"src/lib/component-catalog/componentCatalog.generated.ts",
 			"scripts/generate-component-catalog.mjs",

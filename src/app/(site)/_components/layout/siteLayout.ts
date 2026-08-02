@@ -97,7 +97,7 @@ const dashboardLink: SiteLink = getAvailableSiteSurfaceLink(
 	label: "Dashboard",
 	href: "/",
 };
-const demoLink = getAvailableInternalRouteLink("Component Sweep", "demo");
+const demoLink = getAvailableInternalRouteLink("Component Export", "demo");
 const intelligenceLink = getAvailableInternalRouteLink(
 	"Intelligence",
 	"intelligence",

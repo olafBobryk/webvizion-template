@@ -557,6 +557,7 @@ async function verifyAssistantCapability(templateRoot, tempRoot) {
 		["assistant"],
 	);
 	for (const requiredPath of [
+		"src/app/(site)/dashboard/_components/entities/record/RecordToolCall.tsx",
 		"src/app/(site)/dashboard/assistant",
 		"src/app/api/assistant",
 		"src/components/domain/assistant",
@@ -611,11 +612,24 @@ async function assertNoAssistantCapability(outputRoot) {
 		"src/app/(site)/dashboard/assistant",
 		"src/app/api/assistant",
 		"src/components/domain/assistant",
-		"src/lib/assistant",
 	]) {
 		if (await pathExists(path.join(outputRoot, forbiddenPath))) {
 			throw new Error(
 				`Default project unexpectedly contains Assistant path: ${forbiddenPath}`,
+			);
+		}
+	}
+	const assistantLibraryRoot = path.join(outputRoot, "src/lib/assistant");
+	if (await pathExists(assistantLibraryRoot)) {
+		const assistantLibraryEntries = (
+			await fs.readdir(assistantLibraryRoot)
+		).sort();
+		if (
+			assistantLibraryEntries.length !== 1 ||
+			assistantLibraryEntries[0] !== "contracts.ts"
+		) {
+			throw new Error(
+				`Default project must retain only the shared Assistant contracts, found: ${assistantLibraryEntries.join(", ")}`,
 			);
 		}
 	}
@@ -634,28 +648,38 @@ async function assertNoAssistantCapability(outputRoot) {
 	}
 }
 
-async function assertNoStorybook(outputRoot) {
-	for (const forbiddenPath of [
-		".storybook",
+async function assertStorybook(outputRoot, profileCase) {
+	for (const requiredPath of [
+		".storybook/main.ts",
+		".storybook/preview.tsx",
 		"vitest.config.mts",
 		"vitest.shims.d.ts",
+		"scripts/storybook-preview.mjs",
+		"scripts/storybook-build-provenance.ts",
+		"scripts/verify/verify-storybook-preview.mjs",
 	]) {
-		if (await pathExists(path.join(outputRoot, forbiddenPath))) {
+		if (!(await pathExists(path.join(outputRoot, requiredPath)))) {
 			throw new Error(
-				`Generated project unexpectedly contains template-only Storybook path: ${forbiddenPath}`,
+				`${profileCase.profileId}/${profileCase.content} is missing Storybook path: ${requiredPath}`,
 			);
 		}
 	}
-
+	for (const forbiddenPath of [".agents", "plugins"]) {
+		if (await pathExists(path.join(outputRoot, forbiddenPath))) {
+			throw new Error(
+				`${profileCase.profileId}/${profileCase.content} contains template plugin source: ${forbiddenPath}`,
+			);
+		}
+	}
 	const sourceFiles = await collectTypeScriptFiles(
 		path.join(outputRoot, "src"),
 	);
 	const storyFile = sourceFiles.find((filePath) =>
 		/\.stories\.[cm]?[jt]sx?$/.test(filePath),
 	);
-	if (storyFile) {
+	if (profileCase.profileId !== "thin-start" && !storyFile) {
 		throw new Error(
-			`Generated project unexpectedly contains a Storybook story: ${path.relative(outputRoot, storyFile)}`,
+			`${profileCase.profileId}/${profileCase.content} retained Storybook without any owned stories.`,
 		);
 	}
 	const obsoleteUiDemo = sourceFiles.find((filePath) =>
@@ -670,23 +694,27 @@ async function assertNoStorybook(outputRoot) {
 	}
 
 	const pkg = await readJson(path.join(outputRoot, "package.json"));
-	for (const script of [
+	const requiredScripts = [
 		"storybook",
 		"storybook:preview",
 		"storybook:status",
 		"storybook:stop",
-		"measure:storybook-performance",
 		"verify:storybook-preview",
 		"build-storybook",
 		"test-storybook",
-		"test-storybook:ui:light",
-		"test-storybook:ui:dark",
-		"test-storybook:ui",
-		"verify:storybook-catalog",
-	]) {
-		if (pkg.scripts?.[script] !== undefined) {
+	];
+	if (profileCase.profileId !== "thin-start") {
+		requiredScripts.push(
+			"test-storybook:ui:light",
+			"test-storybook:ui:dark",
+			"test-storybook:ui",
+			"verify:storybook-catalog",
+		);
+	}
+	for (const script of requiredScripts) {
+		if (typeof pkg.scripts?.[script] !== "string") {
 			throw new Error(
-				`Generated project unexpectedly contains Storybook script: ${script}`,
+				`${profileCase.profileId}/${profileCase.content} is missing Storybook script: ${script}`,
 			);
 		}
 	}
@@ -703,18 +731,15 @@ async function assertNoStorybook(outputRoot) {
 		"vite",
 		"vitest",
 	]) {
-		if (
-			pkg.dependencies?.[dependency] !== undefined ||
-			pkg.devDependencies?.[dependency] !== undefined
-		) {
+		if (pkg.devDependencies?.[dependency] === undefined) {
 			throw new Error(
-				`Generated project unexpectedly contains Storybook dependency: ${dependency}`,
+				`${profileCase.profileId}/${profileCase.content} is missing Storybook dependency: ${dependency}`,
 			);
 		}
 	}
 }
 
-async function assertComponentSweep(outputRoot, profileCase) {
+async function assertComponentExport(outputRoot, profileCase) {
 	const selectedSurfaces = new Set(
 		templateProfiles[profileCase.profileId]?.assembly?.surfaces ?? [],
 	);
@@ -736,7 +761,7 @@ async function assertComponentSweep(outputRoot, profileCase) {
 		for (const forbiddenPath of [catalogRoot, generatorPath]) {
 			if (await pathExists(forbiddenPath)) {
 				throw new Error(
-					`${profileCase.profileId}/${profileCase.content} unexpectedly contains Component Sweep machinery: ${path.relative(outputRoot, forbiddenPath)}`,
+					`${profileCase.profileId}/${profileCase.content} unexpectedly contains Component Export machinery: ${path.relative(outputRoot, forbiddenPath)}`,
 				);
 			}
 		}
@@ -761,7 +786,7 @@ async function assertComponentSweep(outputRoot, profileCase) {
 	for (const requiredPath of [catalogRoot, generatorPath]) {
 		if (!(await pathExists(requiredPath))) {
 			throw new Error(
-				`${profileCase.profileId}/${profileCase.content} is missing Component Sweep machinery: ${path.relative(outputRoot, requiredPath)}`,
+				`${profileCase.profileId}/${profileCase.content} is missing Component Export machinery: ${path.relative(outputRoot, requiredPath)}`,
 			);
 		}
 	}
@@ -770,10 +795,10 @@ async function assertComponentSweep(outputRoot, profileCase) {
 		packageJson.scripts?.["verify:component-sweep"] === undefined
 	) {
 		throw new Error(
-			`${profileCase.profileId}/${profileCase.content} is missing Component Sweep scripts.`,
+			`${profileCase.profileId}/${profileCase.content} is missing Component Export scripts.`,
 		);
 	}
-	const expectedOwnerCount = selectedSurfaces.has("dashboard") ? 87 : 74;
+	const expectedOwnerCount = selectedSurfaces.has("dashboard") ? 88 : 76;
 	if (catalogFiles.length !== expectedOwnerCount) {
 		throw new Error(
 			`${profileCase.profileId}/${profileCase.content} expected ${expectedOwnerCount} installed catalogue owners, found ${catalogFiles.length}.`,
@@ -791,15 +816,17 @@ async function assertComponentSweep(outputRoot, profileCase) {
 		...catalogFiles,
 		path.join(
 			outputRoot,
-			selectedSurfaces.has("marketing")
-				? "src/app/(site)/(marketing)/internal/demo/_components/ComponentSweep.tsx"
-				: "src/app/(site)/(dev)/internal/demo/_components/ComponentSweep.tsx",
+			"src/lib/component-catalog/ComponentExportSurface.tsx",
+		),
+		path.join(
+			outputRoot,
+			"src/app/(component-export)/internal/demo/[section]/page.tsx",
 		),
 	]) {
 		const source = await fs.readFile(filePath, "utf8");
 		if (/@storybook|\.stories\./.test(source)) {
 			throw new Error(
-				`${profileCase.profileId}/${profileCase.content} Component Sweep imports Storybook: ${path.relative(outputRoot, filePath)}`,
+				`${profileCase.profileId}/${profileCase.content} Component Export imports Storybook: ${path.relative(outputRoot, filePath)}`,
 			);
 		}
 	}
@@ -1160,8 +1187,8 @@ async function main() {
 				await assertNoOrchestrationCapability(outputRoot);
 				await assertNoTemplatePluginSource(outputRoot);
 				await assertNoAssistantCapability(outputRoot);
-				await assertNoStorybook(outputRoot);
-				await assertComponentSweep(outputRoot, profileCase);
+				await assertStorybook(outputRoot, profileCase);
+				await assertComponentExport(outputRoot, profileCase);
 				await assertRemovedPublicEnvironmentAbsent(
 					outputRoot,
 					`${profileId}/${content}`,

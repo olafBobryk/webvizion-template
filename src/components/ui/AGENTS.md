@@ -26,8 +26,9 @@
   its app-safe consumer contract and fixed preview adapters in a colocated
   `*.catalog.tsx` module; its story consumes that contract for Docs and
   executable guarantees.
-- The optional Component Sweep discovers those same contracts through its
-  generated manifest. Product components must never import catalogue modules.
+- The shell-free Component Export surface discovers those same contracts
+  through its generated manifest. Product components must never import
+  catalogue modules.
 - `AGENTS.md` files retain only ownership, dependency, prohibition, and
   non-observable topology rules. Do not duplicate supported APIs, variants,
   selection advice, examples, or observable behavior here.

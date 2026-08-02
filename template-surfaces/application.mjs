@@ -1,10 +1,22 @@
 export const applicationSurfaces = {
 	assistant: {
 		ownedPaths: [
+			"src/app/(site)/dashboard/_components/entities/record/RecordToolCall.catalog.tsx",
+			"src/app/(site)/dashboard/_components/entities/record/RecordToolCall.stories.tsx",
+			"src/app/(site)/dashboard/_components/entities/record/RecordToolCall.tsx",
 			"src/app/(site)/dashboard/assistant",
 			"src/app/api/assistant",
 			"src/components/domain/assistant",
-			"src/lib/assistant",
+			"src/lib/assistant/access.server.ts",
+			"src/lib/assistant/approval.server.ts",
+			"src/lib/assistant/codex-harness.production.server.ts",
+			"src/lib/assistant/codex-harness.server.ts",
+			"src/lib/assistant/fixture.ts",
+			"src/lib/assistant/records.server.ts",
+			"src/lib/assistant/runs.server.ts",
+			"src/lib/assistant/runtime.server.ts",
+			"src/lib/assistant/server.ts",
+			"src/lib/assistant/tool-input-stream.server.ts",
 			"scripts/verify/verify-assistant.ts",
 		],
 		packageDependencies: [

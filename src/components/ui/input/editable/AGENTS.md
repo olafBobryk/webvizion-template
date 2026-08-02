@@ -2,9 +2,9 @@
 
 ## Ownership and boundary
 
-This folder owns reusable display-to-edit field state. External consumers use
-`@/components/ui/input`; the `UI/Input/Editable/EditableTextField` Storybook
-owner holds its consumer contract.
+This folder owns reusable display-to-edit field state. The
+`UI/Input/Editable/EditableTextField` Storybook owner holds its consumer
+contract.
 
 ## Structural invariants
 
@@ -14,7 +14,6 @@ owner holds its consumer contract.
 - Mutation, validation, draft, and focus-restoration state remain inside
   EditableTextField rather than moving into structural `Field` or ordinary
   TextInput.
-- Pending state keeps the edit topology mounted and disables conflicting
-  controls. Errors remain inline through `Field`.
+- Pending and error state remain inside the existing `Field` topology.
 - New presentation modes require a distinct reusable semantic use case; callers
   do not control internal button variants, typography, animation, or layout.

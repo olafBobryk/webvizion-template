@@ -53,7 +53,7 @@ export function getMarketingSiteLinks() {
 	return {
 		contact,
 		dashboard,
-		demo: getAvailableInternalRouteLink("Component Sweep", "demo"),
+		demo: getAvailableInternalRouteLink("Component Export", "demo"),
 		dictionary: getAvailableInternalRouteLink("Dictionary", "dictionary"),
 		home,
 		intelligence: getAvailableInternalRouteLink("Intelligence", "intelligence"),

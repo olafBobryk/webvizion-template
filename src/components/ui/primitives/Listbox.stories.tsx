@@ -79,6 +79,15 @@ export const SelectionAndSemanticStates: Story = {
 			canvas.getByRole("option", { name: "Alpha workspace" }),
 		).toHaveAttribute("aria-selected", "true");
 		await expect(
+			canvas.getByRole("option", { name: "Alpha workspace" }),
+		).toHaveClass(
+			"focus-visible:ring-inset",
+			"first:focus-visible:rounded-t-md",
+		);
+		await expect(
+			canvas.getByRole("option", { name: /Presentation row/ }),
+		).toHaveClass("last:focus-visible:rounded-b-md");
+		await expect(
 			canvas.getByRole("option", { name: "Archived workspace" }),
 		).toHaveAttribute("aria-disabled", "true");
 		await expect(

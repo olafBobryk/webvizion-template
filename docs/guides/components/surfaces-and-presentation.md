@@ -14,28 +14,8 @@ Card can rise to float or overlay elevation without becoming a Float.
 | Page-section flow and background media | Section |
 | Controls, compact status, and inset content | Their existing component owners |
 
-Import public surfaces only through the family facade:
-
-```tsx
-import {
-  Card,
-  Float,
-  Panel,
-  type CardHeadingProps,
-  type CardProps,
-  type FloatProps,
-  type PanelProps,
-  type SurfaceBackground,
-  type SurfaceElevation,
-  type SurfaceRadius,
-} from "@/components/ui/primitives/surfaces";
-```
-
 ## Cross-Family Rules
 
-- Use semantic backgrounds (`page`, `panel`, `card`, `float`, `muted`, or
-  `transparent`), radii (`none`, `float`, `panel`, or `card`), and elevations
-  (`panel`, `card`, `float`, or `overlay`).
 - Overlay is behavioral context, not a fifth surface primitive. Modal systems
   own portals, focus trapping, dismissal, and placement; their visual content
   is normally a Card at overlay elevation.

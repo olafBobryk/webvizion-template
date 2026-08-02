@@ -76,7 +76,7 @@ const CONCEPTS = [
 			".storybook/CatalogRules.mdx",
 			".storybook/catalog/ownerContract.ts",
 			"src/components",
-			"src/app/(site)/(dev)/internal/demo",
+			"src/app/(component-export)/internal/demo",
 			"src/app/(site)/(dev)/internal/dictionary",
 		],
 		keywords: ["component", "primitive", "demo", "dictionary", "ui"],
@@ -88,7 +88,7 @@ const CONCEPTS = [
 			"Maintainer-facing docs, references, demos, and source notes that explain how the template is meant to be extended.",
 		matches: [
 			"docs",
-			"src/app/(site)/(dev)/internal/demo",
+			"src/app/(component-export)/internal/demo",
 			"src/app/(site)/(dev)/internal/dictionary",
 			"src/app/(site)/(dev)/internal/reference",
 			"src/app/(site)/(dev)/internal/playground",

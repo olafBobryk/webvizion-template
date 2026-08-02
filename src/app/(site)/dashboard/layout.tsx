@@ -7,7 +7,6 @@ import {
 import { applicationAdapters, resolveCurrentSession } from "@/lib/auth/server";
 import { hrefFor, surfaceHref } from "@/lib/routes";
 import { DashboardFrame } from "./_components/layout/DashboardFrame";
-import { DashboardUnauthenticatedRedirect } from "./_components/pages/DashboardUnauthenticatedRedirect";
 import { DashboardProviders } from "./_components/providers/DashboardProviders";
 import { formatMemberJoinedDate } from "./_lib/entities/member/presentation";
 
@@ -22,11 +21,7 @@ export default async function DashboardLayout({
 	);
 	const resolution = await resolveCurrentSession();
 	if (resolution.status === "anonymous") {
-		return (
-			<DashboardUnauthenticatedRedirect
-				destination={withSafeContinuation(hrefFor("auth.login"), requestPath)}
-			/>
-		);
+		redirect(withSafeContinuation(hrefFor("auth.login"), requestPath));
 	}
 	if (resolution.status === "organization-selection-required") {
 		redirect(

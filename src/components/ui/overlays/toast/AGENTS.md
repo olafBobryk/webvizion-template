@@ -16,8 +16,5 @@ and action contract lives at `UI/Overlays/Toast` in Storybook.
 
 ## Structural invariants
 
-- Toast content, actions, cancel, and dismiss controls retain visible focus and
-  semantic Sonner roles.
-- Host animation continues to respect shared reduced-motion settings.
-- Default host titles and the simple, loading, dismissal, and promise dispatch
-  paths remain synchronized with the shared feedback facade.
+- The host keeps feedback dispatch, accessibility semantics, and motion policy
+  centralized; feature code must not recreate any part of that lifecycle.

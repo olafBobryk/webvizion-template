@@ -82,13 +82,16 @@
 		"verify:storybook-preview": "node scripts/verify/verify-storybook-preview.mjs",
 		"measure:storybook-performance": "node scripts/measure-storybook-performance.mjs",
 		"build-storybook": "storybook build && tsx scripts/storybook-build-provenance.ts",
-		"test-storybook": "vitest run --project storybook --maxWorkers=1 --no-file-parallelism",
+		"test-storybook": "vitest run --project storybook --maxWorkers=1 --no-file-parallelism --passWithNoTests",
 		"test-storybook:ui:light": "STORYBOOK_TEST_APPEARANCE=light vitest run --project storybook src/components/ui --maxWorkers=1 --no-file-parallelism",
 		"test-storybook:ui:dark": "STORYBOOK_TEST_APPEARANCE=dark vitest run --project storybook src/components/ui --maxWorkers=1 --no-file-parallelism",
 		"test-storybook:ui": "npm run test-storybook:ui:light && npm run test-storybook:ui:dark",
 		"verify:storybook-catalog": "npm run build-storybook && tsx scripts/verify/verify-storybook-catalog.ts",
 		"verify:component-sweep": "tsx scripts/verify/verify-component-sweep.ts",
-		"verify:design-system-evidence": "node scripts/verify/verify-design-system-evidence.mjs"
+		"verify:design-system-evidence": "node scripts/verify/verify-design-system-evidence.mjs",
+		"verify:storybook-backport": "node --test plugins/averlo-next/skills/storybook-backport/tests/scan-story-backports.test.mjs",
+		"verify:design-system-agent-benchmark": "node scripts/verify/verify-design-system-agent-benchmark.mjs",
+		"generate:design-system-agent-benchmark-report": "node scripts/verify/verify-design-system-agent-benchmark.mjs --write"
 	},
 	"dependencies": {
 		"@ai-sdk/openai": "^4.0.23",

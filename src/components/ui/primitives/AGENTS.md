@@ -14,10 +14,10 @@ composites, domain components, or routes.
 - Storybook `UI/Primitives/*` is authoritative for primitive availability,
   supported imports, selection guidance, compounds, exclusions, examples, and
   executable behavior.
-- Define and export the typed owner contract in the owner's colocated
-  `*.stories.tsx` file. The shared Storybook helper owns only its schema and
-  renderer; do not create a separate registry, index, or copy of consumer
-  guidance here.
+- Define the app-safe typed owner contract in the colocated `*.catalog.tsx`
+  module and consume that same contract from the owner story. The shared
+  catalogue helper owns only its schema and renderer; do not create a separate
+  registry, index, or copy of consumer guidance here.
 - Treat a source-level export as internal unless the Storybook contract and the
   documented primitive facade support it. Cross-file implementation use does
   not establish a public API.

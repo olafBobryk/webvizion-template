@@ -1,7 +1,7 @@
 export const devToolSurfaces = {
 	demo: {
 		ownedPaths: [
-			"src/app/(site)/(dev)/internal/demo",
+			"src/app/(component-export)/internal/demo",
 			"src/lib/component-catalog",
 			"scripts/generate-component-catalog.mjs",
 			"scripts/verify/verify-component-sweep.ts",

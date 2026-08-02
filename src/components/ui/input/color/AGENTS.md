@@ -3,8 +3,7 @@
 ## Ownership and boundary
 
 This full-start-only folder owns free color entry and semantic swatch selection.
-Storybook owns the public consumer contracts. External consumers import
-supported owners and types from `@/components/ui/input`.
+Storybook owns the public consumer contracts.
 
 ## Structural invariants
 
@@ -12,7 +11,6 @@ supported owners and types from `@/components/ui/input`.
   this folder; it must not gain a catalogue identity or public barrel export.
 - Both inputs compose the shared `Field`, `InputFrame`, and `Dropdown.Panel`
   topology instead of creating a second overlay system.
-- Native hidden form output remains synchronized with the visual control.
 - `ColorSwatchInput` keeps semantic `value` and `customColorHex` as independent
   controlled/uncontrolled channels; internal state must not couple their
   ownership.

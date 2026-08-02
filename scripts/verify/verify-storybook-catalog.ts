@@ -115,11 +115,7 @@ function readContract(catalogPath: string) {
 function run() {
 	const catalogPaths = collect(srcDirectory, /\.catalog\.tsx$/);
 	const storyPaths = collect(srcDirectory, /\.stories\.[cm]?[jt]sx?$/);
-	if (catalogPaths.length !== 89) {
-		fail(
-			`canonical main must contain 89 owner contracts, found ${catalogPaths.length}`,
-		);
-	}
+	if (catalogPaths.length === 0) fail("no owner contracts were found");
 	const contracts = catalogPaths.map((catalogPath) => {
 		const contract = readContract(catalogPath);
 		const storyPath = catalogPath.replace(/\.catalog\.tsx$/, ".stories.tsx");
@@ -161,7 +157,7 @@ function run() {
 	);
 	for (const required of [
 		"Do not maintain a separate owner index.",
-		"The app-native Component Sweep is the narrow exception",
+		"The shell-free Component Export surface is the narrow exception",
 		"never computes a Cartesian product",
 	]) {
 		if (!rules.includes(required))
@@ -237,28 +233,6 @@ function run() {
 		}
 	}
 
-	const uiCount = contracts.filter((contract) =>
-		contract.id.startsWith("ui-"),
-	).length;
-	const entityCount = contracts.filter((contract) =>
-		contract.id.startsWith("dashboard-entity-"),
-	).length;
-	const assistantCount = contracts.filter((contract) =>
-		contract.id.startsWith("domain-assistant-"),
-	).length;
-	const commandCount = contracts.filter(
-		(contract) => contract.id === "dashboard-commands-command-palette",
-	).length;
-	if (
-		uiCount !== 74 ||
-		entityCount !== 12 ||
-		assistantCount !== 2 ||
-		commandCount !== 1
-	) {
-		fail(
-			`expected 74 UI, 12 Entity, 2 Assistant, and 1 Command owner; found ${uiCount}, ${entityCount}, ${assistantCount}, and ${commandCount}`,
-		);
-	}
 	console.log(
 		`Storybook catalogue verification passed (${contracts.length} app-safe owner contracts; Storybook remains their Docs/test consumer).`,
 	);

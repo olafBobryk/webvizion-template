@@ -55,7 +55,7 @@ export const fallbackHomePage: MarketingPageDocument = {
 			services: [
 				{
 					id: "demo",
-					title: "Component Sweep",
+					title: "Component Export",
 					description:
 						"Browse live primitives, states, and skeletons before composing them into a product.",
 					surfaceIds: ["demo", "demoPrimitives"],

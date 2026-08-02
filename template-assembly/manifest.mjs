@@ -11,28 +11,24 @@ export const assemblyGeneratedPaths = new Set([
 ]);
 
 export const assemblyTemplateOnlyPaths = new Set([
-	"vitest.config.mts",
-	"vitest.shims.d.ts",
+	"docs/guides/components/design-system-agent-benchmark.md",
+	"docs/guides/components/fixtures/design-system-agent-benchmark-runs.jsonl",
+	"docs/guides/components/fixtures/design-system-agent-benchmark-runs.md",
 	"scripts/create-template-profile.mjs",
 	"scripts/dev-thin.mjs",
 	"scripts/generate-commit-line-delta.mjs",
 	"scripts/generate-template-assembly-inventory.mjs",
 	"scripts/install-orchestration.mjs",
 	"scripts/measure-storybook-performance.mjs",
-	"scripts/record-design-system-evidence.mjs",
 	"scripts/review-thin-start-api.mjs",
-	"scripts/storybook-preview.mjs",
-	"scripts/verify/verify-design-system-evidence.mjs",
-	"scripts/verify/verify-storybook-preview.mjs",
+	"scripts/verify/verify-design-system-agent-benchmark.mjs",
 	"scripts/verify/verify-template-profiles.mjs",
-	"scripts/verify/verify-storybook-catalog.ts",
 	".github/workflows/update-commit-line-delta.yml",
 	"docs/assets/commit-line-delta.svg",
 ]);
 
 export const assemblyTemplateOnlyRoots = [
 	".agents",
-	".storybook",
 	"plugins",
 	"template-assembly",
 	"template-profiles",
@@ -42,6 +38,7 @@ export const assemblyTemplateOnlyRoots = [
 export const assemblyCoreRoots = [
 	".env.example",
 	".gitignore",
+	".storybook",
 	".vercelignore",
 	".vscode",
 	"biome.json",
@@ -51,48 +48,24 @@ export const assemblyCoreRoots = [
 	"public",
 	"scripts",
 	"src",
+	"vitest.config.mts",
+	"vitest.shims.d.ts",
 ];
 
 export const assemblyTemplateOnlyScripts = new Set([
-	"build-storybook",
 	"create:project",
 	"orchestration:init",
 	"dev:thin",
 	"chart:commit-line-delta",
-	"design-system:evidence",
 	"review:thin-start-api",
-	"storybook",
-	"storybook:preview",
-	"storybook:status",
-	"storybook:stop",
 	"measure:storybook-performance",
-	"verify:storybook-preview",
-	"verify:design-system-evidence",
-	"test-storybook",
-	"test-storybook:ui:light",
-	"test-storybook:ui:dark",
-	"test-storybook:ui",
-	"verify:storybook-catalog",
+	"generate:design-system-agent-benchmark-report",
+	"verify:design-system-agent-benchmark",
+	"verify:storybook-backport",
 	"verify:profiles",
 ]);
 
-export const assemblyTemplateOnlyDevDependencies = new Set([
-	"@chromatic-com/storybook",
-	"@storybook/addon-a11y",
-	"@storybook/addon-docs",
-	"@storybook/addon-mcp",
-	"@storybook/addon-vitest",
-	"@storybook/nextjs-vite",
-	"@vitest/browser-playwright",
-	"@vitest/coverage-v8",
-	"storybook",
-	"vite",
-	"vitest",
-]);
-
-export function isAssemblyTemplateOnlyFile(relativePath) {
-	return /\.stories\.[cm]?[jt]sx?$/.test(relativePath);
-}
+export const assemblyTemplateOnlyDevDependencies = new Set([]);
 
 export const assemblyCoreScripts = new Set([
 	"dev",
@@ -104,7 +77,9 @@ export const assemblyCoreScripts = new Set([
 	"predev:preview",
 	"predev:local",
 	"predev:inspect",
+	"build-storybook",
 	"build",
+	"design-system:evidence",
 	"start",
 	"lint",
 	"typecheck",
@@ -116,7 +91,18 @@ export const assemblyCoreScripts = new Set([
 	"verify:route-surfaces",
 	"verify:component-skeletons",
 	"verify:route-skeletons",
+	"storybook",
+	"storybook:preview",
+	"storybook:status",
+	"storybook:stop",
+	"test-storybook",
+	"test-storybook:ui:light",
+	"test-storybook:ui:dark",
+	"test-storybook:ui",
 	"verify",
+	"verify:design-system-evidence",
+	"verify:storybook-catalog",
+	"verify:storybook-preview",
 	"format",
 	"postinstall",
 	"postbuild",
@@ -147,15 +133,26 @@ export const assemblyCoreDependencies = new Set([
 
 export const assemblyCoreDevDependencies = new Set([
 	"@biomejs/biome",
+	"@chromatic-com/storybook",
+	"@storybook/addon-a11y",
+	"@storybook/addon-docs",
+	"@storybook/addon-mcp",
+	"@storybook/addon-vitest",
+	"@storybook/nextjs-vite",
 	"@tailwindcss/postcss",
 	"@types/node",
 	"@types/react",
 	"@types/react-dom",
+	"@vitest/browser-playwright",
+	"@vitest/coverage-v8",
 	"code-inspector-plugin",
 	"playwright",
+	"storybook",
 	"tailwindcss",
 	"tsx",
 	"typescript",
+	"vite",
+	"vitest",
 ]);
 
 export const assemblyProjectDocs = new Set([

@@ -22,14 +22,15 @@ documentation discovery are the catalogue. Higher-level stories and focused
 guides may link to a lower-level owner, but must not restate its availability,
 API, variants, exclusions, examples, or behavior.
 
-The app-native Component Sweep is the narrow exception for deterministic
-spatial review. A dependency-free generator scans installed `*.catalog.tsx`
-modules and emits static imports for `/internal/demo`. Each owner declares
-finite visual axes and a complete baseline; the route projects one axis at a
-time and never computes a Cartesian product. It must not contain a handwritten
-owner list or repeat imports, selection guidance, variants, exclusions, or
-guarantees. Removing an owner contract must remove its sweep entry after
-regeneration without another registry edit.
+The shell-free Component Export surface is the narrow exception for
+deterministic spatial review and design capture. A dependency-free generator
+scans installed `*.catalog.tsx` modules and emits the static imports consumed by
+the app export route and Storybook export organizer. Each owner declares finite
+visual axes and a complete baseline; the surface projects one axis at a time
+and never computes a Cartesian product. It must not contain a handwritten owner
+list or repeat imports, selection guidance, variants, exclusions, or guarantees.
+Removing an owner contract must remove its export entry after regeneration
+without another registry edit.
 
 The shared application catalogue module may define contract types and
 projection helpers; it must not contain owner content or a manual owner list.
@@ -91,9 +92,9 @@ the short structural invariant in `AGENTS.md`, and point to the owner rather
 than duplicating examples there. If a rule is mechanically enforceable but not
 observable in a story, add a repository verifier instead of prose alone.
 
-Once the owner stories pass the migration gate, delete the superseded demo,
-fixture, navigation entry, and duplicated Markdown. A migrated family must not
-retain a second consumer catalogue as a transition mirror.
+Once the owner stories pass the migration gate, delete the superseded
+site-shell demo, fixture, navigation entry, and duplicated Markdown. A migrated
+family must not retain a second consumer catalogue as a transition mirror.
 
 ## 7. Migrate in dependency order
 
@@ -125,7 +126,7 @@ A family is migrated only when it has:
 - no central owner index or higher-level copy of the owner contract;
 - a nearest `AGENTS.md` containing only structural invariants that Storybook
   cannot own;
-- removal of the superseded demo, fixture, navigation, and relationship copy;
+- removal of the superseded site-shell demo, fixture, navigation, and relationship copy;
   and
 - successful focused story tests and a static Storybook build.
 

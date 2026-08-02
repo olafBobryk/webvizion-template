@@ -16,7 +16,6 @@ import {
 	assemblyTemplateOnlyPaths,
 	assemblyTemplateOnlyRoots,
 	assemblyTemplateOnlyScripts,
-	isAssemblyTemplateOnlyFile,
 	isWithinPath,
 } from "./manifest.mjs";
 import {
@@ -59,9 +58,6 @@ function sourceFiles(sourceRoot) {
 
 function matchingSurfaces(relativePath) {
 	const candidates = [];
-	if (/\.catalog\.tsx$/.test(relativePath)) {
-		candidates.push({ surfaceKey: "demo", ownedPath: relativePath });
-	}
 	for (const [surfaceKey, surface] of Object.entries(templateSurfaces)) {
 		for (const ownedPath of surface.ownedPaths ?? []) {
 			if (isWithinPath(relativePath, ownedPath)) {
@@ -69,7 +65,9 @@ function matchingSurfaces(relativePath) {
 			}
 		}
 	}
-	if (candidates.length === 0) return [];
+	if (candidates.length === 0) {
+		return /\.catalog\.tsx$/.test(relativePath) ? ["demo"] : [];
+	}
 	candidates.sort(
 		(left, right) => right.ownedPath.length - left.ownedPath.length,
 	);
@@ -82,7 +80,11 @@ function matchingSurfaces(relativePath) {
 			`Assembly ownership collision for ${relativePath}: ${candidates[0].surfaceKey}, ${candidates[1].surfaceKey}`,
 		);
 	}
-	return [...new Set(candidates.map((candidate) => candidate.surfaceKey))];
+	const surfaceKeys = new Set(
+		candidates.map((candidate) => candidate.surfaceKey),
+	);
+	if (/\.catalog\.tsx$/.test(relativePath)) surfaceKeys.add("demo");
+	return [...surfaceKeys];
 }
 
 function withinAny(relativePath, roots) {
@@ -132,10 +134,7 @@ async function buildCopyPlan(sourceRoot, profile, selectedSurfaces) {
 			omitted.push({ path: relativePath, reason: "generated" });
 			continue;
 		}
-		if (
-			assemblyTemplateOnlyPaths.has(relativePath) ||
-			isAssemblyTemplateOnlyFile(relativePath)
-		) {
+		if (assemblyTemplateOnlyPaths.has(relativePath)) {
 			omitted.push({ path: relativePath, reason: "template-only" });
 			continue;
 		}
@@ -438,6 +437,7 @@ async function writeProjectDocs(destinationRoot, profile, content) {
 			"```sh",
 			"npm install",
 			"npm run dev",
+			"npm run storybook",
 			"npm run verify",
 			"```",
 			"",
@@ -453,6 +453,8 @@ async function writeProjectDocs(destinationRoot, profile, content) {
 			"",
 			"- Use `npm run dev:agent -- --random` for isolated automated previews.",
 			"- Do not run Next.js development commands directly.",
+			"- Start Storybook with `npm run storybook` only after the isolated Next preview is healthy; discover its URL with `npm run storybook:status`.",
+			"- Keep reusable instance-to-template story status in literal story-level `tags` and `parameters.backport`; do not create a central backport ledger.",
 			"- Keep generated build, environment, and local intelligence artifacts out of Git.",
 			"- Internal routes are profile-installed, noindex surfaces; do not add destinations that assembly did not select.",
 			"- Use the shared toast and confirmation-modal primitives for standard feedback and confirmation flows.",

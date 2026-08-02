@@ -13,6 +13,21 @@ if (!existsSync(dashboardRoot)) {
 	process.exit(0);
 }
 
+const dashboardLayoutSource = readFileSync(
+	resolve(dashboardRoot, "layout.tsx"),
+	"utf8",
+);
+assert.match(
+	dashboardLayoutSource,
+	/if \(resolution\.status === ["']anonymous["']\) \{\s*redirect\(/,
+	"Anonymous dashboard access must use a server redirect instead of waiting for client hydration.",
+);
+assert.equal(
+	dashboardLayoutSource.includes("DashboardUnauthenticatedRedirect"),
+	false,
+	"Dashboard layout must not delegate anonymous access to a client redirect component.",
+);
+
 const normalize = (value: string) => value.replaceAll("\\", "/");
 const routeDirectoryForHref = (href: string) => {
 	const suffix = href.slice("/dashboard".length);

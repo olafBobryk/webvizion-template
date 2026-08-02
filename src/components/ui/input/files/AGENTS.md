@@ -2,9 +2,8 @@
 
 ## Ownership and boundary
 
-This folder owns controlled file selection and profile-picture fields. External
-consumers import supported owners and types from `@/components/ui/input`;
-Storybook owns their consumer contracts.
+This folder owns controlled file selection and profile-picture fields. Storybook
+owns their consumer contracts.
 
 ## Private topology
 
@@ -18,11 +17,8 @@ Storybook owns their consumer contracts.
 
 ## Structural invariants
 
-- Keep the native file input synchronized with controlled visual state across
-  selection, replacement, removal, form reset, reset signals, and unmount.
+- Keep the native file input synchronized with controlled visual state.
 - Object URLs are revoked when pending files are replaced or the component
   unmounts.
-- `accept` drives picker, capture, and drag/drop client filtering, but never
-  represents a security boundary; server handlers validate independently.
-- Mixed batches retain accepted files and report rejected files without
-  discarding valid selections.
+- Client filtering is not a security boundary; server handlers validate
+  independently.

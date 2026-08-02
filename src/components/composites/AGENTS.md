@@ -1,15 +1,10 @@
 # Folder: `src/components/composites`
 
-## Role
-Reusable composed components that sit above primitives and inputs but below route-scoped app shells.
+## Ownership
 
-## Use This Folder When
-- A component assembles several design-system primitives into a reusable rendering surface.
-- The component is source-agnostic and does not model a product domain, backend entity, or route-owned workflow.
-- A page needs a copyable higher-level component without inheriting page chrome, data loading, or metadata behavior.
-
-## Prefer These Files
-- `Markdown.Render`, implemented by `src/components/composites/markdown/MarkdownRenderer.tsx`: shared markdown renderer that maps plain markdown and the generic `::button[...]` directive onto design-system primitives.
+Reusable composed components sit above primitives and inputs but below
+route-scoped app shells. Each public family owns its consumer contract and
+examples in its lowest-level Storybook owner.
 
 ## Invariants
 - Keep composites grounded in shared design-system primitives and helpers.

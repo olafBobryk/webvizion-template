@@ -311,7 +311,7 @@ export const catalogContract = defineCatalogOwnerContract({
 			storyId: "ui-primitives-surfaces--panel-layout-and-semantic-accent",
 		},
 		{
-			label: "Structured Card slots",
+			label: "Structured Card slots and footer actions",
 			storyId: "ui-primitives-surfaces--structured-card",
 		},
 		{

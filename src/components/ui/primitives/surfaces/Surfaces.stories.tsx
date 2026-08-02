@@ -246,7 +246,7 @@ export const PersistentShellChrome: Story = {
 
 export const StructuredCard: Story = {
 	render: () => (
-		<Card className="max-w-xl">
+		<Card aria-label="Workspace access card" className="max-w-xl">
 			<Card.Header>
 				<Card.Title>Workspace access</Card.Title>
 				<Card.Description>Manage who can open this project.</Card.Description>
@@ -260,6 +260,18 @@ export const StructuredCard: Story = {
 			</Card.Footer>
 		</Card>
 	),
+	play: async ({ canvas }) => {
+		const card = canvas.getByLabelText("Workspace access card");
+		const content = card.querySelector('[data-slot="card-content"]');
+		const footer = card.querySelector('[data-slot="card-footer"]');
+		const headerAction = card.querySelector('[data-slot="card-action"]');
+		const invite = canvas.getByRole("button", { name: "Invite" });
+		const save = canvas.getByRole("button", { name: "Save changes" });
+
+		await expect(headerAction).toContainElement(invite);
+		await expect(footer).toContainElement(save);
+		await expect(content).not.toContainElement(save);
+	},
 };
 
 export const ReusableCardHeading: Story = {
