@@ -1808,10 +1808,19 @@
 			"subject": "feat: bundle Averlo Codex plugin",
 			"cumulativeNet": 132781,
 			"delta": 4083
+		},
+		{
+			"additions": 64,
+			"date": "2026-08-02",
+			"deletions": 23,
+			"hash": "d3bc7eb94db21054278f6a8a194867c2255296fe",
+			"subject": "fix: clear plugin and build warnings",
+			"cumulativeNet": 132822,
+			"delta": 41
 		}
 	],
 	"endDate": "2026-08-02",
-	"head": "67e4031a588263a3f521ec90989c32fc49541b01",
+	"head": "d3bc7eb94db21054278f6a8a194867c2255296fe",
 	"startDate": "2025-08-24",
 	"version": 1
 }
