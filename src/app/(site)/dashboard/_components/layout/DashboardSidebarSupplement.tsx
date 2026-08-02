@@ -2,9 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import * as React from "react";
-import { Icon } from "@/components/ui/icons/Icon";
+import { Icon, type IconName } from "@/components/ui/icons/Icon";
 import type { AssistantThreadSummary } from "@/lib/assistant/contracts";
-import { DashboardSidebarItem } from "./DashboardSidebarBranch";
+import {
+	DashboardSidebarBranch,
+	DashboardSidebarItem,
+} from "./DashboardSidebarBranch";
 import { DashboardSidebarThreadActionsMenu } from "./DashboardSidebarThreadActionsMenu";
 
 function isAssistantThreadSummary(
@@ -21,13 +24,29 @@ function isAssistantThreadSummary(
 }
 
 export function DashboardSidebarSupplement({
+	active,
+	collapsed,
+	defaultOpen,
 	endpoint,
+	href,
+	icon,
+	label,
+	mobileExpanded,
 	onNavigate,
 	pathname,
+	storageId,
 }: {
+	active: boolean;
+	collapsed: boolean;
+	defaultOpen: boolean;
 	endpoint: string;
+	href: string;
+	icon?: IconName;
+	label: string;
+	mobileExpanded: boolean;
 	onNavigate: () => void;
 	pathname: string;
+	storageId: string;
 }) {
 	const router = useRouter();
 	const [threads, setThreads] = React.useState<AssistantThreadSummary[]>([]);
@@ -77,6 +96,7 @@ export function DashboardSidebarSupplement({
 
 	const pinnedThreads = threads.filter((thread) => thread.pinned);
 	const recentThreads = threads.filter((thread) => !thread.pinned).slice(0, 5);
+	const visibleThreads = [...pinnedThreads, ...recentThreads];
 	const updateThread = (updatedThread: AssistantThreadSummary) =>
 		setThreads((current) =>
 			current.map((thread) =>
@@ -85,40 +105,65 @@ export function DashboardSidebarSupplement({
 		);
 	const deleteThread = (threadId: string) =>
 		setThreads((current) => current.filter((thread) => thread.id !== threadId));
+	if (visibleThreads.length === 0) {
+		return (
+			<DashboardSidebarItem
+				active={active}
+				collapsed={collapsed}
+				href={href}
+				icon={icon}
+				label={label}
+				mobileExpanded={mobileExpanded}
+				onNavigate={onNavigate}
+			/>
+		);
+	}
 
 	return (
-		<div className="grid gap-1">
-			{[...pinnedThreads, ...recentThreads].map((thread) => {
-				const href = `/dashboard/assistant/${encodeURIComponent(thread.id)}`;
-				return (
-					<DashboardSidebarItem
-						active={pathname === href}
-						actions={
-							<>
-								{thread.pinned ? (
-									<span
-										aria-label="Pinned conversation"
-										role="img"
-										title="Pinned conversation"
-									>
-										<Icon name="pin" size="sm" weight="fill" />
-									</span>
-								) : null}
-								<DashboardSidebarThreadActionsMenu
-									active={pathname === href}
-									onDelete={deleteThread}
-									onUpdate={updateThread}
-									thread={thread}
-								/>
-							</>
-						}
-						href={href}
-						key={thread.id}
-						label={thread.title}
-						onNavigate={onNavigate}
-					/>
-				);
-			})}
-		</div>
+		<DashboardSidebarBranch
+			active={active}
+			collapsed={collapsed}
+			defaultOpen={defaultOpen}
+			href={href}
+			icon={icon}
+			label={label}
+			mobileExpanded={mobileExpanded}
+			onNavigate={onNavigate}
+			storageId={storageId}
+		>
+			<div className="grid gap-1">
+				{visibleThreads.map((thread) => {
+					const href = `/dashboard/assistant/${encodeURIComponent(thread.id)}`;
+					return (
+						<DashboardSidebarItem
+							active={pathname === href}
+							actions={
+								<>
+									{thread.pinned ? (
+										<span
+											aria-label="Pinned conversation"
+											role="img"
+											title="Pinned conversation"
+										>
+											<Icon name="pin" size="sm" weight="fill" />
+										</span>
+									) : null}
+									<DashboardSidebarThreadActionsMenu
+										active={pathname === href}
+										onDelete={deleteThread}
+										onUpdate={updateThread}
+										thread={thread}
+									/>
+								</>
+							}
+							href={href}
+							key={thread.id}
+							label={thread.title}
+							onNavigate={onNavigate}
+						/>
+					);
+				})}
+			</div>
+		</DashboardSidebarBranch>
 	);
 }

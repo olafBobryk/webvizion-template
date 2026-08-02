@@ -8,54 +8,10 @@ import {
 	getDashboardSidebarGroups,
 	getDashboardSurface,
 	getDashboardSurfaceTrail,
-	type getVisibleDashboardSurfaces,
 } from "../../_registry/surfaceRegistry";
 import { useDashboardAuth } from "../providers/DashboardAuthProvider";
-import {
-	DashboardSidebarBranch,
-	DashboardSidebarItem,
-} from "./DashboardSidebarBranch";
+import { DashboardSidebarItem } from "./DashboardSidebarBranch";
 import { DashboardSidebarSupplement } from "./DashboardSidebarSupplement";
-
-function DashboardSidebarSurfaceBranch({
-	active,
-	collapsed,
-	mobileExpanded,
-	onNavigate,
-	pathname,
-	sectionActive,
-	surface,
-}: {
-	active: boolean;
-	collapsed: boolean;
-	mobileExpanded: boolean;
-	onNavigate: () => void;
-	pathname: string;
-	sectionActive: boolean;
-	surface: ReturnType<typeof getVisibleDashboardSurfaces>[number];
-}) {
-	const endpoint = surface.sidebarSupplementEndpoint;
-	if (!endpoint) return null;
-	return (
-		<DashboardSidebarBranch
-			active={active}
-			collapsed={collapsed}
-			defaultOpen={sectionActive}
-			href={surface.href}
-			icon={surface.icon}
-			label={surface.label}
-			mobileExpanded={mobileExpanded}
-			onNavigate={onNavigate}
-			storageId={surface.id}
-		>
-			<DashboardSidebarSupplement
-				endpoint={endpoint}
-				onNavigate={onNavigate}
-				pathname={pathname}
-			/>
-		</DashboardSidebarBranch>
-	);
-}
 
 export function DashboardSidebarNav({
 	collapsed,
@@ -122,6 +78,8 @@ export function DashboardSidebarNav({
 								data-sidebar-tier="assistant"
 							>
 								{assistantSurfaces.map((surface) => {
+									const endpoint = surface.sidebarSupplementEndpoint;
+									if (!endpoint) return null;
 									const exactActive = activeSurface?.id === surface.id;
 									const sectionActive =
 										exactActive ||
@@ -129,15 +87,19 @@ export function DashboardSidebarNav({
 											(ancestor) => ancestor.href === surface.href,
 										);
 									return (
-										<DashboardSidebarSurfaceBranch
+										<DashboardSidebarSupplement
 											active={exactActive}
 											collapsed={collapsed}
+											defaultOpen={sectionActive}
+											endpoint={endpoint}
+											href={surface.href}
+											icon={surface.icon}
 											key={surface.id}
+											label={surface.label}
 											mobileExpanded={mobileExpanded}
 											onNavigate={onNavigate}
 											pathname={pathname}
-											sectionActive={sectionActive}
-											surface={surface}
+											storageId={surface.id}
 										/>
 									);
 								})}

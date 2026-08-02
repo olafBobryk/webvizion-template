@@ -703,6 +703,9 @@ assert.match(sidebarSupplement, /recentThreads/u);
 assert.match(sidebarSupplement, /\.slice\(0, 5\)/u);
 assert.match(sidebarSupplement, /DashboardSidebarThreadActionsMenu/u);
 assert.match(sidebarSupplement, /Pinned conversation/u);
+assert.match(sidebarSupplement, /visibleThreads\.length === 0/u);
+assert.match(sidebarSupplement, /<DashboardSidebarItem/u);
+assert.match(sidebarSupplement, /<DashboardSidebarBranch/u);
 assert.doesNotMatch(sidebarSupplement, /label="All conversations"/u);
 assert.doesNotMatch(
 	sidebarSupplement,
@@ -720,7 +723,10 @@ assert.match(sidebarNav, /data-sidebar-tier="assistant"/u);
 assert.match(sidebarNav, /const assistantSurfaces = group\.surfaces\.filter/u);
 assert.match(sidebarNav, /const regularSurfaces = group\.surfaces\.filter/u);
 assert.match(sidebarNav, /DashboardSidebarItem/u);
+assert.match(sidebarNav, /<DashboardSidebarSupplement/u);
 assert.match(sidebarNav, /label="All conversations"/u);
+assert.doesNotMatch(sidebarNav, /DashboardSidebarSurfaceBranch/u);
+assert.doesNotMatch(sidebarNav, /<DashboardSidebarBranch/u);
 assert.doesNotMatch(
 	sidebarNav,
 	/pathname !== "\/dashboard\/assistant\/conversations"/u,
