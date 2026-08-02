@@ -103,10 +103,10 @@ function DashboardFooterActions({
 	return (
 		<div
 			className={clsx(
-				"flex w-full items-center gap-1",
+				"flex w-full gap-1",
 				collapsed
-					? "flex-col justify-center"
-					: "flex-row flex-wrap justify-start",
+					? "flex-col items-center justify-center"
+					: "flex-row flex-wrap items-center justify-start",
 			)}
 		>
 			{actions.map((action) => (
@@ -123,7 +123,7 @@ function DashboardFooterActions({
 							aria-label={action.label}
 							className="!text-muted-foreground hover:!text-sidebar-accent-foreground"
 							href={action.href}
-							iconSize={20}
+							iconSize={16}
 							leadingIcon={action.icon}
 							onClick={onNavigate}
 							size="icon"
@@ -134,7 +134,7 @@ function DashboardFooterActions({
 						<Button
 							aria-label={action.label}
 							className="!text-muted-foreground hover:!text-sidebar-accent-foreground"
-							iconSize={20}
+							iconSize={16}
 							leadingIcon={action.icon}
 							onClick={action.onClick}
 							size="icon"
@@ -246,7 +246,7 @@ export function DashboardFrame({
 					collapsed={sidebarCollapsed}
 					footer={
 						<>
-							<div className="lg:hidden">
+							<div className="w-full lg:hidden">
 								<DashboardFooterActions
 									collapsed={!mobileSidebarOpen}
 									currentRoute={currentRoute}
@@ -254,7 +254,7 @@ export function DashboardFrame({
 									platformAdmin={user?.platformRole === "admin"}
 								/>
 							</div>
-							<div className="max-lg:hidden">
+							<div className="w-full max-lg:hidden">
 								<DashboardFooterActions
 									collapsed={sidebarCollapsed}
 									currentRoute={currentRoute}

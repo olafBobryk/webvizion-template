@@ -49,18 +49,20 @@ export function DashboardSidebarItem({
 				aria-current={active ? "page" : undefined}
 				aria-label={label}
 				className={clsx(
-					"relative flex h-9 min-w-0 flex-1 items-center gap-2 rounded-md text-sm font-medium outline-none",
+					"relative flex h-8 min-w-0 flex-1 items-center gap-1.5 rounded-md text-sm font-medium outline-none",
 					mobileExpanded
-						? "max-lg:justify-start max-lg:px-3"
+						? "max-lg:justify-start max-lg:px-2.5"
 						: "max-lg:justify-center max-lg:px-2",
-					collapsed ? "lg:justify-center lg:px-2" : "lg:justify-start lg:px-3",
+					collapsed
+						? "lg:justify-center lg:px-2"
+						: "lg:justify-start lg:px-2.5",
 					focusRing.visibleDefault,
 				)}
 				href={href}
 				onClick={onNavigate}
 				title={label}
 			>
-				<Icon className="shrink-0" name={icon} size="lg" />
+				<Icon className="shrink-0" name={icon} size="md" />
 				<span
 					className={clsx(
 						"min-w-0 flex-1 truncate",
@@ -74,7 +76,7 @@ export function DashboardSidebarItem({
 			{actions ? (
 				<span
 					className={clsx(
-						"shrink-0 items-center gap-2 pr-2 leading-none [&>*]:flex [&>*]:items-center",
+						"shrink-0 items-center gap-1.5 pr-1.5 leading-none [&>*]:flex [&>*]:items-center",
 						mobileExpanded ? "max-lg:flex" : "max-lg:hidden",
 						collapsed ? "lg:hidden" : "lg:flex",
 					)}
