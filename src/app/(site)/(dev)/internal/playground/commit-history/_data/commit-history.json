@@ -1691,10 +1691,118 @@
 			"subject": "Ship production updates",
 			"cumulativeNet": 128341,
 			"delta": 71
+		},
+		{
+			"additions": 34,
+			"date": "2026-08-02",
+			"deletions": 30,
+			"hash": "9850fd71f7ddc22e778fb9a431838ccd1537d455",
+			"subject": "style: compact dashboard shell",
+			"cumulativeNet": 128345,
+			"delta": 4
+		},
+		{
+			"additions": 21,
+			"date": "2026-08-02",
+			"deletions": 12,
+			"hash": "e35ed9753af879bd739e24a92ea0d5a5df745253",
+			"subject": "style: compact dashboard navigation",
+			"cumulativeNet": 128354,
+			"delta": 9
+		},
+		{
+			"additions": 96,
+			"date": "2026-08-02",
+			"deletions": 83,
+			"hash": "a4d4da9ea2e5ce7f1345626f97439eab13abf6ea",
+			"subject": "fix: avoid empty sidebar accordions",
+			"cumulativeNet": 128367,
+			"delta": 13
+		},
+		{
+			"additions": 2,
+			"date": "2026-08-02",
+			"deletions": 1,
+			"hash": "3c9d5e24ceaff5256a005888fc49b71c553c54c1",
+			"subject": "style: align sidebar disclosure action",
+			"cumulativeNet": 128368,
+			"delta": 1
+		},
+		{
+			"additions": 2,
+			"date": "2026-08-02",
+			"deletions": 1,
+			"hash": "80f7310c15cdd82e8a0bf4447f2c95a3c9fb06aa",
+			"subject": "fix: constrain collapsed sidebar track",
+			"cumulativeNet": 128369,
+			"delta": 1
+		},
+		{
+			"additions": 9,
+			"date": "2026-08-02",
+			"deletions": 4,
+			"hash": "cf20f081edca68b5c18942e5255f9e4f3874d238",
+			"subject": "fix: scale compact organization avatar",
+			"cumulativeNet": 128374,
+			"delta": 5
+		},
+		{
+			"additions": 10,
+			"date": "2026-08-02",
+			"deletions": 7,
+			"hash": "f66c88bfc2d167b525f93274a1bc268bc4638b18",
+			"subject": "style: refine compact organization avatar",
+			"cumulativeNet": 128377,
+			"delta": 3
+		},
+		{
+			"additions": 14,
+			"date": "2026-08-02",
+			"deletions": 10,
+			"hash": "7385a5a2eaa36aff9737b2f2daf0b7bcfc39b9e8",
+			"subject": "fix: align compact avatar with nav rows",
+			"cumulativeNet": 128381,
+			"delta": 4
+		},
+		{
+			"additions": 4,
+			"date": "2026-08-02",
+			"deletions": 4,
+			"hash": "a687886e4809c0bdfc2f1f29b6c5ff4ec1ee5851",
+			"subject": "style: cap compact organization avatar",
+			"cumulativeNet": 128381,
+			"delta": 0
+		},
+		{
+			"additions": 2,
+			"date": "2026-08-02",
+			"deletions": 1,
+			"hash": "64b5aa38cdb66d7f93231d1d811db8915123f19e",
+			"subject": "fix: show logo in open compact sidebar",
+			"cumulativeNet": 128382,
+			"delta": 1
+		},
+		{
+			"additions": 3,
+			"date": "2026-08-02",
+			"deletions": 1,
+			"hash": "cfd4d13602b73f4bbf6f8f9b03dd3b47cca6f4b5",
+			"subject": "fix: restore assistant composer surface",
+			"cumulativeNet": 128384,
+			"delta": 2
+		},
+		{
+			"additions": 410,
+			"date": "2026-08-02",
+			"deletions": 96,
+			"hash": "698016c1767d852229650f4cd153e681b797d943",
+			"subject": "Ship production updates",
+			"cumulativeNet": 128698,
+			"delta": 314
 		}
 	],
 	"endDate": "2026-08-02",
-	"head": "4ff3707946438b177729e3ee76459ae3c96d4820",
+	"head": "698016c1767d852229650f4cd153e681b797d943",
 	"startDate": "2025-08-24",
 	"version": 1
 }
