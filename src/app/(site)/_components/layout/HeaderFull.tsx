@@ -27,6 +27,7 @@ const HEADER_EXPANDED_HEIGHT = 100;
 const HEADER_COMPACT_HEIGHT = 70;
 const HEADER_MENU_TOP_PADDING = 22;
 const HEADER_MENU_BOTTOM_PADDING = 32;
+const HEADER_CLOSED_LINK_LIMIT = 3;
 const HEADER_ENTRANCE_HIDDEN = { opacity: 0, y: -28, scale: 0.965 };
 const HEADER_ENTRANCE_VISIBLE = { opacity: 1, y: 0, scale: 1 };
 
@@ -77,6 +78,10 @@ export default function HeaderFull({
 	const isCompact = isScrolled && !isMenuOpen;
 	const isSearchActive = searchQuery.trim().length > 0;
 	const areTopNavLinksVisible = !isMenuOpen;
+	const closedTopNavLinks = layout.topNavLinks.slice(
+		0,
+		HEADER_CLOSED_LINK_LIMIT,
+	);
 	const searchGroups = getHeaderSearchGroups(searchQuery, layout.searchGroups);
 	const activeMenuGroups = isSearchActive ? searchGroups : layout.menuGroups;
 	const menuContentHeightStyle = {
@@ -213,13 +218,13 @@ export default function HeaderFull({
 								transition={headerTransition}
 								aria-hidden={!areTopNavLinksVisible}
 							>
-								{layout.topNavLinks.map((item, index) => (
+								{closedTopNavLinks.map((item, index) => (
 									<HeaderTopNavLink
 										key={`${item.label}-${getSiteLinkHref(item)}`}
 										link={item}
 										focusable={areTopNavLinksVisible}
 										className={
-											index === layout.topNavLinks.length - 1
+											index === closedTopNavLinks.length - 1
 												? "mr-10"
 												: undefined
 										}
