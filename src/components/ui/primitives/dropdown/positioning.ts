@@ -1,6 +1,31 @@
 import type * as React from "react";
 import type { DropdownPositionStrategy, DropdownSide } from "./types";
 
+type AbsolutePositioningOrigin = {
+	left: number;
+	top: number;
+};
+
+export function getAbsolutePositioningOrigin(
+	element: HTMLElement,
+): AbsolutePositioningOrigin {
+	const offsetParent = element.offsetParent;
+	if (
+		!(offsetParent instanceof HTMLElement) ||
+		offsetParent === document.body ||
+		offsetParent === document.documentElement
+	) {
+		return { left: -window.scrollX, top: -window.scrollY };
+	}
+
+	const offsetParentRect = offsetParent.getBoundingClientRect();
+	return {
+		left:
+			offsetParentRect.left + offsetParent.clientLeft - offsetParent.scrollLeft,
+		top: offsetParentRect.top + offsetParent.clientTop - offsetParent.scrollTop,
+	};
+}
+
 function resolveDropdownSide({
 	preferredSide,
 	measuredHeight,
@@ -42,6 +67,7 @@ function resolveDropdownSide({
 }
 
 export function resolveAnchoredDropdownPosition({
+	absoluteOrigin,
 	align,
 	anchorRect,
 	collisionPadding,
@@ -52,9 +78,9 @@ export function resolveAnchoredDropdownPosition({
 	offset,
 	positionStrategy,
 	side,
-	wrapperRect,
 	zIndex,
 }: {
+	absoluteOrigin?: AbsolutePositioningOrigin;
 	align: "start" | "end";
 	anchorRect: DOMRect;
 	collisionPadding: number;
@@ -65,7 +91,6 @@ export function resolveAnchoredDropdownPosition({
 	offset: number;
 	positionStrategy: DropdownPositionStrategy;
 	side: DropdownSide;
-	wrapperRect?: DOMRect;
 	zIndex: number;
 }) {
 	const availableAbove = Math.max(
@@ -110,42 +135,26 @@ export function resolveAnchoredDropdownPosition({
 			),
 		);
 
-		if (positionStrategy === "fixed") {
-			return {
-				resolvedSide,
-				style: {
-					left:
-						resolvedSide === "left"
-							? Math.max(
-									collisionPadding,
-									anchorRect.left - renderedWidth - offset,
-								)
-							: Math.min(
-									anchorRect.right + offset,
-									window.innerWidth - collisionPadding - renderedWidth,
-								),
-					maxWidth,
-					overflowX: maxWidth === undefined ? undefined : "auto",
-					position: "fixed",
-					top,
-					width: explicitWidth,
-					zIndex,
-				} satisfies React.CSSProperties,
-			};
-		}
-
-		if (!wrapperRect) return undefined;
+		const viewportLeft =
+			resolvedSide === "left"
+				? Math.max(collisionPadding, anchorRect.left - renderedWidth - offset)
+				: Math.min(
+						anchorRect.right + offset,
+						window.innerWidth - collisionPadding - renderedWidth,
+					);
+		if (positionStrategy === "absolute" && !absoluteOrigin) return undefined;
 		return {
 			resolvedSide,
 			style: {
 				left:
-					resolvedSide === "left"
-						? anchorRect.left - wrapperRect.left - renderedWidth - offset
-						: anchorRect.right - wrapperRect.left + offset,
+					viewportLeft -
+					(positionStrategy === "absolute" ? (absoluteOrigin?.left ?? 0) : 0),
 				maxWidth,
 				overflowX: maxWidth === undefined ? undefined : "auto",
-				position: "absolute",
-				top: top - wrapperRect.top,
+				position: positionStrategy,
+				top:
+					top -
+					(positionStrategy === "absolute" ? (absoluteOrigin?.top ?? 0) : 0),
 				width: explicitWidth,
 				zIndex,
 			} satisfies React.CSSProperties,
@@ -157,64 +166,37 @@ export function resolveAnchoredDropdownPosition({
 		measuredHeight > availableHeight ? availableHeight : undefined;
 	const renderedHeight = maxHeight ?? measuredHeight;
 
-	if (positionStrategy === "fixed") {
-		let left =
-			align === "end" ? anchorRect.right - measuredWidth : anchorRect.left;
-		const maxLeft = Math.max(
-			collisionPadding,
-			window.innerWidth - measuredWidth - collisionPadding,
-		);
-		left = Math.min(Math.max(left, collisionPadding), maxLeft);
-		const top =
-			resolvedSide === "top"
-				? Math.max(collisionPadding, anchorRect.top - renderedHeight - offset)
-				: Math.max(
-						collisionPadding,
-						Math.min(
-							anchorRect.bottom + offset,
-							window.innerHeight - collisionPadding - renderedHeight,
-						),
-					);
-		return {
-			resolvedSide,
-			style: {
-				left,
-				maxHeight,
-				minWidth,
-				overflowY: maxHeight === undefined ? undefined : "auto",
-				position: "fixed",
-				top,
-				width: explicitWidth,
-				zIndex,
-			} satisfies React.CSSProperties,
-		};
-	}
-
-	if (!wrapperRect) return undefined;
-	const rawLeft =
-		align === "end"
-			? anchorRect.right - wrapperRect.left - measuredWidth
-			: anchorRect.left - wrapperRect.left;
-	const left = Math.max(
-		0,
-		Math.min(rawLeft, Math.max(0, wrapperRect.width - measuredWidth)),
+	let viewportLeft =
+		align === "end" ? anchorRect.right - measuredWidth : anchorRect.left;
+	const maxLeft = Math.max(
+		collisionPadding,
+		window.innerWidth - measuredWidth - collisionPadding,
 	);
+	viewportLeft = Math.min(Math.max(viewportLeft, collisionPadding), maxLeft);
+	const viewportTop =
+		resolvedSide === "top"
+			? Math.max(collisionPadding, anchorRect.top - renderedHeight - offset)
+			: Math.max(
+					collisionPadding,
+					Math.min(
+						anchorRect.bottom + offset,
+						window.innerHeight - collisionPadding - renderedHeight,
+					),
+				);
+	if (positionStrategy === "absolute" && !absoluteOrigin) return undefined;
 	return {
 		resolvedSide,
 		style: {
-			bottom:
-				resolvedSide === "top"
-					? Math.max(0, wrapperRect.bottom - anchorRect.top + offset)
-					: undefined,
-			left,
+			left:
+				viewportLeft -
+				(positionStrategy === "absolute" ? (absoluteOrigin?.left ?? 0) : 0),
 			maxHeight,
 			minWidth,
 			overflowY: maxHeight === undefined ? undefined : "auto",
-			position: "absolute",
+			position: positionStrategy,
 			top:
-				resolvedSide === "top"
-					? undefined
-					: anchorRect.bottom - wrapperRect.top + offset,
+				viewportTop -
+				(positionStrategy === "absolute" ? (absoluteOrigin?.top ?? 0) : 0),
 			width: explicitWidth,
 			zIndex,
 		} satisfies React.CSSProperties,

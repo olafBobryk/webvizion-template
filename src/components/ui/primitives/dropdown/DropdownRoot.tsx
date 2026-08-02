@@ -10,7 +10,10 @@ import Portal from "@/components/ui/overlays/Portal";
 import { useMotionAllowed } from "@/hooks/useMotionAllowed";
 import { getDropdownSurfaceClassName } from "../dropdownStyles";
 import { COLLISION_PADDING, DEFAULT_MENU_MIN_WIDTH } from "./constants";
-import { resolveAnchoredDropdownPosition } from "./positioning";
+import {
+	getAbsolutePositioningOrigin,
+	resolveAnchoredDropdownPosition,
+} from "./positioning";
 import type { DropdownProps, DropdownSide } from "./types";
 import type { DropdownCollectionController } from "./useDropdownCollectionController";
 
@@ -54,7 +57,6 @@ export function DropdownRoot({
 	const motionAllowed = useMotionAllowed(disableWhenReducedMotion);
 	const [uncontrolledOpen, setUncontrolledOpen] = React.useState(false);
 	const [isPinned, setIsPinned] = React.useState(false);
-	const wrapperRef = React.useRef<HTMLDivElement | null>(null);
 	const rootRef = React.useRef<HTMLElement | null>(null);
 	const menuRef = React.useRef<HTMLDivElement | null>(null);
 	const [menuStyle, setMenuStyle] = React.useState<React.CSSProperties>();
@@ -257,6 +259,10 @@ export function DropdownRoot({
 			menuRef.current?.getBoundingClientRect().height ??
 			0;
 		const position = resolveAnchoredDropdownPosition({
+			absoluteOrigin:
+				positionStrategy === "absolute" && menuRef.current
+					? getAbsolutePositioningOrigin(menuRef.current)
+					: undefined,
 			align,
 			anchorRect: rect,
 			collisionPadding,
@@ -267,7 +273,6 @@ export function DropdownRoot({
 			offset,
 			positionStrategy,
 			side,
-			wrapperRect: wrapperRef.current?.getBoundingClientRect(),
 			zIndex: 90,
 		});
 		if (!position) return;
@@ -459,12 +464,7 @@ export function DropdownRoot({
 	) : null;
 
 	return (
-		<div
-			ref={wrapperRef}
-			className={
-				positionStrategy === "absolute" ? "relative max-w-full" : undefined
-			}
-		>
+		<div className="max-w-full">
 			{renderTrigger({
 				ref: rootRef,
 				isOpen,
@@ -479,11 +479,7 @@ export function DropdownRoot({
 				chevronIcon: <DEFAULT_CHEVRON_ICON isOpen={isOpen} />,
 			})}
 
-			{positionStrategy === "fixed" ? (
-				<Portal target={portalTargetId}>{menuNode}</Portal>
-			) : (
-				menuNode
-			)}
+			<Portal target={portalTargetId}>{menuNode}</Portal>
 		</div>
 	);
 }
