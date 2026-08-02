@@ -1799,10 +1799,19 @@
 			"subject": "Ship production updates",
 			"cumulativeNet": 128698,
 			"delta": 314
+		},
+		{
+			"additions": 4263,
+			"date": "2026-08-02",
+			"deletions": 180,
+			"hash": "67e4031a588263a3f521ec90989c32fc49541b01",
+			"subject": "feat: bundle Averlo Codex plugin",
+			"cumulativeNet": 132781,
+			"delta": 4083
 		}
 	],
 	"endDate": "2026-08-02",
-	"head": "698016c1767d852229650f4cd153e681b797d943",
+	"head": "67e4031a588263a3f521ec90989c32fc49541b01",
 	"startDate": "2025-08-24",
 	"version": 1
 }
