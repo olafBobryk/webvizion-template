@@ -501,12 +501,14 @@ assert.ok(
 	"Organization switching must derive from the resolved organization choices.",
 );
 assert.ok(
-	organizationSwitcher.includes('avatarSize="sm"') &&
-		organizationSwitcher.includes("!size-[min(2rem,100cqi)]") &&
+	organizationSwitcher.includes(
+		'avatarSize={placement === "footer" ? "sm" : "md"}',
+	) &&
+		organizationSwitcher.includes("!size-[100cqi]") &&
 		organizationSwitcher.match(/@container/g)?.length === 2 &&
-		organizationSwitcher.includes("max-lg:px-2") &&
-		organizationSwitcher.includes("lg:px-2"),
-	"Compact organization avatars must scale within their available rail container.",
+		organizationSwitcher.includes("max-lg:px-0") &&
+		organizationSwitcher.includes("lg:px-0"),
+	"Compact organization avatars must occupy the same inset track as navigation rows.",
 );
 
 assert.deepEqual(dashboardDebugStates, [

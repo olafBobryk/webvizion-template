@@ -81,12 +81,12 @@ export function DashboardOrganizationSwitcher({
 	function renderIdentity() {
 		return (
 			<OrganizationIdentity
-				avatarSize="sm"
+				avatarSize={placement === "footer" ? "sm" : "md"}
 				avatarClassName={clsx(
 					!mobileExpanded &&
-						"max-lg:!size-[min(2rem,100cqi)] max-lg:group-focus-visible:ring-3 max-lg:group-focus-visible:ring-ring/30",
+						"max-lg:!size-[100cqi] max-lg:group-focus-visible:ring-3 max-lg:group-focus-visible:ring-ring/30",
 					collapsed &&
-						"lg:!size-[min(2rem,100cqi)] lg:group-focus-visible:ring-3 lg:group-focus-visible:ring-ring/30",
+						"lg:!size-[100cqi] lg:group-focus-visible:ring-3 lg:group-focus-visible:ring-ring/30",
 				)}
 				className={clsx(
 					"w-full",
@@ -110,6 +110,8 @@ export function DashboardOrganizationSwitcher({
 				className={clsx(
 					"@container flex min-w-0 items-center px-2",
 					placement === "footer" ? "h-10" : "h-11",
+					!mobileExpanded && "max-lg:px-0",
+					collapsed && "lg:px-0",
 					mobileExpanded ? "max-lg:justify-start" : "max-lg:justify-center",
 					collapsed ? "lg:justify-center" : "lg:justify-start",
 				)}
@@ -149,9 +151,9 @@ export function DashboardOrganizationSwitcher({
 					placement === "footer" ? "h-10" : "h-12",
 					mobileExpanded
 						? "max-lg:justify-start"
-						: "max-lg:justify-center max-lg:px-2 max-lg:focus-visible:border-transparent max-lg:focus-visible:ring-0 max-lg:aria-expanded:!bg-transparent max-lg:aria-expanded:hover:!bg-transparent",
+						: "max-lg:justify-center max-lg:px-0 max-lg:focus-visible:border-transparent max-lg:focus-visible:ring-0 max-lg:aria-expanded:!bg-transparent max-lg:aria-expanded:hover:!bg-transparent",
 					collapsed
-						? "lg:justify-center lg:px-2 lg:focus-visible:border-transparent lg:focus-visible:ring-0 lg:aria-expanded:!bg-transparent lg:aria-expanded:hover:!bg-transparent"
+						? "lg:justify-center lg:px-0 lg:focus-visible:border-transparent lg:focus-visible:ring-0 lg:aria-expanded:!bg-transparent lg:aria-expanded:hover:!bg-transparent"
 						: "lg:justify-start",
 					"!border-transparent !bg-transparent hover:!bg-transparent aria-expanded:!bg-sidebar-accent/80 aria-expanded:!text-sidebar-accent-foreground aria-expanded:hover:!bg-sidebar-accent/80",
 				),
