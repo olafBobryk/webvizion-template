@@ -73,7 +73,7 @@ export function DashboardSidebarShell({
 					)}
 					data-dashboard-sidebar-header
 				>
-					{collapsed ? null : brand}
+					{mobileOpen || !collapsed ? brand : null}
 					<Button
 						aria-expanded={mobileOpen}
 						aria-label={mobileOpen ? "Collapse sidebar" : "Open sidebar"}

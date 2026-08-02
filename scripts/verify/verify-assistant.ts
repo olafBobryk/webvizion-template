@@ -809,6 +809,7 @@ for (const contract of [
 	/data-dashboard-sidebar-header/u,
 	/data-dashboard-sidebar-body/u,
 	/data-dashboard-sidebar-footer/u,
+	/mobileOpen \|\| !collapsed \? brand : null/u,
 	/"pl-\[56px\] lg:pl-\[72px\]"/u,
 	/"pl-\[56px\] lg:pl-\[240px\]"/u,
 	/"left-\[56px\] lg:left-\[72px\]"/u,
