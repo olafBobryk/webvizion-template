@@ -25,9 +25,12 @@ function CatalogPreview1() {
 
 function CatalogPreview2() {
 	return (
-		<div className="grid gap-4 sm:grid-cols-2">
+		<div className="grid gap-4 sm:grid-cols-3">
 			<div className="flex min-h-24 items-center justify-center rounded-lg bg-background p-5">
 				<Logo aria-label="Dark logo on light surface" tone="dark" />
+			</div>
+			<div className="flex min-h-24 items-center justify-center rounded-lg bg-background p-5">
+				<Logo aria-label="Muted logo on light surface" tone="muted" />
 			</div>
 			<div className="flex min-h-24 items-center justify-center rounded-lg bg-foreground p-5">
 				<Logo aria-label="Light logo on dark surface" tone="light" />
