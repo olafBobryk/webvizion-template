@@ -17,6 +17,7 @@ import {
 	type ReactNode,
 	useCallback,
 	useEffect,
+	useLayoutEffect,
 	useMemo,
 	useRef,
 	useState,
@@ -350,7 +351,7 @@ function RevealSource({
 		},
 	});
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (!appReady || disabled) {
 			progress.jump(1);
 			return;

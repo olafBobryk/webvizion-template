@@ -18,7 +18,11 @@ type Phase = "loading" | "revealing" | "transitioning" | "done";
 const REVEAL_DURATION_MS = Math.round(
 	Number(getMotionTiming("grand").duration ?? 0) * 1000,
 );
-const EXIT_REVEAL_HANDOFF_MS = 180;
+const FONT_READY_TIMEOUT_MS = 1_500;
+
+function waitFor(duration: number) {
+	return new Promise<void>((resolve) => setTimeout(resolve, duration));
+}
 
 export default function LoadingScreenMount() {
 	const immediateIntroDisabled = hasIntroDisabledSearchParam();
@@ -65,13 +69,17 @@ export default function LoadingScreenMount() {
 		let t1: ReturnType<typeof setTimeout> | undefined;
 		let cancelled = false;
 		Promise.all([
-			document.fonts.ready,
-			new Promise<void>((resolve) => setTimeout(resolve, 500)),
+			// A missing or proxy-delayed font must not leave the whole page behind
+			// the intro overlay. The animation itself is typography-independent.
+			Promise.race([document.fonts.ready, waitFor(FONT_READY_TIMEOUT_MS)]),
+			waitFor(500),
 		]).then(() => {
 			if (cancelled) return;
 			setPhase("revealing");
 			t1 = setTimeout(() => {
 				if (cancelled) return;
+				// Establish every deferred entrance before this overlay can expose it.
+				markAppReady();
 				setPhase("transitioning");
 			}, REVEAL_DURATION_MS);
 		});
@@ -81,15 +89,6 @@ export default function LoadingScreenMount() {
 			clearTimeout(t1);
 		};
 	}, [introDisabled]);
-
-	useEffect(() => {
-		if (introDisabled || phase !== "transitioning") return;
-		const readyId = setTimeout(() => {
-			markAppReady();
-		}, EXIT_REVEAL_HANDOFF_MS);
-
-		return () => clearTimeout(readyId);
-	}, [introDisabled, phase]);
 
 	if (immediateIntroDisabled || introDisabled || phase === "done") return null;
 
@@ -104,7 +103,6 @@ export default function LoadingScreenMount() {
 			transition={getMotionTiming("grand")}
 			onAnimationComplete={() => {
 				if (phase !== "transitioning") return;
-				markAppReady();
 				setPhase("done");
 			}}
 		>

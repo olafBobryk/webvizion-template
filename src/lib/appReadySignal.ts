@@ -1,7 +1,7 @@
-// Lightweight module-level singleton that flips once the initial loading screen
-// has fully finished its exit transition. Components that should defer their
-// first entrance animation subscribe here. Stays true permanently after first
-// fire so client-side navigation is never blocked.
+// Lightweight module-level singleton that flips when the initial loading screen
+// starts its exit transition. Deferred entrances reset before that overlay can
+// expose them, then play through the exit. It stays true after first fire so
+// client-side navigation is never blocked.
 
 let ready = false;
 const subscribers = new Set<() => void>();
