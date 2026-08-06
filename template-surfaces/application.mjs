@@ -19,12 +19,7 @@ export const applicationSurfaces = {
 			"src/lib/assistant/tool-input-stream.server.ts",
 			"scripts/verify/verify-assistant.ts",
 		],
-		packageDependencies: [
-			"@ai-sdk/openai",
-			"@ai-sdk/react",
-			"ai",
-			"streamdown",
-		],
+		packageDependencies: ["@ai-sdk/openai", "@ai-sdk/react", "ai"],
 		packageScripts: ["verify:assistant"],
 	},
 	dashboard: {

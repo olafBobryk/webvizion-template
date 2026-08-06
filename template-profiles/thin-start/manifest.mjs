@@ -102,6 +102,7 @@ export const thinStartProfile = {
 			"react-phone-number-input",
 			"remark-gfm",
 			"sonner",
+			"streamdown",
 		],
 		coreDevDependencies: [
 			"@biomejs/biome",

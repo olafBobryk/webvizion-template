@@ -97,27 +97,40 @@ assert.match(floatSource, /data-surface-role="float"/);
 assert.match(cardSource, /elevation = "card"/);
 assert.match(floatSource, /elevation = "float"/);
 
+const dashboardRoot = path.join(root, "src/app/(site)/dashboard");
+const hasDashboard = existsSync(dashboardRoot);
 const shellSurfaceContracts = [
 	{
 		file: "src/app/(site)/_components/layout/HeaderFull.tsx",
+		installed: true,
 		role: "marketing-header",
 	},
 	{
 		file: "src/app/(site)/_components/layout/HeaderCompact.tsx",
+		installed: true,
 		role: "marketing-header",
 	},
 	{
 		file: "src/app/(site)/dashboard/_components/layout/DashboardFrame.tsx",
+		installed: hasDashboard,
 		role: "dashboard-header",
 	},
 	{
 		file: "src/app/(site)/dashboard/_components/layout/DashboardSidebarShell.tsx",
+		installed: hasDashboard,
 		role: "dashboard-sidebar",
 	},
 ];
 
 for (const contract of shellSurfaceContracts) {
-	const source = readFileSync(path.join(root, contract.file), "utf8");
+	const contractPath = path.join(root, contract.file);
+	assert.equal(
+		existsSync(contractPath),
+		contract.installed,
+		`${contract.file} installation does not match its selected surface.`,
+	);
+	if (!contract.installed) continue;
+	const source = readFileSync(contractPath, "utf8");
 	assert.match(
 		source,
 		/@\/components\/ui\/primitives\/surfaces/,
@@ -171,12 +184,10 @@ assert.equal(
 	"Installed route-surface verification failed.",
 );
 
-const dashboardRoot = path.join(root, "src/app/(site)/dashboard");
 const dashboardRegistry = path.join(
 	dashboardRoot,
 	"_registry/surfaceRegistry.ts",
 );
-const hasDashboard = existsSync(dashboardRoot);
 const hasDashboardRegistry = existsSync(dashboardRegistry);
 
 assert.equal(

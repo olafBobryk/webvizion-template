@@ -428,11 +428,11 @@ const installedSurfaces = readFileSync(
 	"utf8",
 );
 assert.ok(installedSurfaces.includes("dashboardRouteSurfaceRegistry"));
-const marketingSurfaces = readFileSync(
-	resolve(root, "src/config/surfaces/marketing.ts"),
-	"utf8",
-);
-assert.ok(!marketingSurfaces.includes('family: "dashboard"'));
+const marketingSurfacesPath = resolve(root, "src/config/surfaces/marketing.ts");
+if (existsSync(marketingSurfacesPath)) {
+	const marketingSurfaces = readFileSync(marketingSurfacesPath, "utf8");
+	assert.ok(!marketingSurfaces.includes('family: "dashboard"'));
+}
 
 const commandProvider = readFileSync(
 	resolve(
