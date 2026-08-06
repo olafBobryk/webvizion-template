@@ -15,8 +15,6 @@ export type AppSurfaceId = AppSurface["id"];
 export const internalRoutes = {
 	demo: "/internal/demo",
 	dictionary: "/internal/dictionary",
-	dictionaryRiveLogoReveal:
-		"/internal/dictionary/loading-screens/rive-logo-reveal",
 	dictionarySpamProtectedForm: "/internal/dictionary/forms/spam-protected-form",
 	intelligence: "/internal/intelligence",
 	playground: "/internal/playground",

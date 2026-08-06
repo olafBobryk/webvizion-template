@@ -89,6 +89,34 @@ function CatalogPreview4() {
 		) => ReturnType<typeof render>
 	)({ ...{}, ...{} } as never);
 }
+function CatalogPreview5() {
+	const render = () => (
+		<div className="grid gap-4">
+			{(
+				[
+					["ink", "Ink context"],
+					["paper", "Paper context"],
+					["primary", "Primary context"],
+				] as const
+			).map(([background, label]) => (
+				<Section background={background} key={background} padding="soft">
+					<Text as="h2" theme="inherit" variant="headingMd">
+						{label}
+					</Text>
+					<Text theme="inherit">
+						This section publishes a semantic context without changing child
+						surface ownership.
+					</Text>
+				</Section>
+			))}
+		</div>
+	);
+	return (
+		render as unknown as (
+			args: Record<string, unknown>,
+		) => ReturnType<typeof render>
+	)({ ...{}, ...{} } as never);
+}
 
 export const catalogContract = defineCatalogOwnerContract({
 	id: "ui-primitives-section",
@@ -106,6 +134,7 @@ export const catalogContract = defineCatalogOwnerContract({
 	exclusions: [
 		"A separate catalogue identity for Section.Background.",
 		"Interactive background content unless it contains genuine controls.",
+		"Radius, elevation, or card-like chrome; use Panel, Card, or Float for contained surfaces.",
 	],
 	guarantees: [
 		{
@@ -123,6 +152,10 @@ export const catalogContract = defineCatalogOwnerContract({
 		{
 			label: "Safe hero height",
 			storyId: "ui-primitives-section--hero-safe-height",
+		},
+		{
+			label: "Semantic surface contexts",
+			storyId: "ui-primitives-section--semantic-surface-contexts",
 		},
 	],
 
@@ -161,6 +194,14 @@ export const catalogContract = defineCatalogOwnerContract({
 			axes: [],
 			stage: "wide",
 			Render: CatalogPreview4,
+		},
+		{
+			id: "semantic-surface-contexts",
+			name: "Semantic surface contexts",
+			baseline: {},
+			axes: [],
+			stage: "wide",
+			Render: CatalogPreview5,
 		},
 	],
 });

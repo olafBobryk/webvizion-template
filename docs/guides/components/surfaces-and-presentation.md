@@ -27,6 +27,11 @@ Card can rise to float or overlay elevation without becoming a Float.
 - Page headings, breadcrumbs, navigation rows, and footer flow are layout or
   content, not additional surfaces. Their owning header, sidebar, or Section
   provides the relevant context.
+- `Section` may publish an explicit `data-surface-context` when its background
+  is semantic (`ink`, `paper`, or `primary`). Descendants may selectively
+  respond through CSS, but this is metadata rather than inherited surface
+  ownership: Panel, Card, and Float keep their own fill contracts. Section
+  never owns radius, elevation, or card-like chrome.
 - Do not introduce an Inset surface for controls, code, media, file previews,
   or contained content. Those owners keep their existing presentation.
 - Semantic accents use the closed shared contract rather than product-specific

@@ -9,6 +9,9 @@ const config: StorybookConfig = {
 		"@storybook/addon-docs",
 		"@storybook/addon-mcp",
 	],
+	features: {
+		experimentalReview: false,
+	},
 	framework: "@storybook/nextjs-vite",
 	staticDirs: ["../public"],
 };

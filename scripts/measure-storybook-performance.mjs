@@ -17,8 +17,8 @@ const SCENARIOS = [
 		path: "/?path=/story/ui-input-choice-indicators--production-composition",
 	},
 	{
-		id: "ui-motion-reveal--family-composition",
-		path: "/?path=/story/ui-motion-reveal--family-composition",
+		id: "ui-motion-motion-effect--effect-gallery",
+		path: "/?path=/story/ui-motion-motion-effect--effect-gallery",
 	},
 	{
 		id: "ui-primitives-dropdown--recursive-pointer-ownership",

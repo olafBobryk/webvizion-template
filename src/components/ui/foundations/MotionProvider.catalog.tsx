@@ -94,7 +94,7 @@ export const catalogContract = defineCatalogOwnerContract({
 		"useMotionDisableOverride",
 		"useIntroDisableOverride",
 	],
-	exclusions: ["GlobalRevealScheduler and other scheduler internals."],
+	exclusions: ["GlobalMotionScheduler and other scheduler internals."],
 	guarantees: [
 		{
 			label: "Scoped motion variables",

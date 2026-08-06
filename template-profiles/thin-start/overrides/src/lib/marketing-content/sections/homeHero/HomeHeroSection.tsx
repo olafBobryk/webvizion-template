@@ -1,6 +1,7 @@
 "use client";
 
-import * as Reveal from "@/components/ui/motion/reveal";
+import * as MotionEffect from "@/components/ui/motion/effect";
+import * as MotionSource from "@/components/ui/motion/source";
 import { Button } from "@/components/ui/primitives/Button";
 import { Section } from "@/components/ui/primitives/Section";
 import { Text } from "@/components/ui/primitives/Text";
@@ -31,60 +32,54 @@ function HomeHeroSectionRoot({ section }: HomeHeroSectionProps) {
 				<div className="absolute left-1/2 top-0 h-[26rem] w-[26rem] -translate-x-1/2 rounded-full bg-primary/12 blur-[120px]" />
 			</Section.Background>
 			<HomeHeroSurfaceAssembly services={section.services} />
-			<Reveal.Sequence className="pointer-events-none relative z-20 flex w-full grow flex-col justify-between">
+			<MotionSource.Sequence className="pointer-events-none relative z-20 flex w-full grow flex-col justify-between">
 				<div className="flex max-w-150 flex-col items-start gap-10">
 					<div className="space-y-[25px]">
-						<Reveal.Item
-							variants={{
-								hidden: { opacity: 0, x: -20 },
-								show: { opacity: 1, x: 0 },
-							}}
-						>
-							<Text as="h1" variant="headingHero">
-								{section.headline}
-							</Text>
-						</Reveal.Item>
-						<Reveal.Item
-							className="justify-end self-end lg:hidden"
-							variants={{
-								hidden: { opacity: 0, x: -20 },
-								show: { opacity: 1, x: 0 },
-							}}
-						>
-							<HeroDescription
-								description={description}
-								className="text-shadow max-w-400"
-							/>
-						</Reveal.Item>
+						<MotionSource.Root strategy={{ type: "reveal" }}>
+							<MotionEffect.Entrance axis="x" distance={-20}>
+								<Text as="h1" variant="headingHero">
+									{section.headline}
+								</Text>
+							</MotionEffect.Entrance>
+						</MotionSource.Root>
+						<MotionSource.Root strategy={{ type: "reveal" }}>
+							<MotionEffect.Entrance
+								axis="x"
+								className="justify-end self-end lg:hidden"
+								distance={-20}
+							>
+								<HeroDescription
+									description={description}
+									className="text-shadow max-w-400"
+								/>
+							</MotionEffect.Entrance>
+						</MotionSource.Root>
 					</div>
-					<Reveal.Item
-						variants={{
-							hidden: { opacity: 0, x: -20 },
-							show: { opacity: 1, x: 0 },
-						}}
-					>
-						<Button
-							href={getMarketingLinkHref(section.cta)}
-							variant="primary"
-							size="md"
-							className="pointer-events-auto"
-						>
-							{section.cta.label}
-						</Button>
-					</Reveal.Item>
+					<MotionSource.Root strategy={{ type: "reveal" }}>
+						<MotionEffect.Entrance axis="x" distance={-20}>
+							<Button
+								href={getMarketingLinkHref(section.cta)}
+								variant="primary"
+								size="md"
+								className="pointer-events-auto"
+							>
+								{section.cta.label}
+							</Button>
+						</MotionEffect.Entrance>
+					</MotionSource.Root>
 				</div>
 				<div className="h-100 md:hidden" />
 
-				<Reveal.Item
-					className="hidden justify-end self-end lg:flex"
-					variants={{
-						hidden: { opacity: 0, x: 20 },
-						show: { opacity: 1, x: 0 },
-					}}
-				>
-					<HeroDescription description={description} className="max-w-75" />
-				</Reveal.Item>
-			</Reveal.Sequence>
+				<MotionSource.Root strategy={{ type: "reveal" }}>
+					<MotionEffect.Entrance
+						axis="x"
+						className="hidden justify-end self-end lg:flex"
+						distance={20}
+					>
+						<HeroDescription description={description} className="max-w-75" />
+					</MotionEffect.Entrance>
+				</MotionSource.Root>
+			</MotionSource.Sequence>
 		</Section>
 	);
 }

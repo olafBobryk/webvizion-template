@@ -1,0 +1,7 @@
+.root {
+	transform-origin: left center;
+}
+
+.root:dir(rtl) {
+	transform-origin: right center;
+}

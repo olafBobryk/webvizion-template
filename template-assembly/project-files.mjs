@@ -79,7 +79,6 @@ export function renderSurfacesFile(state) {
 	if (state.hasDictionary) {
 		internalRouteLines.push(
 			'\tdictionary: "/internal/dictionary",',
-			'\tdictionaryRiveLogoReveal: "/internal/dictionary/loading-screens/rive-logo-reveal",',
 			'\tdictionarySpamProtectedForm: "/internal/dictionary/forms/spam-protected-form",',
 		);
 	}

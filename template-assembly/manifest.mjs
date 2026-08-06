@@ -11,6 +11,7 @@ export const assemblyGeneratedPaths = new Set([
 ]);
 
 export const assemblyTemplateOnlyPaths = new Set([
+	"docs/guides/186-backport-ledger.md",
 	"docs/guides/components/design-system-agent-benchmark.md",
 	"docs/guides/components/fixtures/design-system-agent-benchmark-runs.jsonl",
 	"docs/guides/components/fixtures/design-system-agent-benchmark-runs.md",

@@ -78,5 +78,5 @@
 ## Responsive Rendering
 
 - Use Tailwind responsive classes for visual breakpoint changes and lightweight markup.
-- Use `useTailwindBreakpoints` only when a hidden branch would still mount expensive client work such as animation scenes, observers, canvas/WebGL/Rive, media, or duplicated decorative DOM.
+- Use `useTailwindBreakpoints` only when a hidden branch would still mount expensive client work such as animation scenes, observers, canvas/WebGL runtimes, media, or duplicated decorative DOM.
 - Do not hide SEO-critical content, primary copy, headings, or essential accessibility affordances behind client-only breakpoint checks.

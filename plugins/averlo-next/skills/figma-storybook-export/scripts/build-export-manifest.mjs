@@ -23,7 +23,6 @@ const DOCS_ONLY_OWNER_IDS = new Set([
 	"ui-input-spam-protection-fields",
 	"ui-misc-suspense-boundary",
 	"ui-motion-auto-cycle",
-	"ui-motion-letter-wave",
 	"ui-motion-reveal",
 	"ui-motion-scroll",
 	"ui-overlays-portal",

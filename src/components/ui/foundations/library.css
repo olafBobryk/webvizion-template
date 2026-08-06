@@ -64,6 +64,10 @@
 	--color-primary-foreground: var(--primary-foreground);
 	--color-primary-text: var(--primary-text);
 	--color-primary: var(--primary);
+	--color-paper-foreground: var(--paper-foreground);
+	--color-paper: var(--paper);
+	--color-ink-foreground: var(--ink-foreground);
+	--color-ink: var(--ink);
 	--color-popover-foreground: var(--popover-foreground);
 	--color-popover: var(--popover);
 	--color-card-foreground: var(--card-foreground);
@@ -180,6 +184,10 @@
 
 	--background: oklch(1 0 0);
 	--foreground: oklch(0.141 0.005 285.823);
+	--ink: var(--foreground);
+	--ink-foreground: var(--background);
+	--paper: var(--background);
+	--paper-foreground: var(--foreground);
 	--card: oklch(0.985 0 0);
 	--card-foreground: oklch(0.141 0.005 285.823);
 	--surface: oklch(1 0 0);
@@ -281,6 +289,10 @@
 .dark {
 	--background: oklch(0.141 0.005 285.823);
 	--foreground: oklch(0.985 0 0);
+	--ink: var(--foreground);
+	--ink-foreground: var(--background);
+	--paper: var(--background);
+	--paper-foreground: var(--foreground);
 	--card: oklch(0.21 0.006 285.885);
 	--card-foreground: oklch(0.985 0 0);
 	--surface: oklch(0.21 0.006 285.885);
@@ -518,24 +530,6 @@
 	to {
 		opacity: 1;
 		transform: translateY(0) scale(1);
-	}
-}
-
-@keyframes letter-wave {
-	0%,
-	100% {
-		transform: translateY(0);
-	}
-
-	45% {
-		transform: translateY(-0.18em);
-	}
-}
-
-@media (prefers-reduced-motion: no-preference) {
-	.group:hover .letter-wave-character {
-		animation: letter-wave var(--motion-interaction-duration)
-			var(--motion-interaction-ease) forwards;
 	}
 }
 

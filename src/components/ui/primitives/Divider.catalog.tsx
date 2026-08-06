@@ -50,6 +50,7 @@ export const catalogContract = defineCatalogOwnerContract({
 	],
 	chooseInstead: [
 		"Use an owning Card or overlay slot divider when that component already provides one.",
+		"Use MotionEffect.Divider inside MotionSource.Root when an unlabeled rule should be drawn by motion.",
 	],
 	compounds: [],
 	exclusions: [

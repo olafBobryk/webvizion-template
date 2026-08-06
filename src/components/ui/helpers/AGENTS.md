@@ -16,6 +16,9 @@ Consumer contracts live under `UI/Helpers/*` in Storybook.
 
 - `IconSwap` owns only the visual state transition. The surrounding control
   owns its accessible name, keyboard semantics, and focus treatment.
+- `ArrowAction` composes the canonical Button with decorative Icon layers;
+  interactive instances keep Button-owned focus and semantics, while
+  decorative instances never enter the accessibility tree.
 - `useCopyAction` owns clipboard execution, copied-state timing, and cleanup;
   `CopyStatusIcon` owns only the corresponding decorative icon state.
 - Do not fork either helper into component-local animation or clipboard state.

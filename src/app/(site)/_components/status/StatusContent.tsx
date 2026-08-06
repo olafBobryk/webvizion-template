@@ -2,7 +2,8 @@
 
 import clsx from "clsx";
 import Logo from "@/components/branding/Logo";
-import * as Reveal from "@/components/ui/motion/reveal";
+import * as MotionEffect from "@/components/ui/motion/effect";
+import * as MotionSource from "@/components/ui/motion/source";
 import { Text } from "@/components/ui/primitives/Text";
 
 type StatusContentProps = {
@@ -30,28 +31,36 @@ export function StatusContent({
 			)}
 		>
 			{enableRevealMotion ? (
-				<Reveal.Sequence className="flex w-full flex-col items-center justify-center gap-3">
-					<Reveal.Item>
-						<Logo size="md" variant="mark" />
-					</Reveal.Item>
-					<Reveal.Item>
-						<Text as="h1" variant="headingXl">
-							{heading}
-						</Text>
-					</Reveal.Item>
-					<Reveal.Item>
-						<Text variant="body" tone="muted">
-							{body}
-						</Text>
-					</Reveal.Item>
+				<MotionSource.Sequence className="flex w-full flex-col items-center justify-center gap-3">
+					<MotionSource.Root strategy={{ type: "reveal" }}>
+						<MotionEffect.Entrance>
+							<Logo size="md" variant="mark" />
+						</MotionEffect.Entrance>
+					</MotionSource.Root>
+					<MotionSource.Root strategy={{ type: "reveal" }}>
+						<MotionEffect.Entrance>
+							<Text as="h1" variant="headingXl">
+								{heading}
+							</Text>
+						</MotionEffect.Entrance>
+					</MotionSource.Root>
+					<MotionSource.Root strategy={{ type: "reveal" }}>
+						<MotionEffect.Entrance>
+							<Text variant="body" tone="muted">
+								{body}
+							</Text>
+						</MotionEffect.Entrance>
+					</MotionSource.Root>
 					{actions ? (
-						<Reveal.Item>
-							<div className="mt-2 flex flex-wrap items-center justify-center gap-3">
-								{actions}
-							</div>
-						</Reveal.Item>
+						<MotionSource.Root strategy={{ type: "reveal" }}>
+							<MotionEffect.Entrance>
+								<div className="mt-2 flex flex-wrap items-center justify-center gap-3">
+									{actions}
+								</div>
+							</MotionEffect.Entrance>
+						</MotionSource.Root>
 					) : null}
-				</Reveal.Sequence>
+				</MotionSource.Sequence>
 			) : (
 				<>
 					<Logo size="md" variant="mark" />

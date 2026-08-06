@@ -5,7 +5,6 @@ import { Text } from "@/components/ui/primitives/Text";
 import { type InternalRouteId, internalHrefFor } from "@/lib/routes";
 import { InternalPage, InternalPageHeader } from "../_components/InternalPage";
 import { manifest as spamProtectedFormManifest } from "./forms/spam-protected-form/manifest";
-import { manifest as riveLogoRevealManifest } from "./loading-screens/rive-logo-reveal/manifest";
 
 type DictionaryFamily = {
 	id: string;
@@ -23,18 +22,6 @@ type DictionaryFamily = {
 };
 
 const families: DictionaryFamily[] = [
-	{
-		id: "loading-screens",
-		title: "Loading Screens",
-		summary:
-			"Reference patterns for intro overlays that own the app-ready signal and exit cleanly.",
-		entries: [
-			{
-				manifest: riveLogoRevealManifest,
-				internalRouteId: "dictionaryRiveLogoReveal",
-			},
-		],
-	},
 	{
 		id: "forms",
 		title: "Forms",

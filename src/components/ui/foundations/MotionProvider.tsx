@@ -15,7 +15,7 @@ import {
 	type MotionResolveOptions,
 	resolveMotionTransition,
 } from "@/components/ui/foundations/motionTiming";
-import { GlobalRevealScheduler } from "@/components/ui/motion/reveal/scheduler/GlobalRevealScheduler";
+import { GlobalMotionScheduler } from "@/components/ui/motion/source/scheduler/GlobalMotionScheduler";
 
 type MotionContextValue = {
 	expressive: number;
@@ -68,7 +68,7 @@ export function MotionProvider({
 
 	return (
 		<MotionContext.Provider value={value}>
-			<GlobalRevealScheduler>{children}</GlobalRevealScheduler>
+			<GlobalMotionScheduler>{children}</GlobalMotionScheduler>
 		</MotionContext.Provider>
 	);
 }

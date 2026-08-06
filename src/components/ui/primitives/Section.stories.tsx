@@ -105,3 +105,39 @@ export const HeroSafeHeight: Story = {
 		</Section>
 	),
 };
+
+export const SemanticSurfaceContexts: Story = {
+	render: () => (
+		<div className="grid gap-4">
+			{(
+				[
+					["ink", "Ink context"],
+					["paper", "Paper context"],
+					["primary", "Primary context"],
+				] as const
+			).map(([background, label]) => (
+				<Section
+					background={background}
+					key={background}
+					padding="soft"
+					data-testid={`section-${background}`}
+				>
+					<Text as="h2" theme="inherit" variant="headingMd">
+						{label}
+					</Text>
+					<Text theme="inherit">
+						This section publishes a semantic context without changing child
+						surface ownership.
+					</Text>
+				</Section>
+			))}
+		</div>
+	),
+	play: async ({ canvas }) => {
+		for (const background of ["ink", "paper", "primary"] as const) {
+			const section = canvas.getByTestId(`section-${background}`);
+			await expect(section).toHaveAttribute("data-surface-context", background);
+			await expect(section.className).not.toMatch(/\brounded/);
+		}
+	},
+};

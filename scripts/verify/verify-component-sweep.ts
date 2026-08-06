@@ -397,7 +397,7 @@ function run() {
 		const expectedSectionCounts = new Map([
 			["foundations", 5],
 			["icons", 1],
-			["helpers", 2],
+			["helpers", 3],
 			["primitives", 10],
 			["input", 26],
 			["time", 2],
@@ -406,9 +406,9 @@ function run() {
 			["assistant", 2],
 			["utilities", 4],
 		]);
-		if (exportContracts.length !== 76) {
+		if (exportContracts.length !== 77) {
 			fail(
-				`canonical export must contain 76 owners, found ${exportContracts.length}`,
+				`canonical export must contain 77 owners, found ${exportContracts.length}`,
 			);
 		}
 		for (const [sectionId, expectedCount] of expectedSectionCounts) {

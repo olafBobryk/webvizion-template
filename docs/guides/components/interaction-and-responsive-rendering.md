@@ -10,7 +10,11 @@ Interaction remains accessible on first render and respects shared settings.
   shortcuts for reusable commands, and owner-managed navigation for composite
   widgets.
 - Use shared timing and spring tokens. CSS owns ordinary micro-interactions;
-  shared motion owners handle reveal or scroll choreography.
+  `MotionSource` selects scalar activation strategy and overall timing, while
+  `MotionEffect` owns the corresponding visual mapping and internal phasing.
+- Keep ordinary rules on the server-safe `Divider`. Draw an unlabeled rule with
+  `MotionEffect.Divider` inside the appropriate source; labeled dividers remain
+  static so their text stays readable.
 - Application appearance, text scale, and motion preferences remain under the
   settings and motion providers.
 - JSX SVG attributes use camelCase. Memoization requires a correctness or

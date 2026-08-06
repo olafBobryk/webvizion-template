@@ -1,9 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import * as React from "react";
 import { Icon } from "@/components/ui/icons/Icon";
 import { Loader } from "@/components/ui/misc/Loader";
-import * as Reveal from "@/components/ui/motion/reveal";
+import * as MotionEffect from "@/components/ui/motion/effect";
+import * as MotionSource from "@/components/ui/motion/source";
 import {
 	ModalContent,
 	ModalFooter,
@@ -31,6 +33,14 @@ export function ImageInspectModal({
 	onShare,
 }: ImageInspectModalProps) {
 	const [isSharing, setIsSharing] = React.useState(false);
+	const [imageLoaded, setImageLoaded] = React.useState(false);
+	const [imageFailed, setImageFailed] = React.useState(false);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: reset load state when the image source changes.
+	React.useEffect(() => {
+		setImageLoaded(false);
+		setImageFailed(false);
+	}, [src]);
 
 	const handleShare = async () => {
 		if (isSharing) return;
@@ -66,23 +76,35 @@ export function ImageInspectModal({
 			</ModalHeader>
 			<ModalContent className="p-4">
 				<div className="relative h-[min(70dvh,48rem)] w-full overflow-hidden rounded-md bg-background">
-					<Reveal.Image
-						src={src}
-						alt={alt}
-						fill
-						sizes="(min-width: 1024px) 56rem, calc(100vw - 2rem)"
-						priority
-						unoptimized={unoptimized}
+					{!imageLoaded && !imageFailed ? (
+						<div className="absolute inset-0 z-10 flex items-center justify-center">
+							<Loader />
+						</div>
+					) : null}
+					<MotionSource.Root
 						className="h-full w-full"
-						contentClassName="h-full w-full"
-						imageClassName="object-contain select-none"
-						fallback={
-							<div className="flex h-full w-full items-center justify-center">
-								<Loader />
-							</div>
-						}
-						fallbackClassName="flex items-center justify-center"
-					/>
+						strategy={{ type: "reveal" }}
+					>
+						<MotionEffect.Clip className="h-full w-full">
+							<MotionEffect.ScaleFade
+								className="h-full w-full"
+								fromOpacity={0.8}
+								fromScale={1}
+							>
+								<Image
+									src={src}
+									alt={alt}
+									fill
+									sizes="(min-width: 1024px) 56rem, calc(100vw - 2rem)"
+									priority
+									unoptimized={unoptimized}
+									className="object-contain select-none"
+									onLoad={() => setImageLoaded(true)}
+									onError={() => setImageFailed(true)}
+								/>
+							</MotionEffect.ScaleFade>
+						</MotionEffect.Clip>
+					</MotionSource.Root>
 				</div>
 			</ModalContent>
 			<ModalFooter>

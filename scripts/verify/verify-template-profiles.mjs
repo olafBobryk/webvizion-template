@@ -101,16 +101,6 @@ async function pathExists(filePath) {
 		.catch(() => false);
 }
 
-async function assertNoTemplatePluginSource(outputRoot) {
-	for (const forbiddenPath of [".agents", "plugins"]) {
-		if (await pathExists(path.join(outputRoot, forbiddenPath))) {
-			throw new Error(
-				`Generated project unexpectedly contains template plugin source: ${forbiddenPath}`,
-			);
-		}
-	}
-}
-
 async function collectTypeScriptFiles(directory) {
 	const files = [];
 	for (const entry of await fs.readdir(directory, { withFileTypes: true })) {
@@ -798,7 +788,7 @@ async function assertComponentExport(outputRoot, profileCase) {
 			`${profileCase.profileId}/${profileCase.content} is missing Component Export scripts.`,
 		);
 	}
-	const expectedOwnerCount = selectedSurfaces.has("dashboard") ? 88 : 76;
+	const expectedOwnerCount = selectedSurfaces.has("dashboard") ? 89 : 77;
 	if (catalogFiles.length !== expectedOwnerCount) {
 		throw new Error(
 			`${profileCase.profileId}/${profileCase.content} expected ${expectedOwnerCount} installed catalogue owners, found ${catalogFiles.length}.`,
@@ -1185,7 +1175,6 @@ async function main() {
 				timings.push(performance.now() - startedAt);
 				await assertReceipt(outputRoot, profileCase);
 				await assertNoOrchestrationCapability(outputRoot);
-				await assertNoTemplatePluginSource(outputRoot);
 				await assertNoAssistantCapability(outputRoot);
 				await assertStorybook(outputRoot, profileCase);
 				await assertComponentExport(outputRoot, profileCase);

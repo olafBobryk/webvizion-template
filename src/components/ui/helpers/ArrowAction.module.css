@@ -1,0 +1,86 @@
+.root,
+.decorative {
+	--arrow-action-outgoing-x: 24px;
+	--arrow-action-incoming-x: -24px;
+	overflow: hidden;
+}
+
+.root:dir(rtl),
+.decorative:dir(rtl) {
+	--arrow-action-outgoing-x: -24px;
+	--arrow-action-incoming-x: 24px;
+}
+
+.decorative {
+	display: inline-flex;
+	size: 2.25rem;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid transparent;
+	border-radius: 9999px;
+	background: color-mix(in oklch, var(--input) 50%, transparent);
+	color: var(--foreground);
+	pointer-events: none;
+}
+
+.decorative[data-variant="primary"] {
+	background: var(--primary);
+	color: var(--primary-foreground);
+}
+
+.decorative[data-variant="ghost"] {
+	background: transparent;
+}
+
+.decorative[data-variant="inverse"] {
+	border-color: var(--border);
+	background: var(--foreground);
+	color: var(--background);
+}
+
+.iconStack {
+	position: relative;
+	display: grid;
+	width: 0.75rem;
+	height: 0.75rem;
+}
+
+.icon {
+	grid-area: 1 / 1;
+	width: 0.75rem;
+	height: 0.75rem;
+	transition: transform var(--motion-interaction-duration)
+		var(--motion-interaction-ease);
+	will-change: transform;
+}
+
+.outgoing {
+	transform: translate(0, 0);
+}
+
+.incoming {
+	transform: translate(
+		var(--arrow-action-incoming-x),
+		var(--arrow-action-incoming-y, 24px)
+	);
+}
+
+.root:hover .outgoing,
+.root:focus-visible .outgoing {
+	transform: translate(var(--arrow-action-outgoing-x), -24px);
+}
+
+.root:hover .incoming,
+.root:focus-visible .incoming {
+	transform: translate(0, 0);
+}
+
+html[data-motion-override="off"] .icon {
+	transition-duration: 1ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.icon {
+		transition-duration: 1ms;
+	}
+}

@@ -7,7 +7,6 @@ import net from "node:net";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
-const HOST = "127.0.0.1";
 const PORT_START = 6006;
 const PORT_END = 6099;
 const READY_TIMEOUT_MS = 45_000;
@@ -112,7 +111,7 @@ function canListen(port) {
 		server.once("listening", () => {
 			server.close(() => resolve(true));
 		});
-		server.listen({ host: HOST, port });
+		server.listen({ port });
 	});
 }
 

@@ -23,6 +23,9 @@ const outerStyles = cva("w-full", {
 			surface: "bg-surface",
 			background: "bg-background",
 			foreground: "bg-foreground",
+			ink: "bg-ink text-ink-foreground",
+			paper: "bg-paper text-paper-foreground",
+			primary: "bg-primary text-primary-foreground",
 		},
 		height: {
 			auto: "h-auto",
@@ -143,6 +146,7 @@ function SectionRoot<T extends ElementType = "section">({
 	return (
 		<Tag
 			className={outerClass}
+			data-surface-context={background ?? undefined}
 			{...(rest as ComponentPropsWithoutRef<ElementType>)}
 		>
 			{hasBackground ? (

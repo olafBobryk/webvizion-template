@@ -174,7 +174,8 @@ export const thinStartProfile = {
 		allowedUiPrefixes: [
 			"@/components/ui/foundations/",
 			"@/components/ui/motion/auto-cycle",
-			"@/components/ui/motion/reveal",
+			"@/components/ui/motion/effect",
+			"@/components/ui/motion/source",
 			"@/components/ui/overlays/",
 			"@/components/ui/primitives/surfaces/",
 		],

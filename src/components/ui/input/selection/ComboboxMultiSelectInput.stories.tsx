@@ -53,7 +53,7 @@ export const ComboboxContract: Story = {
 		await userEvent.type(input, "ber");
 		const body = within(canvasElement.ownerDocument.body);
 		await userEvent.click(await body.findByRole("option", { name: /Berlin/i }));
-		await expect(canvas.getByText("Berlin")).toBeVisible();
+		await waitFor(() => expect(canvas.getByText("Berlin")).toBeVisible());
 		await userEvent.click(
 			canvas.getByRole("button", { name: /remove berlin/i }),
 		);
