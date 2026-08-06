@@ -1,12 +1,17 @@
 import assert from "node:assert/strict";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { relative, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 import {
 	defaultSiteLayout,
 	getSiteLinkHref,
+	type SiteLayoutDocument,
 } from "../../src/app/(site)/_components/layout/siteLayout";
 import { appSurfaceRegistry, internalRoutes } from "../../src/config/surfaces";
-import { assertRouteSurfaceRegistry } from "../../src/lib/surfaces/routeSurface";
+import {
+	assertRouteSurfaceRegistry,
+	type RouteSurfaceBase,
+} from "../../src/lib/surfaces/routeSurface";
 
 const root = process.cwd();
 const appRoot = resolve(root, "src/app");
@@ -17,8 +22,9 @@ const familyRoots = {
 } as const;
 
 const normalize = (value: string) => value.replaceAll("\\", "/");
+const routeSurfaces: readonly RouteSurfaceBase[] = appSurfaceRegistry;
 
-function pagePathForSurface(surface: (typeof appSurfaceRegistry)[number]) {
+function pagePathForSurface(surface: RouteSurfaceBase) {
 	if (surface.family === "marketing") {
 		return surface.href === "/"
 			? resolve(familyRoots.marketing, "(home)/page.tsx")
@@ -42,7 +48,7 @@ function collectPages(directory: string) {
 }
 
 async function main() {
-	assertRouteSurfaceRegistry(appSurfaceRegistry);
+	assertRouteSurfaceRegistry(routeSurfaces);
 
 	const siteLayoutSource = readFileSync(
 		resolve(appRoot, "(site)/_components/layout/siteLayout.ts"),
@@ -58,10 +64,13 @@ async function main() {
 		root,
 		"src/lib/marketing-content/fallback.ts",
 	);
-	const navigationLayout = existsSync(marketingFallbackPath)
-		? (await import("../../src/lib/marketing-content/fallback"))
-				.fallbackSiteLayout
-		: defaultSiteLayout;
+	const marketingFallback = existsSync(marketingFallbackPath)
+		? ((await import(pathToFileURL(marketingFallbackPath).href)) as {
+				fallbackSiteLayout: SiteLayoutDocument;
+			})
+		: null;
+	const navigationLayout =
+		marketingFallback?.fallbackSiteLayout ?? defaultSiteLayout;
 
 	const installedShellHrefs = new Set(
 		defaultSiteLayout.header.menuGroups.flatMap((group) => [
@@ -84,7 +93,7 @@ async function main() {
 			`Installed internal route ${href} is missing from the header menu.`,
 		);
 	}
-	for (const surface of appSurfaceRegistry) {
+	for (const surface of routeSurfaces) {
 		if (surface.family !== "marketing" || surface.match !== "exact") continue;
 		assert.ok(
 			marketingHeaderHrefs.has(surface.href),
@@ -93,7 +102,7 @@ async function main() {
 	}
 
 	for (const [family, familyRoot] of Object.entries(familyRoots)) {
-		const installedInRoutes = appSurfaceRegistry.some(
+		const installedInRoutes = routeSurfaces.some(
 			(surface) => surface.family === family,
 		);
 		assert.equal(
@@ -104,7 +113,7 @@ async function main() {
 	}
 
 	const registeredPages = new Set<string>();
-	for (const surface of appSurfaceRegistry) {
+	for (const surface of routeSurfaces) {
 		const pagePath = pagePathForSurface(surface);
 		assert.ok(
 			existsSync(pagePath),

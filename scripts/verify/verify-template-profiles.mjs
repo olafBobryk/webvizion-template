@@ -271,6 +271,27 @@ async function assertGeneratedSurfaceContract(outputRoot, profileCase) {
 	}
 }
 
+async function assertGeneratedRuntimeDependencyClosure(
+	outputRoot,
+	profileCase,
+) {
+	const markdownRendererPath = path.join(
+		outputRoot,
+		"src/components/composites/markdown/MarkdownRenderer.tsx",
+	);
+	if (!(await pathExists(markdownRendererPath))) return;
+
+	const markdownRenderer = await fs.readFile(markdownRendererPath, "utf8");
+	if (!/from\s+["']streamdown["']/.test(markdownRenderer)) return;
+
+	const pkg = await readJson(path.join(outputRoot, "package.json"));
+	if (!pkg.dependencies?.streamdown) {
+		throw new Error(
+			`${profileCase.profileId}/${profileCase.content} includes the Streamdown-backed Markdown renderer without its runtime dependency.`,
+		);
+	}
+}
+
 async function assertReceipt(outputRoot, profileCase, capabilities = []) {
 	const receipt = await readJson(
 		path.join(outputRoot, ".template-profile.json"),
@@ -562,12 +583,7 @@ async function verifyAssistantCapability(templateRoot, tempRoot) {
 	const selectedPackage = await readJson(
 		path.join(selectedRoot, "package.json"),
 	);
-	for (const dependency of [
-		"@ai-sdk/openai",
-		"@ai-sdk/react",
-		"ai",
-		"streamdown",
-	]) {
+	for (const dependency of ["@ai-sdk/openai", "@ai-sdk/react", "ai"]) {
 		if (!selectedPackage.dependencies?.[dependency]) {
 			throw new Error(
 				`Selected Assistant capability is missing ${dependency}.`,
@@ -624,12 +640,7 @@ async function assertNoAssistantCapability(outputRoot) {
 		}
 	}
 	const pkg = await readJson(path.join(outputRoot, "package.json"));
-	for (const dependency of [
-		"@ai-sdk/openai",
-		"@ai-sdk/react",
-		"ai",
-		"streamdown",
-	]) {
+	for (const dependency of ["@ai-sdk/openai", "@ai-sdk/react", "ai"]) {
 		if (pkg.dependencies?.[dependency] !== undefined) {
 			throw new Error(
 				`Default project unexpectedly contains Assistant dependency: ${dependency}`,
@@ -1186,6 +1197,10 @@ async function main() {
 
 			await assertInternalRouteShell(integrationRoot, profileCase);
 			await assertGeneratedSurfaceContract(integrationRoot, profileCase);
+			await assertGeneratedRuntimeDependencyClosure(
+				integrationRoot,
+				profileCase,
+			);
 			run(
 				process.execPath,
 				[
