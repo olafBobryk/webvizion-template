@@ -30,10 +30,12 @@ Record the aggregate result:
 npm run record:scroll-performance -- --input tmp/scroll-performance.json
 ```
 
-Create a disposable autoresearch worktree for a real page target:
+Create a disposable autoresearch worktree for a real page target. The example
+declares a p95 target and a visible-behavior invariant backed by an existing
+verification script:
 
 ```bash
-npm run setup:scroll-performance-autoresearch -- --tag home-hero --path / --mutable src/lib/marketing-content/sections/homeHero
+npm run setup:scroll-performance-autoresearch -- --tag home-hero --path / --mutable src/lib/marketing-content/sections/homeHero --target-p95-ms 8.5 --guard-script verify:site-layout --invariant "Homepage layout and interactions remain unchanged"
 ```
 
 Preview the setup without creating a worktree:
@@ -93,10 +95,19 @@ distance. Tail frame metrics such as `p95_frame_ms`, `p99_frame_ms`,
 `max_frame_ms`, and `top_3_frame_avg_ms` stay in milliseconds because a stutter
 is experienced as time. Those metrics are protected by the geometry gate below.
 
-## V1 Keep Rule
+## Reproducible Keep Rule
 
-- Fast pass: one run.
-- Confirm pass: three runs.
+- Manual measurements may use one run for diagnostics. Autoresearch acceptance
+  always takes at least three control samples and three candidate samples.
+- Median `p95_frame_ms` is the sole primary keep metric and must improve by the
+  configured nonzero minimum delta (default `0.1ms`). Secondary metrics cannot
+  keep a candidate.
+- Every comparison rebuilds and measures the accepted control and candidate in
+  the same environment. A passing candidate becomes `provisional`; the scorer
+  then restarts the evaluator and repeats the paired comparison.
+- A candidate is accepted only when both blocks independently clear the primary
+  threshold and every guard. A failed recheck is `invalidated` and restores the
+  disposable branch to the accepted revision.
 - A candidate is gated before performance scoring if it changes the measured
   page shape beyond the tolerance:
   - exact `target_path` match,
@@ -107,15 +118,16 @@ is experienced as time. Those metrics are protected by the geometry gate below.
 - A gated candidate is recorded as `gate`, reset back to the accepted baseline,
   and should be reviewed as a visual/layout change rather than auto-kept as a
   performance win.
-- A kept result must improve at least one primary metric:
-  - `p95_frame_ms`, or
-  - `frames_over_33ms`
-- If `p95_frame_ms` is the improved primary metric, `frames_over_33ms` must not
-  regress by more than `1.0` averaged frame.
-- If `frames_over_33ms` is the improved primary metric, `p95_frame_ms` must not
-  regress by more than `0.5ms`.
-- If both primary metrics improve, the result is eligible to keep without using
-  the cross-metric tolerance.
+- `frames_over_33ms` is a hard severe-jank guard and may regress by at most one
+  averaged frame. Improvements in that guard never compensate for worse p95.
+- Repeatable `--guard-script <npm-script>` checks run in both blocks. Every
+  `--invariant` declaration requires at least one such script; prose alone is
+  not treated as visual or interaction evidence.
+- Environment fingerprints include Node, Next.js, Playwright, Chromium,
+  platform, viewport, and cache policy. A mismatch blocks the loop.
+- Runtime `state.json` is authoritative. Terminal states are `succeeded`,
+  `exhausted`, and `blocked`; `final_report.md` exists only for a validated
+  terminal state and is regenerated from it.
 
 ## Surface Ownership
 
@@ -132,8 +144,9 @@ needs scroll-performance measurement, add it intentionally after activation.
   developer routes remain available when their profile surface is installed.
 - The benchmark surface is process infrastructure only; it does not authorize
   page changes by itself.
-- Disposable loop runs keep `results.jsonl`, `latest-measurement.json`,
-  `state.json`, and optional `run.log` under
+- Disposable loop runs keep `results.jsonl`, `benchmark-runs.jsonl`, raw
+  measurement artifacts, `state.json`, optional `run.log`, and terminal-only
+  `final_report.md` under
   `tmp/scroll-performance-autoresearch/<tag>/`.
 - The score loop resets discarded candidate commits in its disposable
   autoresearch worktree back to the accepted baseline. Do not run candidate

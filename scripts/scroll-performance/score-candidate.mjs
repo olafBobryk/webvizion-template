@@ -5,14 +5,18 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 import {
+	aggregateMetricSamples,
 	appendJsonLine,
-	decideScrollPerformanceKeep,
+	buildBenchmarkFinalReport,
+	compareBenchmarkEnvironments,
+	evaluateScrollPerformanceComparison,
 	getUnauthorizedPaths,
 	parseScrollPerformanceCandidate,
 	readJsonFile,
 	resolveAutoresearchRuntimePaths,
 	sanitizeTag,
 	summarizeScrollPerformanceResult,
+	TERMINAL_BENCHMARK_STATUSES,
 	writeJsonFile,
 } from "./lib/scroll-performance.mjs";
 
@@ -21,15 +25,16 @@ function printUsage() {
 
 Options:
   --tag <tag>        Required runtime tag created by setup
-  --runs 1|3         Fast or confirm measurement run count (default: 1)
   --label "note"     Optional candidate label; defaults to the current commit subject
-`);
+
+The scorer owns the configured sample count. Candidate passes always run a
+paired control/candidate block followed by an independently restarted
+confirmation block.`);
 }
 
 function parseArgs(argv) {
 	const flags = new Set();
 	const values = new Map();
-
 	for (let index = 0; index < argv.length; index += 1) {
 		const arg = argv[index];
 		if (!arg.startsWith("--")) continue;
@@ -37,13 +42,11 @@ function parseArgs(argv) {
 			flags.add(arg.slice(2));
 			continue;
 		}
-
 		const [rawKey, inlineValue] = arg.slice(2).split("=");
 		const nextValue = inlineValue ?? argv[index + 1];
 		if (inlineValue === undefined) index += 1;
 		values.set(rawKey.trim(), nextValue);
 	}
-
 	return { flags, values };
 }
 
@@ -52,29 +55,17 @@ function readString(values, key) {
 	return typeof value === "string" && value.trim() ? value.trim() : null;
 }
 
-function readRunCount(values) {
-	const raw = readString(values, "runs");
-	if (!raw) return 1;
-	const parsed = Number.parseInt(raw, 10);
-	if (parsed !== 1 && parsed !== 3) {
-		throw new Error("--runs must be 1 or 3.");
-	}
-	return parsed;
-}
-
 function runCommand(command, args, { cwd, allowFailure = false } = {}) {
 	const result = spawnSync(command, args, {
 		cwd,
 		encoding: "utf8",
-		maxBuffer: 1024 * 1024 * 20,
+		maxBuffer: 1024 * 1024 * 40,
 	});
-
 	if (result.status !== 0 && !allowFailure) {
 		throw new Error(
 			(result.stderr || result.stdout || `${command} ${args.join(" ")}`).trim(),
 		);
 	}
-
 	return result;
 }
 
@@ -99,9 +90,7 @@ async function runAndCapture(command, args, { cwd, label, logLines }) {
 	const result = runCommand(command, args, { cwd });
 	logLines.push(`$ ${label}`);
 	logLines.push((result.stdout || "").trim());
-	if (result.stderr?.trim()) {
-		logLines.push(result.stderr.trim());
-	}
+	if (result.stderr?.trim()) logLines.push(result.stderr.trim());
 	return result;
 }
 
@@ -109,9 +98,9 @@ async function scoreMeasurement({
 	cwd,
 	label,
 	logLines,
+	outputPath,
 	readySelector,
 	runCount,
-	runtimePaths,
 	targetPath,
 }) {
 	await runAndCapture("npm", ["run", "build"], {
@@ -119,7 +108,6 @@ async function scoreMeasurement({
 		label: "npm run build",
 		logLines,
 	});
-
 	const measureArgs = [
 		"scripts/scroll-performance/measure.mjs",
 		"--path",
@@ -127,24 +115,142 @@ async function scoreMeasurement({
 		"--runs",
 		String(runCount),
 		"--output",
-		runtimePaths.latestMeasurementPath,
+		outputPath,
 		"--notes",
 		label,
 	];
-
-	if (readySelector) {
-		measureArgs.push("--ready-selector", readySelector);
-	}
-
+	if (readySelector) measureArgs.push("--ready-selector", readySelector);
 	await runAndCapture(process.execPath, measureArgs, {
 		cwd,
 		label: `node ${measureArgs.join(" ")}`,
 		logLines,
 	});
+	const payload = await readJsonFile(outputPath);
+	parseScrollPerformanceCandidate(payload);
+	return {
+		...payload,
+		environment: {
+			...payload.environment,
+			ownedProcessesCleaned: true,
+		},
+	};
+}
 
-	return parseScrollPerformanceCandidate(
-		await readJsonFile(runtimePaths.latestMeasurementPath),
+async function measureRevision({
+	branch,
+	cwd,
+	label,
+	logLines,
+	outputPath,
+	readySelector,
+	revision,
+	runCount,
+	targetPath,
+}) {
+	git(["switch", "--detach", revision], { cwd });
+	try {
+		return await scoreMeasurement({
+			cwd,
+			label,
+			logLines,
+			outputPath,
+			readySelector,
+			runCount,
+			targetPath,
+		});
+	} finally {
+		git(["switch", branch], { cwd });
+	}
+}
+
+function runGuardScripts({ cwd, scripts }) {
+	return Object.fromEntries(
+		scripts.map((script) => {
+			const result = runCommand("npm", ["run", script], {
+				allowFailure: true,
+				cwd,
+			});
+			return [
+				`script:${script}`,
+				{
+					exitCode: result.status,
+					pass: result.status === 0,
+				},
+			];
+		}),
 	);
+}
+
+async function runPairBlock({
+	acceptedHead,
+	benchmark,
+	branch,
+	candidateHead,
+	cwd,
+	label,
+	logLines,
+	phase,
+	readySelector,
+	runtimePaths,
+	targetPath,
+}) {
+	const controlPath = path.join(runtimePaths.baseDir, `${phase}-control.json`);
+	const candidatePath = path.join(
+		runtimePaths.baseDir,
+		`${phase}-candidate.json`,
+	);
+	const common = {
+		branch,
+		cwd,
+		logLines,
+		readySelector,
+		runCount: benchmark.pairedSampleCount,
+		targetPath,
+	};
+	const controlPayload = await measureRevision({
+		...common,
+		label: `${label} ${phase} control`,
+		outputPath: controlPath,
+		revision: acceptedHead,
+	});
+	const candidatePayload = await measureRevision({
+		...common,
+		label: `${label} ${phase} candidate`,
+		outputPath: candidatePath,
+		revision: candidateHead,
+	});
+	const guardResults = runGuardScripts({
+		cwd,
+		scripts: benchmark.guardScripts ?? [],
+	});
+	const environmentFingerprint = compareBenchmarkEnvironments(
+		controlPayload,
+		candidatePayload,
+	);
+	const evaluation = evaluateScrollPerformanceComparison({
+		benchmark,
+		candidatePayload,
+		controlPayload,
+		guardResults,
+	});
+	const evidence = {
+		artifacts: { candidate: candidatePath, control: controlPath },
+		candidate: {
+			environment: candidatePayload.environment,
+			samples: evaluation.candidateSamples,
+		},
+		control: {
+			environment: controlPayload.environment,
+			samples: evaluation.controlSamples,
+		},
+		environmentFingerprint,
+		evaluation,
+		phase,
+		recordedAt: new Date().toISOString(),
+		schemaVersion: 2,
+	};
+	await appendJsonLine(runtimePaths.benchmarkRunsPath, evidence);
+	return { candidatePayload, controlPayload, evaluation, evidence };
 }
 
 async function writeRunLog(runtimePaths, logLines) {
@@ -156,6 +262,35 @@ async function writeRunLog(runtimePaths, logLines) {
 	);
 }
 
+async function writeStateAndReport(runtimePaths, state) {
+	await writeJsonFile(runtimePaths.statePath, state);
+	if (TERMINAL_BENCHMARK_STATUSES.has(state.status)) {
+		await fs.writeFile(
+			runtimePaths.finalReportPath,
+			buildBenchmarkFinalReport(state),
+			"utf8",
+		);
+		return;
+	}
+	await fs.rm(runtimePaths.finalReportPath, { force: true });
+}
+
+function decisionReason(evaluation) {
+	if (!evaluation.guardsPass) {
+		return `Hard guard failure: ${evaluation.failedGuards.join(", ")}.`;
+	}
+	if (!evaluation.primaryPass) {
+		return `Median p95 improved by ${evaluation.absoluteDelta}ms; required ${evaluation.minimumDeltaMs}ms.`;
+	}
+	return `Median p95 improved by ${evaluation.absoluteDelta}ms (${(
+		evaluation.relativeDelta * 100
+	).toFixed(2)}%) with every guard passing.`;
+}
+
+function resetToAccepted(cwd, acceptedHead) {
+	git(["reset", "--hard", acceptedHead], { cwd });
+}
+
 async function main() {
 	const args = parseArgs(process.argv.slice(2));
 	if (args.flags.has("help")) {
@@ -164,20 +299,20 @@ async function main() {
 	}
 
 	const tag = sanitizeTag(readString(args.values, "tag"));
-	const runCount = readRunCount(args.values);
 	const repoRoot = getRepoRoot(process.cwd());
 	const runtimePaths = resolveAutoresearchRuntimePaths({ cwd: repoRoot, tag });
 	const state = await readJsonFile(runtimePaths.statePath);
 	const currentBranch = git(["branch", "--show-current"], {
 		cwd: repoRoot,
 	}).stdout.trim();
-
 	if (currentBranch !== state.branch) {
 		throw new Error(
 			`This worktree is on ${currentBranch || "detached HEAD"}, but state expects ${state.branch}.`,
 		);
 	}
-
+	if (TERMINAL_BENCHMARK_STATUSES.has(state.status)) {
+		throw new Error(`Benchmark is already terminal: ${state.status}.`);
+	}
 	requireCleanWorkingTree(repoRoot);
 
 	const currentHead = git(["rev-parse", "HEAD"], {
@@ -191,7 +326,7 @@ async function main() {
 		git(["log", "-1", "--pretty=%s"], { cwd: repoRoot }).stdout.trim() ??
 		currentCommit;
 	const logLines = [
-		`# ${new Date().toISOString()} scroll autoresearch score`,
+		`# ${new Date().toISOString()} paired scroll benchmark`,
 		`tag: ${tag}`,
 		`branch: ${currentBranch}`,
 		`head: ${currentHead}`,
@@ -201,65 +336,65 @@ async function main() {
 	if (state.accepted.metrics === null) {
 		if (currentHead !== state.accepted.head) {
 			throw new Error(
-				"Baseline scoring must run at the accepted setup commit before any candidate commits.",
+				"Baseline scoring must run at the accepted setup commit before candidate commits.",
 			);
 		}
-
-		const aggregate = await scoreMeasurement({
+		const payload = await scoreMeasurement({
 			cwd: repoRoot,
-			label: commitLabel,
+			label: `${commitLabel} baseline`,
 			logLines,
+			outputPath: runtimePaths.latestMeasurementPath,
 			readySelector: state.readySelector,
-			runCount,
-			runtimePaths,
+			runCount: state.benchmark.pairedSampleCount,
 			targetPath: state.targetPath,
 		});
+		const samples = payload.runs.map(
+			(run) => run[state.benchmark.primaryMetric],
+		);
+		const baselineValue = aggregateMetricSamples(
+			samples,
+			state.benchmark.aggregation,
+		);
 		const recordedAt = new Date().toISOString();
-		await appendJsonLine(runtimePaths.resultsPath, {
-			aggregate,
-			branch: currentBranch,
-			candidate_commit: currentCommit,
-			candidate_head: currentHead,
-			decision: "baseline",
-			label: commitLabel,
-			pass: 0,
-			recordedAt,
-			runs: runCount,
-			schemaVersion: 1,
-			tag,
-			target_path: state.targetPath,
-		});
-
 		state.accepted = {
 			...state.accepted,
 			establishedAt: recordedAt,
 			label: commitLabel,
-			metrics: aggregate,
+			metrics: payload.aggregate,
+		};
+		state.initialBaseline = {
+			environmentFingerprint: payload.environment.fingerprint,
+			metric: state.benchmark.primaryMetric,
+			samples,
+			value: baselineValue,
 		};
 		state.lastDecision = {
 			at: recordedAt,
 			decision: "baseline",
-			label: commitLabel,
-			result: aggregate,
+			value: baselineValue,
 		};
-		await writeJsonFile(runtimePaths.statePath, state);
-		logLines.push(
-			`Baseline established: ${summarizeScrollPerformanceResult(aggregate)}`,
-		);
+		await appendJsonLine(runtimePaths.resultsPath, {
+			decision: "baseline",
+			head: currentHead,
+			metric: state.benchmark.primaryMetric,
+			recordedAt,
+			runs: samples,
+			value: baselineValue,
+		});
+		await writeStateAndReport(runtimePaths, state);
 		await writeRunLog(runtimePaths, logLines);
 		console.log(
-			`Established baseline ${currentCommit}: ${summarizeScrollPerformanceResult(aggregate)}.`,
+			`Established ${samples.length}-sample baseline ${currentCommit}: ${summarizeScrollPerformanceResult(payload.aggregate)}.`,
 		);
 		return;
 	}
 
 	const nextPass = Number(state.completedPasses ?? 0) + 1;
 	if (nextPass > Number(state.passLimit ?? 0)) {
-		throw new Error(
-			`Pass limit reached (${state.passLimit}). Create a new tagged worktree to continue.`,
-		);
+		state.status = "exhausted";
+		await writeStateAndReport(runtimePaths, state);
+		throw new Error(`Pass limit reached (${state.passLimit}).`);
 	}
-
 	const commitsAhead = Number.parseInt(
 		git(["rev-list", "--count", `${state.accepted.head}..HEAD`], {
 			cwd: repoRoot,
@@ -268,15 +403,12 @@ async function main() {
 	);
 	if (commitsAhead !== 1) {
 		throw new Error(
-			`Expected exactly one committed candidate ahead of ${state.accepted.commit}; found ${commitsAhead}.`,
+			`Expected exactly one candidate commit ahead of ${state.accepted.commit}; found ${commitsAhead}.`,
 		);
 	}
-
 	const changedFiles = git(
 		["diff", "--name-only", `${state.accepted.head}..HEAD`],
-		{
-			cwd: repoRoot,
-		},
+		{ cwd: repoRoot },
 	)
 		.stdout.split("\n")
 		.map((line) => line.trim())
@@ -291,94 +423,165 @@ async function main() {
 		);
 	}
 
-	const aggregate = await scoreMeasurement({
-		cwd: repoRoot,
-		label: commitLabel,
-		logLines,
-		readySelector: state.readySelector,
-		runCount,
-		runtimePaths,
-		targetPath: state.targetPath,
-	});
-	const decision = decideScrollPerformanceKeep({
-		accepted: state.accepted.metrics,
-		candidate: aggregate,
-	});
-	const decisionLabel = decision.keep
-		? "keep"
-		: decision.gated
-			? "gate"
-			: "discard";
-	const recordedAt = new Date().toISOString();
-
-	await appendJsonLine(runtimePaths.resultsPath, {
-		accepted_before: {
-			commit: state.accepted.commit,
-			head: state.accepted.head,
-			metrics: state.accepted.metrics,
-		},
-		aggregate,
-		branch: currentBranch,
-		candidate_commit: currentCommit,
-		candidate_head: currentHead,
-		changed_files: changedFiles,
-		decision: decisionLabel,
-		deltas: decision.deltas,
-		gated: decision.gated,
-		geometry_deltas: decision.geometryDeltas,
-		geometry_failures: decision.geometryFailures,
-		label: commitLabel,
-		pass: nextPass,
-		primary_metric: decision.primaryMetric,
-		reason: decision.reason,
-		recordedAt,
-		runs: runCount,
-		schemaVersion: 1,
-		tag,
-		target_path: state.targetPath,
-	});
+	let measurement;
+	try {
+		measurement = await runPairBlock({
+			acceptedHead: state.accepted.head,
+			benchmark: state.benchmark,
+			branch: currentBranch,
+			candidateHead: currentHead,
+			cwd: repoRoot,
+			label: commitLabel,
+			logLines,
+			phase: "measurement",
+			readySelector: state.readySelector,
+			runtimePaths,
+			targetPath: state.targetPath,
+		});
+	} catch (error) {
+		state.status = "blocked";
+		state.invalidationReason =
+			error instanceof Error ? error.message : String(error);
+		resetToAccepted(repoRoot, state.accepted.head);
+		await writeStateAndReport(runtimePaths, state);
+		throw error;
+	}
 
 	state.completedPasses = nextPass;
-	state.lastDecision = {
-		at: recordedAt,
-		decision: decisionLabel,
-		deltas: decision.deltas,
-		gated: decision.gated,
-		geometryDeltas: decision.geometryDeltas,
-		geometryFailures: decision.geometryFailures,
-		label: commitLabel,
-		pass: nextPass,
-		primaryMetric: decision.primaryMetric,
-		reason: decision.reason,
-		result: aggregate,
-	};
-
-	if (decision.keep) {
-		state.accepted = {
-			commit: currentCommit,
-			establishedAt: recordedAt,
-			head: currentHead,
-			label: commitLabel,
-			metrics: aggregate,
-		};
-		logLines.push("Decision: KEEP");
-		logLines.push(decision.reason);
-		await writeJsonFile(runtimePaths.statePath, state);
+	if (!measurement.evaluation.keep) {
+		const reason = decisionReason(measurement.evaluation);
+		const decision = measurement.evaluation.guardsPass ? "discard" : "gate";
+		state.lastDecision = { at: new Date().toISOString(), decision, reason };
+		state.status = nextPass >= state.passLimit ? "exhausted" : "running";
+		resetToAccepted(repoRoot, state.accepted.head);
+		await appendJsonLine(runtimePaths.resultsPath, {
+			changedFiles,
+			decision,
+			evaluation: measurement.evaluation,
+			pass: nextPass,
+			reason,
+		});
+		await writeStateAndReport(runtimePaths, state);
 		await writeRunLog(runtimePaths, logLines);
-		console.log(`KEPT ${currentCommit}: ${decision.reason}`);
-		console.log(`Accepted baseline is now ${currentCommit}.`);
+		console.log(`${decision.toUpperCase()} ${currentCommit}: ${reason}`);
 		return;
 	}
 
-	git(["reset", "--hard", state.accepted.head], { cwd: repoRoot });
-	logLines.push(decision.gated ? "Decision: GATE" : "Decision: DISCARD");
-	logLines.push(decision.reason);
-	await writeJsonFile(runtimePaths.statePath, state);
+	state.status = "provisional";
+	state.provisionalCandidate = {
+		head: currentHead,
+		label: commitLabel,
+		measurement: measurement.evaluation,
+		pass: nextPass,
+	};
+	state.invalidationReason = null;
+	await writeStateAndReport(runtimePaths, state);
+
+	let confirmation;
+	try {
+		confirmation = await runPairBlock({
+			acceptedHead: state.accepted.head,
+			benchmark: state.benchmark,
+			branch: currentBranch,
+			candidateHead: currentHead,
+			cwd: repoRoot,
+			label: commitLabel,
+			logLines,
+			phase: "confirmation",
+			readySelector: state.readySelector,
+			runtimePaths,
+			targetPath: state.targetPath,
+		});
+		compareBenchmarkEnvironments(
+			measurement.controlPayload,
+			measurement.candidatePayload,
+			confirmation.controlPayload,
+			confirmation.candidatePayload,
+		);
+	} catch (error) {
+		state.status = "blocked";
+		state.provisionalCandidate = null;
+		state.invalidationReason =
+			error instanceof Error ? error.message : String(error);
+		resetToAccepted(repoRoot, state.accepted.head);
+		await writeStateAndReport(runtimePaths, state);
+		throw error;
+	}
+
+	if (!confirmation.evaluation.keep) {
+		const reason = `Independent confirmation failed: ${decisionReason(
+			confirmation.evaluation,
+		)}`;
+		state.invalidationReason = reason;
+		state.lastDecision = {
+			at: new Date().toISOString(),
+			decision: "invalidated",
+			reason,
+		};
+		state.provisionalCandidate = null;
+		state.status = nextPass >= state.passLimit ? "exhausted" : "running";
+		resetToAccepted(repoRoot, state.accepted.head);
+		await appendJsonLine(runtimePaths.resultsPath, {
+			changedFiles,
+			confirmation: confirmation.evaluation,
+			decision: "invalidated",
+			measurement: measurement.evaluation,
+			pass: nextPass,
+			reason,
+		});
+		await writeStateAndReport(runtimePaths, state);
+		await writeRunLog(runtimePaths, logLines);
+		console.log(`INVALIDATED ${currentCommit}: ${reason}`);
+		return;
+	}
+
+	const recordedAt = new Date().toISOString();
+	const initialValue = state.initialBaseline.value;
+	const confirmedValue = confirmation.evaluation.candidate;
+	const relativeImprovement =
+		initialValue > 0 ? (initialValue - confirmedValue) / initialValue : 0;
+	state.accepted = {
+		commit: currentCommit,
+		establishedAt: recordedAt,
+		head: currentHead,
+		label: commitLabel,
+		metrics: confirmation.candidatePayload.aggregate,
+	};
+	state.confirmedMetric = {
+		metric: state.benchmark.primaryMetric,
+		relativeImprovement,
+		value: confirmedValue,
+	};
+	state.invalidationReason = null;
+	state.lastDecision = {
+		at: recordedAt,
+		decision: "keep",
+		reason: decisionReason(confirmation.evaluation),
+	};
+	state.provisionalCandidate = null;
+	const targetMet =
+		typeof state.benchmark.targetP95Ms === "number" &&
+		confirmedValue <= state.benchmark.targetP95Ms;
+	state.status = targetMet
+		? "succeeded"
+		: nextPass >= state.passLimit
+			? "exhausted"
+			: "running";
+	await appendJsonLine(runtimePaths.resultsPath, {
+		changedFiles,
+		confirmation: confirmation.evaluation,
+		decision: "keep",
+		measurement: measurement.evaluation,
+		pass: nextPass,
+		recordedAt,
+		status: state.status,
+	});
+	await writeStateAndReport(runtimePaths, state);
 	await writeRunLog(runtimePaths, logLines);
 	console.log(
-		`${decision.gated ? "GATED" : "DISCARDED"} ${currentCommit}: ${decision.reason}`,
+		`KEPT ${currentCommit}: ${decisionReason(confirmation.evaluation)}`,
 	);
-	console.log(`Reset branch back to ${state.accepted.commit}.`);
+	console.log(`Benchmark status: ${state.status}.`);
 }
 
 main().catch((error) => {

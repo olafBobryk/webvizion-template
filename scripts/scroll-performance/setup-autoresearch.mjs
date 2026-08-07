@@ -5,13 +5,18 @@ import fs from "node:fs/promises";
 import process from "node:process";
 import {
 	DEFAULT_AUTORESEARCH_PASS_LIMIT,
+	DEFAULT_MINIMUM_P95_DELTA_MS,
+	DEFAULT_PAIRED_SAMPLE_COUNT,
+	DEFAULT_SEVERE_JANK_REGRESSION_LIMIT,
 	DEFAULT_TARGET_PATH,
 	ensureJsonLineFile,
 	getAutoresearchBranchName,
 	getAutoresearchWorktreePath,
 	normalizeScopePath,
 	normalizeTargetPath,
-	PRIMARY_METRIC_TOLERANCES,
+	PRIMARY_METRIC,
+	PRIMARY_METRIC_AGGREGATION,
+	PRIMARY_METRIC_DIRECTION,
 	READ_ONLY_SCOPE,
 	resolveAutoresearchRuntimePaths,
 	sanitizeTag,
@@ -27,6 +32,11 @@ Options:
   --ready-selector "[data]"   Optional selector to wait for before scoring
   --mutable <path>            Allowed candidate mutation scope; repeatable
   --passes 12                 Candidate pass cap (default: ${DEFAULT_AUTORESEARCH_PASS_LIMIT})
+	--samples 3                 Paired control/candidate samples (minimum: ${DEFAULT_PAIRED_SAMPLE_COUNT})
+	--min-delta-ms 0.1          Minimum median p95 improvement (default: ${DEFAULT_MINIMUM_P95_DELTA_MS})
+	--target-p95-ms <number>    Optional confirmed p95 target that ends the loop
+	--guard-script <npm-script> Additional hard guard; repeatable
+	--invariant "description"  Visible-behavior invariant; repeatable and requires a guard script
   --allow-over-12             Required when --passes exceeds ${DEFAULT_AUTORESEARCH_PASS_LIMIT}
   --dry-run                   Print setup plan without creating a worktree
 `);
@@ -93,6 +103,16 @@ function readPositiveInteger(values, key, fallback) {
 	return parsed;
 }
 
+function readPositiveNumber(values, key, fallback = null) {
+	const raw = values.get(key);
+	if (raw === undefined) return fallback;
+	const parsed = Number.parseFloat(String(raw));
+	if (!Number.isFinite(parsed) || parsed <= 0) {
+		throw new Error(`--${key} must be a number greater than zero.`);
+	}
+	return parsed;
+}
+
 function runCommand(command, args, { cwd, allowFailure = false } = {}) {
 	const result = spawnSync(command, args, {
 		cwd,
@@ -140,6 +160,7 @@ function printDryRunPlan({
 	mutableScopeAllowlist,
 	passLimit,
 	readySelector,
+	benchmark,
 	targetPath,
 	worktreePath,
 }) {
@@ -150,6 +171,15 @@ function printDryRunPlan({
 	console.log(`Target path: ${targetPath}`);
 	console.log(`Ready selector: ${readySelector ?? "(none)"}`);
 	console.log(`Pass limit: ${passLimit}`);
+	console.log(`Paired samples: ${benchmark.pairedSampleCount}`);
+	console.log(`Minimum p95 delta: ${benchmark.minimumDeltaMs}ms`);
+	console.log(`Target p95: ${benchmark.targetP95Ms ?? "(none)"}`);
+	console.log(
+		`Guard scripts: ${benchmark.guardScripts.join(", ") || "(built-ins only)"}`,
+	);
+	console.log(
+		`Visible invariants: ${benchmark.visibleBehaviorInvariants.join("; ") || "(none declared)"}`,
+	);
 	console.log("Mutable scope allowlist:");
 	for (const scopePath of mutableScopeAllowlist) {
 		console.log(`- ${scopePath}`);
@@ -172,10 +202,44 @@ async function main() {
 	);
 	const targetPath = normalizeTargetPath(readString(args.values, "path"));
 	const readySelector = readString(args.values, "ready-selector");
+	const pairedSampleCount = readPositiveInteger(
+		args.values,
+		"samples",
+		DEFAULT_PAIRED_SAMPLE_COUNT,
+	);
+	const minimumDeltaMs = readPositiveNumber(
+		args.values,
+		"min-delta-ms",
+		DEFAULT_MINIMUM_P95_DELTA_MS,
+	);
+	const targetP95Ms = readPositiveNumber(args.values, "target-p95-ms");
+	const guardScripts = readStringList(args.values, "guard-script");
+	const visibleBehaviorInvariants = readStringList(args.values, "invariant");
 	const mutableScopeAllowlist = readStringList(args.values, "mutable").map(
 		normalizeScopePath,
 	);
 	const dryRun = args.flags.has("dry-run");
+	if (pairedSampleCount < DEFAULT_PAIRED_SAMPLE_COUNT) {
+		throw new Error(
+			`--samples must be at least ${DEFAULT_PAIRED_SAMPLE_COUNT} for noisy benchmarks.`,
+		);
+	}
+	if (visibleBehaviorInvariants.length > 0 && guardScripts.length === 0) {
+		throw new Error(
+			"Visible-behavior invariants require at least one --guard-script that verifies them.",
+		);
+	}
+	const benchmark = {
+		aggregation: PRIMARY_METRIC_AGGREGATION,
+		direction: PRIMARY_METRIC_DIRECTION,
+		guardScripts,
+		minimumDeltaMs,
+		pairedSampleCount,
+		primaryMetric: PRIMARY_METRIC,
+		severeJankRegressionLimit: DEFAULT_SEVERE_JANK_REGRESSION_LIMIT,
+		targetP95Ms,
+		visibleBehaviorInvariants,
+	};
 
 	if (mutableScopeAllowlist.length === 0 && !dryRun) {
 		throw new Error(
@@ -217,6 +281,7 @@ async function main() {
 
 	if (dryRun) {
 		printDryRunPlan({
+			benchmark,
 			branchName,
 			mutableScopeAllowlist,
 			passLimit,
@@ -247,6 +312,7 @@ async function main() {
 	});
 
 	await ensureJsonLineFile(runtimePaths.resultsPath);
+	await ensureJsonLineFile(runtimePaths.benchmarkRunsPath);
 	await writeJsonFile(runtimePaths.statePath, {
 		accepted: {
 			commit: acceptedCommit,
@@ -256,20 +322,25 @@ async function main() {
 			metrics: null,
 		},
 		benchmark: {
+			...benchmark,
 			doc: "docs/guides/scroll-performance.md",
 			exampleLog:
 				"scripts/scroll-performance/fixtures/scroll-performance-runs.example.jsonl",
-			primaryMetricTolerances: PRIMARY_METRIC_TOLERANCES,
 		},
 		branch: branchName,
 		completedPasses: 0,
 		createdAt: new Date().toISOString(),
 		lastDecision: null,
+		confirmedMetric: null,
+		initialBaseline: null,
+		invalidationReason: null,
 		mutableScopeAllowlist,
 		passLimit,
 		readOnlyScope: READ_ONLY_SCOPE,
 		readySelector,
-		schemaVersion: 1,
+		provisionalCandidate: null,
+		schemaVersion: 2,
+		status: "running",
 		source: {
 			branch: branchAtSetup,
 			commit: acceptedCommit,

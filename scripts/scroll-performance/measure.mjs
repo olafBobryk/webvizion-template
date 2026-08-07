@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 
 import { spawnSync } from "node:child_process";
+import { createHash, randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
+import { createRequire } from "node:module";
+import os from "node:os";
 import path from "node:path";
 import process from "node:process";
 import { chromium } from "playwright";
@@ -16,6 +19,7 @@ import {
 } from "./lib/scroll-performance.mjs";
 
 const PROJECT = "averlo-next-template";
+const require = createRequire(import.meta.url);
 const DEFAULT_RUNS = 1;
 const DEFAULT_VIEWPORT = { width: 1440, height: 900 };
 const NORMALIZATION_DISTANCE_PX = 1000;
@@ -209,6 +213,28 @@ function getCommit() {
 		return "unknown";
 	}
 	return result.stdout.trim() || "unknown";
+}
+
+function buildEnvironmentEvidence({ browserVersion, viewport }) {
+	const descriptor = {
+		architecture: os.arch(),
+		browser: `chromium ${browserVersion}`,
+		cachePolicy:
+			"fresh browser context per sample; production build per revision",
+		nextVersion: require("next/package.json").version,
+		nodeVersion: process.version,
+		platform: `${os.platform()} ${os.release()}`,
+		playwrightVersion: require("playwright/package.json").version,
+		viewport: `${viewport.width}x${viewport.height}`,
+	};
+	return {
+		...descriptor,
+		fingerprint: createHash("sha256")
+			.update(JSON.stringify(descriptor))
+			.digest("hex"),
+		freshRuntime: true,
+		sessionId: randomUUID(),
+	};
 }
 
 async function readProtocolStream(session, handle) {
@@ -580,6 +606,10 @@ async function main() {
 				viewport: DEFAULT_VIEWPORT,
 			}),
 			capturedAt: new Date().toISOString(),
+			environment: buildEnvironmentEvidence({
+				browserVersion: browser.version(),
+				viewport: DEFAULT_VIEWPORT,
+			}),
 			project: PROJECT,
 			route: targetPath,
 			runs,

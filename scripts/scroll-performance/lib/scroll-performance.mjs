@@ -4,6 +4,9 @@ import process from "node:process";
 
 export const DEFAULT_TARGET_PATH = "/";
 export const DEFAULT_AUTORESEARCH_PASS_LIMIT = 12;
+export const DEFAULT_PAIRED_SAMPLE_COUNT = 3;
+export const DEFAULT_MINIMUM_P95_DELTA_MS = 0.1;
+export const DEFAULT_SEVERE_JANK_REGRESSION_LIMIT = 1;
 export const DEFAULT_SCROLL_PERFORMANCE_RECORD_PATH = path.join(
 	"tmp",
 	"scroll-performance-runs.jsonl",
@@ -12,10 +15,9 @@ export const AUTORESEARCH_RUNTIME_ROOT = path.join(
 	"tmp",
 	"scroll-performance-autoresearch",
 );
-export const PRIMARY_METRIC_TOLERANCES = {
-	frames_over_33ms: 1.0,
-	p95_frame_ms: 0.5,
-};
+export const PRIMARY_METRIC = "p95_frame_ms";
+export const PRIMARY_METRIC_DIRECTION = "minimize";
+export const PRIMARY_METRIC_AGGREGATION = "median";
 export const GEOMETRY_GATE_TOLERANCES = {
 	scroll_distance_px: {
 		absolute: 80,
@@ -34,6 +36,7 @@ export const READ_ONLY_SCOPE = [
 	"scripts/scroll-performance",
 	"scripts/_lib/local-production-preview.mjs",
 	"docs/guides/scroll-performance.md",
+	"docs/guides/scroll-performance-benchmark-hardening.md",
 	"scripts/scroll-performance/fixtures/scroll-performance-runs.example.jsonl",
 ];
 
@@ -166,13 +169,184 @@ export function resolveAutoresearchRuntimePaths({ cwd = process.cwd(), tag }) {
 	const baseDir = path.join(cwd, AUTORESEARCH_RUNTIME_ROOT, safeTag);
 
 	return {
+		benchmarkRunsPath: path.join(baseDir, "benchmark-runs.jsonl"),
 		baseDir,
+		finalReportPath: path.join(baseDir, "final_report.md"),
 		latestMeasurementPath: path.join(baseDir, "latest-measurement.json"),
 		resultsPath: path.join(baseDir, "results.jsonl"),
 		runLogPath: path.join(baseDir, "run.log"),
 		statePath: path.join(baseDir, "state.json"),
 		tag: safeTag,
 	};
+}
+
+export function aggregateMetricSamples(
+	samples,
+	method = PRIMARY_METRIC_AGGREGATION,
+) {
+	if (!Array.isArray(samples) || samples.length === 0) {
+		throw new Error("Metric samples must be a non-empty array.");
+	}
+
+	const values = samples.map((value, index) => {
+		if (typeof value !== "number" || !Number.isFinite(value)) {
+			throw new Error(`Metric sample ${index + 1} must be a finite number.`);
+		}
+		return value;
+	});
+
+	if (method === "mean") {
+		return roundMetric(
+			values.reduce((sum, value) => sum + value, 0) / values.length,
+		);
+	}
+	if (method !== "median") {
+		throw new Error(`Unsupported benchmark aggregation: ${method}`);
+	}
+
+	const sorted = [...values].sort((a, b) => a - b);
+	const middle = Math.floor(sorted.length / 2);
+	return roundMetric(
+		sorted.length % 2 === 0
+			? (sorted[middle - 1] + sorted[middle]) / 2
+			: sorted[middle],
+	);
+}
+
+function getPrimarySamples(payload, metric, expectedCount) {
+	if (!payload || typeof payload !== "object" || !Array.isArray(payload.runs)) {
+		throw new Error("Benchmark evidence must include raw measurement runs.");
+	}
+	if (payload.runs.length !== expectedCount) {
+		throw new Error(
+			`Expected exactly ${expectedCount} ${metric} samples; received ${payload.runs.length}.`,
+		);
+	}
+	return payload.runs.map((run, index) => {
+		const value = run?.[metric];
+		if (typeof value !== "number" || !Number.isFinite(value)) {
+			throw new Error(`Run ${index + 1} is missing finite ${metric}.`);
+		}
+		return value;
+	});
+}
+
+export function compareBenchmarkEnvironments(...payloads) {
+	const fingerprints = payloads.map(
+		(payload) => payload?.environment?.fingerprint,
+	);
+	if (
+		fingerprints.some(
+			(fingerprint) => typeof fingerprint !== "string" || !fingerprint,
+		)
+	) {
+		throw new Error(
+			"Every benchmark measurement must include an environment fingerprint.",
+		);
+	}
+	if (new Set(fingerprints).size !== 1) {
+		throw new Error("Benchmark environment fingerprints do not match.");
+	}
+	return fingerprints[0];
+}
+
+export function evaluateScrollPerformanceComparison({
+	benchmark,
+	candidatePayload,
+	controlPayload,
+	guardResults = {},
+}) {
+	const metric = benchmark?.primaryMetric ?? PRIMARY_METRIC;
+	const sampleCount =
+		benchmark?.pairedSampleCount ?? DEFAULT_PAIRED_SAMPLE_COUNT;
+	const aggregation = benchmark?.aggregation ?? PRIMARY_METRIC_AGGREGATION;
+	const minimumDeltaMs =
+		benchmark?.minimumDeltaMs ?? DEFAULT_MINIMUM_P95_DELTA_MS;
+	const severeJankRegressionLimit =
+		benchmark?.severeJankRegressionLimit ??
+		DEFAULT_SEVERE_JANK_REGRESSION_LIMIT;
+	if (metric !== PRIMARY_METRIC) {
+		throw new Error(`Unsupported scroll benchmark primary metric: ${metric}`);
+	}
+	if (!Number.isInteger(sampleCount) || sampleCount < 3) {
+		throw new Error("pairedSampleCount must be an integer of at least 3.");
+	}
+	if (!(minimumDeltaMs > 0)) {
+		throw new Error("minimumDeltaMs must be greater than zero.");
+	}
+
+	const controlSamples = getPrimarySamples(controlPayload, metric, sampleCount);
+	const candidateSamples = getPrimarySamples(
+		candidatePayload,
+		metric,
+		sampleCount,
+	);
+	const control = aggregateMetricSamples(controlSamples, aggregation);
+	const candidate = aggregateMetricSamples(candidateSamples, aggregation);
+	const absoluteDelta = roundMetric(control - candidate);
+	const relativeDelta =
+		control > 0 ? roundMetric(absoluteDelta / control, 6) : 0;
+	const geometry = evaluateScrollPerformanceGeometry({
+		accepted: parseScrollPerformanceCandidate(controlPayload),
+		candidate: parseScrollPerformanceCandidate(candidatePayload),
+	});
+	const severeJankDelta = roundMetric(
+		parseScrollPerformanceCandidate(candidatePayload).frames_over_33ms -
+			parseScrollPerformanceCandidate(controlPayload).frames_over_33ms,
+	);
+	const normalizedGuardResults = {
+		geometry: {
+			details: geometry.failures,
+			pass: geometry.pass,
+		},
+		severe_jank: {
+			delta: severeJankDelta,
+			limit: severeJankRegressionLimit,
+			pass: severeJankDelta <= severeJankRegressionLimit,
+		},
+		...guardResults,
+	};
+	const failedGuards = Object.entries(normalizedGuardResults)
+		.filter(([, result]) => result?.pass !== true)
+		.map(([name]) => name)
+		.sort();
+
+	return {
+		absoluteDelta,
+		aggregation,
+		candidate,
+		candidateSamples,
+		control,
+		controlSamples,
+		failedGuards,
+		geometryDeltas: geometry.deltas,
+		guardResults: normalizedGuardResults,
+		guardsPass: failedGuards.length === 0,
+		keep: absoluteDelta >= minimumDeltaMs && failedGuards.length === 0,
+		minimumDeltaMs,
+		primaryMetric: metric,
+		primaryPass: absoluteDelta >= minimumDeltaMs,
+		relativeDelta,
+	};
+}
+
+export const TERMINAL_BENCHMARK_STATUSES = new Set([
+	"blocked",
+	"exhausted",
+	"succeeded",
+]);
+
+export function buildBenchmarkFinalReport(state) {
+	if (!state || !TERMINAL_BENCHMARK_STATUSES.has(state.status)) {
+		throw new Error(
+			"A final report requires a validated terminal benchmark state.",
+		);
+	}
+	const confirmed = state.confirmedMetric;
+	const metricLine = confirmed
+		? `${confirmed.metric}: ${confirmed.value}ms (${roundMetric(confirmed.relativeImprovement * 100, 2)}% improvement from the initial baseline)`
+		: "No confirmed target-crossing metric.";
+	return `# Scroll-performance autoresearch report\n\n- Status: ${state.status}\n- Accepted revision: ${state.accepted?.head ?? "unknown"}\n- Confirmed result: ${metricLine}\n- Target: ${state.benchmark?.targetP95Ms ?? "not configured"}\n- Completed passes: ${state.completedPasses ?? 0}/${state.passLimit ?? 0}\n- Invalidation reason: ${state.invalidationReason ?? "none"}\n`;
 }
 
 export async function ensureJsonLineFile(filePath) {
@@ -274,7 +448,7 @@ export function evaluateScrollPerformanceGeometry({ accepted, candidate }) {
 
 export function decideScrollPerformanceKeep({ accepted, candidate }) {
 	const geometry = evaluateScrollPerformanceGeometry({ accepted, candidate });
-	const p95Delta = roundMetric(candidate.p95_frame_ms - accepted.p95_frame_ms);
+	const p95Delta = roundMetric(accepted.p95_frame_ms - candidate.p95_frame_ms);
 	const framesOver33Delta = roundMetric(
 		candidate.frames_over_33ms - accepted.frames_over_33ms,
 	);
@@ -295,25 +469,9 @@ export function decideScrollPerformanceKeep({ accepted, candidate }) {
 		};
 	}
 
-	const p95Improved = p95Delta < 0;
-	const framesOver33Improved = framesOver33Delta < 0;
-	const withinFramesTolerance =
-		framesOver33Delta <= PRIMARY_METRIC_TOLERANCES.frames_over_33ms;
-	const withinP95Tolerance = p95Delta <= PRIMARY_METRIC_TOLERANCES.p95_frame_ms;
-
-	if (p95Improved && framesOver33Improved) {
-		return {
-			deltas,
-			gated: false,
-			geometryDeltas: geometry.deltas,
-			geometryFailures: [],
-			keep: true,
-			primaryMetric: "both",
-			reason: "Improved both primary metrics.",
-		};
-	}
-
-	if (p95Improved && withinFramesTolerance) {
+	const severeJankPass =
+		framesOver33Delta <= DEFAULT_SEVERE_JANK_REGRESSION_LIMIT;
+	if (p95Delta >= DEFAULT_MINIMUM_P95_DELTA_MS && severeJankPass) {
 		return {
 			deltas,
 			gated: false,
@@ -321,19 +479,7 @@ export function decideScrollPerformanceKeep({ accepted, candidate }) {
 			geometryFailures: [],
 			keep: true,
 			primaryMetric: "p95_frame_ms",
-			reason: `Improved p95_frame_ms while keeping frames_over_33ms within the ${PRIMARY_METRIC_TOLERANCES.frames_over_33ms} frame tolerance.`,
-		};
-	}
-
-	if (framesOver33Improved && withinP95Tolerance) {
-		return {
-			deltas,
-			gated: false,
-			geometryDeltas: geometry.deltas,
-			geometryFailures: [],
-			keep: true,
-			primaryMetric: "frames_over_33ms",
-			reason: `Improved frames_over_33ms while keeping p95_frame_ms within the ${PRIMARY_METRIC_TOLERANCES.p95_frame_ms}ms tolerance.`,
+			reason: `Improved p95_frame_ms by ${p95Delta}ms while keeping severe jank within the ${DEFAULT_SEVERE_JANK_REGRESSION_LIMIT} frame guard.`,
 		};
 	}
 
@@ -344,8 +490,9 @@ export function decideScrollPerformanceKeep({ accepted, candidate }) {
 		geometryFailures: [],
 		keep: false,
 		primaryMetric: null,
-		reason:
-			"Did not improve a primary metric without breaching the cross-metric tolerance.",
+		reason: severeJankPass
+			? `Did not improve p95_frame_ms by the required ${DEFAULT_MINIMUM_P95_DELTA_MS}ms.`
+			: `Severe-jank guard failed: frames_over_33ms regressed by ${framesOver33Delta}.`,
 	};
 }
 

@@ -19,3 +19,4 @@ approved.
 | Generic Scroll.Scale | Ignore | No approved reusable template use case. |
 | LetterWave and Rive | Ignore | Intentionally removed from the template. |
 | AutoCycle, ImageSwitcher, ScrollBorders, and image inspection | Ignore | Already represented by existing template owners. |
+| Reproducible homepage scroll benchmark protocol | Adapt | Keep the generic lifecycle in the autoresearch plugin; adapt the template page evaluator to paired median-p95 measurements, independent confirmation, hard guards, environment fingerprints, invalidation, and state-derived reports. |

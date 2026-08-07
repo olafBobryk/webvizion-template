@@ -67,6 +67,7 @@
 		"record:scroll-performance": "node scripts/scroll-performance/record.mjs",
 		"setup:scroll-performance-autoresearch": "node scripts/scroll-performance/setup-autoresearch.mjs",
 		"score:scroll-performance": "node scripts/scroll-performance/score-candidate.mjs",
+		"verify:scroll-performance": "node --test scripts/scroll-performance/lib/scroll-performance.test.mjs",
 		"verify": "npm run verify:static && npm run verify:build && npm run verify:smoke",
 		"format": "biome format --write",
 		"create:project": "node scripts/create-template-profile.mjs",

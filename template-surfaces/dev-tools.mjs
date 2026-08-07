@@ -60,6 +60,7 @@ export const devToolSurfaces = {
 		ownedPaths: [
 			"scripts/scroll-performance",
 			"docs/guides/scroll-performance.md",
+			"docs/guides/scroll-performance-benchmark-hardening.md",
 			"scripts/scroll-performance/fixtures/scroll-performance-runs.example.jsonl",
 		],
 		packageScripts: [
@@ -67,6 +68,7 @@ export const devToolSurfaces = {
 			"record:scroll-performance",
 			"setup:scroll-performance-autoresearch",
 			"score:scroll-performance",
+			"verify:scroll-performance",
 		],
 		packageDependencies: ["playwright"],
 	},
