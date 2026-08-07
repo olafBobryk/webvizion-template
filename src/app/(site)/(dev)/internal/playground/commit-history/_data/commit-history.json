@@ -1853,10 +1853,28 @@
 			"subject": "Ship production updates",
 			"cumulativeNet": 133385,
 			"delta": 0
+		},
+		{
+			"additions": 68,
+			"date": "2026-08-06",
+			"deletions": 36,
+			"hash": "5871b8ec46ed0095e9dd0469016b39ddc49a4e57",
+			"subject": "fix(template): verify profile-owned surfaces",
+			"cumulativeNet": 133417,
+			"delta": 32
+		},
+		{
+			"additions": 869,
+			"date": "2026-08-07",
+			"deletions": 207,
+			"hash": "7dfe099ca51315b0a7ddace56cde61e034e96f7b",
+			"subject": "feat: harden scroll performance benchmarking",
+			"cumulativeNet": 134079,
+			"delta": 662
 		}
 	],
-	"endDate": "2026-08-06",
-	"head": "11e44ceb45e5787d5dec5fe62cca4933e5d3a60b",
+	"endDate": "2026-08-07",
+	"head": "7dfe099ca51315b0a7ddace56cde61e034e96f7b",
 	"startDate": "2025-08-24",
 	"version": 1
 }
