@@ -35,7 +35,7 @@
   `npm run storybook:preview` after a healthy `npm run dev`; it reuses one
   worktree-owned instance recorded in `.codex/storybook-preview.json`.
   Never run raw `storybook dev`, choose a Storybook port, or assume `6006`.
-  Use `npm run storybook:status` to discover the Storybook UI and MCP URLs.
+  Use `npm run storybook:status` to discover the Storybook UI URL.
 - For section-scoped UI review, report a direct section-anchor URL on the
   verified preview. If the expected anchor is missing, say
   `section anchor missing`, name the expected section id, and provide the nearest
@@ -61,17 +61,15 @@
 
 ## Halo UI Primitives
 
-- Before reading implementation source for a UI change, run
-  `npm run design-system:evidence -- --target <source> --owner <owner-story>`.
-  Repeat `--target` and `--owner` as needed. The command reads governing
-  policies, then owner stories, then implementation sources and stores an
-  ignored, privacy-safe receipt under `.codex/design-system-evidence/`. Include
-  that receipt path in delegated handoffs so evidence order is auditable.
-- Cross-cutting component usage conventions are indexed at
-  `docs/guides/components/README.md`. Read the matching guide before building or
-  reviewing forms, feedback, loading states, overlays, responsive behavior, or
-  shared surfaces. A nearer component `AGENTS.md` remains authoritative for
-  implementation details.
+- For an ordinary UI change, read the nearest `AGENTS.md` and the relevant owner
+  story before inspecting implementation. Read a focused component guide only
+  when its concern applies (forms, feedback, loading, overlays, responsive
+  behavior, or shared surfaces).
+- Before changing a public component API, primitive, shared token, or migrating
+  a component family, run `npm run design-system:evidence -- --target <source>
+  --owner <owner-story>`. The command is quiet by default and writes a
+  privacy-safe receipt under `.codex/design-system-evidence/`; include its path
+  in a delegated handoff only for that higher-risk work.
 - Treat `ToastHost` plus `showToast` as the shared transient-feedback system. Simple toast helpers accept `{ title }`; promise toasts accept `loadingTitle`, `successTitle`, and `errorTitle`.
 - Treat `ConfirmationModal` and `useConfirmationModal` as the shared confirm-before-action primitive. Do not create page-local confirmation dialogs for standard destructive or confirm flows.
 

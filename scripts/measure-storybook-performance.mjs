@@ -113,7 +113,7 @@ async function readMetadata(root) {
 		}
 		throw error;
 	}
-	if (metadata.root !== root || !metadata.localUrl || !metadata.mcpUrl) {
+	if (metadata.root !== root || !metadata.localUrl) {
 		throw new Error("Storybook metadata does not belong to this checkout.");
 	}
 	const response = await fetch(metadata.localUrl, {
@@ -259,10 +259,9 @@ async function main() {
 			scenarios.push({ ...scenario, results, summary: summarize(results) });
 		}
 		const report = {
-			metadata: {
-				localUrl: metadata.localUrl,
-				mcpUrl: metadata.mcpUrl,
-				ownership: metadata.ownership,
+		metadata: {
+			localUrl: metadata.localUrl,
+			ownership: metadata.ownership,
 				root,
 			},
 			runs,

@@ -26,10 +26,11 @@ Never scan `/`, the home directory, or an inferred broad root. Never persist a w
 
 ## Instance mode
 
-1. Confirm Storybook 10.5 or newer and `@storybook/addon-mcp` are installed. Generated Averlo projects should already satisfy this.
+1. Confirm Storybook 10.5 or newer is installed.
 2. Follow the Storybook writing workflow and use documented public component owners.
 3. Add the story-level `backport-candidate` tag and literal `parameters.backport` object. Do not mark unrelated stories.
-4. Run the local Storybook interaction and accessibility checks and publish a Storybook review.
+4. Run the local Storybook interaction and accessibility checks. Use a direct
+   Storybook preview when a visual decision needs human review.
 5. Keep the story as a candidate until a human explicitly approves it.
 6. On approval, compute the normalized story fingerprint:
 
@@ -75,4 +76,7 @@ Editing an approved or ported story invalidates its fingerprint. Return it to ca
 
 ## Completion report
 
-Report the source and target story paths, status transition, fingerprint, port/adapt/skip decisions, design-system evidence receipt, verification results, and Storybook review URL. Do not create a separate run ledger.
+Report the source and target story paths, status transition, fingerprint,
+port/adapt/skip decisions, design-system evidence receipt when applicable,
+verification results, and any direct Storybook preview used. Do not create a
+separate run ledger.

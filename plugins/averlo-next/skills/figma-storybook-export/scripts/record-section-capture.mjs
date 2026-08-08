@@ -28,7 +28,7 @@ function parseArgs(argv) {
 			options.captureHeight = Number(argv[++index]);
 		else if (argv[index] === "--screenshot") options.screenshot = argv[++index];
 		else if (argv[index] === "--validation") options.validation = argv[++index];
-		else throw new Error(`Unknown argument: ${argv[index]}`);
+		else throw new Error("Unknown argument: " + argv[index]);
 	}
 	return options;
 }
@@ -51,14 +51,14 @@ const statePath = resolve(
 	options.state ??
 		join(options.root, ".codex", "tmp", "figma-storybook-export", "state.json"),
 );
-if (!existsSync(statePath)) throw new Error(`State not found: ${statePath}`);
+if (!existsSync(statePath)) throw new Error("State not found: " + statePath);
 const state = JSON.parse(readFileSync(statePath, "utf8"));
 if (state.schemaVersion !== 3 || state.strategy !== "storybook-section-capture")
 	throw new Error(
 		"State must use schemaVersion 3 and the section-capture strategy",
 	);
 const section = state.sections?.[options.section];
-if (!section) throw new Error(`Section not found in state: ${options.section}`);
+if (!section) throw new Error("Section not found in state: " + options.section);
 const now = new Date().toISOString();
 Object.assign(section, {
 	storyId: options.storyId,
@@ -80,13 +80,13 @@ state.verification = {
 	status: complete ? "complete" : "pending",
 	validatedAt: complete ? now : null,
 };
-writeFileSync(statePath, `${JSON.stringify(state, null, 2)}\n`, "utf8");
+writeFileSync(statePath, JSON.stringify(state, null, 2) + "\n", "utf8");
 process.stdout.write(
-	`${JSON.stringify({
+	JSON.stringify({
 		statePath,
 		section: options.section,
 		frameId: options.frameId,
 		captureRootId: options.captureId,
 		status: section.status,
-	})}\n`,
+	}) + "\n",
 );

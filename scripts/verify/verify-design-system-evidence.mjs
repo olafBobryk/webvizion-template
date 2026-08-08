@@ -11,7 +11,6 @@ const temporaryDirectory = await fs.mkdtemp(
 try {
 	process.env.DESIGN_SYSTEM_EVIDENCE_DIR = temporaryDirectory;
 	const { receipt, receiptPath } = await recordDesignSystemEvidence([
-		"--quiet",
 		"--target",
 		"src/components/ui/primitives/Button.tsx",
 		"--owner",

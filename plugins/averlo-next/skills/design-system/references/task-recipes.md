@@ -1,7 +1,7 @@
 # Task Recipes
 
 Use these as quick patterns after selecting an owner through the skill's
-Storybook-first evidence order and reading the relevant `AGENTS.md` files.
+evidence order and reading the relevant `AGENTS.md` files.
 
 ## Selecting A Public UI Owner
 
@@ -67,19 +67,19 @@ Storybook-first evidence order and reading the relevant `AGENTS.md` files.
 - Keep modal work inside the shared modal host system.
 - Preserve focus entry, trap, and return behavior when modal flows change.
 
-## Storybook Handoff
+## Storybook Verification
 
-- Start or reuse the current checkout's one persistent Storybook/MCP server
-  with `npm run storybook:preview` after `npm run dev` is healthy. Read
-  `.codex/storybook-preview.json` or run `npm run storybook:status` for its
-  actual URLs; never run raw `storybook dev` or assume port 6006.
+- Start or reuse the current checkout's managed Storybook server only when
+  visual verification is useful. Run `npm run storybook:preview` after
+  `npm run dev` is healthy, then use `npm run storybook:status` for its actual
+  UI URL; never run raw `storybook dev` or assume port 6006.
 - Keep disposable Storybook test workers separate from that persistent preview.
 - For public UI families, update the owner story with behaviorally distinct
   states and play coverage rather than creating identities for implementation
   helpers.
-- When tools are callable, discover changed story IDs, run story tests, and
-  return every preview URL produced.
-- Otherwise run the repository's Storybook test and static build scripts.
+- When tools are callable, use grounded story IDs for targeted previews and
+  tests. Otherwise run the focused repository Storybook test; add a static
+  build only for broad or public-owner changes.
 
 ## Migrating A Component Family To Storybook
 

@@ -51,34 +51,9 @@ async function removeFileIfPresent(filePath) {
 	}
 }
 
-async function isUrlHealthy(url, { mcp = false } = {}) {
+async function isUrlHealthy(url) {
 	try {
-		const response = await fetch(url, {
-			...(mcp
-				? {
-						body: JSON.stringify({
-							id: 1,
-							jsonrpc: "2.0",
-							method: "initialize",
-							params: {
-								capabilities: {},
-								clientInfo: {
-									name: "averlo-storybook-preview",
-									version: "1.0.0",
-								},
-								protocolVersion: "2025-03-26",
-							},
-						}),
-						headers: {
-							accept: "application/json, text/event-stream",
-							"content-type": "application/json",
-						},
-						method: "POST",
-					}
-				: {}),
-			signal: AbortSignal.timeout(2_000),
-		});
-		if (mcp) return response.status >= 200 && response.status < 500;
+		const response = await fetch(url, { signal: AbortSignal.timeout(2_000) });
 		return response.status < 500;
 	} catch {
 		return false;
@@ -151,11 +126,7 @@ async function validateNextPreview({ root, previewPath }) {
 async function validateStorybookState({ root, state }) {
 	if (!state || state.root !== root) return false;
 	if (!isProcessAlive(state.pid)) return false;
-	return (
-		(await isUrlHealthy(state.localUrl)) &&
-		(await isUrlHealthy(state.mcpUrl, { mcp: true })) &&
-		(await isStorybookIndexHealthy(state.localUrl))
-	);
+	return (await isUrlHealthy(state.localUrl)) && isStorybookIndexHealthy(state.localUrl);
 }
 
 async function getProcessCwd(pid) {
@@ -297,7 +268,6 @@ function printState(label, state) {
 	console.log(`Next preview: ${state.preview.localUrl}`);
 	console.log(`Next automation: ${state.preview.automationUrl}`);
 	console.log(`Storybook: ${state.localUrl}`);
-	console.log(`Storybook MCP: ${state.mcpUrl}`);
 	console.log(`Storybook pid: ${state.pid}`);
 	console.log(`ownership: ${state.ownership}`);
 }
@@ -360,7 +330,6 @@ export async function ensureStorybookPreview({
 				pid,
 				port,
 				localUrl: `http://localhost:${port}`,
-				mcpUrl: `http://localhost:${port}/mcp`,
 				ownership: "adopted",
 				startedAt: new Date().toISOString(),
 				logPath: null,
@@ -400,7 +369,6 @@ export async function ensureStorybookPreview({
 			pid: child.pid,
 			port,
 			localUrl,
-			mcpUrl: `${localUrl}/mcp`,
 			ownership: "managed",
 			startedAt: new Date().toISOString(),
 			logPath,

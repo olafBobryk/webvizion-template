@@ -1,7 +1,7 @@
 # Audit Checklist
 
-Use this checklist after following the skill's Storybook-first evidence order
-and reading the relevant local `AGENTS.md` files.
+Use only the relevant sections after following the skill's evidence order and
+reading the relevant local `AGENTS.md` files.
 
 ## Evidence And Public API
 
@@ -70,15 +70,15 @@ and reading the relevant local `AGENTS.md` files.
 
 ## Storybook Verification
 
-- Was the current worktree's managed Storybook metadata read, or was
-  `npm run storybook:preview` used after a healthy Next preview? Was raw
-  `storybook dev` avoided and the metadata MCP URL used instead of a guessed
-  localhost port?
+- When visual verification was useful, was the current worktree's managed
+  Storybook metadata read or `npm run storybook:preview` used after a healthy
+  Next preview? Was raw `storybook dev` avoided and the printed UI URL used?
 - Do migrated component changes update owner-level stories and behavior tests?
-- When callable, were changed stories discovered, relevant previews obtained,
-  and focused plus broad story tests run with accessibility enabled?
-- When Storybook tools were unavailable, were the repo Storybook test and build
-  scripts run?
+- When tools were already callable, were relevant stories discovered and
+  targeted previews obtained? Were focused and broad story tests matched to the
+  scope?
+- When Storybook tools were unavailable, were the focused test and any broader
+  build checks proportionate to the change?
 - Are semantic accessibility defects fixed directly and visual accessibility
   changes held for user approval?
 

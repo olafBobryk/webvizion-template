@@ -1,156 +1,93 @@
 ---
 name: design-system
-description: Storybook-first design-system enforcement for Averlo Next. Use when building, refactoring, reviewing, auditing, selecting, or migrating public UI under `src/app` or `src/components`; discover supported owners across primitives, foundations, inputs, misc, motion, overlays, icons, helpers, and time through callable Storybook tools when available, use the catalogue-rules guide for migrations, enforce structural `AGENTS.md` invariants, prefer public library facades, and verify focus, forms, loading, feedback, skeleton, motion, dropdown, and auth-redirect conventions.
+description: Targeted design-system guidance for Averlo Next UI work. Use when building, refactoring, reviewing, selecting, or migrating public UI under `src/app` or `src/components`; find supported owners, enforce local structural invariants, prefer public facades, and verify the behavior actually changed.
 ---
 
 # Averlo Next Design System
 
-## Evidence Order
+## Evidence order
 
 Choose components and APIs from the strongest available evidence. Do not infer
 public support from a source-level export.
 
-1. When Storybook MCP tools are callable, call `list-all-documentation` once.
-   For catalogue authoring or migration, inspect
-   `ui-guides-catalog-rules--docs` before the affected owners. For ordinary
-   component selection, select and inspect the relevant owner directly. Use
-   `get-documentation-for-story` only when owner docs do not include the
-   relevant scenario. Never guess a Storybook ID or component prop.
-2. Read `src/components/AGENTS.md` and the nearest relevant folder-level
-   `AGENTS.md`. These files govern ownership, dependency direction, invariants,
-   source topology, and prohibitions even when Storybook is available. Do not
-   expect or recreate consumer selection guidance there.
-3. When Storybook tools are unavailable, inspect the selected owner's colocated
-   `*.stories.*` file for its supported import, examples, variants, compound
-   members, and executable behavior. For catalogue work, also inspect the
-   catalogue-rules source and the affected story's exported typed contract.
-4. Use `bash <skill-path>/scripts/component-index.sh` only as a candidate index.
-   If the component root is nonstandard, pass `--components-dir <path>`.
-5. If the owner remains unresolved, read the focused guide under
-   `docs/guides/components/`, its documented public facade, and finally the
-   minimum implementation source needed to confirm behavior.
+1. Read `src/components/AGENTS.md` and the nearest relevant folder-level
+   `AGENTS.md` for ownership, dependency direction, invariants, source topology,
+   and prohibitions.
+2. Inspect the selected owner's colocated `*.stories.*` file for its supported
+   import, examples, variants, compound members, and executable behavior. For a
+   catalogue migration, also read the catalogue rules and typed owner contract.
+3. When Storybook documentation tools are already callable, use their grounded
+   owner documentation. Do not install or start an MCP service solely for
+   discovery, and never guess a Storybook ID or component prop.
+4. If the owner remains unresolved, use the component index as a candidate list,
+   then a focused guide, documented public facade, and the minimum source needed
+   to confirm behavior.
 
-The component index is not API documentation. A symbol discovered in the index
-or exported for internal composition is not public unless Storybook, a focused
-guide, or a documented public facade supports consumer use. State an evidence
-gap instead of inventing props or promoting an internal export.
+For public component API, primitive, shared-token, or component-family migration
+work, record the order with:
 
-Do not reorder the fallback when MCP tools are absent: read the governing
-`AGENTS.md` files before the colocated story, then continue to the candidate
-index, focused guide, facade, and source. Template Intelligence may locate these
-files, but it is routing evidence rather than component API evidence.
+```sh
+npm run design-system:evidence -- --target <source> --owner <owner-story>
+```
 
-## Workflow
+The receipt is quiet by default. Ordinary UI work does not need one.
 
-### Build Mode
+## Build and review
 
-1. Identify the UX pattern, not only the requested styling.
-2. Follow the evidence order and select the highest-level supported owner that
-   covers the behavior.
-3. List the governing local invariants before editing.
-4. Use only documented variants, sizes, configuration, compounds, and import
-   paths. Do not add caller-owned visual overrides unless the user explicitly
-   requests that departure; surface a real API gap when no configuration fits.
-5. Compose existing components before adding custom UI. Add a wrapper only when
-   it owns distinct reusable behavior rather than renaming or forwarding props.
-6. Keep any necessary abstraction aligned with the local component taxonomy and
-   public facade.
-7. Run `references/audit-checklist.md` before finishing.
+1. Identify the UX pattern and select the highest-level supported owner that
+   covers it.
+2. Use documented variants, sizes, configuration, compounds, and import paths.
+   Surface an API gap rather than adding unrequested caller-owned visual
+   overrides.
+3. Compose existing components before adding custom UI. A wrapper must own
+   distinct reusable behavior rather than rename or forward props.
+4. Apply only the relevant items from `references/audit-checklist.md`; do not
+   turn the entire catalogue into a routine checklist.
 
-### Review Mode
+For reviews, identify missed supported owners or compounds, broken local
+invariants, unsupported imports or props, and the shortest supported correction.
 
-1. Identify the UX pattern each changed surface is solving.
-2. Follow the evidence order and check for a missed supported owner or compound.
-3. Check the nearest `AGENTS.md` invariants and public import boundary.
-4. Report unsupported imports or props, convention drift, regressions, and
-   missed reuse opportunities.
-5. Recommend the shortest supported correction path and cite the first component
-   evidence consulted.
+## Verification routing
 
-## Verification Routing
-
-After component, story, style, theme, or token changes:
-
-1. For a live Storybook/MCP session, read `.codex/storybook-preview.json` in
-   the current checkout or run `npm run storybook:preview`. This command
-   requires the worktree's existing `npm run dev` preview and starts or reuses
-   its sole managed Storybook process. Do not invoke raw `storybook dev`, pick
-   a port, or assume `localhost:6006`; use `npm run storybook:status` to
-   discover the UI and MCP URLs. A disposable Storybook server created by the
-   test runner is verification infrastructure, not a second persistent dev
-   instance.
-2. When the metadata's MCP endpoint is callable, use `get-changed-stories`; use
-   `get-stories-by-component` for touched files it does not cover.
-3. Use `preview-stories` for the most relevant grounded story IDs and return all
-   preview URLs it provides.
-4. Use focused `run-story-tests` while iterating and an unscoped run for broad
-   changes before handoff. Include accessibility checks.
-5. When Storybook tools are unavailable, run the repository's focused Storybook
-   test script, `build-storybook`, and `verify:storybook-catalog` when present,
-   plus the repo checks required by the nearest `AGENTS.md`.
+- For behaviorally meaningful UI changes, run the focused Storybook test and
+  relevant accessibility checks.
+- Run broader Storybook tests, a static build, or the catalogue verifier for
+  public-owner changes, shared tokens/primitives, or component-family migrations.
+- Start the managed Storybook preview only when visual verification is useful or
+  the user asks to browse it. Never invoke raw `storybook dev` or assume a port.
+- If Storybook tools are already callable, use grounded story IDs for targeted
+  previews; do not create an MCP service just to obtain them.
 
 Fix semantic accessibility defects directly. Ask before changing visual design
 to resolve contrast, spacing, typography, layout, or focus-indicator findings.
-Do not bundle or assume a global localhost Storybook MCP registration; read the
-current worktree's managed metadata and use the tools only when that endpoint is
-callable.
 
-## Required Checks
+## Relevant checks
 
-Always check these when relevant:
+Check only the concerns that apply to the change:
 
-- missed supported component or compound opportunity
-- supported public import versus implementation-only direct export
-- control treatment through documented variant/configuration, without
-  unrequested caller-owned visual overrides
-- visible keyboard focus
-- form semantics, submit behavior, and `Field`-owned validation relationships
-- finished password flow, including `PasswordInput` and `showStrength`
-- initial-load skeleton or inline loading versus toast misuse
-- toast usage for user-initiated async actions
-- skeleton parity and non-interactivity
-- dropdown/listbox selection, dismissal, positioning, and keyboard ownership
-- shared motion timing or spring tokens
-- auth redirect behavior for guarded screens
-- unnecessary `useMemo`, `useCallback`, or similar memoization
-- for catalogue migrations: a typed contract colocated with every owner story,
-  stable owner/guide IDs, an owner-level teaching story, executable guarantee
-  links, no central owner index, no duplicated consumer guidance in
-  higher-level stories or `AGENTS.md`, and removal of the superseded demo or
-  fixture only after representative variants, states, compositions, and
-  failure cases have equivalent lowest-owner coverage
+- supported public import and component/compound reuse;
+- visible keyboard focus and control semantics;
+- form, loading, toast, confirmation, dropdown, skeleton, and motion conventions;
+- auth redirects; and
+- migration-specific owner contract, story breadth, and obsolete-demo removal.
 
-Read `references/task-recipes.md` for common implementation patterns and
-`references/audit-checklist.md` for the concrete review checklist.
+Use `references/task-recipes.md` only when a matching implementation pattern is
+needed.
 
-## Response Format
+## Response
 
-For build tasks, respond with recommended existing components, applicable
-invariants, risks or gaps, then the implementation path.
+State only the component evidence, constraints, and checks that affected the
+result. For review tasks, list findings by severity and identify the evidence
+used.
 
-For review tasks, respond with findings or violations, missed existing
-component opportunities, broken or at-risk invariants, then the correction path.
-List multiple findings by severity and identify the component evidence used.
+## Repo contract
 
-## Repo Contract
-
-- Treat local `AGENTS.md` files as the authority for repo conventions.
-- Treat Storybook as the canonical catalogue for all public
-  `src/components/ui` owners. Catalogue migrations start at the rules guide;
-  component selection starts at the relevant owner. Use colocated stories,
-  focused repo docs, the public facade, and source as the explicit fallback.
-- Keep `AGENTS.md` focused on ownership, dependency direction, prohibitions, and
-  non-observable structural invariants. Do not duplicate Storybook consumer
-  contracts there.
-- Treat Storybook navigation and callable documentation discovery as the owner
-  index. Keep each consumer contract in its lowest-level owner story and do not
-  recreate a central registry or higher-level copy.
-- Do not route public UI discovery through `/internal/demo/ui/**`; those
-  superseded demo routes are intentionally absent after migration.
-- Treat contracts and focused assertion stories as necessary but insufficient
-  migration evidence. Before deleting a prior demo, compare its useful breadth
-  with the lowest-owner stories and preserve that teaching value without
-  recreating the old page structure or a second catalogue.
-- Default to supported public library owners, not page-local custom markup or
-  raw implementation exports.
-- Summarize only the rules that apply to the task.
+- Local `AGENTS.md` files govern repository conventions.
+- Storybook is the canonical catalogue for public `src/components/ui` owners;
+  owner stories, focused docs, public facades, and source are the fallback order.
+- Keep `AGENTS.md` to ownership, dependency direction, prohibitions, and
+  non-observable structural invariants; do not duplicate consumer contracts.
+- Keep each consumer contract with its lowest-level owner. Do not recreate a
+  central owner index or route public discovery through the removed internal demo.
+- Default to supported public library owners, not page-local custom markup or raw
+  implementation exports. Summarize only rules that apply to the task.

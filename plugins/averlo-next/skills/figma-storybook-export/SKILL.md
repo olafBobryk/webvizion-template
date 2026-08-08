@@ -44,7 +44,9 @@ Read [references/export-contract.md](references/export-contract.md) before chang
     - set capture x = 0 and y = 0;
     - preserve frame width and resize frame height to capture height.
 11. Record section story IDs, source signatures, frame IDs, capture IDs, screenshot paths, and validation status with record-section-capture.mjs.
-12. Run verify-export-state.mjs --strict, representative visual review, repository checks, and a final Storybook review link.
+12. Run verify-export-state.mjs --strict, representative visual review,
+    repository checks, and direct Storybook section URLs when human review is
+    needed.
 
 ## Synchronization
 
@@ -62,4 +64,3 @@ Read [references/export-contract.md](references/export-contract.md) before chang
 - Return every mutated frame ID and capture ID from Figma writes.
 - Do not use story.to.design, s2d, browser importer plugins, native reconstruction, importer topology, or Code Connect.
 - Authentication, CAPTCHA, legal, and entitlement prompts remain interactive checkpoints.
-

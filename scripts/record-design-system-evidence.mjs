@@ -9,22 +9,26 @@ const RECEIPT_SCHEMA_VERSION = 1;
 function usage() {
 	return [
 		"Usage:",
-		"  npm run design-system:evidence -- --target <source> --owner <story> [--target ...] [--owner ...] [--quiet]",
+		"  npm run design-system:evidence -- --target <source> --owner <story> [--target ...] [--owner ...] [--verbose]",
 		"",
 		"The command reads governing AGENTS.md files, then owner stories, then target",
-		"implementation sources. It writes a privacy-safe local receipt of that order.",
+		"implementation sources. It is quiet by default and writes a privacy-safe local receipt of that order.",
 	].join("\n");
 }
 
 function parseArgs(argv) {
 	const targets = [];
 	const owners = [];
-	let quiet = false;
+	let quiet = true;
 
 	for (let index = 0; index < argv.length; index += 1) {
 		const argument = argv[index];
 		if (argument === "--quiet") {
 			quiet = true;
+			continue;
+		}
+		if (argument === "--verbose") {
+			quiet = false;
 			continue;
 		}
 		if (argument !== "--target" && argument !== "--owner") {

@@ -109,7 +109,6 @@ export const thinStartProfile = {
 			"@chromatic-com/storybook",
 			"@storybook/addon-a11y",
 			"@storybook/addon-docs",
-			"@storybook/addon-mcp",
 			"@storybook/addon-vitest",
 			"@storybook/nextjs-vite",
 			"@tailwindcss/postcss",

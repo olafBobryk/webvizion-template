@@ -26,40 +26,19 @@ npm run dev
 
 ### Agent Prompts
 
-**First-time bootstrap:** Create a project from this repository. Read
-`AGENTS.md`, help me choose a profile and content mode, materialize it into a new
-folder, and verify it before adding project-specific work.
-
-**Already cloned:** Read `AGENTS.md`, inspect the selected profile and content
-receipt, and summarize the installed surfaces before changing the project.
-
-**Continue an existing project:** Read the nearest `AGENTS.md`, preserve the
-installed route and content boundaries, and prefer existing Storybook owners,
-adapters, and shared primitives before adding structure.
-
-## Codex Plugin Skills
-
-| Skill | Use it for |
-| --- | --- |
-| `$averlo-next:design-system` | Select, build, and review public UI through Storybook-owned component contracts. |
-| `$averlo-next:entities` | Discover and shape entity presentation, routes, adapters, mutations, and commands. |
-| `$averlo-next:figma-storybook-export` | Capture the generated Storybook catalogue into editable Figma Library frames. |
-| `$averlo-next:skeletons` | Keep route loading states and component-owned skeletons aligned with live UI. |
-| `$averlo-next:surfaces` | Maintain canonical route registries, navigation, breadcrumbs, metadata, and Command-K entries. |
-| `$averlo-next:storybook-backport` | Move approved reusable stories from product instances into the canonical template. |
-
-These repository-specific skills ship with the `averlo-next` Codex plugin. They
-guide agent work but are not generated-project runtime dependencies. Activate
-the bundled marketplace once after cloning:
+Storybook uses the same checkout and source environment as the isolated Next
+preview, but it remains a separate Vite process. Start the Next preview first,
+then let the managed command reuse or start the checkout's sole Storybook
+instance:
 
 ```sh
 codex plugin marketplace add .
 codex plugin list
 ```
 
-The plugin installs by default. If it is listed but disabled, run
-`codex plugin add averlo-next@averlo-next-template`, then start a new Codex
-thread. Read `AGENTS.md` before invoking a skill.
+The command prints the Storybook URL and records it in ignored
+`.codex/storybook-preview.json`. Use `npm run storybook:status` to rediscover
+it; do not run raw `storybook dev` or assume a fixed port.
 
 ## Profiles
 
@@ -113,12 +92,17 @@ product surfaces.
 
 | Command | Purpose |
 | --- | --- |
-| `npm run create:project` | Materialize a profile into a new workspace. |
-| `npm run dev` | Start an isolated, prewarmed preview. |
-| `npm run storybook:preview` | Start or reuse the checkout's managed Storybook/MCP process. |
-| `npm run intelligence:generate` | Refresh the local repository map. |
-| `npm run intelligence:query -- <topic>` | Find the governing files for focused work. |
-| `npm run verify:static` | Run lint, policy, and type checks. |
+| `npm run create:project` | Materialize a route profile into a project workspace. |
+| `npm run orchestration:init` | Explicitly install the transitional legacy orchestration capability. |
+| `npm run dev` | Start an isolated, prewarmed preview on a random port. |
+| `npm run dev:local` | Start the former local server flow on port 3000–3010. |
+| `npm run dev:agent` | Compatibility alias for `npm run dev`. |
+| `npm run dev:inspect` | Start a preview with the code-inspector sidecar enabled. |
+| `npm run storybook:preview` | Start or reuse the current checkout's Storybook server. |
+| `npm run storybook:status` | Show the paired preview and Storybook URLs. |
+| `npm run storybook:stop` | Stop only a Storybook server launched by the coordinator. |
+| `npm run measure:storybook-performance` | Capture a cold-cache developer-catalog baseline from the managed Storybook instance. |
+| `npm run verify:static` | Run static policy, formatting, and type checks. |
 | `npm run verify:profiles` | Materialize and verify every profile. |
 | `npm run build` | Create the production build. |
 

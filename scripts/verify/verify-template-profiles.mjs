@@ -723,7 +723,6 @@ async function assertStorybook(outputRoot, profileCase) {
 		"@chromatic-com/storybook",
 		"@storybook/addon-a11y",
 		"@storybook/addon-docs",
-		"@storybook/addon-mcp",
 		"@storybook/addon-vitest",
 		"@storybook/nextjs-vite",
 		"@vitest/browser-playwright",

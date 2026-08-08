@@ -73,8 +73,7 @@ async function createFixture() {
 			'    if (process.env.HEALTHY_INDEX === "false") { response.writeHead(500); response.end("index failed"); return; }',
 			'    response.writeHead(200, { "content-type": "application/json" }); response.end(JSON.stringify({ entries: {} })); return;',
 			"  }",
-			'  if (request.url === "/mcp") { response.writeHead(200, { "content-type": "application/json" }); response.end("{}"); return; }',
-			'  response.end("storybook");',
+		'  response.end("storybook");',
 			'}).listen(port, "127.0.0.1");',
 		].join("\n"),
 	);
@@ -151,7 +150,6 @@ await withFixture(async ({ root }) => {
 await withFixture(async ({ root }) => {
 	await writeJson(path.join(root, ".codex", "storybook-preview.json"), {
 		localUrl: "http://127.0.0.1:1",
-		mcpUrl: "http://127.0.0.1:1/mcp",
 		pid: 999_999,
 		root,
 	});
@@ -171,7 +169,6 @@ await withFixture(async ({ root, serverPath }) => {
 	try {
 		await writeJson(path.join(root, ".codex", "storybook-preview.json"), {
 			localUrl: `http://localhost:${port}`,
-			mcpUrl: `http://localhost:${port}/mcp`,
 			pid: child.pid,
 			root,
 		});
@@ -190,7 +187,6 @@ await withFixture(async ({ root, serverPath }) => {
 		const adopted = await ensureStorybookPreview({ root });
 		assert.equal(adopted.ownership, "adopted");
 		assert.equal(adopted.pid, child.pid);
-		assert.equal(adopted.mcpUrl, `http://localhost:${port}/mcp`);
 		const reused = await ensureStorybookPreview({ root });
 		assert.equal(reused.pid, child.pid);
 		await expectReject(() => stopManagedStorybookPreview({ root }), /adopted/);
