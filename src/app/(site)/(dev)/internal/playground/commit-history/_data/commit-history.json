@@ -1871,10 +1871,19 @@
 			"subject": "feat: harden scroll performance benchmarking",
 			"cumulativeNet": 134079,
 			"delta": 662
+		},
+		{
+			"additions": 174,
+			"date": "2026-08-08",
+			"deletions": 464,
+			"hash": "66c37f4dbc59de8644d600e69d79b7610921db5d",
+			"subject": "Ship production updates",
+			"cumulativeNet": 133789,
+			"delta": -290
 		}
 	],
-	"endDate": "2026-08-07",
-	"head": "7dfe099ca51315b0a7ddace56cde61e034e96f7b",
+	"endDate": "2026-08-08",
+	"head": "66c37f4dbc59de8644d600e69d79b7610921db5d",
 	"startDate": "2025-08-24",
 	"version": 1
 }
