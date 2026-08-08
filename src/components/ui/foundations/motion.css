@@ -1,0 +1,131 @@
+/** biome-ignore-all lint/suspicious/noUnknownAtRules: Tailwind layers are expected here. */
+:root {
+	--motion-feedback-duration: 140ms;
+	--motion-feedback-ease: cubic-bezier(0.33, 0.1, 0.2, 1);
+	--motion-interaction-duration: 200ms;
+	--motion-interaction-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+	--motion-disclosure-duration: 260ms;
+	--motion-disclosure-ease: cubic-bezier(0.16, 1, 0.3, 1);
+	--motion-overlay-duration: 320ms;
+	--motion-overlay-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+	--motion-reveal-duration: 940ms;
+	--motion-reveal-ease: cubic-bezier(0.32, 0.04, 0.18, 1);
+	--motion-ambient-duration: 900ms;
+	--motion-ambient-ease: cubic-bezier(0.33, 0, 0.2, 1);
+	--motion-scroll-duration: 260ms;
+	--motion-scroll-ease: cubic-bezier(0.16, 1, 0.3, 1);
+	--motion-micro-duration: var(--motion-feedback-duration);
+	--motion-micro-ease: var(--motion-feedback-ease);
+	--motion-interactive-duration: var(--motion-interaction-duration);
+	--motion-interactive-ease: var(--motion-interaction-ease);
+	--motion-component-duration: var(--motion-disclosure-duration);
+	--motion-component-ease: var(--motion-disclosure-ease);
+	--motion-macro-duration: var(--motion-overlay-duration);
+	--motion-macro-ease: var(--motion-overlay-ease);
+	--motion-grand-duration: var(--motion-reveal-duration);
+	--motion-grand-ease: var(--motion-reveal-ease);
+	--motion-decorative-duration: var(--motion-ambient-duration);
+	--motion-decorative-ease: var(--motion-ambient-ease);
+	--motion-ring-ease: cubic-bezier(0.36, 0.07, 0.19, 0.97);
+	--motion-spin-duration: 2s;
+	--motion-spin-ease: cubic-bezier(0.75, 0.25, 0.25, 0.75);
+}
+
+@layer utilities {
+	.motion-micro,
+	.motion-feedback {
+		transition-duration: var(--motion-feedback-duration);
+		transition-timing-function: var(--motion-feedback-ease);
+	}
+
+	.motion-interactive,
+	.motion-interaction {
+		transition-duration: var(--motion-interaction-duration);
+		transition-timing-function: var(--motion-interaction-ease);
+	}
+
+	.motion-component,
+	.motion-disclosure {
+		transition-duration: var(--motion-disclosure-duration);
+		transition-timing-function: var(--motion-disclosure-ease);
+	}
+
+	.motion-macro,
+	.motion-overlay {
+		transition-duration: var(--motion-overlay-duration);
+		transition-timing-function: var(--motion-overlay-ease);
+	}
+
+	.motion-grand,
+	.motion-reveal {
+		transition-duration: var(--motion-reveal-duration);
+		transition-timing-function: var(--motion-reveal-ease);
+	}
+
+	.motion-decorative,
+	.motion-ambient {
+		animation-duration: var(--motion-ambient-duration);
+		animation-timing-function: var(--motion-ambient-ease);
+		transition-duration: var(--motion-ambient-duration);
+		transition-timing-function: var(--motion-ambient-ease);
+	}
+
+	.motion-scroll {
+		transition-duration: var(--motion-scroll-duration);
+		transition-timing-function: var(--motion-scroll-ease);
+	}
+
+	.dropdown-panel-enter {
+		transform-origin: top right;
+		animation: dropdown-panel-enter var(--motion-disclosure-duration)
+			var(--motion-disclosure-ease) both;
+	}
+}
+
+@keyframes dropdown-panel-enter {
+	from {
+		opacity: 0;
+		transform: translateY(-4px) scale(0.98);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.dropdown-panel-enter {
+		animation-duration: 1ms;
+	}
+}
+
+@layer base {
+	html[data-motion-override="off"] [data-loading-screen-mount="true"] {
+		visibility: hidden;
+	}
+
+	html[data-motion-override="off"] [data-reveal-item] {
+		/* biome-ignore lint/complexity/noImportantStyles: Automation overrides must beat server-rendered inline motion styles. */
+		opacity: 1 !important;
+		/* biome-ignore lint/complexity/noImportantStyles: Automation overrides must beat server-rendered inline motion styles. */
+		transform: none !important;
+		/* biome-ignore lint/complexity/noImportantStyles: Automation overrides must beat server-rendered inline motion styles. */
+		clip-path: none !important;
+		/* biome-ignore lint/complexity/noImportantStyles: Automation overrides must beat server-rendered inline motion styles. */
+		animation: none !important;
+		/* biome-ignore lint/complexity/noImportantStyles: Automation overrides must beat server-rendered inline motion styles. */
+		transition: none !important;
+	}
+
+	html[data-motion-override="off"] {
+		--motion-feedback-duration: 1ms;
+		--motion-interaction-duration: 1ms;
+		--motion-disclosure-duration: 1ms;
+		--motion-overlay-duration: 1ms;
+		--motion-reveal-duration: 1ms;
+		--motion-ambient-duration: 1ms;
+		--motion-scroll-duration: 1ms;
+		scroll-behavior: auto;
+	}
+}

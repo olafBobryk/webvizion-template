@@ -9,6 +9,7 @@ export const applicationSurfaces = {
 			"src/components/domain/assistant",
 			"src/lib/assistant/access.server.ts",
 			"src/lib/assistant/approval.server.ts",
+			"src/lib/assistant/codex-harness.production.server.ts",
 			"src/lib/assistant/codex-harness.server.ts",
 			"src/lib/assistant/fixture.ts",
 			"src/lib/assistant/records.server.ts",

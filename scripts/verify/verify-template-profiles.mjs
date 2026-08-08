@@ -910,9 +910,9 @@ async function assertInternalRouteShell(outputRoot, profileCase) {
 	const expectedLayout = shouldUseMarketingShell
 		? marketingInternalLayout
 		: standaloneInternalLayout;
-	const unexpectedLayout = shouldUseMarketingShell
-		? standaloneInternalLayout
-		: marketingInternalLayout;
+	const unexpectedInternalRoot = shouldUseMarketingShell
+		? path.join(outputRoot, "src/app/(site)/(dev)/internal")
+		: path.join(outputRoot, "src/app/(site)/(marketing)/internal");
 
 	if (
 		!(await fs
@@ -926,12 +926,12 @@ async function assertInternalRouteShell(outputRoot, profileCase) {
 	}
 	if (
 		await fs
-			.stat(unexpectedLayout)
+			.stat(unexpectedInternalRoot)
 			.then(() => true)
 			.catch(() => false)
 	) {
 		throw new Error(
-			`Internal routes were assembled beneath the wrong shell for ${profileCase.profileId}/${profileCase.content}.`,
+			`Internal routes or overrides were assembled beneath the wrong shell for ${profileCase.profileId}/${profileCase.content}.`,
 		);
 	}
 

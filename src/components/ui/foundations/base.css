@@ -1,0 +1,82 @@
+/** biome-ignore-all lint/suspicious/noUnknownAtRules: Tailwind layer and apply rules are expected here. */
+@layer components {
+	.inset-center {
+		@apply absolute inset-1/2 -translate-1/2;
+	}
+
+	.scroll-target {
+		@apply scroll-m-[100px];
+	}
+}
+
+@layer base {
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+		scrollbar-width: thin;
+		scrollbar-color: color-mix(in oklch, var(--foreground), transparent 80%)
+			var(--background);
+		@apply border-border outline-ring/50;
+	}
+
+	html[data-loading-override="off"] [data-loading-screen-mount="true"] {
+		visibility: hidden;
+	}
+
+	html {
+		@apply font-sans;
+	}
+
+	body {
+		font-family: var(--font-body);
+		font-size: var(--font-size-base);
+		min-height: 100vh;
+		@apply bg-background text-foreground;
+	}
+
+	::-webkit-scrollbar {
+		width: 10px;
+		height: 10px;
+	}
+
+	::-webkit-scrollbar-track {
+		background: var(--background);
+	}
+
+	::-webkit-scrollbar-thumb {
+		background: color-mix(in oklch, var(--foreground), transparent 82%);
+		border-radius: 999px;
+		border: 2px solid var(--background);
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		background: color-mix(in oklch, var(--foreground), transparent 72%);
+	}
+
+	::-webkit-scrollbar-corner {
+		background: var(--background);
+	}
+
+	input:-webkit-autofill,
+	input:-webkit-autofill:hover,
+	input:-webkit-autofill:focus,
+	input:-webkit-autofill:active,
+	textarea:-webkit-autofill,
+	textarea:-webkit-autofill:hover,
+	textarea:-webkit-autofill:focus,
+	textarea:-webkit-autofill:active,
+	select:-webkit-autofill,
+	select:-webkit-autofill:hover,
+	select:-webkit-autofill:focus,
+	select:-webkit-autofill:active {
+		/** biome-ignore lint/complexity/noImportantStyles: WebKit autofill requires important to override browser-injected colors. */
+		-webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+		/** biome-ignore lint/complexity/noImportantStyles: WebKit autofill requires important to override browser-injected colors. */
+		-webkit-text-fill-color: inherit !important;
+		/** biome-ignore lint/complexity/noImportantStyles: WebKit autofill requires important to preserve delayed autofill background behavior. */
+		transition: background-color 5000s ease-in-out 0s !important;
+		/** biome-ignore lint/complexity/noImportantStyles: WebKit autofill requires important to override browser-injected colors. */
+		caret-color: var(--foreground) !important;
+	}
+}

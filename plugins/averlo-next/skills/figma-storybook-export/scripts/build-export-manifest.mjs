@@ -12,7 +12,7 @@ import {
 } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, extname, join, relative, resolve } from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { pathToFileURL } from "node:url";
 
 const DOCS_ONLY_OWNER_IDS = new Set([
 	"ui-foundations-focus",

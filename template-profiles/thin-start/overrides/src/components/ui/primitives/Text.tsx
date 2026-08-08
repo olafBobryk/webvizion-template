@@ -26,6 +26,11 @@ export const textVariants = cva("", {
 			muted: "text-muted-foreground",
 			inherit: "text-inherit",
 		},
+		theme: {
+			dark: "",
+			light: "",
+			inherit: "",
+		},
 		interactive: {
 			true: "transition-colors motion-interactive",
 			false: "",
@@ -34,6 +39,7 @@ export const textVariants = cva("", {
 	defaultVariants: {
 		variant: "body",
 		tone: "default",
+		theme: "inherit",
 		interactive: true,
 	},
 });
@@ -56,18 +62,25 @@ export type TextVariant =
 	| "caption"
 	| null;
 export type TextTone = "default" | "muted" | "inherit" | null;
+export type TextTheme = "dark" | "light" | "inherit" | null;
 
 type TextOwnProps = {
 	as?: React.ElementType;
 	children?: React.ReactNode;
 	className?: string;
 	interactive?: boolean;
+	theme?: TextTheme;
 	tone?: TextTone;
 	variant?: TextVariant;
 };
 
 export type TextProps = TextOwnProps &
 	Omit<React.HTMLAttributes<HTMLElement>, keyof TextOwnProps>;
+
+export type TextSpanProps = TextOwnProps &
+	Omit<React.HTMLAttributes<HTMLSpanElement>, keyof TextOwnProps> & {
+		as?: "span";
+	};
 
 function TextSkeleton({
 	as = "span",
@@ -99,6 +112,7 @@ function TextRoot({
 	children,
 	className,
 	interactive: _interactive,
+	theme,
 	tone = "default",
 	variant = "body",
 	...rest
@@ -110,6 +124,7 @@ function TextRoot({
 			className={textVariants({
 				variant,
 				tone,
+				theme,
 				interactive: _interactive,
 				className,
 			})}

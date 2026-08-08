@@ -151,7 +151,7 @@ function parseArgs(argv) {
 		else if (argv[index] === "--plugin-version")
 			options.pluginVersion = argv[++index];
 		else if (argv[index] === "--help") options.help = true;
-		else throw new Error("Unknown argument: " + argv[index]);
+		else throw new Error(`Unknown argument: ${argv[index]}`);
 	}
 	return options;
 }
@@ -175,7 +175,7 @@ function main() {
 		ids: resolve(options.ids ?? join(base, "figma-section-ids.json")),
 	};
 	for (const path of [paths.plan, paths.inventory, paths.ids])
-		if (!existsSync(path)) throw new Error("Required file not found: " + path);
+		if (!existsSync(path)) throw new Error(`Required file not found: ${path}`);
 	const previous = existsSync(paths.state) ? readJson(paths.state) : {};
 	const next = reconcileState({
 		plan: readJson(paths.plan),
@@ -186,9 +186,9 @@ function main() {
 		hostedStorybookUrl: options.hostedStorybookUrl,
 		pluginVersion: options.pluginVersion,
 	});
-	writeFileSync(paths.state, JSON.stringify(next, null, 2) + "\n", "utf8");
+	writeFileSync(paths.state, `${JSON.stringify(next, null, 2)}\n`, "utf8");
 	process.stdout.write(
-		JSON.stringify(
+		`${JSON.stringify(
 			{
 				statePath: paths.state,
 				sections: Object.keys(next.sections).length,
@@ -196,7 +196,7 @@ function main() {
 			},
 			null,
 			2,
-		) + "\n",
+		)}\n`,
 	);
 }
 

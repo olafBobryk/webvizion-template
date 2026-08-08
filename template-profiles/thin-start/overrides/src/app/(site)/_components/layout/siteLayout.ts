@@ -1,3 +1,4 @@
+import type { IconName } from "@/components/ui/icons/Icon";
 import {
 	hrefFor,
 	internalHrefFor,
@@ -5,7 +6,7 @@ import {
 	type StaticAppSurfaceId,
 } from "@/lib/routes";
 
-export type HeaderIconName = "close" | "menu" | "search" | "dot";
+export type HeaderIconName = IconName;
 
 export type SiteLink =
 	| {
@@ -35,6 +36,12 @@ export type SiteMenuGroup = {
 	links?: SiteLink[];
 };
 
+export type SiteSocialLink = {
+	label: string;
+	icon: HeaderIconName;
+	href: string;
+};
+
 export type SiteLayoutDocument = {
 	header: {
 		cta: SiteLink;
@@ -53,11 +60,7 @@ export type SiteLayoutDocument = {
 		searchGroups: SiteMenuGroup[];
 		topNavLinks: SiteLink[];
 	};
-	socialLinks: Array<{
-		label: string;
-		icon: HeaderIconName;
-		href: string;
-	}>;
+	socialLinks: SiteSocialLink[];
 	footer: {
 		navLinks: SiteLink[];
 	};

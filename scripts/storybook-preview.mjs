@@ -126,7 +126,10 @@ async function validateNextPreview({ root, previewPath }) {
 async function validateStorybookState({ root, state }) {
 	if (!state || state.root !== root) return false;
 	if (!isProcessAlive(state.pid)) return false;
-	return (await isUrlHealthy(state.localUrl)) && isStorybookIndexHealthy(state.localUrl);
+	return (
+		(await isUrlHealthy(state.localUrl)) &&
+		isStorybookIndexHealthy(state.localUrl)
+	);
 }
 
 async function getProcessCwd(pid) {

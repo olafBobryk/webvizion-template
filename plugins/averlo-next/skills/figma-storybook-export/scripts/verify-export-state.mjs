@@ -101,7 +101,7 @@ function parseArgs(argv) {
 		else if (argv[index] === "--out") options.out = argv[++index];
 		else if (argv[index] === "--strict") options.strict = true;
 		else if (argv[index] === "--help") options.help = true;
-		else throw new Error("Unknown argument: " + argv[index]);
+		else throw new Error(`Unknown argument: ${argv[index]}`);
 	}
 	return options;
 }
@@ -122,7 +122,7 @@ function main() {
 	);
 	const statePath = resolve(options.state ?? join(base, "state.json"));
 	for (const path of [planPath, inventoryPath, statePath])
-		if (!existsSync(path)) throw new Error("Required file not found: " + path);
+		if (!existsSync(path)) throw new Error(`Required file not found: ${path}`);
 	const result = comparePlanToState(
 		readJson(planPath),
 		readJson(statePath),
@@ -137,7 +137,7 @@ function main() {
 		),
 		...result,
 	};
-	const output = JSON.stringify(report, null, 2) + "\n";
+	const output = `${JSON.stringify(report, null, 2)}\n`;
 	if (options.out) {
 		const out = resolve(options.out);
 		mkdirSync(dirname(out), { recursive: true });

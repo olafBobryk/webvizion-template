@@ -15,12 +15,14 @@ type ImageInspectModalProps = {
 	onShare?: () => void | Promise<void>;
 	shareUrl?: string;
 	src: string;
+	unoptimized?: boolean;
 };
 
 export function ImageInspectModal({
 	src,
 	alt = "Preview image",
 	onClose,
+	unoptimized,
 }: ImageInspectModalProps) {
 	return (
 		<>
@@ -52,7 +54,7 @@ export function ImageInspectModal({
 						className="object-contain"
 						fill
 						src={src}
-						unoptimized
+						unoptimized={unoptimized}
 					/>
 				</div>
 			</ModalContent>

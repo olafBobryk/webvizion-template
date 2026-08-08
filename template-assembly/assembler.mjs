@@ -362,7 +362,12 @@ async function writePackage(
 	);
 }
 
-async function applyProfileFiles(sourceRoot, destinationRoot, profile) {
+async function applyProfileFiles(
+	sourceRoot,
+	destinationRoot,
+	profile,
+	selectedSurfaces,
+) {
 	const files = [
 		...(profile.sharedFiles ?? []).map((target) => ({
 			source: target,
@@ -371,7 +376,10 @@ async function applyProfileFiles(sourceRoot, destinationRoot, profile) {
 		...(profile.overrides ?? []),
 	];
 	for (const file of files) {
-		const destination = path.join(destinationRoot, file.target);
+		const destination = path.join(
+			destinationRoot,
+			getAssembledPath(file.target, selectedSurfaces),
+		);
 		await fs.mkdir(path.dirname(destination), { recursive: true });
 		await fs.copyFile(path.join(sourceRoot, file.source), destination);
 	}
@@ -490,7 +498,12 @@ export async function assembleTemplateProfile({
 			getAssembledPath(relativePath, selectedSurfaces),
 		);
 	}
-	await applyProfileFiles(sourceRoot, destinationRoot, profile);
+	await applyProfileFiles(
+		sourceRoot,
+		destinationRoot,
+		profile,
+		selectedSurfaces,
+	);
 	await writeCentralFiles(sourceRoot, destinationRoot, selectedSurfaces);
 	if (selectedSurfaces.has("demo")) {
 		execFileSync("node", ["scripts/generate-component-catalog.mjs"], {

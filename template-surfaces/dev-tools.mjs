@@ -4,6 +4,7 @@ export const devToolSurfaces = {
 			"src/app/(component-export)/internal/demo",
 			"src/lib/component-catalog",
 			"scripts/generate-component-catalog.mjs",
+			"scripts/verify/verify-storybook-catalog.ts",
 			"scripts/verify/verify-component-sweep.ts",
 		],
 		packageScripts: [

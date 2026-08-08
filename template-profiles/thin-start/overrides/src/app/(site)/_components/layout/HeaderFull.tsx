@@ -7,6 +7,7 @@ import Logo from "@/components/branding/Logo";
 import { instantTransition } from "@/components/ui/foundations/motionTiming";
 import { spring } from "@/components/ui/foundations/spring";
 import { Button } from "@/components/ui/primitives/Button";
+import { Panel } from "@/components/ui/primitives/surfaces";
 import { useMotionAllowed } from "@/hooks/useMotionAllowed";
 import {
 	getHeaderSearchGroups,
@@ -160,12 +161,22 @@ export default function HeaderFull({
 				className,
 			)}
 		>
-			<motion.div
+			<Panel
 				aria-hidden="true"
-				className="pointer-events-none absolute inset-0 border-b border-border bg-background"
+				as={motion.div}
+				background="page"
+				border="none"
+				className="pointer-events-none absolute inset-0 border-b border-border"
+				data-shell-surface="marketing-header"
+				display="block"
+				gap="none"
 				initial={false}
 				animate={{ opacity: showHeaderSurface ? 1 : 0 }}
+				overflow="visible"
+				padding="none"
+				radius="none"
 				transition={headerTransition}
+				width="full"
 			/>
 			<div className="relative mx-auto flex w-full max-w-section-max flex-col">
 				<motion.div
