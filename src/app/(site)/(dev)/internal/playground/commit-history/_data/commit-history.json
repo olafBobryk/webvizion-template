@@ -1898,10 +1898,19 @@
 			"subject": "feat: add create-averlo initializer",
 			"cumulativeNet": 134888,
 			"delta": 1304
+		},
+		{
+			"additions": 621,
+			"date": "2026-08-12",
+			"deletions": 3,
+			"hash": "5588de098ab813b83336b3a8f25b3255f90f906c",
+			"subject": "feat: add Averlo project workflow skills",
+			"cumulativeNet": 135506,
+			"delta": 618
 		}
 	],
 	"endDate": "2026-08-12",
-	"head": "e3360f052f33523221dc881581534927bc89a0a7",
+	"head": "5588de098ab813b83336b3a8f25b3255f90f906c",
 	"startDate": "2025-08-24",
 	"version": 1
 }
