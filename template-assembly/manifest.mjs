@@ -69,6 +69,7 @@ export const assemblyTemplateOnlyScripts = new Set([
 	"generate:design-system-agent-benchmark-report",
 	"verify:design-system-agent-benchmark",
 	"verify:storybook-backport",
+	"verify:project-skills",
 	"verify:profiles",
 	"verify:create-averlo",
 ]);
