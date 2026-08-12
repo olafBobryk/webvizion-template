@@ -91,7 +91,7 @@
 		"verify:storybook-catalog": "npm run build-storybook && tsx scripts/verify/verify-storybook-catalog.ts",
 		"verify:component-sweep": "tsx scripts/verify/verify-component-sweep.ts",
 		"verify:design-system-evidence": "node scripts/verify/verify-design-system-evidence.mjs",
-		"verify:storybook-backport": "node --test plugins/averlo-next/skills/storybook-backport/tests/scan-story-backports.test.mjs",
+		"verify:storybook-backport": "node --test plugins/averlo-next/skills/averlo-storybook-backport/tests/scan-story-backports.test.mjs",
 		"verify:project-skills": "node --test plugins/averlo-next/skills/publish-project/tests/*.test.mjs",
 		"verify:design-system-agent-benchmark": "node scripts/verify/verify-design-system-agent-benchmark.mjs",
 		"generate:design-system-agent-benchmark-report": "node scripts/verify/verify-design-system-agent-benchmark.mjs --write"

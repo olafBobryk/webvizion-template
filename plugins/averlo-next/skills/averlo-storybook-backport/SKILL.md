@@ -1,9 +1,9 @@
 ---
-name: storybook-backport
+name: averlo-storybook-backport
 description: Create reusable Storybook stories inside Averlo-derived product instances, track each story's candidate/approval/ported status inline, scan a bounded workspace for approved stories, and adapt the smallest reusable story and component changes back into the canonical Averlo Next template. Use for instance-to-template Storybook backports, story portability reviews, backport status transitions, or discovery of reusable UI evidence across Averlo projects.
 ---
 
-# Storybook Backport
+# Averlo Next · Storybook Backport
 
 Move reusable UI evidence from product instances into the canonical template without creating a reverse-sync system or central ledger.
 
