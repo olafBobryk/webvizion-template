@@ -1916,10 +1916,19 @@
 			"subject": "fix: namespace Storybook backport skill",
 			"cumulativeNet": 135506,
 			"delta": 0
+		},
+		{
+			"additions": 3,
+			"date": "2026-08-12",
+			"deletions": 3,
+			"hash": "88db1ec1665dcf3eafab268934ef46f79417edde",
+			"subject": "fix: validate Storybook backport metadata",
+			"cumulativeNet": 135506,
+			"delta": 0
 		}
 	],
 	"endDate": "2026-08-12",
-	"head": "1e2066c50c6568a06d1382cf5b0fa347dae57467",
+	"head": "88db1ec1665dcf3eafab268934ef46f79417edde",
 	"startDate": "2025-08-24",
 	"version": 1
 }
