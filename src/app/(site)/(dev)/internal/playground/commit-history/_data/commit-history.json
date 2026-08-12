@@ -1925,10 +1925,28 @@
 			"subject": "fix: validate Storybook backport metadata",
 			"cumulativeNet": 135506,
 			"delta": 0
+		},
+		{
+			"additions": 988,
+			"date": "2026-08-12",
+			"deletions": 988,
+			"hash": "2333e3c389d48ce97cee77a25cdb324cae0e8790",
+			"subject": "feat: prefix Storybook backport skill identity",
+			"cumulativeNet": 135506,
+			"delta": 0
+		},
+		{
+			"additions": 44,
+			"date": "2026-08-12",
+			"deletions": 42,
+			"hash": "143550bdb8b1dc8ad020fa155310e9ea75c508a6",
+			"subject": "chore: refresh Averlo plugin cache",
+			"cumulativeNet": 135508,
+			"delta": 2
 		}
 	],
 	"endDate": "2026-08-12",
-	"head": "88db1ec1665dcf3eafab268934ef46f79417edde",
+	"head": "143550bdb8b1dc8ad020fa155310e9ea75c508a6",
 	"startDate": "2025-08-24",
 	"version": 1
 }
