@@ -1,0 +1,38 @@
+name: Publish create-averlo
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    if: startsWith(github.event.release.tag_name, 'create-averlo-v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.release.tag_name }}
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+      - name: Install template dependencies
+        run: npm ci
+      - name: Install initializer dependencies
+        run: npm ci
+        working-directory: packages/create-averlo
+      - name: Verify release version
+        run: npm run check:release-version -- "${{ github.event.release.tag_name }}"
+        working-directory: packages/create-averlo
+      - name: Verify template profiles
+        run: npm run verify:profiles
+      - name: Verify packed initializer
+        run: npm run verify:create-averlo -- --integration
+      - name: Publish create-averlo
+        run: npm publish --access public
+        working-directory: packages/create-averlo

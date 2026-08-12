@@ -12,6 +12,18 @@ The generated project contains only the surfaces selected by its profile.
 Developer routes and template assembly machinery stay outside the product, and
 frontend components remain independent of their content source.
 
+Create a clean project directly from the published initializer:
+
+```sh
+npx create-averlo my-project --profile thin-start --content static
+```
+
+The command installs dependencies by default and initializes an independent
+local `main` repository with one commit and no remote. Use `--no-install` to
+generate the project and lockfile without `node_modules`. Non-interactive
+callers must provide the destination and `--profile`; interactive terminals
+prompt for missing choices.
+
 ## Instant Setup
 
 ```sh
@@ -104,6 +116,7 @@ product surfaces.
 | `npm run measure:storybook-performance` | Capture a cold-cache developer-catalog baseline from the managed Storybook instance. |
 | `npm run verify:static` | Run static policy, formatting, and type checks. |
 | `npm run verify:profiles` | Materialize and verify every profile. |
+| `npm run verify:create-averlo` | Pack and smoke-test the public initializer without publishing it. |
 | `npm run build` | Create the production build. |
 
 Start `npm run dev` before Storybook. Use `npm run storybook:status` to recover

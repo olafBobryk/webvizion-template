@@ -38,8 +38,10 @@ function parseArgs(argv) {
 		content: undefined,
 		dryRun: false,
 		force: false,
+		finalize: "source",
 		help: false,
 		output: undefined,
+		projectName: undefined,
 		profile: "full",
 	};
 
@@ -65,6 +67,22 @@ function parseArgs(argv) {
 				throw new Error("--output requires a directory path.");
 			}
 			options.output = value;
+			index += 1;
+		} else if (arg === "--project-name") {
+			const value = argv[index + 1];
+			if (!value || value.startsWith("--")) {
+				throw new Error("--project-name requires an npm package name.");
+			}
+			options.projectName = value;
+			index += 1;
+		} else if (arg === "--finalize") {
+			const value = argv[index + 1];
+			if (!value || !["source", "install", "lockfile-only"].includes(value)) {
+				throw new Error(
+					"--finalize requires source, install, or lockfile-only.",
+				);
+			}
+			options.finalize = value;
 			index += 1;
 		} else if (arg === "--with") {
 			const value = argv[index + 1];
@@ -94,7 +112,9 @@ Flags:
   --profile <id>    Select the template profile (default: full)
   --content <mode>  Select static or payload-ready content (profile default when omitted)
   --output <path>   Materialize at a custom directory
-	  --with <name>     Enable an opt-in capability; repeatable (assistant, orchestration)
+  --project-name <name>  Set the generated npm package and README name
+  --finalize <mode>  Finalize from source dependencies, install dependencies, or create only a lockfile
+  --with <name>     Enable an opt-in capability; repeatable (assistant, orchestration)
   --dry-run         Print the positive assembly plan without changing files
   --force           Replace a verified output with the same profile and content
   --help            Show this help text
@@ -172,28 +192,51 @@ async function assertReplaceableOutput(outputRoot, options) {
 	}
 }
 
-function formatWorkspace(destinationRoot) {
+function resolveBiomeCli(destinationRoot, finalize) {
+	const targetRequire = createRequire(
+		path.join(destinationRoot, "package.json"),
+	);
+	const resolver = finalize === "source" ? require : targetRequire;
 	let biomeCli;
 	try {
-		biomeCli = require.resolve("@biomejs/biome/bin/biome");
+		biomeCli = resolver.resolve("@biomejs/biome/bin/biome");
 	} catch {
 		throw new Error(
-			"The template formatter is unavailable. Run npm install in the source template before creating a project.",
+			finalize === "source"
+				? "The template formatter is unavailable. Run npm install in the source template before creating a project."
+				: "The generated project formatter is unavailable after dependency installation.",
 		);
 	}
+	return biomeCli;
+}
+
+function formatWorkspace(destinationRoot, finalize) {
+	const biomeCli = resolveBiomeCli(destinationRoot, finalize);
 	execFileSync(process.execPath, [biomeCli, "check", "--write", "."], {
 		cwd: destinationRoot,
 		stdio: "inherit",
 	});
 }
 
-function formatReceipt(destinationRoot) {
-	const biomeCli = require.resolve("@biomejs/biome/bin/biome");
+function formatReceipt(destinationRoot, finalize) {
+	const biomeCli = resolveBiomeCli(destinationRoot, finalize);
 	execFileSync(
 		process.execPath,
 		[biomeCli, "format", "--write", PROFILE_MARKER],
 		{ cwd: destinationRoot, stdio: "inherit" },
 	);
+}
+
+function finalizePackage(destinationRoot, finalize) {
+	if (finalize === "source") return;
+	const args = ["install", "--no-audit", "--no-fund"];
+	if (finalize === "lockfile-only") {
+		args.push("--package-lock-only", "--ignore-scripts");
+	}
+	execFileSync("npm", args, {
+		cwd: destinationRoot,
+		stdio: "inherit",
+	});
 }
 
 async function walkFiles(targetDir) {
@@ -332,6 +375,8 @@ function printPlan(options, destinationRoot) {
 	console.log(`- content: ${options.content}`);
 	console.log(`- capabilities: ${options.capabilities.join(", ") || "none"}`);
 	console.log(`- destination: ${displayPath(destinationRoot)}`);
+	console.log(`- project name: ${options.projectName ?? "template default"}`);
+	console.log(`- finalize: ${options.finalize}`);
 	console.log(
 		`- selected surfaces: ${selectedSurfaces.join(", ") || "core only"}`,
 	);
@@ -362,11 +407,18 @@ async function materializeWorkspace(options, destinationRoot) {
 		content: options.content,
 		capabilities: options.capabilities,
 		sourceCommit: currentCommit(),
+		projectName: options.projectName,
+		deferLockfile: options.finalize !== "source",
 	});
-	formatWorkspace(destinationRoot);
+	finalizePackage(destinationRoot, options.finalize);
+	if (options.finalize !== "lockfile-only") {
+		formatWorkspace(destinationRoot, options.finalize);
+	}
 	await validateProfile(destinationRoot, options.content, options.capabilities);
 	await writeReceipt(destinationRoot, options, assemblyResult);
-	formatReceipt(destinationRoot);
+	if (options.finalize !== "lockfile-only") {
+		formatReceipt(destinationRoot, options.finalize);
+	}
 }
 
 async function main() {

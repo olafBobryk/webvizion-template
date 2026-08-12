@@ -309,6 +309,20 @@ async function assertReceipt(outputRoot, profileCase, capabilities = []) {
 	}
 }
 
+async function assertGeneratedDocumentation(outputRoot, profileCase) {
+	for (const requiredPath of [
+		"docs/README.md",
+		"docs/project/README.md",
+		"docs/project/source/README.md",
+	]) {
+		if (!(await pathExists(path.join(outputRoot, requiredPath)))) {
+			throw new Error(
+				`${profileCase.profileId}/${profileCase.content} is missing generated documentation path ${requiredPath}.`,
+			);
+		}
+	}
+}
+
 async function verifyOrchestrationCapability(templateRoot, tempRoot) {
 	const selectedRoot = path.join(tempRoot, "orchestration-selected");
 	run(
@@ -1184,6 +1198,7 @@ async function main() {
 				);
 				timings.push(performance.now() - startedAt);
 				await assertReceipt(outputRoot, profileCase);
+				await assertGeneratedDocumentation(outputRoot, profileCase);
 				await assertNoOrchestrationCapability(outputRoot);
 				await assertNoAssistantCapability(outputRoot);
 				await assertStorybook(outputRoot, profileCase);

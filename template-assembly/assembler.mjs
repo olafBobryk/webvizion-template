@@ -318,6 +318,7 @@ async function writePackage(
 	destinationRoot,
 	profile,
 	selectedSurfaces,
+	{ projectName, deferLockfile = false },
 ) {
 	const sourcePackage = JSON.parse(
 		await fs.readFile(path.join(sourceRoot, "package.json"), "utf8"),
@@ -326,6 +327,7 @@ async function writePackage(
 	const selected = selectedPackageEntries(profile, selectedSurfaces);
 	const pkg = {
 		...sourcePackage,
+		...(projectName ? { name: projectName } : {}),
 		scripts: normalizePackageScriptsForSurfaces(
 			selectRecord(sourcePackage.scripts, selected.scripts),
 			selectedSurfaces,
@@ -344,6 +346,7 @@ async function writePackage(
 		path.join(destinationRoot, "package.json"),
 		`${JSON.stringify(pkg, null, "\t")}\n`,
 	);
+	if (deferLockfile) return;
 	await fs.copyFile(
 		path.join(sourceRoot, "package-lock.json"),
 		path.join(destinationRoot, "package-lock.json"),
@@ -433,12 +436,18 @@ async function writeCentralFiles(
 	}
 }
 
-async function writeProjectDocs(destinationRoot, profile, content) {
+async function writeProjectDocs(
+	destinationRoot,
+	profile,
+	content,
+	projectName,
+) {
 	const profileLabel = profile.id;
+	const projectLabel = projectName ?? `${profileLabel} project`;
 	await fs.writeFile(
 		path.join(destinationRoot, "README.md"),
 		[
-			`# ${profileLabel} project`,
+			`# ${projectLabel}`,
 			"",
 			`Initialized from Averlo with the \`${profileLabel}\` profile and \`${content}\` content using positive assembly.`,
 			"",
@@ -451,6 +460,39 @@ async function writeProjectDocs(destinationRoot, profile, content) {
 			"",
 			"Template setup and assembly machinery is intentionally not included in this initialized project.",
 			"See `.template-profile.json` for its immutable setup receipt.",
+			"",
+		].join("\n"),
+	);
+	await fs.mkdir(path.join(destinationRoot, "docs/project/source"), {
+		recursive: true,
+	});
+	await fs.writeFile(
+		path.join(destinationRoot, "docs/README.md"),
+		[
+			"# Documentation",
+			"",
+			"- `project/` contains documentation owned by this project.",
+			"- `project/source/` contains supplied briefs, research, and reference inputs.",
+			"- `guides/` contains inherited Averlo engineering and operational guidance.",
+			"",
+		].join("\n"),
+	);
+	await fs.writeFile(
+		path.join(destinationRoot, "docs/project/README.md"),
+		[
+			"# Project documentation",
+			"",
+			"Keep project-owned specifications, decisions, and working documentation here.",
+			"Store supplied source material in `source/` so its ownership stays explicit.",
+			"",
+		].join("\n"),
+	);
+	await fs.writeFile(
+		path.join(destinationRoot, "docs/project/source/README.md"),
+		[
+			"# Source material",
+			"",
+			"Store supplied briefs, research, exports, and other reference inputs here.",
 			"",
 		].join("\n"),
 	);
@@ -478,6 +520,8 @@ export async function assembleTemplateProfile({
 	content,
 	capabilities = [],
 	sourceCommit,
+	projectName,
+	deferLockfile = false,
 }) {
 	if (!profile.assembly?.surfaces) {
 		throw new Error(
@@ -511,8 +555,11 @@ export async function assembleTemplateProfile({
 			stdio: "inherit",
 		});
 	}
-	await writePackage(sourceRoot, destinationRoot, profile, selectedSurfaces);
-	await writeProjectDocs(destinationRoot, profile, content);
+	await writePackage(sourceRoot, destinationRoot, profile, selectedSurfaces, {
+		projectName,
+		deferLockfile,
+	});
+	await writeProjectDocs(destinationRoot, profile, content, projectName);
 	if (capabilities.includes("orchestration")) {
 		await installOrchestrationCapability({
 			targetRoot: destinationRoot,

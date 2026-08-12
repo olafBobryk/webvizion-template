@@ -1,6 +1,9 @@
 export const assemblyGeneratedPaths = new Set([
 	"AGENTS.md",
 	"README.md",
+	"docs/README.md",
+	"docs/project/README.md",
+	"docs/project/source/README.md",
 	"next.config.ts",
 	"package-lock.json",
 	"package.json",
@@ -23,13 +26,16 @@ export const assemblyTemplateOnlyPaths = new Set([
 	"scripts/measure-storybook-performance.mjs",
 	"scripts/review-thin-start-api.mjs",
 	"scripts/verify/verify-design-system-agent-benchmark.mjs",
+	"scripts/verify/verify-create-averlo.mjs",
 	"scripts/verify/verify-template-profiles.mjs",
+	".github/workflows/publish-create-averlo.yml",
 	".github/workflows/update-commit-line-delta.yml",
 	"docs/assets/commit-line-delta.svg",
 ]);
 
 export const assemblyTemplateOnlyRoots = [
 	".agents",
+	"packages",
 	"plugins",
 	"template-assembly",
 	"template-profiles",
@@ -64,6 +70,7 @@ export const assemblyTemplateOnlyScripts = new Set([
 	"verify:design-system-agent-benchmark",
 	"verify:storybook-backport",
 	"verify:profiles",
+	"verify:create-averlo",
 ]);
 
 export const assemblyTemplateOnlyDevDependencies = new Set([]);

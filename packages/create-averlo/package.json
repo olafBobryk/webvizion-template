@@ -1,0 +1,41 @@
+{
+	"name": "create-averlo",
+	"version": "0.1.0",
+	"description": "Create an Averlo project from a pinned positive-assembly profile.",
+	"type": "module",
+	"bin": {
+		"create-averlo": "bin/create-averlo.mjs"
+	},
+	"files": [
+		"bin",
+		"dist/template-metadata.json",
+		"lib",
+		"LICENSE",
+		"README.md"
+	],
+	"scripts": {
+		"build:metadata": "node scripts/build-metadata.mjs",
+		"check:release-version": "node scripts/check-release-version.mjs",
+		"test": "node --test test/*.test.mjs",
+		"prepack": "npm run build:metadata && npm test"
+	},
+	"engines": {
+		"node": ">=20.9.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/olafBobryk/averlo-next-template.git",
+		"directory": "packages/create-averlo"
+	},
+	"homepage": "https://github.com/olafBobryk/averlo-next-template#readme",
+	"bugs": "https://github.com/olafBobryk/averlo-next-template/issues",
+	"keywords": [
+		"averlo",
+		"nextjs",
+		"project-initializer"
+	],
+	"license": "MIT",
+	"publishConfig": {
+		"access": "public"
+	}
+}
