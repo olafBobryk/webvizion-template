@@ -1,44 +1,46 @@
 {
-	"name": "averlo-next",
-	"version": "0.1.0+codex.20260812155416",
-	"description": "Repository workflows for creating, publishing, building, reviewing, and backporting Averlo Next application patterns.",
-	"author": {
-		"name": "Olaf Bobryk",
-		"url": "https://averlo-next-template.vercel.app"
-	},
-	"homepage": "https://averlo-next-template.vercel.app",
-	"repository": "https://github.com/olafBobryk/averlo-next-template",
-	"keywords": [
-		"averlo",
-		"nextjs",
-		"initializer",
-		"gitlab",
-		"vercel",
-		"entities",
-		"surfaces",
-		"skeletons",
-		"design-system",
-		"figma",
-		"storybook",
-		"backport",
-		"visual-parity",
-		"export"
-	],
-	"skills": "./skills/",
-	"interface": {
-		"displayName": "Averlo Next",
-		"shortDescription": "Build with Averlo Next contracts",
-		"longDescription": "Averlo Next packages workflows for initializing independent projects, publishing private GitLab repositories to Vercel, shaping entity UI, enforcing application surfaces and Storybook-backed public UI, deterministic Figma exports, and reviewed story backports.",
-		"developerName": "Olaf Bobryk",
-		"category": "Developer Tools",
-		"capabilities": ["Write"],
-		"websiteURL": "https://averlo-next-template.vercel.app",
-		"defaultPrompt": [
-			"Create and verify a new Averlo project",
-			"Publish an Averlo project to its configured private GitLab and Vercel targets",
-			"Audit this entity UI against Averlo Next",
-			"Review this route surface registry",
-			"Backport approved Storybook stories into the Averlo template"
-		]
-	}
+  "name": "averlo-next",
+  "version": "0.1.0+codex.20260812164803",
+  "description": "Repository workflows for creating, publishing, building, reviewing, and backporting Averlo Next application patterns.",
+  "author": {
+    "name": "Olaf Bobryk",
+    "url": "https://averlo-next-template.vercel.app"
+  },
+  "homepage": "https://averlo-next-template.vercel.app",
+  "repository": "https://github.com/olafBobryk/averlo-next-template",
+  "keywords": [
+    "averlo",
+    "nextjs",
+    "initializer",
+    "gitlab",
+    "vercel",
+    "entities",
+    "surfaces",
+    "skeletons",
+    "design-system",
+    "figma",
+    "storybook",
+    "backport",
+    "visual-parity",
+    "export"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Averlo Next",
+    "shortDescription": "Build with Averlo Next contracts",
+    "longDescription": "Averlo Next packages workflows for initializing independent projects, publishing private GitLab repositories to Vercel, shaping entity UI, enforcing application surfaces and Storybook-backed public UI, deterministic Figma exports, and reviewed story backports.",
+    "developerName": "Olaf Bobryk",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Write"
+    ],
+    "websiteURL": "https://averlo-next-template.vercel.app",
+    "defaultPrompt": [
+      "Create and verify a new Averlo project",
+      "Publish an Averlo project to its configured private GitLab and Vercel targets",
+      "Audit this entity UI against Averlo Next",
+      "Review this route surface registry",
+      "Backport approved Storybook stories into the Averlo template"
+    ]
+  }
 }
