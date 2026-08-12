@@ -1,4 +1,4 @@
 interface:
-	display_name: "Averlo Next · Storybook Backport"
-	short_description: "Move approved stories back into the template"
-	default_prompt: "Use $averlo-next:storybook-backport to create or pull an approved reusable Storybook story."
+  display_name: "Averlo Next · Storybook Backport"
+  short_description: "Move approved stories back into the template"
+  default_prompt: "Use $averlo-next:storybook-backport to create or pull an approved reusable Storybook story."
