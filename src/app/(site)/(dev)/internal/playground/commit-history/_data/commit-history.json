@@ -1889,10 +1889,19 @@
 			"subject": "Ship production updates",
 			"cumulativeNet": 133584,
 			"delta": -205
+		},
+		{
+			"additions": 1316,
+			"date": "2026-08-12",
+			"deletions": 12,
+			"hash": "e3360f052f33523221dc881581534927bc89a0a7",
+			"subject": "feat: add create-averlo initializer",
+			"cumulativeNet": 134888,
+			"delta": 1304
 		}
 	],
-	"endDate": "2026-08-08",
-	"head": "341d1b46538a5c25bc000e179d247d112795cf93",
+	"endDate": "2026-08-12",
+	"head": "e3360f052f33523221dc881581534927bc89a0a7",
 	"startDate": "2025-08-24",
 	"version": 1
 }
