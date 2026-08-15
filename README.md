@@ -2,41 +2,58 @@
 
 ![Averlo Next Template banner](public/averlo-next-template-banner.png)
 
-A production-oriented Next.js template for assembling focused marketing sites,
-authenticated applications, or both. It includes route registries, an
-organization-aware dashboard, records and an approval-gated assistant, a
-Storybook-owned component catalogue, isolated previews, and optional Payload
-infrastructure.
+Choose a route profile, materialize a clean project, and build its design system
+on a focused Next.js App Router foundation.
 
-The generated project contains only the surfaces selected by its profile.
-Developer routes and template assembly machinery stay outside the product, and
-frontend components remain independent of their content source.
+Averlo provides marketing, authentication, dashboard, and local developer
+surfaces without turning the generated project into a demo-heavy product. Its
+frontend stays source-agnostic: server-side resolvers turn fallback or Payload
+documents into lightweight page, layout, and section props.
 
-Create a clean project directly from the published initializer:
+## Instant Setup
+
+Template repository: [github.com/olafBobryk/averlo-next-template](https://github.com/olafBobryk/averlo-next-template)
+
+Create a clean project directly from a published profile initializer:
 
 ```sh
 npx create-averlo my-project --profile thin-start --content static
 ```
 
-The command installs dependencies by default and initializes an independent
-local `main` repository with one commit and no remote. Use `--no-install` to
-generate the project and lockfile without `node_modules`. Non-interactive
-callers must provide the destination and `--profile`; interactive terminals
-prompt for missing choices.
+The command installs dependencies by default and initializes a local `main`
+repository with one commit and no remote. Use `--no-install` to generate only
+the project and lockfile. Non-interactive callers must provide the project
+directory and `--profile`; interactive terminals prompt for missing choices.
 
-## Instant Setup
+### Agent Bootstrap
+
+Copy this prompt into Codex or another coding agent:
+
+**Create a project from `https://github.com/olafBobryk/averlo-next-template`.
+Read `PRODUCT.md`, `AGENTS.md`, and `README.md`; help me
+choose a route profile; materialize it into a new folder; and verify the result
+before project-specific work. Preserve the existing UI primitives, marketing
+layout contract, resolvers, and isolated agent dev workflow. Keep secrets,
+environment files, generated indexes, build output, and local service metadata
+out of Git.**
+
+Equivalent shell-first setup:
 
 ```sh
 git clone https://github.com/olafBobryk/averlo-next-template.git averlo-template
 cd averlo-template
 npm install
-npm run create:project -- --profile full --content payload-ready \
-  --output ../my-project
+npm run create:project -- --profile <profile> --content <content> --output ../my-project
+```
+
+Then work from the generated project:
+
+```sh
 cd ../my-project
 npm run dev
 ```
 
-### Agent Prompts
+### Storybook
 
 Storybook uses the same checkout and source environment as the isolated Next
 preview, but it remains a separate Vite process. Start the Next preview first,
@@ -44,110 +61,141 @@ then let the managed command reuse or start the checkout's sole Storybook
 instance:
 
 ```sh
-codex plugin marketplace add .
-codex plugin list
+npm run storybook:preview
 ```
 
 The command prints the Storybook URL and records it in ignored
 `.codex/storybook-preview.json`. Use `npm run storybook:status` to rediscover
 it; do not run raw `storybook dev` or assume a fixed port.
 
-## Profiles
+## Choose a Profile
 
-| Profile | Production surfaces | Content | Default |
-| --- | --- | --- | --- |
-| `full` | Marketing, auth, dashboard | `static`, `payload-ready` | `payload-ready` |
-| `app-only` | Auth, dashboard | `static` | `static` |
-| `marketing-only` | Marketing | `static`, `payload-ready` | `payload-ready` |
-| `thin-start` | Minimal marketing foundation | `static`, `payload-ready` | `payload-ready` |
+Profile selection is the main setup decision:
 
-Profile assembly is positive: only explicitly owned files, packages, scripts,
-and local developer surfaces are copied. The generated project records its
-immutable starting configuration in `.template-profile.json`.
+| Profile          | Included surfaces                                    | Content choices           | Default         |
+| ---------------- | ---------------------------------------------------- | ------------------------- | --------------- |
+| `full`           | Marketing, auth, dashboard, and developer tools.     | `static`, `payload-ready` | `payload-ready` |
+| `app-only`       | Auth, dashboard, and developer tools; no marketing.  | `static`                  | `static`        |
+| `marketing-only` | Marketing and developer tools; no auth or dashboard. | `static`, `payload-ready` | `payload-ready` |
+| `thin-start`     | Minimal marketing specialist surface.                | `static`, `payload-ready` | `payload-ready` |
 
-## What Is Included
+Generated projects are one-way starting points rather than alternate states of
+this checkout. Positive assembly copies only selected, explicitly owned project
+code and omits template profiles, inventories, and creation machinery.
 
-- Next.js App Router surfaces for marketing, authentication, organizations,
-  records, dashboard administration, platform operations, and the assistant.
-- Shared UI foundations for inputs, overlays, feedback, motion, focus, branding,
-  responsive shells, and loading states.
-- Colocated Storybook owner contracts, teaching stories, accessibility checks,
-  and an app-safe component catalogue.
-- Static marketing documents plus guarded Payload-ready resolvers that emit the
-  same lightweight render contracts.
-- Isolated Next previews, managed Storybook/MCP hosting, template intelligence,
-  profile verification, and performance tooling.
+## How It Works
 
-Legacy orchestration is a dormant compatibility capability. It is excluded by
-default and should not gain new product or template coupling.
+- **Route profiles** decide which production surfaces belong in the generated
+  project.
+- **Developer routes** under `/internal` are local-development tools, not public
+  product surfaces.
+- **Shared primitives** provide reusable UI, overlay, motion, focus, and branding
+  foundations.
+- **Marketing documents** describe site layout, pages, and named sections.
+- **Server resolvers** adapt fallback or Payload data into small render props.
+- **Section renderers** own presentation without importing Payload document
+  shapes.
 
-## Architecture and Content
+The content source is replaceable; the layout contract and section renderers
+remain stable.
 
-```text
-profile + content mode -> positive assembly -> generated project
-fallback or Payload data -> server resolver -> render contract -> section UI
+## Content Modes
+
+Marketing-capable profiles support three content states:
+
+- **Static:** render committed TypeScript fallback content without Payload.
+- **Payload-ready:** retain the guarded scaffold while admin and API routes stay
+  inactive.
+- **Payload-powered:** activate the real admin/API routes with Neon Postgres and
+  Vercel Blob.
+
+No generated profile is Payload-powered by default. Read
+[`docs/operations/payload-vercel-neon-blob.md`](docs/operations/payload-vercel-neon-blob.md)
+before activation.
+
+The marketing layout model and resolver boundary already exist. When using the
+optional `$cms-backfill` workflow, treat that model as an input to preserve and
+populate—not as a missing schema or permission to introduce a reorderable page
+builder.
+
+## Public Safety
+
+This repository is designed to remain safe as a public template. Do not commit
+secrets, tokens, deploy hooks, database URLs, Payload secrets, environment files,
+generated agent indexes, local Vercel metadata, build output, dependency folders,
+raw client files, or throwaway worktrees.
+
+Use ignored local files or platform environment stores for secrets. Keep
+source-specific CMS and deployment details behind server-side adapters so the
+frontend continues to render the same small contract.
+
+## Core Workflows
+
+### Development
+
+Use `npm run dev` for the isolated, prewarmed preview workflow. It selects a
+random port and an isolated build directory, then warms the home route before
+reporting the preview ready. Use `npm run dev:local` only when a stable local
+server is actually needed:
+
+```sh
+npm run dev
 ```
 
-The content source is replaceable; route ownership, render contracts, and
-section presentation remain stable.
+### Thin Start
 
-- `static` excludes Payload code and packages.
-- `payload-ready` keeps the guarded scaffold while live admin/API routes remain
-  inactive.
-- `payload-powered` is an explicit activation path using Neon Postgres, Vercel
-  Blob, and project environment secrets.
+`thin-start` can also be reviewed as an isolated workspace before committing to
+that profile. Create it with the normal project command, then run
+`npm run review:thin-start-api -- --root <output> --strict` from the template.
 
-Internal routes under `/internal` are development tools and are not public
-product surfaces.
+### Scroll Performance
 
-## Essential Commands
+The repository includes real-page measurement and disposable autoresearch
+worktrees for scroll-sensitive changes. Use them only when a change is being
+measured or optimized against real page-scroll evidence; see
+[`docs/operations/scroll-performance.md`](docs/operations/scroll-performance.md).
 
-| Command | Purpose |
-| --- | --- |
-| `npm run create:project` | Materialize a route profile into a project workspace. |
-| `npm run orchestration:init` | Explicitly install the transitional legacy orchestration capability. |
-| `npm run dev` | Start an isolated, prewarmed preview on a random port. |
-| `npm run dev:local` | Start the former local server flow on port 3000–3010. |
-| `npm run dev:agent` | Compatibility alias for `npm run dev`. |
-| `npm run dev:inspect` | Start a preview with the code-inspector sidecar enabled. |
-| `npm run storybook:preview` | Start or reuse the current checkout's Storybook server. |
-| `npm run storybook:status` | Show the paired preview and Storybook URLs. |
-| `npm run storybook:stop` | Stop only a Storybook server launched by the coordinator. |
+## Repository Map
+
+```text
+.
+|-- AGENTS.md               Agent and repository boundaries
+|-- PRODUCT.md              Product purpose, audience, and boundaries
+|-- docs/benchmarks/        Template-assessment systems and historical evidence
+|-- docs/operations/        External-service and measurement runbooks
+|-- scripts/                Creation, development, and verification tooling
+|-- src/app/                Marketing, auth, dashboard, Payload, and API routes
+|-- src/components/         Shared UI and product components
+|-- src/lib/marketing-content/  Layout contract, fallback data, and resolvers
+`-- src/payload/            Guarded Payload-ready infrastructure
+```
+
+## Essential Scripts
+
+| Script                                  | Purpose                                                                              |
+| --------------------------------------- | ------------------------------------------------------------------------------------ |
+| `npm run create:project`                | Materialize a route profile into a project workspace.                                |
+| `npm run dev`                           | Start an isolated, prewarmed preview on a random port.                               |
+| `npm run dev:local`                     | Start the former local server flow on port 3000–3010.                                |
+| `npm run dev:inspect`                   | Start a preview with the code-inspector sidecar enabled.                             |
+| `npm run storybook:preview`             | Start or reuse the current checkout's Storybook server.                              |
+| `npm run storybook:status`              | Show the paired preview and Storybook URLs.                                          |
+| `npm run storybook:stop`                | Stop only a Storybook server launched by the coordinator.                            |
 | `npm run measure:storybook-performance` | Capture a cold-cache developer-catalog baseline from the managed Storybook instance. |
-| `npm run verify:static` | Run static policy, formatting, and type checks. |
-| `npm run verify:profiles` | Materialize and verify every profile. |
-| `npm run verify:create-averlo` | Pack and smoke-test the public initializer without publishing it. |
-| `npm run build` | Create the production build. |
+| `npm run verify:static`                 | Run static policy, formatting, and type checks.                                      |
+| `npm run verify:profiles`               | Materialize and verify every profile.                                                |
+| `npm run verify:create-averlo`          | Pack and smoke-test the public initializer without publishing it.                    |
+| `npm run build`                         | Create the production Next.js build.                                                 |
 
-Start `npm run dev` before Storybook. Use `npm run storybook:status` to recover
-the managed URLs; do not assume fixed ports or run raw `storybook dev`.
-
-## Public Safety and Deployment
-
-Keep secrets, environment files, deploy hooks, local Vercel metadata, generated
-indexes, build output, dependencies, private source material, and temporary
-worktrees out of Git. Use ignored local files or platform environment storage
-for credentials.
+## Deployment
 
 The template targets Vercel. Static and Payload-ready projects deploy without
-live Payload routes. Follow the Payload guide before activating Neon, Blob,
-admin/API routes, or `MARKETING_CONTENT_SOURCE=payload`.
+live Payload routes. Payload-powered projects use Neon for `DATABASE_URL`,
+Vercel Blob for `BLOB_READ_WRITE_TOKEN`, and a project-specific
+`PAYLOAD_SECRET`; follow the Payload deployment guide before enabling them.
 
-## Repository Layout
+## Further Reading
 
-```text
-AGENTS.md                 Repository and agent boundaries
-docs/guides/              Architecture and operational guides
-scripts/                  Assembly, preview, and verification tooling
-src/app/                  Product, developer, API, and Payload routes
-src/components/           Shared UI and domain components
-src/lib/marketing-content Source-neutral documents and resolvers
-template-profiles/        Installable profile manifests
-```
-
-## Guides
-
-- [Component system](docs/guides/components/README.md)
-- [Payload on Vercel with Neon and Blob](docs/guides/payload-vercel-neon-blob.md)
-- [Template Intelligence](docs/guides/template-intelligence.md)
-- [Scroll performance](docs/guides/scroll-performance.md)
+- [Payload on Vercel with Neon and Blob](docs/operations/payload-vercel-neon-blob.md)
+- [Scroll-performance workflow](docs/operations/scroll-performance.md)
+- [Benchmarks](docs/benchmarks/README.md)

@@ -5,11 +5,6 @@
 This folder owns cross-cutting state, loading, display, copy, disclosure, media,
 and utility components that are neither complete inputs nor overlays.
 
-Storybook `UI/Misc/*` owner pages are authoritative for availability, supported
-imports, selection guidance, compounds, examples, variants, and observable
-behavior. Keep each consumer contract in the lowest-level owner story; do not
-recreate an owner index or consumer guide here.
-
 ## Dependency and profile boundary
 
 - Misc internals and lower-level UI dependencies import direct owners where

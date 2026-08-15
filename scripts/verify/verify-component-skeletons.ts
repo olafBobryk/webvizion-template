@@ -286,7 +286,6 @@ const forbiddenGraphTokens = [
 	"react-force-graph-2d",
 	"react-force-graph-3d",
 	"three-spritetext",
-	"/internal/intelligence/graph",
 ];
 const searchableFiles = ["src", "scripts", "template-profiles", "package.json"];
 for (const token of forbiddenGraphTokens) {

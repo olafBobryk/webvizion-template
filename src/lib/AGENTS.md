@@ -1,54 +1,15 @@
 # Folder: `src/lib`
 
 ## Role
-Shared non-UI application utilities. This folder is for transport, state helpers, and reusable project foundations that should stay independent from React components.
 
-## Use This Folder When
-- You need API or fetch helpers.
-- You need shared modal, toast, or motion helpers that are not UI components themselves.
-- You want logic that can be reused by app routes, demo code, tests, or external consumers without pulling in component dependencies.
-
-## Preferred Starting Points
-- `src/lib/api/createApiClient.ts`: generic request factory for project and external APIs.
-- `src/lib/api/createMockFetch.ts`: transport-level mock fetch implementation.
-- `src/lib/api/checkHealth.ts`: example endpoint wrapper built on the shared API client.
-- `src/lib/forms/guard.ts`: reusable server-side form guard helpers.
-- `src/lib/feedback/toast.ts`: shared toast helpers.
-- `src/lib/modal.ts`: shared modal state helpers.
-- `src/lib/metadata.ts`: shared Next metadata factories backed by `src/config/metadataConfig.ts`.
-- `src/lib/surfaces/routeSurface.ts`: shared route-surface definition, matching, validation, and href materialization contract.
-
-## New Feature Workflow
-For any new reusable lib feature:
-1. Implement the feature in its canonical domain folder under `src/lib`.
-2. Keep the public API small and typed, and update barrel exports only when the new surface should be imported broadly.
-3. Add focused tests or owner documentation when the feature exposes a public call shape other engineers should copy.
-4. Update the nearest `AGENTS.md` with role, preferred entrypoints, and invariants introduced by the new feature.
-5. If the feature changes shared lib conventions, update this file as the parent contract.
-6. Run checks on the touched files before considering the feature complete.
+Shared non-UI application utilities. Keep reusable project foundations
+independent from React components.
 
 ## Invariants
+
 - Network and transport code does not belong in `src/components`.
-- Prefer small endpoint wrappers over raw `fetch` calls scattered through app code.
+- Prefer canonical endpoint wrappers over raw `fetch` calls scattered through
+  app code.
 - Keep the transport layer dependency-injectable: demos and tests should swap the client or fetcher, not duplicate endpoint logic.
 - Keep browser-only defaults explicit when they matter, but do not hardwire project assumptions into the factory when injection solves it cleanly.
 - UI feedback belongs in `src/app` or `src/components`; `src/lib` should return data or throw typed errors.
-
-## Example Guidance
-- Keep reusable library examples with their canonical documentation or tests.
-- Prefer one real wrapper function and one mock transport example over duplicating full API pages.
-- For fake calls, route the same endpoint wrapper through `createMockFetch(...)`.
-
-## Folder Index
-- `src/lib/api/`
-- `src/lib/forms/`
-- `src/lib/surfaces/`
-- `src/lib/feedback/`
-- `src/lib/metadata.ts`
-
-## Avoid
-- Putting API helpers in `src/components`.
-- Calling `fetch` directly from many pages when a lib wrapper already exists.
-- Creating separate “demo-only” endpoint functions that drift from the real transport contract.
-
-Reusable lib features are not complete until implementation, focused evidence where relevant, and documentation all exist together.

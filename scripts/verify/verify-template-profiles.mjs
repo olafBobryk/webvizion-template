@@ -8,10 +8,6 @@ import { performance } from "node:perf_hooks";
 import process from "node:process";
 import { assertPackageOwnership } from "../../template-assembly/assembler.mjs";
 import {
-	assertInstalledOrchestrationCapability,
-	assertNoOrchestrationCapability,
-} from "../../template-assembly/capabilities/orchestration/index.mjs";
-import {
 	getProfileVerificationCommands,
 	templateProfiles,
 } from "../../template-profiles/index.mjs";
@@ -271,27 +267,6 @@ async function assertGeneratedSurfaceContract(outputRoot, profileCase) {
 	}
 }
 
-async function assertGeneratedRuntimeDependencyClosure(
-	outputRoot,
-	profileCase,
-) {
-	const markdownRendererPath = path.join(
-		outputRoot,
-		"src/components/composites/markdown/MarkdownRenderer.tsx",
-	);
-	if (!(await pathExists(markdownRendererPath))) return;
-
-	const markdownRenderer = await fs.readFile(markdownRendererPath, "utf8");
-	if (!/from\s+["']streamdown["']/.test(markdownRenderer)) return;
-
-	const pkg = await readJson(path.join(outputRoot, "package.json"));
-	if (!pkg.dependencies?.streamdown) {
-		throw new Error(
-			`${profileCase.profileId}/${profileCase.content} includes the Streamdown-backed Markdown renderer without its runtime dependency.`,
-		);
-	}
-}
-
 async function assertReceipt(outputRoot, profileCase, capabilities = []) {
 	const receipt = await readJson(
 		path.join(outputRoot, ".template-profile.json"),
@@ -310,252 +285,104 @@ async function assertReceipt(outputRoot, profileCase, capabilities = []) {
 }
 
 async function assertGeneratedDocumentation(outputRoot, profileCase) {
-	for (const requiredPath of [
-		"docs/README.md",
-		"docs/project/README.md",
-		"docs/project/source/README.md",
-	]) {
+	for (const requiredPath of ["AGENTS.md", "PRODUCT.md", "docs/README.md"]) {
 		if (!(await pathExists(path.join(outputRoot, requiredPath)))) {
 			throw new Error(
 				`${profileCase.profileId}/${profileCase.content} is missing generated documentation path ${requiredPath}.`,
 			);
 		}
 	}
+	for (const retiredPath of [
+		"docs/project/README.md",
+		"docs/project/source/README.md",
+	]) {
+		if (await pathExists(path.join(outputRoot, retiredPath))) {
+			throw new Error(
+				`${profileCase.profileId}/${profileCase.content} retained retired documentation path ${retiredPath}.`,
+			);
+		}
+	}
+
+	const agentInstructions = await fs.readFile(
+		path.join(outputRoot, "AGENTS.md"),
+		"utf8",
+	);
+	for (const heading of [
+		"## Project",
+		"## Averlo Plugin Pack",
+		"## Development and Review Isolation",
+		"## Application Areas",
+		"## Design System",
+	]) {
+		if (!agentInstructions.includes(heading)) {
+			throw new Error(
+				`${profileCase.profileId}/${profileCase.content} generated AGENTS.md is missing ${heading}.`,
+			);
+		}
+	}
+	for (const forbiddenText of [
+		"ToastHost",
+		"showToast",
+		"ConfirmationModal",
+		"useTailwindBreakpoints",
+		"## Responsive Rendering",
+	]) {
+		if (agentInstructions.includes(forbiddenText)) {
+			throw new Error(
+				`${profileCase.profileId}/${profileCase.content} generated AGENTS.md contains recipe text: ${forbiddenText}.`,
+			);
+		}
+	}
+
+	const product = await fs.readFile(
+		path.join(outputRoot, "PRODUCT.md"),
+		"utf8",
+	);
+	if (
+		!product.includes(`\`${profileCase.profileId}\` profile`) ||
+		!product.includes(`\`${profileCase.content}\` content mode`) ||
+		!product.includes("Purpose: To be defined by the project owner.")
+	) {
+		throw new Error(
+			`${profileCase.profileId}/${profileCase.content} generated PRODUCT.md does not preserve its setup facts and unfinished product definition.`,
+		);
+	}
 }
 
-async function verifyOrchestrationCapability(templateRoot, tempRoot) {
-	const selectedRoot = path.join(tempRoot, "orchestration-selected");
-	run(
-		process.execPath,
-		[
-			"scripts/create-template-profile.mjs",
-			"--profile",
-			"full",
-			"--content",
-			"static",
-			"--with",
-			"orchestration",
-			"--with",
-			"orchestration",
-			"--output",
-			selectedRoot,
-		],
-		templateRoot,
-		{ silent: true },
+async function assertCanonicalAgentContract(templateRoot) {
+	const agentInstructions = await fs.readFile(
+		path.join(templateRoot, "AGENTS.md"),
+		"utf8",
 	);
-	await assertReceipt(selectedRoot, { profileId: "full", content: "static" }, [
-		"orchestration",
-	]);
-	await assertInstalledOrchestrationCapability(selectedRoot);
-	const selectedState = runNpm(
-		["run", "orchestration", "--", "state"],
-		selectedRoot,
-		{
-			silent: true,
-		},
-	);
-	if (!selectedState.stdout.includes("status: planning")) {
-		throw new Error(
-			"Selected orchestration capability did not read its own planning root.",
-		);
+	for (const heading of [
+		"## Project",
+		"## Averlo Plugin Pack",
+		"## Development and Review Isolation",
+		"## Application Areas",
+		"## Design System",
+	]) {
+		if (!agentInstructions.includes(heading)) {
+			throw new Error(`Canonical AGENTS.md is missing ${heading}.`);
+		}
 	}
-
-	const lateRoot = path.join(tempRoot, "orchestration-late");
-	run(
-		process.execPath,
-		[
-			"scripts/create-template-profile.mjs",
-			"--profile",
-			"full",
-			"--content",
-			"static",
-			"--output",
-			lateRoot,
-		],
-		templateRoot,
-		{ silent: true },
-	);
-	const receiptPath = path.join(lateRoot, ".template-profile.json");
-	const immutableReceipt = await fs.readFile(receiptPath, "utf8");
-	for (const extraArgs of [["--dry-run"], []]) {
-		run(
-			process.execPath,
-			["scripts/install-orchestration.mjs", "--target", lateRoot, ...extraArgs],
-			templateRoot,
-			{ silent: true },
-		);
+	for (const forbiddenText of [
+		"## Template Content Modes",
+		"## Halo UI Primitives",
+		"## Responsive Rendering",
+		"ToastHost",
+		"showToast",
+		"ConfirmationModal",
+		"useTailwindBreakpoints",
+	]) {
+		if (agentInstructions.includes(forbiddenText)) {
+			throw new Error(
+				`Canonical AGENTS.md contains retired recipe text: ${forbiddenText}.`,
+			);
+		}
 	}
-	if ((await fs.readFile(receiptPath, "utf8")) !== immutableReceipt) {
-		throw new Error(
-			"Later orchestration installation changed the immutable receipt.",
-		);
+	if (!(await pathExists(path.join(templateRoot, "PRODUCT.md")))) {
+		throw new Error("Canonical template is missing PRODUCT.md.");
 	}
-	await assertInstalledOrchestrationCapability(lateRoot);
-	run(
-		process.execPath,
-		["scripts/install-orchestration.mjs", "--target", lateRoot],
-		templateRoot,
-		{ silent: true },
-	);
-	await fs.appendFile(
-		path.join(lateRoot, "docs/ORCHESTRATION.md"),
-		"\nlocal divergence\n",
-	);
-	const divergentRerun = run(
-		process.execPath,
-		["scripts/install-orchestration.mjs", "--target", lateRoot],
-		templateRoot,
-		{ allowFailure: true, silent: true },
-	);
-	assertFailure(
-		divergentRerun,
-		"Divergent orchestration installation was treated as idempotent.",
-	);
-
-	const mismatchedForce = run(
-		process.execPath,
-		[
-			"scripts/create-template-profile.mjs",
-			"--profile",
-			"full",
-			"--content",
-			"static",
-			"--output",
-			lateRoot,
-			"--force",
-		],
-		templateRoot,
-		{ allowFailure: true, silent: true },
-	);
-	assertFailure(
-		mismatchedForce,
-		"Force regeneration ignored the later capability marker.",
-	);
-	run(
-		process.execPath,
-		[
-			"scripts/create-template-profile.mjs",
-			"--profile",
-			"full",
-			"--content",
-			"static",
-			"--with",
-			"orchestration",
-			"--output",
-			lateRoot,
-			"--force",
-		],
-		templateRoot,
-		{ silent: true },
-	);
-
-	const unknown = run(
-		process.execPath,
-		["scripts/create-template-profile.mjs", "--with", "unknown", "--dry-run"],
-		templateRoot,
-		{ allowFailure: true, silent: true },
-	);
-	assertFailure(unknown, "Unknown orchestration capability was accepted.");
-
-	const conflictRoot = path.join(tempRoot, "orchestration-conflict");
-	run(
-		process.execPath,
-		[
-			"scripts/create-template-profile.mjs",
-			"--profile",
-			"app-only",
-			"--content",
-			"static",
-			"--output",
-			conflictRoot,
-		],
-		templateRoot,
-		{ silent: true },
-	);
-	await fs.writeFile(
-		path.join(conflictRoot, "docs/ORCHESTRATION.md"),
-		"conflict\n",
-	);
-	const conflict = run(
-		process.execPath,
-		["scripts/install-orchestration.mjs", "--target", conflictRoot],
-		templateRoot,
-		{ allowFailure: true, silent: true },
-	);
-	assertFailure(
-		conflict,
-		"Partial orchestration installation was overwritten.",
-	);
-	await fs.rm(path.join(conflictRoot, "docs/ORCHESTRATION.md"));
-	const conflictPackagePath = path.join(conflictRoot, "package.json");
-	const conflictPackage = await readJson(conflictPackagePath);
-	conflictPackage.scripts.orchestration = "node conflicting-orchestration.mjs";
-	await fs.writeFile(
-		conflictPackagePath,
-		`${JSON.stringify(conflictPackage, null, "\t")}\n`,
-	);
-	const scriptConflict = run(
-		process.execPath,
-		["scripts/install-orchestration.mjs", "--target", conflictRoot],
-		templateRoot,
-		{ allowFailure: true, silent: true },
-	);
-	assertFailure(
-		scriptConflict,
-		"Conflicting orchestration script was overwritten.",
-	);
-
-	const unsafe = run(
-		process.execPath,
-		[
-			"scripts/install-orchestration.mjs",
-			"--target",
-			path.parse(tempRoot).root,
-		],
-		templateRoot,
-		{ allowFailure: true, silent: true },
-	);
-	assertFailure(unsafe, "Unsafe orchestration target was accepted.");
-
-	const oldReceiptRoot = path.join(tempRoot, "old-receipt");
-	run(
-		process.execPath,
-		[
-			"scripts/create-template-profile.mjs",
-			"--profile",
-			"app-only",
-			"--content",
-			"static",
-			"--output",
-			oldReceiptRoot,
-		],
-		templateRoot,
-		{ silent: true },
-	);
-	const oldReceipt = await readJson(
-		path.join(oldReceiptRoot, ".template-profile.json"),
-	);
-	delete oldReceipt.capabilities;
-	await fs.writeFile(
-		path.join(oldReceiptRoot, ".template-profile.json"),
-		`${JSON.stringify(oldReceipt, null, "\t")}\n`,
-	);
-	run(
-		process.execPath,
-		[
-			"scripts/create-template-profile.mjs",
-			"--profile",
-			"app-only",
-			"--content",
-			"static",
-			"--output",
-			oldReceiptRoot,
-			"--force",
-		],
-		templateRoot,
-		{ silent: true },
-	);
-	console.log("Orchestration capability checks passed.");
 }
 
 async function verifyAssistantCapability(templateRoot, tempRoot) {
@@ -597,7 +424,12 @@ async function verifyAssistantCapability(templateRoot, tempRoot) {
 	const selectedPackage = await readJson(
 		path.join(selectedRoot, "package.json"),
 	);
-	for (const dependency of ["@ai-sdk/openai", "@ai-sdk/react", "ai"]) {
+	for (const dependency of [
+		"@ai-sdk/openai",
+		"@ai-sdk/react",
+		"ai",
+		"streamdown",
+	]) {
 		if (!selectedPackage.dependencies?.[dependency]) {
 			throw new Error(
 				`Selected Assistant capability is missing ${dependency}.`,
@@ -624,6 +456,13 @@ async function verifyAssistantCapability(templateRoot, tempRoot) {
 		rejected,
 		"Dashboard-less profile accepted the Assistant capability.",
 	);
+	const unknown = run(
+		process.execPath,
+		["scripts/create-template-profile.mjs", "--with", "unknown", "--dry-run"],
+		templateRoot,
+		{ allowFailure: true, silent: true },
+	);
+	assertFailure(unknown, "Unknown capability was accepted.");
 	console.log("Assistant capability checks passed.");
 }
 
@@ -654,7 +493,12 @@ async function assertNoAssistantCapability(outputRoot) {
 		}
 	}
 	const pkg = await readJson(path.join(outputRoot, "package.json"));
-	for (const dependency of ["@ai-sdk/openai", "@ai-sdk/react", "ai"]) {
+	for (const dependency of [
+		"@ai-sdk/openai",
+		"@ai-sdk/react",
+		"ai",
+		"streamdown",
+	]) {
 		if (pkg.dependencies?.[dependency] !== undefined) {
 			throw new Error(
 				`Default project unexpectedly contains Assistant dependency: ${dependency}`,
@@ -846,68 +690,6 @@ async function assertComponentExport(outputRoot, profileCase) {
 	}
 }
 
-async function verifyNestedProjectRootIsolation(templateRoot) {
-	const nestedRoot = path.join(
-		templateRoot,
-		".codex/tmp/orchestration-root-isolation",
-	);
-	const parentOrchestrationRoot = path.join(templateRoot, "docs/orchestration");
-	if (
-		await fs
-			.stat(parentOrchestrationRoot)
-			.then(() => true)
-			.catch(() => false)
-	) {
-		throw new Error(
-			"Canonical orchestration root must be absent before isolation verification.",
-		);
-	}
-	try {
-		await fs.rm(nestedRoot, { recursive: true, force: true });
-		run(
-			process.execPath,
-			[
-				"scripts/create-template-profile.mjs",
-				"--profile",
-				"app-only",
-				"--content",
-				"static",
-				"--with",
-				"orchestration",
-				"--output",
-				nestedRoot,
-			],
-			templateRoot,
-			{ silent: true },
-		);
-		await fs.rename(
-			path.join(nestedRoot, "docs/orchestration"),
-			path.join(nestedRoot, "docs/orchestration-disabled"),
-		);
-		await fs.mkdir(path.join(parentOrchestrationRoot, "_tools"), {
-			recursive: true,
-		});
-		await fs.writeFile(
-			path.join(parentOrchestrationRoot, "_tools/orchestration.mjs"),
-			'console.log("BORROWED_PARENT_ROOT");\n',
-		);
-		const result = run(
-			process.execPath,
-			["scripts/orchestration.mjs", "state"],
-			nestedRoot,
-			{ allowFailure: true, silent: true },
-		);
-		assertFailure(result, "Nested generated project borrowed the parent root.");
-		if (`${result.stdout}${result.stderr}`.includes("BORROWED_PARENT_ROOT")) {
-			throw new Error("Nested generated project borrowed the parent root.");
-		}
-		console.log("Nested generated-project root isolation passed.");
-	} finally {
-		await fs.rm(nestedRoot, { recursive: true, force: true });
-		await fs.rm(parentOrchestrationRoot, { recursive: true, force: true });
-	}
-}
-
 async function assertInternalRouteShell(outputRoot, profileCase) {
 	const marketingInternalLayout = path.join(
 		outputRoot,
@@ -924,9 +706,9 @@ async function assertInternalRouteShell(outputRoot, profileCase) {
 	const expectedLayout = shouldUseMarketingShell
 		? marketingInternalLayout
 		: standaloneInternalLayout;
-	const unexpectedInternalRoot = shouldUseMarketingShell
-		? path.join(outputRoot, "src/app/(site)/(dev)/internal")
-		: path.join(outputRoot, "src/app/(site)/(marketing)/internal");
+	const unexpectedLayout = shouldUseMarketingShell
+		? standaloneInternalLayout
+		: marketingInternalLayout;
 
 	if (
 		!(await fs
@@ -940,12 +722,12 @@ async function assertInternalRouteShell(outputRoot, profileCase) {
 	}
 	if (
 		await fs
-			.stat(unexpectedInternalRoot)
+			.stat(unexpectedLayout)
 			.then(() => true)
 			.catch(() => false)
 	) {
 		throw new Error(
-			`Internal routes or overrides were assembled beneath the wrong shell for ${profileCase.profileId}/${profileCase.content}.`,
+			`Internal routes were assembled beneath the wrong shell for ${profileCase.profileId}/${profileCase.content}.`,
 		);
 	}
 
@@ -1160,6 +942,7 @@ async function main() {
 	const timings = [];
 
 	try {
+		await assertCanonicalAgentContract(templateRoot);
 		await assertRemovedPublicEnvironmentAbsent(
 			templateRoot,
 			"Canonical template",
@@ -1199,7 +982,6 @@ async function main() {
 				timings.push(performance.now() - startedAt);
 				await assertReceipt(outputRoot, profileCase);
 				await assertGeneratedDocumentation(outputRoot, profileCase);
-				await assertNoOrchestrationCapability(outputRoot);
 				await assertNoAssistantCapability(outputRoot);
 				await assertStorybook(outputRoot, profileCase);
 				await assertComponentExport(outputRoot, profileCase);
@@ -1211,10 +993,6 @@ async function main() {
 
 			await assertInternalRouteShell(integrationRoot, profileCase);
 			await assertGeneratedSurfaceContract(integrationRoot, profileCase);
-			await assertGeneratedRuntimeDependencyClosure(
-				integrationRoot,
-				profileCase,
-			);
 			run(
 				process.execPath,
 				[
@@ -1245,9 +1023,7 @@ async function main() {
 
 		await verifyCreationSafety(templateRoot, tempRoot);
 		await verifyOwnershipGuards(templateRoot, tempRoot);
-		await verifyOrchestrationCapability(templateRoot, tempRoot);
 		await verifyAssistantCapability(templateRoot, tempRoot);
-		await verifyNestedProjectRootIsolation(templateRoot);
 		console.log(
 			`assemble median materialization: ${Math.round(median(timings))}ms`,
 		);

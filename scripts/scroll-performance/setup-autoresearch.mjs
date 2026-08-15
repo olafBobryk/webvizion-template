@@ -323,7 +323,7 @@ async function main() {
 		},
 		benchmark: {
 			...benchmark,
-			doc: "docs/guides/scroll-performance.md",
+			doc: "docs/operations/scroll-performance.md",
 			exampleLog:
 				"scripts/scroll-performance/fixtures/scroll-performance-runs.example.jsonl",
 		},

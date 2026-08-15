@@ -5,10 +5,10 @@
 	},
 	"plugins": [
 		{
-			"name": "averlo-next",
+			"name": "averlo",
 			"source": {
 				"source": "local",
-				"path": "./plugins/averlo-next"
+				"path": "./plugins/averlo"
 			},
 			"policy": {
 				"installation": "AVAILABLE",

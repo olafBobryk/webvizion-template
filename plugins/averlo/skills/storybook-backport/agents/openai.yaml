@@ -1,0 +1,4 @@
+interface:
+  display_name: "Averlo · Storybook Backport"
+  short_description: "Move approved stories back into the template"
+  default_prompt: "Use $averlo:storybook-backport to create or pull an approved reusable Storybook story."

@@ -3,8 +3,7 @@
 ## Ownership
 
 This folder owns reusable Markdown rendering, authoring, loading, and modal-form
-composition. Storybook `Composites/Markdown` owns supported public members,
-selection guidance, examples, variants, and observable behavior.
+composition.
 
 ## Public and profile boundary
 
@@ -14,6 +13,7 @@ selection guidance, examples, variants, and observable behavior.
   must not include MDXEditor, editor CSS, or modal authoring composition.
 
 ## Invariants
+
 - Keep markdown output grounded in design-system primitives.
 - ReactMarkdown owns completed rendering. Streamdown is a private parser used only when `Markdown.Render streaming` needs incomplete-Markdown recovery. Both engines must consume the same component map, remark transforms, density, wrapper, and semantic variant.
 - Keep Streamdown controls, icons, caret, animations, optional plugins, component types, and package classes out of the public API and visible output. Do not import its animation stylesheet. `Markdown.Render` remains presentation-authoritative and thin-profile compatible.

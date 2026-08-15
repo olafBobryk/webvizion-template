@@ -13,10 +13,6 @@ import {
 	readEffectiveCapabilities,
 } from "../template-assembly/capabilities/index.mjs";
 import {
-	assertInstalledOrchestrationCapability,
-	assertNoOrchestrationCapability,
-} from "../template-assembly/capabilities/orchestration/index.mjs";
-import {
 	getProfileContentMode,
 	getProfileVerificationCommands,
 	getTemplateProfile,
@@ -114,7 +110,7 @@ Flags:
   --output <path>   Materialize at a custom directory
   --project-name <name>  Set the generated npm package and README name
   --finalize <mode>  Finalize from source dependencies, install dependencies, or create only a lockfile
-  --with <name>     Enable an opt-in capability; repeatable (assistant, orchestration)
+  --with <name>     Enable an opt-in capability; repeatable (assistant)
   --dry-run         Print the positive assembly plan without changing files
   --force           Replace a verified output with the same profile and content
   --help            Show this help text
@@ -178,10 +174,7 @@ async function assertReplaceableOutput(outputRoot, options) {
 			`Refusing to replace ${displayPath(outputRoot)} because its content marker is ${marker.content}, not ${options.content}.`,
 		);
 	}
-	const effectiveCapabilities = await readEffectiveCapabilities(
-		outputRoot,
-		marker,
-	);
+	const effectiveCapabilities = readEffectiveCapabilities(marker);
 	if (
 		JSON.stringify(effectiveCapabilities) !==
 		JSON.stringify(options.capabilities)
@@ -268,7 +261,7 @@ async function assertNoParkedImports(destinationRoot) {
 	}
 }
 
-async function validateProfile(destinationRoot, content, capabilities) {
+async function validateProfile(destinationRoot, content) {
 	const requiredFiles = activeProfile.verification.requiredFiles.filter(
 		(requiredFile) =>
 			content === "payload-ready" || requiredFile !== "payload.config.ts",
@@ -314,11 +307,6 @@ async function validateProfile(destinationRoot, content, capabilities) {
 				`Template profile verification script is missing: ${scriptName}`,
 			);
 		}
-	}
-	if (capabilities.includes("orchestration")) {
-		await assertInstalledOrchestrationCapability(destinationRoot);
-	} else {
-		await assertNoOrchestrationCapability(destinationRoot);
 	}
 	await assertNoParkedImports(destinationRoot);
 }
@@ -406,7 +394,6 @@ async function materializeWorkspace(options, destinationRoot) {
 		profile: activeProfile,
 		content: options.content,
 		capabilities: options.capabilities,
-		sourceCommit: currentCommit(),
 		projectName: options.projectName,
 		deferLockfile: options.finalize !== "source",
 	});
@@ -414,7 +401,7 @@ async function materializeWorkspace(options, destinationRoot) {
 	if (options.finalize !== "lockfile-only") {
 		formatWorkspace(destinationRoot, options.finalize);
 	}
-	await validateProfile(destinationRoot, options.content, options.capabilities);
+	await validateProfile(destinationRoot, options.content);
 	await writeReceipt(destinationRoot, options, assemblyResult);
 	if (options.finalize !== "lockfile-only") {
 		formatReceipt(destinationRoot, options.finalize);

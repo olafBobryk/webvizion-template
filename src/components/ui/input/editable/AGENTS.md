@@ -2,9 +2,7 @@
 
 ## Ownership and boundary
 
-This folder owns reusable display-to-edit field state. The
-`UI/Input/Editable/EditableTextField` Storybook owner holds its consumer
-contract.
+This folder owns reusable display-to-edit field state.
 
 ## Structural invariants
 

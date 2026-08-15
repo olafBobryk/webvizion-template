@@ -2,11 +2,10 @@
 
 ## Ownership
 
-This folder owns the product mark and wordmark implementation. Storybook
-`Branding/Logo` owns consumer selection, supported variants, examples, and
-observable semantics.
+This folder owns the product mark and wordmark implementation.
 
 ## Invariants
+
 - Keep brand SVG geometry, wordmark styling, sizing, and tone variants centralized
   in `Logo` rather than branching them in consumers.
 - Semantic rendering and interaction state remain component-owned. Do not wrap

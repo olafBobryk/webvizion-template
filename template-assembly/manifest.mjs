@@ -1,9 +1,8 @@
 export const assemblyGeneratedPaths = new Set([
 	"AGENTS.md",
+	"PRODUCT.md",
 	"README.md",
 	"docs/README.md",
-	"docs/project/README.md",
-	"docs/project/source/README.md",
 	"next.config.ts",
 	"package-lock.json",
 	"package.json",
@@ -14,29 +13,26 @@ export const assemblyGeneratedPaths = new Set([
 ]);
 
 export const assemblyTemplateOnlyPaths = new Set([
-	"docs/guides/186-backport-ledger.md",
-	"docs/guides/components/design-system-agent-benchmark.md",
-	"docs/guides/components/fixtures/design-system-agent-benchmark-runs.jsonl",
-	"docs/guides/components/fixtures/design-system-agent-benchmark-runs.md",
+	"docs/benchmarks/history/template-intelligence-runs.jsonl",
+	"docs/benchmarks/README.md",
+	"docs/benchmarks/design-system-agent-benchmark.md",
+	"docs/benchmarks/design-system-agent-benchmark-runs.jsonl",
+	"docs/benchmarks/design-system-agent-benchmark-runs.md",
 	"scripts/create-template-profile.mjs",
 	"scripts/dev-thin.mjs",
-	"scripts/generate-commit-line-delta.mjs",
 	"scripts/generate-template-assembly-inventory.mjs",
-	"scripts/install-orchestration.mjs",
 	"scripts/measure-storybook-performance.mjs",
 	"scripts/review-thin-start-api.mjs",
 	"scripts/verify/verify-design-system-agent-benchmark.mjs",
-	"scripts/verify/verify-create-averlo.mjs",
 	"scripts/verify/verify-template-profiles.mjs",
+	"scripts/verify/verify-create-averlo.mjs",
 	".github/workflows/publish-create-averlo.yml",
-	".github/workflows/update-commit-line-delta.yml",
-	"docs/assets/commit-line-delta.svg",
 ]);
 
 export const assemblyTemplateOnlyRoots = [
 	".agents",
-	"packages",
 	"plugins",
+	"packages",
 	"template-assembly",
 	"template-profiles",
 	"template-surfaces",
@@ -61,15 +57,12 @@ export const assemblyCoreRoots = [
 
 export const assemblyTemplateOnlyScripts = new Set([
 	"create:project",
-	"orchestration:init",
 	"dev:thin",
-	"chart:commit-line-delta",
 	"review:thin-start-api",
 	"measure:storybook-performance",
 	"generate:design-system-agent-benchmark-report",
 	"verify:design-system-agent-benchmark",
 	"verify:storybook-backport",
-	"verify:project-skills",
 	"verify:profiles",
 	"verify:create-averlo",
 ]);
@@ -78,14 +71,12 @@ export const assemblyTemplateOnlyDevDependencies = new Set([]);
 
 export const assemblyCoreScripts = new Set([
 	"dev",
-	"dev:preview",
 	"dev:local",
 	"dev:inspect",
-	"dev:user",
-	"dev:agent",
-	"predev:preview",
+	"predev",
 	"predev:local",
 	"predev:inspect",
+	"prebuild",
 	"build-storybook",
 	"build",
 	"design-system:evidence",
@@ -97,6 +88,9 @@ export const assemblyCoreScripts = new Set([
 	"verify:smoke",
 	"verify:modals",
 	"verify:surface-contracts",
+	"verify:retired-semantic-service",
+	"verify:retired-template-intelligence",
+	"verify:skill-references",
 	"verify:route-surfaces",
 	"verify:component-skeletons",
 	"verify:route-skeletons",
@@ -138,7 +132,6 @@ export const assemblyCoreDependencies = new Set([
 	"react-phone-number-input",
 	"remark-gfm",
 	"sonner",
-	"streamdown",
 ]);
 
 export const assemblyCoreDevDependencies = new Set([
@@ -165,16 +158,7 @@ export const assemblyCoreDevDependencies = new Set([
 ]);
 
 export const assemblyProjectDocs = new Set([
-	"docs/guides/auth-organization-adapters.md",
-	"docs/guides/components/README.md",
-	"docs/guides/components/composition-and-public-apis.md",
-	"docs/guides/components/feedback-and-status.md",
-	"docs/guides/components/forms-and-submission.md",
-	"docs/guides/components/interaction-and-responsive-rendering.md",
-	"docs/guides/components/loading-and-async-states.md",
-	"docs/guides/components/overlays-and-confirmation.md",
-	"docs/guides/components/surfaces-and-presentation.md",
-	"docs/guides/payload-vercel-neon-blob.md",
+	"docs/operations/payload-vercel-neon-blob.md",
 ]);
 
 export function isWithinPath(relativePath, ownedPath) {

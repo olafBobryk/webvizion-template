@@ -15,7 +15,6 @@ function omitMissingLinks<T>(items: Array<T | null>): T[] {
 const siteLinks = getMarketingSiteLinks();
 const internalRouteLinks = omitMissingLinks<SiteLink>([
 	siteLinks.demo,
-	siteLinks.intelligence,
 	siteLinks.playground,
 	siteLinks.dictionary,
 	siteLinks.reference,
@@ -59,13 +58,6 @@ export const fallbackHomePage: MarketingPageDocument = {
 					description:
 						"Browse live primitives, states, and skeletons before composing them into a product.",
 					surfaceIds: ["demo", "demoPrimitives"],
-				},
-				{
-					id: "intelligence",
-					title: "Intelligence",
-					description:
-						"Generate a repository map and query the right surfaces before changing shared code.",
-					surfaceIds: ["intelligence"],
 				},
 				{
 					id: "playground",
@@ -137,7 +129,6 @@ export const fallbackSiteLayout: SiteLayoutDocument = {
 			},
 			siteLinks.contact,
 			siteLinks.demo,
-			siteLinks.intelligence,
 			siteLinks.playground,
 			siteLinks.settings,
 		]),
@@ -161,7 +152,6 @@ export const fallbackSiteLayout: SiteLayoutDocument = {
 		topNavLinks: omitMissingLinks([
 			siteLinks.home,
 			siteLinks.demo,
-			siteLinks.intelligence,
 			siteLinks.playground,
 			siteLinks.settings,
 		]),

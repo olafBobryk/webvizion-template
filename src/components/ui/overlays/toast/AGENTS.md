@@ -2,8 +2,7 @@
 
 ## Ownership
 
-This folder owns the client-only transient-feedback host. The supported host
-and action contract lives at `UI/Overlays/Toast` in Storybook.
+This folder owns the client-only transient-feedback host.
 
 ## Dependency and host boundaries
 

@@ -3,7 +3,6 @@
 ## Ownership and boundary
 
 This full-start-only folder owns free color entry and semantic swatch selection.
-Storybook owns the public consumer contracts.
 
 ## Structural invariants
 

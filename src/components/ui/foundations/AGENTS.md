@@ -3,8 +3,7 @@
 ## Ownership
 
 This folder owns library-wide focus, motion, settings, appearance, text-scale,
-surface-tint, and CSS-token infrastructure. Consumer contracts and executable
-examples live under `UI/Foundations/*` in Storybook.
+surface-tint, and CSS-token infrastructure.
 
 ## Dependency and runtime boundaries
 

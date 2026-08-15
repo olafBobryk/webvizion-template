@@ -46,8 +46,6 @@ yarn-error.log*
 /.template-instances/
 /tmp/
 /.thin-start/
-/.template-intelligence/
-/.serena/
 /.understand-anything/
 /graphify-out/
 

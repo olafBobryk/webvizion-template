@@ -4,7 +4,6 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { templateSurfaces } from "../template-surfaces/index.mjs";
 import { getCapabilitySurfaces } from "./capabilities/index.mjs";
-import { installOrchestrationCapability } from "./capabilities/orchestration/index.mjs";
 import {
 	assemblyCoreDependencies,
 	assemblyCoreDevDependencies,
@@ -365,12 +364,7 @@ async function writePackage(
 	);
 }
 
-async function applyProfileFiles(
-	sourceRoot,
-	destinationRoot,
-	profile,
-	selectedSurfaces,
-) {
+async function applyProfileFiles(sourceRoot, destinationRoot, profile) {
 	const files = [
 		...(profile.sharedFiles ?? []).map((target) => ({
 			source: target,
@@ -379,10 +373,7 @@ async function applyProfileFiles(
 		...(profile.overrides ?? []),
 	];
 	for (const file of files) {
-		const destination = path.join(
-			destinationRoot,
-			getAssembledPath(file.target, selectedSurfaces),
-		);
+		const destination = path.join(destinationRoot, file.target);
 		await fs.mkdir(path.dirname(destination), { recursive: true });
 		await fs.copyFile(path.join(sourceRoot, file.source), destination);
 	}
@@ -460,39 +451,39 @@ async function writeProjectDocs(
 			"",
 			"Template setup and assembly machinery is intentionally not included in this initialized project.",
 			"See `.template-profile.json` for its immutable setup receipt.",
+			"Read `PRODUCT.md` before making product or UX decisions.",
 			"",
 		].join("\n"),
 	);
-	await fs.mkdir(path.join(destinationRoot, "docs/project/source"), {
-		recursive: true,
-	});
+	await fs.writeFile(
+		path.join(destinationRoot, "PRODUCT.md"),
+		[
+			`# ${projectLabel}`,
+			"",
+			"## Product definition",
+			"",
+			"- Purpose: To be defined by the project owner.",
+			"- Primary users: To be defined by the project owner.",
+			"- Core outcomes: To be defined by the project owner.",
+			"",
+			"Do not infer product requirements from Averlo reference fixtures. Record the project's actual product intent here before making product or UX decisions.",
+			"",
+			"## Starting point",
+			"",
+			`This project was initialized from Averlo with the \`${profileLabel}\` profile and \`${content}\` content mode.`,
+			"`.template-profile.json` is the immutable source for the installed profile and content selection.",
+			"",
+		].join("\n"),
+	);
+	await fs.mkdir(path.join(destinationRoot, "docs"), { recursive: true });
 	await fs.writeFile(
 		path.join(destinationRoot, "docs/README.md"),
 		[
 			"# Documentation",
 			"",
-			"- `project/` contains documentation owned by this project.",
-			"- `project/source/` contains supplied briefs, research, and reference inputs.",
-			"- `guides/` contains inherited Averlo engineering and operational guidance.",
-			"",
-		].join("\n"),
-	);
-	await fs.writeFile(
-		path.join(destinationRoot, "docs/project/README.md"),
-		[
-			"# Project documentation",
-			"",
-			"Keep project-owned specifications, decisions, and working documentation here.",
-			"Store supplied source material in `source/` so its ownership stays explicit.",
-			"",
-		].join("\n"),
-	);
-	await fs.writeFile(
-		path.join(destinationRoot, "docs/project/source/README.md"),
-		[
-			"# Source material",
-			"",
-			"Store supplied briefs, research, exports, and other reference inputs here.",
+			"- [PRODUCT.md](../PRODUCT.md) contains this project's product purpose, users, and outcomes.",
+			"- `operations/` contains inherited Averlo external-service runbooks when installed.",
+			"- Add project documentation here only when the project has real supporting material to preserve.",
 			"",
 		].join("\n"),
 	);
@@ -501,13 +492,32 @@ async function writeProjectDocs(
 		[
 			"# Project Agent Instructions",
 			"",
-			"- Use `npm run dev:agent -- --random` for isolated automated previews.",
-			"- Do not run Next.js development commands directly.",
-			"- Start Storybook with `npm run storybook` only after the isolated Next preview is healthy; discover its URL with `npm run storybook:status`.",
-			"- Keep reusable instance-to-template story status in literal story-level `tags` and `parameters.backport`; do not create a central backport ledger.",
-			"- Keep generated build, environment, and local intelligence artifacts out of Git.",
-			"- Internal routes are profile-installed, noindex surfaces; do not add destinations that assembly did not select.",
-			"- Use the shared toast and confirmation-modal primitives for standard feedback and confirmation flows.",
+			"## Project",
+			"",
+			`- This is \`${projectLabel}\`, an independent Averlo project initialized with the \`${profileLabel}\` profile and \`${content}\` content mode.`,
+			"- Read `PRODUCT.md` before making product, audience, or UX decisions. `.template-profile.json` owns the immutable installed profile; do not infer product requirements from Averlo reference fixtures.",
+			"",
+			"## Averlo Plugin Pack",
+			"",
+			"- Treat the installed Averlo plugin pack as the repository workflow layer. For implementation or implementation review, invoke `$averlo:repository-workflows` and follow only the workflows and concerns it selects.",
+			"- After the router is selected, do not separately invoke overlapping Averlo design-system, skeleton, entity, or surface skills for the same change unit. Use a dedicated operational skill only when project lifecycle or transfer work is requested.",
+			"- Root and nearest `AGENTS.md` files own structural policy. Existing verifier commands own deterministic policy.",
+			"",
+			"## Development and Review Isolation",
+			"",
+			"- Use `$preview` to start, recover, verify, or hand off application and Storybook previews. It owns wrapper selection, server isolation, generated preview state, review modes, section anchors, screenshots, and verified review links.",
+			"- Do not start development servers or report a preview as live outside that workflow.",
+			"",
+			"## Application Areas",
+			"",
+			"- The dashboard is the application implementation area.",
+			"- Marketing is the public-site implementation area.",
+			"- `.template-profile.json` determines which areas exist. Use the matching repository workflow and nearest `AGENTS.md` for their structure.",
+			"- Resolve provider-specific records and metadata in server-side resolvers or adapters before data reaches the frontend contract.",
+			"",
+			"## Design System",
+			"",
+			"- Route UI work through `$averlo:repository-workflows`. Follow the owner evidence and concern contracts it selects rather than treating this file as a component catalogue or API reference.",
 			"",
 		].join("\n"),
 	);
@@ -519,7 +529,6 @@ export async function assembleTemplateProfile({
 	profile,
 	content,
 	capabilities = [],
-	sourceCommit,
 	projectName,
 	deferLockfile = false,
 }) {
@@ -542,12 +551,7 @@ export async function assembleTemplateProfile({
 			getAssembledPath(relativePath, selectedSurfaces),
 		);
 	}
-	await applyProfileFiles(
-		sourceRoot,
-		destinationRoot,
-		profile,
-		selectedSurfaces,
-	);
+	await applyProfileFiles(sourceRoot, destinationRoot, profile);
 	await writeCentralFiles(sourceRoot, destinationRoot, selectedSurfaces);
 	if (selectedSurfaces.has("demo")) {
 		execFileSync("node", ["scripts/generate-component-catalog.mjs"], {
@@ -560,12 +564,6 @@ export async function assembleTemplateProfile({
 		deferLockfile,
 	});
 	await writeProjectDocs(destinationRoot, profile, content, projectName);
-	if (capabilities.includes("orchestration")) {
-		await installOrchestrationCapability({
-			targetRoot: destinationRoot,
-			sourceCommit,
-		});
-	}
 	return {
 		includedFiles: plan.included.length,
 		omittedFiles: plan.omitted.length,

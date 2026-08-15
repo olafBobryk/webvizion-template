@@ -2,9 +2,7 @@
 
 ## Ownership
 
-This family owns complete form controls composed from UI primitives. Storybook
-under `UI/Input/**` is the authority for supported owners, imports, compounds,
-selection guidance, examples, and observable behavior.
+This family owns complete form controls composed from UI primitives.
 
 ## Public facade and dependency direction
 
@@ -33,5 +31,4 @@ selection guidance, examples, and observable behavior.
   full-start-only; DateInput and the shared calendar core remain available to
   thin-start.
 
-Read the nearest child `AGENTS.md` for internal topology that Storybook cannot
-enforce. Do not recreate an owner inventory or consumer contract here.
+Read the nearest child `AGENTS.md` for internal topology.

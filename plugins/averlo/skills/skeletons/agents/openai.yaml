@@ -1,0 +1,4 @@
+interface:
+  display_name: "Averlo · Skeletons"
+  short_description: "Audit loading states for Component.Skeleton"
+  default_prompt: "Use $averlo:skeletons to audit this loading surface and apply the Component.Skeleton pattern."

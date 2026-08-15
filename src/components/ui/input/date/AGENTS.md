@@ -2,15 +2,14 @@
 
 ## Ownership and boundary
 
-This folder owns the canonical single-date and date-range system. Storybook
-owns the public contracts. DateRangeInput is full-start-only while
-DateInput and the shared calendar core remain available to thin-start.
+This folder owns the canonical single-date and date-range system. DateRangeInput
+is full-start-only while DateInput and the shared calendar core remain available
+to thin-start.
 
 ## Structural invariants
 
-- Both public inputs compose one private `CalendarPopover` and the same UTC date
-  utilities. Values remain validated `YYYY-MM-DD` strings and use UTC
-  arithmetic.
+- Both public inputs compose one private `CalendarPopover` and shared date
+  utilities.
 - `CalendarPopover` owns calendar state and interaction; no second calendar or
   overlay topology may be introduced.
 - `Dropdown.Panel` is only the anchored shell. Its content remains one compact

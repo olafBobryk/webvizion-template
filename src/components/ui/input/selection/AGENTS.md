@@ -3,9 +3,8 @@
 ## Ownership and boundary
 
 This folder owns searchable, combobox, and compact button-based selection
-controls. Storybook owns their consumer contracts. Implementations import
-`InputSkeleton` and choice primitives directly rather than self-importing the
-public facade.
+controls. Implementations import `InputSkeleton` and choice primitives directly
+rather than self-importing the public facade.
 
 ## Private topology
 

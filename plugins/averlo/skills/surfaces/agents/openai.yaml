@@ -1,0 +1,4 @@
+interface:
+  display_name: "Averlo · Surfaces"
+  short_description: "Keep Averlo route surfaces canonical"
+  default_prompt: "Use $averlo:surfaces to audit this route or dashboard surface against its canonical registry."

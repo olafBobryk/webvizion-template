@@ -8,9 +8,9 @@ import { Text } from "@/components/ui/primitives/Text";
 import { getMarketingLinkHref } from "../../links";
 import type { HomeHeroSectionBlock } from "../../types";
 import {
-	HomeHeroSurfaceAssembly,
-	HomeHeroSurfaceAssemblySkeleton,
-} from "./HomeHeroSurfaceAssembly";
+	HomeHeroPreviewCollage,
+	HomeHeroPreviewCollageSkeleton,
+} from "./HomeHeroPreviewCollage";
 
 type HomeHeroSectionProps = {
 	section: HomeHeroSectionBlock;
@@ -31,7 +31,7 @@ function HomeHeroSectionRoot({ section }: HomeHeroSectionProps) {
 				<div className="absolute inset-x-0 top-0 h-full bg-[radial-gradient(ellipse_at_top,rgb(var(--color-primary-rgb)_/_0.24),transparent_62%)]" />
 				<div className="absolute left-1/2 top-0 h-[26rem] w-[26rem] -translate-x-1/2 rounded-full bg-primary/12 blur-[120px]" />
 			</Section.Background>
-			<HomeHeroSurfaceAssembly services={section.services} />
+			<HomeHeroPreviewCollage services={section.services} />
 			<MotionSource.Sequence className="pointer-events-none relative z-20 flex w-full grow flex-col justify-between">
 				<div className="flex flex-col gap-10 max-w-150 items-start">
 					<div className="space-y-[25px]">
@@ -99,7 +99,7 @@ function HomeHeroSectionSkeleton({ section }: HomeHeroSectionProps) {
 				<div className="absolute inset-x-0 top-0 h-full bg-[radial-gradient(ellipse_at_top,rgb(var(--color-primary-rgb)_/_0.24),transparent_62%)]" />
 				<div className="absolute left-1/2 top-0 h-[26rem] w-[26rem] -translate-x-1/2 rounded-full bg-primary/12 blur-[120px]" />
 			</Section.Background>
-			<HomeHeroSurfaceAssemblySkeleton services={section.services} />
+			<HomeHeroPreviewCollageSkeleton services={section.services} />
 			<div className="pointer-events-none relative z-20 flex w-full grow flex-col justify-between">
 				<div className="flex flex-col gap-10 max-w-150 items-start">
 					<div className="space-y-[25px]">

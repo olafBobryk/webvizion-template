@@ -3,7 +3,7 @@
 ## Ownership
 
 This folder owns shared relative-time and timezone-aware calendar-date
-presentation. Consumer contracts live under `UI/Time/*` in Storybook.
+presentation.
 
 ## Dependency and runtime boundaries
 

@@ -1,13 +1,5 @@
-import {
-	ORCHESTRATION_CAPABILITY,
-	readOrchestrationCapabilityMarker,
-} from "./orchestration/index.mjs";
-
 export const ASSISTANT_CAPABILITY = "assistant";
-export const supportedCapabilities = new Set([
-	ASSISTANT_CAPABILITY,
-	ORCHESTRATION_CAPABILITY,
-]);
+export const supportedCapabilities = new Set([ASSISTANT_CAPABILITY]);
 
 export function normalizeCapabilities(values = []) {
 	const normalized = [...new Set(values)].sort();
@@ -42,10 +34,6 @@ export function getCapabilitySurfaces(profile, capabilities = []) {
 	return normalized.includes(ASSISTANT_CAPABILITY) ? ["assistant"] : [];
 }
 
-export async function readEffectiveCapabilities(targetRoot, receipt) {
-	const capabilities = new Set(normalizeReceiptCapabilities(receipt));
-	if (await readOrchestrationCapabilityMarker(targetRoot)) {
-		capabilities.add(ORCHESTRATION_CAPABILITY);
-	}
-	return [...capabilities].sort();
+export function readEffectiveCapabilities(receipt) {
+	return normalizeReceiptCapabilities(receipt);
 }

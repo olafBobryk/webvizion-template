@@ -19,13 +19,6 @@ export const fallbackHomePage: MarketingPageDocument = {
 			},
 			services: [
 				{
-					id: "intelligence",
-					title: "Intelligence",
-					description:
-						"Generate the same repository map before changing shared routes, primitives, or content.",
-					surfaceIds: ["intelligence"],
-				},
-				{
 					id: "primitives",
 					title: "Primitives",
 					description:

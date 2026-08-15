@@ -1,5 +1,650 @@
+/** biome-ignore-all lint/suspicious/noUnknownAtRules: Tailwind and theme at-rules are expected here. */
 @import "tailwindcss";
 @import "./iconAnimations.css";
-@import "./theme.css";
-@import "./motion.css";
-@import "./base.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+	--font-heading: var(--font-app);
+	--font-sans: var(--font-app);
+	--text-3xs: var(--font-size-3xs);
+	--text-2xs: var(--font-size-2xs);
+	--text-editor: var(--font-size-editor);
+	--text-xs: var(--font-size-xs);
+	--text-sm: var(--font-size-sm);
+	--text-base: var(--font-size-base);
+	--text-lg: var(--font-size-lg);
+	--text-xl: var(--font-size-xl);
+	--text-2xl: var(--font-size-2xl);
+	--text-3xl: var(--font-size-3xl);
+	--text-4xl: var(--font-size-4xl);
+	--text-5xl: var(--font-size-5xl);
+	--text-6xl: var(--font-size-6xl);
+	--text-7xl: var(--font-size-7xl);
+	--text-8xl: var(--font-size-8xl);
+	--text-9xl: var(--font-size-9xl);
+	--text-display-hero: var(--font-size-display-hero);
+	--text-display-2xxl: var(--font-size-display-2xxl);
+	--text-display-xxl: var(--font-size-display-xxl);
+	--text-display-xl: var(--font-size-display-xl);
+	--color-sidebar-ring: var(--sidebar-ring);
+	--color-sidebar-border: var(--sidebar-border);
+	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+	--color-sidebar-accent: var(--sidebar-accent);
+	--color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+	--color-sidebar-primary: var(--sidebar-primary);
+	--color-sidebar-foreground: var(--sidebar-foreground);
+	--color-sidebar: var(--sidebar);
+	--color-chart-10: var(--chart-10);
+	--color-chart-9: var(--chart-9);
+	--color-chart-8: var(--chart-8);
+	--color-chart-7: var(--chart-7);
+	--color-chart-6: var(--chart-6);
+	--color-chart-5: var(--chart-5);
+	--color-chart-4: var(--chart-4);
+	--color-chart-3: var(--chart-3);
+	--color-chart-2: var(--chart-2);
+	--color-chart-1: var(--chart-1);
+	--color-app-lime: var(--app-lime);
+	--color-app-orange: var(--app-orange);
+	--color-app-rose: var(--app-rose);
+	--color-app-berry: var(--app-berry);
+	--color-app-purple: var(--app-purple);
+	--color-app-violet: var(--app-violet);
+	--color-ring: var(--ring);
+	--color-input: var(--input);
+	--color-border: var(--border);
+	--color-destructive: var(--destructive);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-accent: var(--accent);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-muted: var(--muted);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-secondary: var(--secondary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-primary-text: var(--primary-text);
+	--color-primary: var(--primary);
+	--color-paper-foreground: var(--paper-foreground);
+	--color-paper: var(--paper);
+	--color-ink-foreground: var(--ink-foreground);
+	--color-ink: var(--ink);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-popover: var(--popover);
+	--color-card-foreground: var(--card-foreground);
+	--color-card: var(--card);
+	--color-foreground: var(--foreground);
+	--color-background: var(--background);
+	--color-surface: var(--surface);
+	--color-background-hover: color-mix(
+		in oklch,
+		var(--background),
+		var(--foreground) 5%
+	);
+	--color-background-active: color-mix(
+		in oklch,
+		var(--background),
+		var(--foreground) 10%
+	);
+	--color-foreground-hover: color-mix(
+		in oklch,
+		var(--foreground),
+		var(--background) 5%
+	);
+	--color-foreground-active: color-mix(
+		in oklch,
+		var(--foreground),
+		var(--background) 20%
+	);
+	--color-primary-hover: color-mix(
+		in oklch,
+		var(--primary),
+		var(--background) 20%
+	);
+	--color-primary-active: color-mix(
+		in oklch,
+		var(--primary),
+		var(--foreground) 8%
+	);
+	--color-danger: var(--danger);
+	--color-danger-text: var(--danger-text);
+	--color-success: var(--success);
+	--color-success-text: var(--success-text);
+	--color-warning: var(--warning-foreground);
+	--color-warning-accent: var(--warning);
+	--radius-sm: calc(var(--radius) * 0.6);
+	--radius-md: calc(var(--radius) * 0.8);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) * 1.4);
+	--radius-2xl: calc(var(--radius) * 1.8);
+	--radius-3xl: calc(var(--radius) * 2.2);
+	--radius-4xl: calc(var(--radius) * 2.6);
+	--spacing-section-x: var(--spacing-section-x);
+	--spacing-section-y: var(--spacing-section-y);
+	--spacing-section: var(--spacing-section);
+	--spacing-section-max: var(--spacing-section-max);
+}
+
+:root {
+	--font-sans-fallback:
+		system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+	--font-app: var(--font-inter, var(--font-sans-fallback));
+	--font-body: var(--font-app);
+	--font-heading: var(--font-app);
+	--text-scale: 1;
+	--font-size-3xs: calc(0.625rem * var(--text-scale));
+	--font-size-2xs: calc(0.6875rem * var(--text-scale));
+	--font-size-editor: calc(0.8125rem * var(--text-scale));
+	--font-size-xs: calc(0.75rem * var(--text-scale));
+	--font-size-sm: calc(0.875rem * var(--text-scale));
+	--font-size-base: calc(1rem * var(--text-scale));
+	--font-size-lg: calc(1.125rem * var(--text-scale));
+	--font-size-xl: calc(1.25rem * var(--text-scale));
+	--font-size-2xl: calc(1.5rem * var(--text-scale));
+	--font-size-3xl: calc(1.875rem * var(--text-scale));
+	--font-size-4xl: calc(2.25rem * var(--text-scale));
+	--font-size-5xl: calc(3rem * var(--text-scale));
+	--font-size-6xl: calc(3.75rem * var(--text-scale));
+	--font-size-7xl: calc(4.5rem * var(--text-scale));
+	--font-size-8xl: calc(6rem * var(--text-scale));
+	--font-size-9xl: calc(8rem * var(--text-scale));
+	--font-size-display-hero: calc(4.375rem * var(--text-scale));
+	--font-size-display-2xxl: calc(3.125rem * var(--text-scale));
+	--font-size-display-xxl: calc(2.25rem * var(--text-scale));
+	--font-size-display-xl: calc(1.625rem * var(--text-scale));
+
+	--motion-feedback-duration: 140ms;
+	--motion-feedback-ease: cubic-bezier(0.33, 0.1, 0.2, 1);
+	--motion-interaction-duration: 200ms;
+	--motion-interaction-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+	--motion-disclosure-duration: 260ms;
+	--motion-disclosure-ease: cubic-bezier(0.16, 1, 0.3, 1);
+	--motion-overlay-duration: 320ms;
+	--motion-overlay-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+	--motion-reveal-duration: 940ms;
+	--motion-reveal-ease: cubic-bezier(0.32, 0.04, 0.18, 1);
+	--motion-ambient-duration: 900ms;
+	--motion-ambient-ease: cubic-bezier(0.33, 0, 0.2, 1);
+	--motion-scroll-duration: 260ms;
+	--motion-scroll-ease: cubic-bezier(0.16, 1, 0.3, 1);
+	--motion-micro-duration: var(--motion-feedback-duration);
+	--motion-micro-ease: var(--motion-feedback-ease);
+	--motion-interactive-duration: var(--motion-interaction-duration);
+	--motion-interactive-ease: var(--motion-interaction-ease);
+	--motion-component-duration: var(--motion-disclosure-duration);
+	--motion-component-ease: var(--motion-disclosure-ease);
+	--motion-macro-duration: var(--motion-overlay-duration);
+	--motion-macro-ease: var(--motion-overlay-ease);
+	--motion-grand-duration: var(--motion-reveal-duration);
+	--motion-grand-ease: var(--motion-reveal-ease);
+	--motion-decorative-duration: var(--motion-ambient-duration);
+	--motion-decorative-ease: var(--motion-ambient-ease);
+	--motion-ring-ease: cubic-bezier(0.36, 0.07, 0.19, 0.97);
+	--motion-spin-duration: 2s;
+	--motion-spin-ease: cubic-bezier(0.75, 0.25, 0.25, 0.75);
+
+	--background: oklch(1 0 0);
+	--foreground: oklch(0.141 0.005 285.823);
+	--ink: var(--foreground);
+	--ink-foreground: var(--background);
+	--paper: var(--background);
+	--paper-foreground: var(--foreground);
+	--card: oklch(0.985 0 0);
+	--card-foreground: oklch(0.141 0.005 285.823);
+	--surface: oklch(1 0 0);
+	--popover: oklch(1 0 0);
+	--popover-foreground: oklch(0.141 0.005 285.823);
+	--primary: #315fd7;
+	--primary-foreground: #ffffff;
+	--primary-text: #284ebd;
+	--secondary: oklch(0.967 0.001 286.375);
+	--secondary-foreground: oklch(0.21 0.006 285.885);
+	--muted: oklch(0.967 0.001 286.375);
+	--muted-foreground: #656570;
+	--accent: oklch(0.967 0.001 286.375);
+	--accent-foreground: oklch(0.21 0.006 285.885);
+	--destructive: #f14d72;
+	--danger: var(--destructive);
+	--danger-text: #af1d42;
+	--border: oklch(0.92 0.004 286.32);
+	--input: oklch(0.92 0.004 286.32);
+	--ring: oklch(0.705 0.015 286.067);
+	--app-violet: #7014c5;
+	--app-purple: #743cdf;
+	--app-berry: #9c46bf;
+	--app-rose: #c94a99;
+	--app-orange: #f96a56;
+	--app-lime: #c7ce18;
+	--app-spectrum-gradient: linear-gradient(
+		90deg,
+		#3567ea 0%,
+		#5345da 8%,
+		#7014c5 16%,
+		#711cca 27%,
+		#7324ce 37%,
+		#7435dc 49%,
+		#7642e3 58%,
+		#9c46bf 62%,
+		#c94a99 66%,
+		#f14d72 70%,
+		#f96a56 74%,
+		#fdb31f 84%,
+		#c7ce18 92%,
+		#36c24c 100%
+	);
+	--chart-1: var(--primary);
+	--chart-2: var(--app-violet);
+	--chart-3: var(--app-purple);
+	--chart-4: var(--app-berry);
+	--chart-5: var(--app-rose);
+	--chart-6: var(--destructive);
+	--chart-7: var(--app-orange);
+	--chart-8: var(--warning);
+	--chart-9: var(--app-lime);
+	--chart-10: var(--success);
+	--radius: 0.625rem;
+	--sidebar: oklch(0.985 0 0);
+	--sidebar-foreground: oklch(0.141 0.005 285.823);
+	--sidebar-primary: oklch(0.546 0.245 262.881);
+	--sidebar-primary-foreground: oklch(0.97 0.014 254.604);
+	--sidebar-accent: oklch(0.967 0.001 286.375);
+	--sidebar-accent-foreground: oklch(0.21 0.006 285.885);
+	--sidebar-border: oklch(0.92 0.004 286.32);
+	--sidebar-ring: oklch(0.705 0.015 286.067);
+	--success: #36c24c;
+	--success-text: #157334;
+	--warning: #fdb31f;
+	--warning-foreground: #b54708;
+
+	--color-primary-rgb: 49 95 215;
+	--color-primary-hover-rgb: 47 90 209;
+	--color-primary-active-rgb: 38 73 171;
+	--color-primary-foreground-rgb: 239 246 255;
+	--color-foreground-rgb: 24 24 27;
+	--color-background-rgb: 255 255 255;
+	--color-danger-rgb: 241 77 114;
+	--color-success-rgb: 54 194 76;
+	--color-warning-rgb: 181 71 8;
+	--color-helper-0: #0f766e;
+	--color-helper-1: #2563eb;
+	--color-helper-2: #7c3aed;
+	--color-helper-3: #c2410c;
+	--color-helper-4: #be123c;
+	--color-helper-5: #047857;
+	--color-helper-6: #9333ea;
+	--color-helper-7: #0369a1;
+
+	--spacing-section-x: clamp(1rem, 5vw, 6.25rem);
+	--spacing-section-y: clamp(3rem, 8vw, 6.25rem);
+	--spacing-section: var(--spacing-section-y) var(--spacing-section-x);
+	--spacing-section-max: 1500px;
+	--site-header-height: 4.75rem;
+}
+
+@media (min-width: 64rem) {
+	:root {
+		--site-header-height: 6.25rem;
+	}
+}
+
+.dark {
+	--background: oklch(0.141 0.005 285.823);
+	--foreground: oklch(0.985 0 0);
+	--ink: var(--foreground);
+	--ink-foreground: var(--background);
+	--paper: var(--background);
+	--paper-foreground: var(--foreground);
+	--card: oklch(0.21 0.006 285.885);
+	--card-foreground: oklch(0.985 0 0);
+	--surface: oklch(0.21 0.006 285.885);
+	--popover: oklch(0.21 0.006 285.885);
+	--popover-foreground: oklch(0.985 0 0);
+	--primary: #315fd7;
+	--primary-foreground: oklch(0.97 0.014 254.604);
+	--primary-text: #91aeff;
+	--secondary: oklch(0.274 0.006 286.033);
+	--secondary-foreground: oklch(0.985 0 0);
+	--muted: oklch(0.274 0.006 286.033);
+	--muted-foreground: #b5b5bf;
+	--accent: oklch(0.274 0.006 286.033);
+	--accent-foreground: oklch(0.985 0 0);
+	--destructive: #f14d72;
+	--danger: var(--destructive);
+	--danger-text: #ff9bb2;
+	--border: oklch(1 0 0 / 10%);
+	--input: oklch(1 0 0 / 15%);
+	--ring: oklch(0.552 0.016 285.938);
+	--app-violet: #7014c5;
+	--app-purple: #743cdf;
+	--app-berry: #9c46bf;
+	--app-rose: #c94a99;
+	--app-orange: #f96a56;
+	--app-lime: #c7ce18;
+	--app-spectrum-gradient: linear-gradient(
+		90deg,
+		#3567ea 0%,
+		#5345da 8%,
+		#7014c5 16%,
+		#711cca 27%,
+		#7324ce 37%,
+		#7435dc 49%,
+		#7642e3 58%,
+		#9c46bf 62%,
+		#c94a99 66%,
+		#f14d72 70%,
+		#f96a56 74%,
+		#fdb31f 84%,
+		#c7ce18 92%,
+		#36c24c 100%
+	);
+	--chart-1: var(--primary);
+	--chart-2: var(--app-violet);
+	--chart-3: var(--app-purple);
+	--chart-4: var(--app-berry);
+	--chart-5: var(--app-rose);
+	--chart-6: var(--destructive);
+	--chart-7: var(--app-orange);
+	--chart-8: var(--warning);
+	--chart-9: var(--app-lime);
+	--chart-10: var(--success);
+	--sidebar: oklch(0.21 0.006 285.885);
+	--sidebar-foreground: oklch(0.985 0 0);
+	--sidebar-primary: oklch(0.623 0.214 259.815);
+	--sidebar-primary-foreground: oklch(0.97 0.014 254.604);
+	--sidebar-accent: oklch(0.274 0.006 286.033);
+	--sidebar-accent-foreground: oklch(0.985 0 0);
+	--sidebar-border: oklch(1 0 0 / 10%);
+	--sidebar-ring: oklch(0.552 0.016 285.938);
+	--success: #36c24c;
+	--success-text: #78e68a;
+	--warning: #fdb31f;
+	--warning-foreground: #fdb31f;
+
+	--color-primary-rgb: 49 95 215;
+	--color-primary-hover-rgb: 47 90 209;
+	--color-primary-active-rgb: 38 73 171;
+	--color-primary-foreground-rgb: 239 246 255;
+	--color-foreground-rgb: 250 250 250;
+	--color-background-rgb: 24 24 27;
+	--color-danger-rgb: 241 77 114;
+	--color-success-rgb: 54 194 76;
+	--color-warning-rgb: 253 179 31;
+}
+
+@layer components {
+	.inset-center {
+		@apply absolute inset-1/2 -translate-1/2;
+	}
+
+	.scroll-target {
+		@apply scroll-m-[100px];
+	}
+}
+
+@layer utilities {
+	/*
+	 * .motion-micro
+	 * -------------------------
+	 * Very small, quick transitions for micro-interactions.
+	 *
+	 * Ideal for:
+	 * - Icon / chevron rotations (eg. dropdown chevron pointing up when open).
+	 * - Tiny hover effects (opacity, color, background on pills or badges).
+	 * - Button hover states where only color/opacity changes.
+	 * - Focus rings appearing on inputs.
+	 * - Small border-color changes on validation.
+	 * - Slight scale on icons or small buttons (scale(0.97–1.03)).
+	 *
+	 * Use on:
+	 * - The chevron SVG on dropdown triggers when you toggle `rotate-180`.
+	 * - Small elements that should feel snappy and responsive with almost no lag.
+	 */
+	.motion-micro,
+	.motion-feedback {
+		transition-duration: var(--motion-feedback-duration);
+		transition-timing-function: var(--motion-feedback-ease);
+	}
+
+	/*
+	 * .motion-interactive
+	 * -------------------------
+	 * For interactive elements where the user explicitly clicks or taps.
+	 *
+	 * Ideal for:
+	 * - Dropdown triggers (the pill/button that opens a menu).
+	 * - Buttons that slightly change background, scale, or shadow on hover/active.
+	 * - Toggle switches and checkboxes changing state.
+	 * - Tabs highlighting / underline sliding between active tabs.
+	 * - Chips / filters being selected or deselected.
+	 *
+	 * Specific examples:
+	 * - DateRangeInput pill: background + border subtle change on hover/active.
+	 * - Cards that slightly lift with a shadow when hovered.
+	 * - A button that grows in width when loading text appears ("Save" -> "Saving…").
+	 */
+	.motion-interactive,
+	.motion-interaction {
+		transition-duration: var(--motion-interaction-duration);
+		transition-timing-function: var(--motion-interaction-ease);
+	}
+
+	/*
+	 * .motion-component
+	 * -------------------------
+	 * For component-level transitions where the shape/size/layout of a component changes.
+	 *
+	 * Ideal for:
+	 * - Dropdown menus appearing/disappearing (opacity, translateY) if not using Framer.
+	 * - Panels expanding/collapsing in an accordion.
+	 * - Cards changing layout slightly (eg. showing extra text or controls).
+	 * - Form sections sliding in when a toggle reveals more fields.
+	 * - Width/height changes where the component grows/shrinks a bit.
+	 *
+	 * Specific examples:
+	 * - A filter sidebar opening from the side (width change).
+	 * - A details row expanding inside a table to show extra information.
+	 * - A "more options" panel inside a card that fades and slides down into view.
+	 */
+	.motion-component,
+	.motion-disclosure {
+		transition-duration: var(--motion-disclosure-duration);
+		transition-timing-function: var(--motion-disclosure-ease);
+	}
+
+	/*
+	 * .motion-macro
+	 * -------------------------
+	 * For large, page-level or layout-level transitions that should feel slower and smoother.
+	 *
+	 * Ideal for:
+	 * - Entire sidebars opening/closing.
+	 * - Overlay panels / drawers sliding in from edges.
+	 * - Modals fading in combined with a backdrop.
+	 * - Big layout shifts (eg. dashboard content area resizing when nav collapses).
+	 * - Page sections expanding to show advanced filters, analytics, or details.
+	 *
+	 * Specific examples:
+	 * - A full-height filter drawer on mobile that slides up.
+	 * - The main content shifting right when a left sidebar expands.
+	 * - A hero section height expanding when a "show more" description is opened.
+	 */
+	.motion-macro,
+	.motion-overlay {
+		transition-duration: var(--motion-overlay-duration);
+		transition-timing-function: var(--motion-overlay-ease);
+	}
+
+	/*
+	 * .motion-grand
+	 * -------------------------
+	 * For slow, deliberate reveal or scene-level transitions that should feel cinematic.
+	 *
+	 * Ideal for:
+	 * - Hero or intro sequences.
+	 * - Layered reveal choreography across multiple sections.
+	 * - Large decorative transforms that should settle with more weight than macro UI motion.
+	 */
+	.motion-grand,
+	.motion-reveal {
+		transition-duration: var(--motion-reveal-duration);
+		transition-timing-function: var(--motion-reveal-ease);
+	}
+
+	/*
+	 * .motion-decorative
+	 * -------------------------
+	 * For non-interactive, decorative animations that loop or pulse.
+	 *
+	 * Ideal for:
+	 * - Icon accent animations (bell, subtle pulses).
+	 * - Background glows or ambient motion.
+	 *
+	 * Use on:
+	 * - Elements with a keyframe animation where you want consistent timing.
+	 */
+	.motion-decorative,
+	.motion-ambient {
+		animation-duration: var(--motion-ambient-duration);
+		animation-timing-function: var(--motion-ambient-ease);
+		transition-duration: var(--motion-ambient-duration);
+		transition-timing-function: var(--motion-ambient-ease);
+	}
+
+	.motion-scroll {
+		transition-duration: var(--motion-scroll-duration);
+		transition-timing-function: var(--motion-scroll-ease);
+	}
+
+	.dropdown-panel-enter {
+		transform-origin: top right;
+		animation: dropdown-panel-enter var(--motion-disclosure-duration)
+			var(--motion-disclosure-ease) both;
+	}
+}
+
+@keyframes dropdown-panel-enter {
+	from {
+		opacity: 0;
+		transform: translateY(-4px) scale(0.98);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.dropdown-panel-enter {
+		animation-duration: 1ms;
+	}
+}
+
+@layer base {
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+		scrollbar-width: thin;
+		scrollbar-color: color-mix(in oklch, var(--foreground), transparent 80%)
+			var(--background);
+		@apply border-border outline-ring/50;
+	}
+
+	html[data-theme-switching],
+	html[data-theme-switching] *,
+	html[data-theme-switching] *::before,
+	html[data-theme-switching] *::after {
+		/* biome-ignore lint/complexity/noImportantStyles: The root theme transaction must override component-owned transition timings for two frames. */
+		transition-duration: 0s !important;
+		/* biome-ignore lint/complexity/noImportantStyles: Delayed component transitions would otherwise resume after the atomic theme swap. */
+		transition-delay: 0s !important;
+	}
+
+	html[data-motion-override="off"] [data-loading-screen-mount="true"] {
+		visibility: hidden;
+	}
+
+	html[data-loading-override="off"] [data-loading-screen-mount="true"] {
+		visibility: hidden;
+	}
+
+	html[data-motion-override="off"] [data-reveal-item] {
+		/* biome-ignore lint/complexity/noImportantStyles: Automation overrides must beat server-rendered inline motion styles. */
+		opacity: 1 !important;
+		/* biome-ignore lint/complexity/noImportantStyles: Automation overrides must beat server-rendered inline motion styles. */
+		transform: none !important;
+		/* biome-ignore lint/complexity/noImportantStyles: Automation overrides must beat server-rendered inline motion styles. */
+		clip-path: none !important;
+		/* biome-ignore lint/complexity/noImportantStyles: Automation overrides must beat server-rendered inline motion styles. */
+		animation: none !important;
+		/* biome-ignore lint/complexity/noImportantStyles: Automation overrides must beat server-rendered inline motion styles. */
+		transition: none !important;
+	}
+
+	html[data-motion-override="off"] {
+		--motion-feedback-duration: 1ms;
+		--motion-interaction-duration: 1ms;
+		--motion-disclosure-duration: 1ms;
+		--motion-overlay-duration: 1ms;
+		--motion-reveal-duration: 1ms;
+		--motion-ambient-duration: 1ms;
+		--motion-scroll-duration: 1ms;
+		scroll-behavior: auto;
+	}
+
+	html {
+		@apply font-sans;
+	}
+
+	body {
+		font-family: var(--font-body);
+		font-size: var(--font-size-base);
+		min-height: 100vh;
+		@apply bg-background text-foreground;
+	}
+
+	::-webkit-scrollbar {
+		width: 10px;
+		height: 10px;
+	}
+
+	::-webkit-scrollbar-track {
+		background: var(--background);
+	}
+
+	::-webkit-scrollbar-thumb {
+		background: color-mix(in oklch, var(--foreground), transparent 82%);
+		border-radius: 999px;
+		border: 2px solid var(--background);
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		background: color-mix(in oklch, var(--foreground), transparent 72%);
+	}
+
+	::-webkit-scrollbar-corner {
+		background: var(--background);
+	}
+
+	input:-webkit-autofill,
+	input:-webkit-autofill:hover,
+	input:-webkit-autofill:focus,
+	input:-webkit-autofill:active,
+	textarea:-webkit-autofill,
+	textarea:-webkit-autofill:hover,
+	textarea:-webkit-autofill:focus,
+	textarea:-webkit-autofill:active,
+	select:-webkit-autofill,
+	select:-webkit-autofill:hover,
+	select:-webkit-autofill:focus,
+	select:-webkit-autofill:active {
+		/** biome-ignore lint/complexity/noImportantStyles: WebKit autofill requires important to override browser-injected colors. */
+		-webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+		/** biome-ignore lint/complexity/noImportantStyles: WebKit autofill requires important to override browser-injected colors. */
+		-webkit-text-fill-color: inherit !important;
+		/** biome-ignore lint/complexity/noImportantStyles: WebKit autofill requires important to preserve delayed autofill background behavior. */
+		transition: background-color 5000s ease-in-out 0s !important;
+		/** biome-ignore lint/complexity/noImportantStyles: WebKit autofill requires important to override browser-injected colors. */
+		caret-color: var(--foreground) !important;
+	}
+}

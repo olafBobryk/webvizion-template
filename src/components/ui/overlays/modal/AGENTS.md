@@ -4,7 +4,6 @@
 
 This folder owns the client-only modal host, shell, Card surface, slots,
 submission context, and specialized confirmation and image-inspection flows.
-Consumer contracts live under `UI/Overlays/Modal*` in Storybook.
 
 ## Dependency and host boundaries
 

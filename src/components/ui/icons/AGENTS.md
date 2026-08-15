@@ -2,8 +2,7 @@
 
 ## Ownership
 
-This folder owns named icon rendering and registry composition. The supported
-consumer contract lives at `UI/Icons/Icon and Registry` in Storybook.
+This folder owns named icon rendering and registry composition.
 
 ## Dependency and runtime boundaries
 

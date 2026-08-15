@@ -1,0 +1,15 @@
+{
+  "policyVersion": 2,
+  "paths": {
+    "foundation": "src/app/(site)/dashboard/_lib/presentation/contracts.ts",
+    "accountDomain": "src/app/(site)/dashboard/_lib/entities/account/domain.ts",
+    "accountPresentation": "src/app/(site)/dashboard/_lib/entities/account/presentation.ts",
+    "memberDomain": "src/app/(site)/dashboard/_lib/entities/member/domain.ts",
+    "memberPresentation": "src/app/(site)/dashboard/_lib/entities/member/presentation.ts",
+    "invitationPresentation": "src/app/(site)/dashboard/_lib/entities/invitation/presentation.ts",
+    "organizationDomain": "src/app/(site)/dashboard/_lib/entities/organization/domain.ts",
+    "organizationPresentation": "src/app/(site)/dashboard/_lib/entities/organization/presentation.ts",
+    "recordDomain": "src/app/(site)/dashboard/_lib/entities/record/domain.ts",
+    "recordPresentation": "src/app/(site)/dashboard/_lib/entities/record/presentation.ts"
+  }
+}

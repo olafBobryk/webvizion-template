@@ -50,7 +50,6 @@ export type TemplateServiceSurfaceId =
 	| "demo"
 	| "demoPrimitives"
 	| "fullStart"
-	| "intelligence"
 	| "playground"
 	| "assembly"
 	| "thinStart";

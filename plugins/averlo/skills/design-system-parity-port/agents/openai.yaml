@@ -1,0 +1,6 @@
+interface:
+  display_name: "Averlo · Design System Parity Port"
+  short_description: "Bridge fidelity scaffolds into canonical owners"
+  default_prompt: "Use $averlo:design-system-parity-port to build and freeze this authoritative page reference, resolve its presentation inventory through the canonical-owner bridge gate, and complete a zero-regression design-system port."
+policy:
+  allow_implicit_invocation: false

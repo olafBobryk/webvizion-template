@@ -3,7 +3,6 @@
 ## Ownership
 
 Component-owned implementation for the public `Accordion` composition.
-Storybook `UI/Misc/Accordion` owns its consumer contract and executable behavior.
 
 ## Public boundary
 

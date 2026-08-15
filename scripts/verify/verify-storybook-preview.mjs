@@ -73,7 +73,7 @@ async function createFixture() {
 			'    if (process.env.HEALTHY_INDEX === "false") { response.writeHead(500); response.end("index failed"); return; }',
 			'    response.writeHead(200, { "content-type": "application/json" }); response.end(JSON.stringify({ entries: {} })); return;',
 			"  }",
-			'  response.end("storybook");',
+		'  response.end("storybook");',
 			'}).listen(port, "127.0.0.1");',
 		].join("\n"),
 	);

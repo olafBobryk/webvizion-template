@@ -2,8 +2,7 @@
 
 ## Ownership and boundary
 
-This folder owns controlled file selection and profile-picture fields. Storybook
-owns their consumer contracts.
+This folder owns controlled file selection and profile-picture fields.
 
 ## Private topology
 

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Averlo · Repository Workflows"
+  short_description: "Route repository implementation work by intent"
+  default_prompt: "Use $averlo:repository-workflows to route this implementation work through every applicable entry workflow and only the required concern contracts."
+policy:
+  allow_implicit_invocation: false

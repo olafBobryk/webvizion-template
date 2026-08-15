@@ -259,9 +259,9 @@ async function main() {
 			scenarios.push({ ...scenario, results, summary: summarize(results) });
 		}
 		const report = {
-			metadata: {
-				localUrl: metadata.localUrl,
-				ownership: metadata.ownership,
+		metadata: {
+			localUrl: metadata.localUrl,
+			ownership: metadata.ownership,
 				root,
 			},
 			runs,

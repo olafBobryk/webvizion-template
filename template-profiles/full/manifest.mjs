@@ -13,7 +13,6 @@ export const fullProfile = {
 			"dashboard",
 			"marketing",
 			"demo",
-			"intelligence",
 			"scrollPerformance",
 			"playground",
 			"dictionary",
@@ -39,6 +38,7 @@ export const fullProfile = {
 		forbiddenPackages: [],
 		commands: [
 			"npm run verify:static",
+			"npm run verify:marketing-sections",
 			"npm run verify:site-layout",
 			"npm run build",
 			"npm run verify:smoke",

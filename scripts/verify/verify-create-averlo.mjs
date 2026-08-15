@@ -98,14 +98,20 @@ async function assertGeneratedProject(targetRoot, { installed }) {
 		throw new Error("Generated profile receipt is incorrect.");
 	}
 	for (const requiredPath of [
+		"PRODUCT.md",
 		"docs/README.md",
-		"docs/project/README.md",
-		"docs/project/source/README.md",
-		"docs/guides/components/README.md",
 		"package-lock.json",
 	]) {
 		if (!(await exists(path.join(targetRoot, requiredPath)))) {
 			throw new Error(`Generated project is missing ${requiredPath}.`);
+		}
+	}
+	for (const retiredPath of [
+		"docs/project/README.md",
+		"docs/project/source/README.md",
+	]) {
+		if (await exists(path.join(targetRoot, retiredPath))) {
+			throw new Error(`Generated project retained ${retiredPath}.`);
 		}
 	}
 	if ((await exists(path.join(targetRoot, "node_modules"))) !== installed) {

@@ -3,8 +3,8 @@
 ## Ownership and boundary
 
 This folder owns text, email, password, phone, multiline, and hidden honeypot
-entry. Storybook owns their consumer contracts. Implementations import
-InputSkeleton directly and keep private support types out of the public facade.
+entry. Implementations import InputSkeleton directly and keep private support
+types out of the public facade.
 
 ## Private topology
 

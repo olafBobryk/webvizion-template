@@ -1,6 +1,6 @@
 const payloadDisabledResponse = () =>
 	new Response(
-		"Payload API routes are scaffolded but disabled in this template version. See docs/guides/payload-vercel-neon-blob.md.",
+		"Payload API routes are scaffolded but disabled in this template version. See docs/operations/payload-vercel-neon-blob.md.",
 		{
 			status: 404,
 			headers: {

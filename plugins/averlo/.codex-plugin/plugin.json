@@ -1,0 +1,39 @@
+{
+	"name": "averlo",
+	"version": "0.1.0+codex.20260815170000",
+	"description": "Repository workflows for building, reviewing, and backporting reusable Averlo Next application patterns.",
+	"author": {
+		"name": "Olaf Bobryk",
+		"url": "https://averlo-next-template.vercel.app"
+	},
+	"homepage": "https://averlo-next-template.vercel.app",
+	"repository": "https://github.com/olafBobryk/averlo-next-template",
+	"keywords": [
+		"averlo",
+		"nextjs",
+		"entities",
+		"surfaces",
+		"skeletons",
+		"design-system",
+		"figma",
+		"storybook",
+		"backport",
+		"visual-parity",
+		"export"
+	],
+	"skills": "./skills/",
+	"interface": {
+		"displayName": "Averlo",
+		"shortDescription": "Build with Averlo contracts",
+		"longDescription": "Averlo packages repository workflows for entity UI, application surface registries, component-owned loading states, Storybook-backed public UI enforcement, deterministic Figma exports, and reviewed story backports from product instances into the canonical template.",
+		"developerName": "Olaf Bobryk",
+		"category": "Developer Tools",
+		"capabilities": ["Write"],
+		"websiteURL": "https://averlo-next-template.vercel.app",
+		"defaultPrompt": [
+			"Audit this entity UI against Averlo",
+			"Review this route surface registry",
+			"Backport approved Storybook stories into the Averlo template"
+		]
+	}
+}

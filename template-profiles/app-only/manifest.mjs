@@ -14,7 +14,6 @@ export const appOnlyProfile = {
 		surfaces: [
 			"dashboard",
 			"demo",
-			"intelligence",
 			"scrollPerformance",
 			"playground",
 			"dictionary",

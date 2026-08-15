@@ -2,8 +2,7 @@
 
 ## Ownership
 
-This folder owns shared portal-backed overlay infrastructure. Consumer
-contracts live under `UI/Overlays/*` in Storybook.
+This folder owns shared portal-backed overlay infrastructure.
 
 ## Dependency and runtime boundaries
 

@@ -23,11 +23,6 @@ async function getExpectations() {
 		"src/app/(site)/(marketing)/(home)/page.tsx",
 	);
 	const hasDashboard = await pathExists("src/app/(site)/dashboard/page.tsx");
-	const hasIntelligence =
-		(await pathExists("src/app/(site)/(dev)/internal/intelligence/page.tsx")) ||
-		(await pathExists(
-			"src/app/(site)/(marketing)/internal/intelligence/page.tsx",
-		));
 	const expectations = [
 		{
 			route: "/",
@@ -39,13 +34,6 @@ async function getExpectations() {
 	if (hasDashboard) {
 		expectations.push({ route: "/login", statuses: new Set([200]) });
 	}
-	if (hasIntelligence) {
-		expectations.push({
-			route: "/internal/intelligence",
-			statuses: new Set([200]),
-		});
-	}
-
 	return expectations;
 }
 

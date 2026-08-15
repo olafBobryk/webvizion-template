@@ -11,11 +11,11 @@ const ROOT = path.resolve(
 );
 const RUNS_PATH = path.join(
 	ROOT,
-	"docs/guides/components/fixtures/design-system-agent-benchmark-runs.jsonl",
+	"docs/benchmarks/design-system-agent-benchmark-runs.jsonl",
 );
 const REPORT_PATH = path.join(
 	ROOT,
-	"docs/guides/components/fixtures/design-system-agent-benchmark-runs.md",
+	"docs/benchmarks/design-system-agent-benchmark-runs.md",
 );
 const SCORE_KEYS = [
 	"evidenceDiscipline",

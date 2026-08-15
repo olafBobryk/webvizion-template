@@ -1,0 +1,4 @@
+interface:
+  display_name: "Averlo · Entities"
+  short_description: "Discover and shape Averlo entity UI"
+  default_prompt: "Use $averlo:entities to map this repository entity frontend before implementing it."

@@ -12,7 +12,6 @@ export const marketingOnlyProfile = {
 		surfaces: [
 			"marketing",
 			"demo",
-			"intelligence",
 			"scrollPerformance",
 			"playground",
 			"dictionary",
@@ -21,13 +20,7 @@ export const marketingOnlyProfile = {
 		],
 	},
 	sharedFiles: ["src/lib/marketing-content/fallback.ts"],
-	overrides: [
-		{
-			source:
-				"template-profiles/marketing-only/overrides/src/lib/template-intelligence/dashboard-domain.tsx",
-			target: "src/lib/template-intelligence/dashboard-domain.tsx",
-		},
-	],
+	overrides: [],
 	verification: {
 		requiredFiles: [
 			"src/app/(site)/(marketing)/(home)/page.tsx",
@@ -48,6 +41,7 @@ export const marketingOnlyProfile = {
 		forbiddenPackages: [],
 		commands: [
 			"npm run verify:static",
+			"npm run verify:marketing-sections",
 			"npm run verify:site-layout",
 			"npm run build",
 			"npm run verify:smoke",

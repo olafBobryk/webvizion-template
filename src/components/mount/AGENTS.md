@@ -3,8 +3,7 @@
 ## Ownership
 
 Client-only singleton mounts for global hosts and app-level browser coordination.
-They are infrastructure, not public component catalogue owners; public overlay and
-feedback contracts live with their Storybook owners.
+They are infrastructure, not public component catalogue owners.
 
 ## Structural invariants
 

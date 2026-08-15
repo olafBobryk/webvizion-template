@@ -169,6 +169,41 @@ assert.equal(
 );
 
 const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
+const marketingRoot = path.join(root, "src/app/(site)/(marketing)");
+const marketingSectionsRoot = path.join(
+	root,
+	"src/lib/marketing-content/sections",
+);
+const hasMarketing = existsSync(marketingRoot);
+
+assert.equal(
+	hasMarketing,
+	existsSync(marketingSectionsRoot),
+	"Marketing route tree and marketing section registry must be added or removed together.",
+);
+
+if (hasMarketing) {
+	assert.equal(
+		typeof packageJson.scripts?.["verify:marketing-sections"],
+		"string",
+		"Marketing instances must retain the focused verify:marketing-sections command.",
+	);
+	const marketingResult = spawnSync(
+		npmCommand,
+		["run", "verify:marketing-sections"],
+		{
+			cwd: root,
+			stdio: "inherit",
+		},
+	);
+	if (marketingResult.error) throw marketingResult.error;
+	assert.equal(
+		marketingResult.status,
+		0,
+		"Canonical marketing section verification failed.",
+	);
+}
+
 const routeSurfaceResult = spawnSync(
 	npmCommand,
 	["run", "verify:route-surfaces"],

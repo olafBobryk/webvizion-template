@@ -8,7 +8,6 @@ export function createProjectState(selectedSurfaceIds) {
 		hasMarketing: selected.has("marketing"),
 		hasDashboard: selected.has("dashboard"),
 		hasDemo: selected.has("demo"),
-		hasIntelligence: selected.has("intelligence"),
 		hasPlayground: selected.has("playground"),
 		hasDictionary: selected.has("dictionary"),
 		hasReference: selected.has("reference"),
@@ -81,9 +80,6 @@ export function renderSurfacesFile(state) {
 			'\tdictionary: "/internal/dictionary",',
 			'\tdictionarySpamProtectedForm: "/internal/dictionary/forms/spam-protected-form",',
 		);
-	}
-	if (state.hasIntelligence) {
-		internalRouteLines.push('\tintelligence: "/internal/intelligence",');
 	}
 	if (state.hasPlayground) {
 		internalRouteLines.push('\tplayground: "/internal/playground",');

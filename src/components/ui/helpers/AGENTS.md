@@ -3,7 +3,6 @@
 ## Ownership
 
 This folder owns small reusable interaction helpers used by higher-level UI.
-Consumer contracts live under `UI/Helpers/*` in Storybook.
 
 ## Dependency and runtime boundaries
 

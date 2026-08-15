@@ -9,7 +9,6 @@ export const applicationSurfaces = {
 			"src/components/domain/assistant",
 			"src/lib/assistant/access.server.ts",
 			"src/lib/assistant/approval.server.ts",
-			"src/lib/assistant/codex-harness.production.server.ts",
 			"src/lib/assistant/codex-harness.server.ts",
 			"src/lib/assistant/fixture.ts",
 			"src/lib/assistant/records.server.ts",
@@ -19,14 +18,18 @@ export const applicationSurfaces = {
 			"src/lib/assistant/tool-input-stream.server.ts",
 			"scripts/verify/verify-assistant.ts",
 		],
-		packageDependencies: ["@ai-sdk/openai", "@ai-sdk/react", "ai"],
+		packageDependencies: [
+			"@ai-sdk/openai",
+			"@ai-sdk/react",
+			"ai",
+			"streamdown",
+		],
 		packageScripts: ["verify:assistant"],
 	},
 	dashboard: {
 		ownedPaths: [
 			"src/config/surfaces/auth.ts",
 			"src/config/surfaces/dashboard.ts",
-			"docs/guides/auth-organization-adapters.md",
 			"scripts/verify/verify-auth-organization.ts",
 			"scripts/verify/verify-dashboard-page-policy.ts",
 			"scripts/verify/verify-dashboard-surfaces.ts",
@@ -46,7 +49,6 @@ export const applicationSurfaces = {
 			"src/app/api/support",
 			"src/lib/api/auth.ts",
 			"src/lib/auth",
-			"src/lib/template-intelligence/dashboard-domain.tsx",
 		],
 		packageScripts: [
 			"verify:auth",

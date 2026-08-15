@@ -16,7 +16,6 @@ export const internalRoutes = {
 	demo: "/internal/demo",
 	dictionary: "/internal/dictionary",
 	dictionarySpamProtectedForm: "/internal/dictionary/forms/spam-protected-form",
-	intelligence: "/internal/intelligence",
 	playground: "/internal/playground",
 	reference: "/internal/reference",
 } as const;

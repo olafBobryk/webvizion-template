@@ -2,9 +2,8 @@
 
 ## Ownership and boundary
 
-This folder owns typed, fixed-unit, and range-style numeric controls. Storybook
-owns the consumer contracts. Family implementations import their owning
-siblings directly.
+This folder owns typed, fixed-unit, and range-style numeric controls. Family
+implementations import their owning siblings directly.
 
 ## Structural invariants
 

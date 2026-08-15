@@ -3,9 +3,7 @@
 ## Ownership
 
 Shared scalar sources, scalar visual effects, scroll velocity, cycling, and
-text-motion implementations. Storybook
-`UI/Motion/*` owner pages are authoritative for supported imports, selection,
-family members, examples, configuration, and observable behavior.
+text-motion implementations.
 
 ## Public boundary
 

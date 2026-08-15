@@ -98,10 +98,6 @@ const dashboardLink: SiteLink = getAvailableSiteSurfaceLink(
 	href: "/",
 };
 const demoLink = getAvailableInternalRouteLink("Component Export", "demo");
-const intelligenceLink = getAvailableInternalRouteLink(
-	"Intelligence",
-	"intelligence",
-);
 const playgroundLink = getAvailableInternalRouteLink(
 	"Playground",
 	"playground",
@@ -113,7 +109,6 @@ const dictionaryLink = getAvailableInternalRouteLink(
 const referenceLink = getAvailableInternalRouteLink("Reference", "reference");
 const internalRouteLinks = omitMissingLinks<SiteLink>([
 	demoLink,
-	intelligenceLink,
 	playgroundLink,
 	dictionaryLink,
 	referenceLink,
@@ -138,7 +133,6 @@ export const defaultSiteLayout: SiteLayoutDocument = {
 		navLinks: omitMissingLinks<SiteNavLink>([
 			homeLink,
 			demoLink,
-			intelligenceLink,
 			playgroundLink,
 		]),
 		search: {
@@ -147,12 +141,7 @@ export const defaultSiteLayout: SiteLayoutDocument = {
 			noResultsText: "No matching pages",
 		},
 		searchGroups: omitMissingLinks([developerMenuGroup]),
-		topNavLinks: omitMissingLinks([
-			homeLink,
-			demoLink,
-			intelligenceLink,
-			playgroundLink,
-		]),
+		topNavLinks: omitMissingLinks([homeLink, demoLink, playgroundLink]),
 	},
 	socialLinks: [],
 	footer: {

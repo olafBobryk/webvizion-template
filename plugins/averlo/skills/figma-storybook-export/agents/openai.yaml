@@ -1,0 +1,7 @@
+interface:
+  display_name: "Averlo · Figma Export"
+  short_description: "Capture dense Storybook sections into Figma"
+  default_prompt: "Use $averlo:figma-storybook-export to validate the dense Storybook export surface and synchronize its 11 editable section captures into the preserved Figma Library frames."
+
+policy:
+  allow_implicit_invocation: true

@@ -3,8 +3,6 @@
 ## Ownership
 
 Implementation owners for `StateIndicator`, `ErrorState`, and `IdleState`.
-Storybook `UI/Misc/State` owns their consumer contract, selection guidance,
-examples, variants, and executable behavior.
 
 ## Public Boundary
 

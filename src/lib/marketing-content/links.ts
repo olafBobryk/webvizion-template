@@ -56,7 +56,6 @@ export function getMarketingSiteLinks() {
 		demo: getAvailableInternalRouteLink("Component Export", "demo"),
 		dictionary: getAvailableInternalRouteLink("Dictionary", "dictionary"),
 		home,
-		intelligence: getAvailableInternalRouteLink("Intelligence", "intelligence"),
 		playground: getAvailableInternalRouteLink("Playground", "playground"),
 		reference: getAvailableInternalRouteLink("Reference", "reference"),
 		settings,

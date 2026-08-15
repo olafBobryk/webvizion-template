@@ -3,8 +3,7 @@
 ## Ownership
 
 This folder owns the native choice composition layer and complete grouped radio,
-checkbox, and toggle fields. Consumer contracts live with the `UI/Input/Choice`
-Storybook owners.
+checkbox, and toggle fields.
 
 ## Dependency direction
 
