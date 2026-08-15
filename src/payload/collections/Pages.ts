@@ -1,5 +1,6 @@
 import type { CollectionConfig } from "payload";
 import { HomeHeroBlock } from "../blocks/HomeHeroBlock";
+import { MarkdownDocumentBlock } from "../blocks/MarkdownDocumentBlock";
 
 export const Pages: CollectionConfig = {
 	slug: "pages",
@@ -35,14 +36,15 @@ export const Pages: CollectionConfig = {
 			required: true,
 			unique: true,
 			admin: {
-				description: 'Use "home" for the homepage.',
+				description:
+					'Use "home" for the homepage or "document" for the document example.',
 			},
 		},
 		{
 			name: "layout",
 			type: "blocks",
 			required: true,
-			blocks: [HomeHeroBlock],
+			blocks: [HomeHeroBlock, MarkdownDocumentBlock],
 		},
 	],
 };

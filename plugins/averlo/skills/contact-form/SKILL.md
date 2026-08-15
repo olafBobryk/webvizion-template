@@ -10,7 +10,10 @@ Deliver enquiry forms reliably without exposing credentials or weakening the rep
 ## Workflow
 
 1. Read the repository root and nearest `AGENTS.md` files. Then read local `PRODUCT.md`, `DESIGN.md`, component guidance, and existing form/input/button/toast implementations when present.
-2. Use `$averlo:design-system`. Run its component index when the repository has a component tree; pass `--components-dir app/components` when that is the actual root. If no local form policy exists, read `references/form-ux-policy.md`.
+2. Invoke `$averlo:repository-workflows`. Select Forms and every applicable
+   interaction, action-lifecycle, protection, and API-transport concern before
+   choosing owners from Storybook. If no local form policy exists, read
+   `references/form-ux-policy.md`.
 3. Run `node scripts/audit-contact-form.mjs --repo <repo>` from this skill. Treat findings as orientation, then inspect the actual form, route, configuration, and deployment metadata.
 4. Establish the client recipient. If it cannot be discovered from configuration or user context, stop with exactly: `What email address should receive website enquiries?`
 5. Implement a semantic form with inline validation, visible focus, an in-flight double-submit guard, accessible status, and existing repository components. Keep server credentials server-only.

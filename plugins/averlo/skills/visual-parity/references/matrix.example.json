@@ -1,0 +1,22 @@
+{
+  "source": { "label": "Reference" },
+  "target": { "label": "Generated instance" },
+  "cases": [
+    {
+      "id": "hero-desktop",
+      "viewport": { "width": 1440, "height": 960 },
+      "dpr": 1,
+      "colorScheme": "light",
+      "source": {
+        "image": "./reference/hero-desktop.png",
+        "label": "Figma export"
+      },
+      "target": {
+        "url": "http://localhost:3000/",
+        "selector": "[data-parity-root='hero']",
+        "waitFor": "[data-parity-root='hero']",
+        "label": "Generated instance"
+      }
+    }
+  ]
+}

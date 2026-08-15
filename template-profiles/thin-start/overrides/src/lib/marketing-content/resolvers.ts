@@ -1,6 +1,7 @@
 import { cache } from "react";
 import { getConfiguredMarketingPage, getConfiguredSiteLayout } from "./source";
 import type {
+	MarketingPageBySlug,
 	MarketingPageDocument,
 	MarketingPageSlug,
 	SiteLayoutDocument,
@@ -11,8 +12,10 @@ const getCachedMarketingPage = cache(
 		getConfiguredMarketingPage(slug),
 );
 
-export async function getMarketingPage(slug: MarketingPageSlug) {
-	return getCachedMarketingPage(slug);
+export async function getMarketingPage<TSlug extends MarketingPageSlug>(
+	slug: TSlug,
+): Promise<MarketingPageBySlug[TSlug]> {
+	return (await getCachedMarketingPage(slug)) as MarketingPageBySlug[TSlug];
 }
 
 export async function getSiteLayout(): Promise<SiteLayoutDocument> {

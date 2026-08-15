@@ -1,0 +1,24 @@
+.root {
+	border-radius: inherit;
+	overflow: hidden;
+	position: relative;
+}
+
+.visual {
+	border-radius: inherit;
+	height: 100%;
+	overflow: hidden;
+	width: 100%;
+}
+
+.visual > * {
+	display: block;
+	height: 100%;
+	width: 100%;
+}
+
+.mask {
+	height: 0;
+	position: absolute;
+	width: 0;
+}

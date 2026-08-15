@@ -7,7 +7,16 @@ import { DateIndicator } from "./DateIndicator";
 function CatalogPreview1() {
 	return createElement(
 		DateIndicator as unknown as ComponentType<Record<string, unknown>>,
-		{ ...{}, ...{ date: "2025-01-13T12:00:00Z", leadingText: "Published" } },
+		{
+			...{},
+			...{
+				date: "2025-01-13T12:00:00Z",
+				interactive: false,
+				leadingText: "Published",
+				tone: "muted",
+				variant: "caption",
+			},
+		},
 	);
 }
 

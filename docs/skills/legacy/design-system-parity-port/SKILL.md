@@ -14,7 +14,7 @@ evidence, not release-ready architecture.
 Invoke these skills when their phase begins and follow their instructions:
 
 1. `$target-fidelity` and `$visual-diff-minimizer` for the authoritative build.
-2. `$averlo:design-system` before selecting or changing shared owners.
+2. `$averlo:repository-workflows` before selecting or changing shared owners.
 3. `$figma-design-system-port` and `$jsx-visual-parity-refactor` for the port.
 4. `$strict-visual-parity` for both verdicts.
 5. `$storybook:stories` before creating or editing owner stories.
@@ -69,10 +69,10 @@ Use this required sequence:
 1. Inventory visible regions, repeated compositions, interaction roles, shell
    elements, typography roles, asset treatments, and every temporary Pass A
    presentation owner.
-2. Run the component candidate index from `$averlo:design-system`, then
-   inspect relevant Storybook owner documentation or colocated owner stories.
-   The index proposes candidates; Storybook and documented public contracts are
-   the ownership evidence.
+2. Use `$averlo:repository-workflows` to select the relevant owner-discovery
+   and catalogue concerns, then inspect relevant Storybook owner documentation
+   or colocated owner stories. Storybook and documented public contracts are the
+   ownership evidence.
 3. Add one temporary owner-map row per inventory item. Record the presentation
    role, Pass A source, reference provenance, candidates reviewed, disposition,
    selected target owner, rationale, consumer impact, parity or story evidence,

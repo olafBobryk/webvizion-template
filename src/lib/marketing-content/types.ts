@@ -17,7 +17,7 @@ export type {
 	SiteSocialLink as MarketingSocialLink,
 };
 
-export const marketingPageSlugs = ["home"] as const;
+export const marketingPageSlugs = ["home", "document"] as const;
 
 export type MarketingPageSlug = (typeof marketingPageSlugs)[number];
 
@@ -33,6 +33,13 @@ export type HomeHeroSectionBlock = MarketingSectionBase<"homeHero"> & {
 	}>;
 	cta: SiteLink;
 	services: HomeHeroServiceItem[];
+};
+
+export type MarkdownDocumentContentBlock = {
+	id?: string;
+	blockType: "markdownDocument";
+	date: string;
+	markdown: string;
 };
 
 const allTemplateServiceSurfaceIds = [
@@ -62,9 +69,26 @@ export type HomeHeroServiceItem = {
 
 export type MarketingSection = HomeHeroSectionBlock;
 
-export type MarketingPageDocument = {
+type MarketingPageDocumentBase<TSlug extends MarketingPageSlug, TLayout> = {
 	description: string;
-	slug: MarketingPageSlug;
+	slug: TSlug;
 	title: string;
-	layout: MarketingSection[];
+	layout: TLayout;
 };
+
+export type HomeMarketingPageDocument = MarketingPageDocumentBase<
+	"home",
+	MarketingSection[]
+>;
+
+export type DocumentMarketingPageDocument = MarketingPageDocumentBase<
+	"document",
+	[MarkdownDocumentContentBlock]
+>;
+
+export type MarketingPageBySlug = {
+	document: DocumentMarketingPageDocument;
+	home: HomeMarketingPageDocument;
+};
+
+export type MarketingPageDocument = MarketingPageBySlug[MarketingPageSlug];

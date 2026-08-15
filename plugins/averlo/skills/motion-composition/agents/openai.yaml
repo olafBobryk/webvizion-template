@@ -1,0 +1,6 @@
+interface:
+  display_name: "Averlo · Motion Composition"
+  short_description: "Compose scoped motion from an approved static endpoint"
+  default_prompt: "Use $averlo:motion-composition to add coherent motion to this approved Averlo surface."
+policy:
+  allow_implicit_invocation: false

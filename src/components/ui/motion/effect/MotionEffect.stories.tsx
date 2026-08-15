@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/primitives/Button";
 import { Panel } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 import { formatCatalogOwnerContract } from "@/lib/component-catalog/contract";
+import type { MotionCompositionMetadata } from "../compositionMetadata";
 import * as MotionSource from "../source";
 import * as MotionEffect from "./index";
 import { catalogContract } from "./MotionEffect.catalog";
@@ -16,7 +17,7 @@ const meta = {
 	title: "UI/Motion/MotionEffect",
 	component: MotionEffect.Entrance,
 	subcomponents: {
-		"MotionEffect.TextReveal": MotionEffect.TextReveal,
+		"MotionEffect.TextStagger": MotionEffect.TextStagger,
 		"MotionEffect.TextHighlight": MotionEffect.TextHighlight,
 		"MotionEffect.Divider": MotionEffect.Divider,
 		"MotionEffect.TextShift": MotionEffect.TextShift,
@@ -27,6 +28,7 @@ const meta = {
 		"MotionEffect.Scramble": MotionEffect.Scramble,
 		"MotionEffect.Number": MotionEffect.Number,
 		"MotionEffect.Clip": MotionEffect.Clip,
+		"MotionEffect.GridClip": MotionEffect.GridClip,
 		"MotionEffect.ScaleFade": MotionEffect.ScaleFade,
 	},
 	excludeStories: ["catalogContract"],
@@ -127,9 +129,9 @@ function TextEffectsTeachingSurface() {
 			className="grid max-w-4xl gap-7 p-8"
 			strategy={{ type: "boolean", active, timing: "grand" }}
 		>
-			<MotionEffect.TextReveal as="h2" variant="headingLg">
-				A stable character reveal
-			</MotionEffect.TextReveal>
+			<MotionEffect.TextStagger as="h2" variant="headingLg">
+				A stable character stagger
+			</MotionEffect.TextStagger>
 			<MotionEffect.TextHighlight
 				as="p"
 				highlight="shared progress"
@@ -179,7 +181,7 @@ export const TextEffects: Story = {
 	args: { children: <span>Text effect</span> },
 	render: () => <TextEffectsTeachingSurface />,
 	play: async ({ canvas, canvasElement }) => {
-		await expect(canvas.getByText("A stable character reveal")).toBeVisible();
+		await expect(canvas.getByText("A stable character stagger")).toBeVisible();
 		await expect(
 			canvas.getAllByText("Seeded deterministic scramble").length,
 		).toBeGreaterThanOrEqual(1);
@@ -189,7 +191,7 @@ export const TextEffects: Story = {
 	},
 };
 
-function TextRevealTeachingSurface() {
+function TextStaggerTeachingSurface() {
 	const [active, setActive] = useState(false);
 	return (
 		<div className="grid max-w-5xl gap-8 p-8">
@@ -198,58 +200,75 @@ function TextRevealTeachingSurface() {
 				size="sm"
 				variant="secondary"
 			>
-				{active ? "Reverse text reveals" : "Complete text reveals"}
+				{active ? "Reverse text staggers" : "Complete text staggers"}
 			</Button>
 			<MotionSource.Root
 				className="grid gap-8"
 				strategy={{ type: "boolean", active, timing: "grand" }}
 			>
-				<MotionEffect.TextReveal
+				<MotionEffect.TextStagger
 					as="h2"
 					className="max-w-3xl"
 					variant="headingLg"
 				>
 					Graphemes keep emoji 👩🏽‍💻 together.
-				</MotionEffect.TextReveal>
-				<MotionEffect.TextReveal
-					by="words"
+				</MotionEffect.TextStagger>
+				<MotionEffect.TextStagger
 					className="block w-80 text-3xl leading-tight"
 					treatment="blur"
+					unit="words"
 				>
 					Words, punctuation, and wrapping stay intact across lines.
-				</MotionEffect.TextReveal>
-				<MotionEffect.TextReveal
+				</MotionEffect.TextStagger>
+				<MotionEffect.TextStagger
+					blurOffset="0.9em"
+					blurRadius={8}
 					className="text-4xl font-medium"
-					runs={[
-						{ text: "186", by: "characters" },
-						{ text: " creates liquidity structures", by: "words" },
+					segments={[
+						{ text: "186", unit: "graphemes" },
+						{
+							className: "font-semibold italic",
+							text: " creates liquidity structures",
+							unit: "words",
+						},
 					]}
 					treatment="blur"
 				/>
-				<MotionEffect.TextReveal
-					by="words"
+				<MotionEffect.TextStagger
 					className="max-w-md text-2xl leading-relaxed"
 					dir="rtl"
 					lang="ar"
 					treatment="blur"
+					unit="words"
 				>
 					النص العربي يحافظ على الاتجاه وعلامات الترقيم.
-				</MotionEffect.TextReveal>
-				<MotionEffect.TextReveal by="words" lang="ja" treatment="blur">
+				</MotionEffect.TextStagger>
+				<MotionEffect.TextStagger lang="ja" treatment="blur" unit="words">
 					流動性構造をつくる
-				</MotionEffect.TextReveal>
+				</MotionEffect.TextStagger>
 			</MotionSource.Root>
 		</div>
 	);
 }
 
-export const TextRevealModes: Story = {
-	args: { children: <span>Text reveal modes</span> },
-	render: () => <TextRevealTeachingSurface />,
+export const TextStaggerModes: Story = {
+	args: { children: <span>Text stagger modes</span> },
+	parameters: {
+		motionComposition: {
+			effects: ["text-stagger"],
+			focusHints: ["section", "page"],
+			role: "controlled-text-stagger",
+			schemaVersion: 1,
+			staticPattern: "standalone-text",
+			sources: ["boolean"],
+			status: "approved",
+		} satisfies MotionCompositionMetadata,
+	},
+	render: () => <TextStaggerTeachingSurface />,
 	play: async ({ canvas, canvasElement }) => {
 		const roots = Array.from(
 			canvasElement.querySelectorAll<HTMLElement>(
-				'[data-motion-effect="text-reveal"]',
+				'[data-motion-effect="text-stagger"]',
 			),
 		);
 		await expect(roots).toHaveLength(5);
@@ -261,7 +280,7 @@ export const TextRevealModes: Story = {
 		);
 		const graphemeUnits = Array.from(
 			roots[0]?.querySelectorAll<HTMLElement>(
-				"[data-motion-effect-text-reveal-unit]",
+				"[data-motion-effect-text-stagger-token]",
 			) ?? [],
 		);
 		await expect(
@@ -269,45 +288,117 @@ export const TextRevealModes: Story = {
 		).toHaveLength(1);
 		await expect(
 			roots[1]?.querySelector<HTMLElement>(
-				"[data-motion-effect-text-reveal-unit]",
+				"[data-motion-effect-text-stagger-token]",
 			),
 		).toHaveTextContent("Words,");
 		await waitFor(() => {
 			const wordLines = new Set(
 				Array.from(
 					roots[1]?.querySelectorAll<HTMLElement>(
-						"[data-motion-effect-text-reveal-unit]",
+						"[data-motion-effect-text-stagger-token]",
 					) ?? [],
 				).map((unit) => unit.offsetTop),
 			);
 			expect(wordLines.size).toBeGreaterThan(1);
 		});
 		await expect(
-			roots[2]?.querySelectorAll('[data-motion-effect-text-reveal-run="0"]'),
+			roots[2]?.querySelectorAll(
+				'[data-motion-effect-text-stagger-segment="0"]',
+			),
 		).toHaveLength(3);
 		await expect(
-			roots[2]?.querySelectorAll('[data-motion-effect-text-reveal-run="1"]')
-				.length,
+			roots[2]?.querySelectorAll(
+				'[data-motion-effect-text-stagger-segment="1"]',
+			).length,
 		).toBeGreaterThan(1);
 		await expect(
-			roots[4]?.querySelectorAll("[data-motion-effect-text-reveal-unit]")
+			roots[4]?.querySelectorAll("[data-motion-effect-text-stagger-token]")
 				.length,
 		).toBeGreaterThan(1);
 		await expect(roots[3]).toHaveAttribute("dir", "rtl");
 
 		const firstVisual = roots[0]?.querySelector<HTMLElement>(
-			"[data-motion-effect-text-reveal-unit] > span",
+			"[data-motion-effect-text-stagger-token] > span",
 		);
 		if (!firstVisual)
-			throw new Error("TextReveal visual unit was not rendered.");
+			throw new Error("TextStagger visual token was not rendered.");
 		await waitFor(() =>
 			expect(Number(getComputedStyle(firstVisual).opacity)).toBe(0),
 		);
 		await userEvent.click(
-			canvas.getByRole("button", { name: "Complete text reveals" }),
+			canvas.getByRole("button", { name: "Complete text staggers" }),
 		);
 		await waitFor(() =>
 			expect(Number(getComputedStyle(firstVisual).opacity)).toBe(1),
+		);
+	},
+};
+
+function GridClipTeachingSurface() {
+	const [active, setActive] = useState(false);
+	return (
+		<div className="grid gap-6 p-8">
+			<Button
+				onClick={() => setActive((value) => !value)}
+				size="sm"
+				variant="secondary"
+			>
+				{active ? "Reverse grid clip" : "Complete grid clip"}
+			</Button>
+			<div className="grid justify-items-start gap-6 overflow-x-auto">
+				{[
+					["landscape", "h-80 w-[56rem]"],
+					["portrait", "h-96 w-80"],
+				].map(([name, size]) => (
+					<MotionSource.Root
+						className={size}
+						key={name}
+						strategy={{ type: "boolean", active, timing: "grand" }}
+					>
+						<MotionEffect.GridClip
+							className="h-full"
+							data-testid={`grid-clip-${name}`}
+						>
+							<div className="h-full bg-[radial-gradient(circle_at_25%_20%,var(--color-primary),transparent_36%),linear-gradient(135deg,var(--color-foreground),var(--color-surface))]" />
+						</MotionEffect.GridClip>
+					</MotionSource.Root>
+				))}
+			</div>
+		</div>
+	);
+}
+
+export const GridClipMedia: Story = {
+	args: { children: <span>Grid-clipped media</span> },
+	parameters: {
+		motionComposition: {
+			effects: ["grid-clip"],
+			focusHints: ["section", "page"],
+			role: "grid-clipped-media",
+			schemaVersion: 1,
+			staticPattern: "media-frame",
+			sources: ["boolean"],
+			status: "approved",
+		} satisfies MotionCompositionMetadata,
+	},
+	render: () => <GridClipTeachingSurface />,
+	play: async ({ canvas, userEvent }) => {
+		const landscape = canvas.getByTestId("grid-clip-landscape");
+		const portrait = canvas.getByTestId("grid-clip-portrait");
+		await expect(
+			Number(landscape.dataset.motionGridClipColumns),
+		).toBeGreaterThan(Number(portrait.dataset.motionGridClipColumns));
+		await expect(
+			landscape.querySelectorAll("[data-motion-grid-clip-tile]").length,
+		).toBeGreaterThan(0);
+		await userEvent.click(
+			canvas.getByRole("button", { name: "Complete grid clip" }),
+		);
+		await waitFor(() =>
+			expect(landscape).toHaveAttribute(
+				"data-motion-grid-clip-complete",
+				"true",
+			),
 		);
 	},
 };
@@ -661,9 +752,9 @@ export const RequiresSource: Story = {
 	render: () => (
 		<div className="grid gap-3 p-8">
 			<EffectUsageBoundary>
-				<MotionEffect.TextReveal>
-					Unsupported text reveal
-				</MotionEffect.TextReveal>
+				<MotionEffect.TextStagger>
+					Unsupported text stagger
+				</MotionEffect.TextStagger>
 			</EffectUsageBoundary>
 			<EffectUsageBoundary>
 				<MotionEffect.Clip>Unsupported clip</MotionEffect.Clip>
@@ -677,7 +768,7 @@ export const RequiresSource: Story = {
 		const alerts = canvas.getAllByRole("alert");
 		await expect(alerts).toHaveLength(3);
 		await expect(alerts[0]).toHaveTextContent(
-			"MotionEffect.TextReveal must be rendered inside MotionSource.Root.",
+			"MotionEffect.TextStagger must be rendered inside MotionSource.Root.",
 		);
 		await expect(alerts[1]).toHaveTextContent(
 			"MotionEffect.Clip must be rendered inside MotionSource.Root.",

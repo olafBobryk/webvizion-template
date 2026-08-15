@@ -1,4 +1,10 @@
-import type { MarketingPageDocument, SiteLayoutDocument } from "./types";
+import type {
+	DocumentMarketingPageDocument,
+	HomeMarketingPageDocument,
+	MarketingPageBySlug,
+	MarketingPageSlug,
+	SiteLayoutDocument,
+} from "./types";
 
 const developmentMenuGroups =
 	process.env.NODE_ENV !== "production"
@@ -11,7 +17,7 @@ const developmentMenuGroups =
 			]
 		: [];
 
-export const fallbackHomePage: MarketingPageDocument = {
+export const fallbackHomePage: HomeMarketingPageDocument = {
 	description:
 		"A focused website starter built from a small, source-neutral content contract.",
 	slug: "home",
@@ -64,9 +70,34 @@ export const fallbackHomePage: MarketingPageDocument = {
 	],
 };
 
+export const fallbackDocumentPage: DocumentMarketingPageDocument = {
+	description: "A Payload-ready dated document composed from shared owners.",
+	slug: "document",
+	title: "Motion and interaction guidelines",
+	layout: [
+		{
+			id: "document-content",
+			blockType: "markdownDocument",
+			date: "2026-08-15T12:00:00.000Z",
+			markdown: `## Overview
+
+Motion should clarify hierarchy, causality, and change. It should never be required to understand the interface.
+
+## Principles
+
+- Prefer one clear visual idea over several competing transitions.
+- Preserve readable content and stable layout throughout the sequence.
+- Respect reduced-motion preferences without removing information.`,
+		},
+	],
+};
+
 export const fallbackMarketingPages = {
+	document: fallbackDocumentPage,
 	home: fallbackHomePage,
-} satisfies Record<"home", MarketingPageDocument>;
+} satisfies {
+	[TSlug in MarketingPageSlug]: MarketingPageBySlug[TSlug];
+};
 
 export const fallbackSiteLayout: SiteLayoutDocument = {
 	header: {

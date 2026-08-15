@@ -7,7 +7,12 @@ import {
 } from "@/app/(site)/_components/layout/siteLayout";
 import { templateCapabilities } from "@/config/capabilities";
 import { getMarketingSiteLinks, publicSocialLinks } from "./links";
-import type { MarketingPageDocument, MarketingPageSlug } from "./types";
+import type {
+	DocumentMarketingPageDocument,
+	HomeMarketingPageDocument,
+	MarketingPageBySlug,
+	MarketingPageSlug,
+} from "./types";
 
 function omitMissingLinks<T>(items: Array<T | null>): T[] {
 	return items.filter((item): item is T => item !== null);
@@ -34,7 +39,7 @@ if (!fallbackHeroCta) {
 	throw new Error("Marketing fallback content requires a primary CTA surface.");
 }
 
-export const fallbackHomePage: MarketingPageDocument = {
+export const fallbackHomePage: HomeMarketingPageDocument = {
 	description:
 		"An agent-ready Next.js template for lightweight design-system scaffolds.",
 	slug: "home",
@@ -91,9 +96,46 @@ export const fallbackHomePage: MarketingPageDocument = {
 	],
 };
 
+export const fallbackDocumentPage: DocumentMarketingPageDocument = {
+	description:
+		"A Payload-ready document page composed through the shared Markdown renderer.",
+	slug: "document",
+	title: "Motion and interaction guidelines",
+	layout: [
+		{
+			id: "document-content",
+			blockType: "markdownDocument",
+			date: "2026-08-15T12:00:00.000Z",
+			markdown: `## Overview
+
+Motion should clarify hierarchy, causality, and change. It should never be required to understand the interface.
+
+## Source and effect
+
+A motion source determines **when** progress changes. An effect determines **how** that progress changes the presentation. Keeping those responsibilities separate lets the same clip, stagger, or transform respond to reveal, scroll, hover, and controlled state.
+
+---
+
+## Principles
+
+- Prefer one clear visual idea over several competing transitions.
+- Preserve readable content and stable layout throughout the sequence.
+- Keep durations and springs aligned with the shared timing system.
+- Respect reduced-motion preferences without removing information.
+
+## Responsive behavior
+
+Animation geometry should derive from the rendered container—not from assumptions about a particular page. At narrow widths, simplify the composition while preserving the reading order and controls.`,
+		},
+	],
+};
+
 export const fallbackMarketingPages = {
+	document: fallbackDocumentPage,
 	home: fallbackHomePage,
-} satisfies Record<MarketingPageSlug, MarketingPageDocument>;
+} satisfies {
+	[TSlug in MarketingPageSlug]: MarketingPageBySlug[TSlug];
+};
 
 export const fallbackSiteLayout: SiteLayoutDocument = {
 	header: {

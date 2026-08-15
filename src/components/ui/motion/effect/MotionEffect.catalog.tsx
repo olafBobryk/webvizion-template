@@ -22,9 +22,9 @@ function EffectPreview() {
 				className="grid gap-5"
 				strategy={{ type: "boolean", active }}
 			>
-				<MotionEffect.TextReveal variant="headingMd">
-					Text reveal
-				</MotionEffect.TextReveal>
+				<MotionEffect.TextStagger variant="headingMd">
+					Text stagger
+				</MotionEffect.TextStagger>
 				<MotionEffect.TextHighlight className="text-xl">
 					One source can drive every scalar effect.
 				</MotionEffect.TextHighlight>
@@ -55,7 +55,7 @@ export const catalogContract = defineCatalogOwnerContract({
 	],
 	compounds: [
 		"MotionEffect.Entrance",
-		"MotionEffect.TextReveal",
+		"MotionEffect.TextStagger",
 		"MotionEffect.TextHighlight",
 		"MotionEffect.Divider",
 		"MotionEffect.TextShift",
@@ -66,6 +66,7 @@ export const catalogContract = defineCatalogOwnerContract({
 		"MotionEffect.Scramble",
 		"MotionEffect.Number",
 		"MotionEffect.Clip",
+		"MotionEffect.GridClip",
 		"MotionEffect.ScaleFade",
 	],
 	exclusions: [
@@ -82,8 +83,12 @@ export const catalogContract = defineCatalogOwnerContract({
 			storyId: "ui-motion-motion-effect--text-effects",
 		},
 		{
-			label: "Grapheme, word, and mixed-run text reveal",
-			storyId: "ui-motion-motion-effect--text-reveal-modes",
+			label: "Grapheme, word, whole-segment, and styled text staggering",
+			storyId: "ui-motion-motion-effect--text-stagger-modes",
+		},
+		{
+			label: "Responsive grid-clipped media",
+			storyId: "ui-motion-motion-effect--grid-clip-media",
 		},
 		{
 			label: "Logical and radial media geometry",

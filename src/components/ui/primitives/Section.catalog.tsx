@@ -117,6 +117,33 @@ function CatalogPreview5() {
 		) => ReturnType<typeof render>
 	)({ ...{}, ...{} } as never);
 }
+function CatalogPreview6() {
+	const render = () => (
+		<div className="min-w-[1728px]">
+			<Section
+				className="min-h-80 bg-ink text-ink-foreground"
+				style={{ "--spacing-section-y": "7rem" } as React.CSSProperties}
+			>
+				<Section.Background interactive>
+					<button
+						className="absolute inset-0 w-full bg-primary/10"
+						type="button"
+					>
+						<span className="sr-only">Interactive background</span>
+					</button>
+				</Section.Background>
+				<div className="relative rounded-md border border-border p-6">
+					Default-capped foreground
+				</div>
+			</Section>
+		</div>
+	);
+	return (
+		render as unknown as (
+			args: Record<string, unknown>,
+		) => ReturnType<typeof render>
+	)({ ...{}, ...{} } as never);
+}
 
 export const catalogContract = defineCatalogOwnerContract({
 	id: "ui-primitives-section",
@@ -156,6 +183,10 @@ export const catalogContract = defineCatalogOwnerContract({
 		{
 			label: "Semantic surface contexts",
 			storyId: "ui-primitives-section--semantic-surface-contexts",
+		},
+		{
+			label: "Full-bleed background with capped foreground",
+			storyId: "ui-primitives-section--full-bleed-capped-foreground",
 		},
 	],
 
@@ -202,6 +233,14 @@ export const catalogContract = defineCatalogOwnerContract({
 			axes: [],
 			stage: "wide",
 			Render: CatalogPreview5,
+		},
+		{
+			id: "full-bleed-capped-foreground",
+			name: "Full-bleed background with capped foreground",
+			baseline: {},
+			axes: [],
+			stage: "wide",
+			Render: CatalogPreview6,
 		},
 	],
 });

@@ -102,6 +102,7 @@ export const thinStartProfile = {
 			"@chromatic-com/storybook",
 			"@storybook/addon-a11y",
 			"@storybook/addon-docs",
+			"@storybook/addon-mcp",
 			"@storybook/addon-vitest",
 			"@storybook/nextjs-vite",
 			"@tailwindcss/postcss",
@@ -153,6 +154,7 @@ export const thinStartProfile = {
 			"@/components/ui/input",
 			"@/components/ui/input/InputSkeleton",
 			"@/components/ui/primitives/Button",
+			"@/components/ui/primitives/Divider",
 			"@/components/ui/primitives/surfaces",
 			"@/components/ui/primitives/Text",
 			"@/components/ui/primitives/Section",
@@ -163,6 +165,7 @@ export const thinStartProfile = {
 			"@/components/ui/primitives/dropdownStyles",
 			"@/components/ui/input/choice/ChoiceField",
 			"@/components/ui/input/choice/ChoiceIndicators",
+			"@/components/ui/time/DateIndicator",
 		],
 		allowedUiPrefixes: [
 			"@/components/ui/foundations/",
@@ -185,6 +188,8 @@ export const thinStartProfile = {
 		requiredFiles: [
 			"src/app/(site)/(marketing)/(home)/page.tsx",
 			"src/app/(site)/(marketing)/contact/page.tsx",
+			"src/app/(site)/(marketing)/document/page.tsx",
+			"src/components/domain/marketing/DocumentPage.tsx",
 			"src/components/ui/misc/index.ts",
 			"src/components/ui/misc/Skeleton.tsx",
 			"src/components/ui/input/index.ts",

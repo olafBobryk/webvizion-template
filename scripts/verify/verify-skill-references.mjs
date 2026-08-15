@@ -27,10 +27,11 @@ const WALK_EXCLUDED_DIRECTORIES = new Set([
 const RETIRED_ROUTER_SOURCES = [
 	"docs/guides/auth-organization-adapters.md",
 	"docs/guides/components/",
-	"plugins/averlo/skills/design-system/",
-	"plugins/averlo/skills/entities/",
-	"plugins/averlo/skills/skeletons/",
-	"plugins/averlo/skills/surfaces/",
+	"docs/skills/legacy/design-system/",
+	"docs/skills/legacy/design-system-parity-port/",
+	"docs/skills/legacy/entities/",
+	"docs/skills/legacy/skeletons/",
+	"docs/skills/legacy/surfaces/",
 ];
 
 function walk(targetPath) {

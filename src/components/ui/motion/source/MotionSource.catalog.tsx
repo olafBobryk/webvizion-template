@@ -75,8 +75,16 @@ export const catalogContract = defineCatalogOwnerContract({
 			storyId: "ui-motion-motion-source--reveal-sequence",
 		},
 		{
-			label: "Opt-in viewport exit reset and re-entry playback",
+			label: "Replayable viewport exit reset and re-entry playback",
 			storyId: "ui-motion-motion-source--reveal-viewport-reentry",
+		},
+		{
+			label: "Staged footer-heading handoff composition",
+			storyId: "ui-motion-motion-source--footer-heading-handoff",
+		},
+		{
+			label: "Scroll-highlight quote with supporting media composition",
+			storyId: "ui-motion-motion-source--quote-scroll-highlight",
 		},
 		{
 			label: "Reduced-motion source fallbacks",

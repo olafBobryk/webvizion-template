@@ -1,0 +1,6 @@
+interface:
+  display_name: "Averlo · Static Composition"
+  short_description: "Build a scoped static composition in an Averlo instance"
+  default_prompt: "Use $averlo:static-composition to build this focused static surface from its visual-parity evidence."
+policy:
+  allow_implicit_invocation: false

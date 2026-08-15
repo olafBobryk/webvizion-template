@@ -17,6 +17,11 @@ export {
 	type MotionEffectFrameWidthProps as FrameWidthProps,
 } from "./MotionEffectFrameWidth";
 export {
+	getGridClipDimensions,
+	MotionEffectGridClip as GridClip,
+	type MotionEffectGridClipProps as GridClipProps,
+} from "./MotionEffectGridClip";
+export {
 	MotionEffectNumber as Number,
 	type MotionEffectNumberAnimation as NumberAnimation,
 	type MotionEffectNumberProps as NumberProps,
@@ -42,16 +47,16 @@ export {
 	type MotionEffectTextReplayProps as TextReplayProps,
 } from "./MotionEffectTextReplay";
 export {
-	MotionEffectTextReveal as TextReveal,
-	type MotionEffectTextRevealBy as TextRevealBy,
-	type MotionEffectTextRevealProps as TextRevealProps,
-	type MotionEffectTextRevealRun as TextRevealRun,
-	type MotionEffectTextRevealTreatment as TextRevealTreatment,
-} from "./MotionEffectTextReveal";
-export {
 	MotionEffectTextShift as TextShift,
 	type MotionEffectTextShiftProps as TextShiftProps,
 } from "./MotionEffectTextShift";
+export {
+	MotionEffectTextStagger as TextStagger,
+	type MotionEffectTextStaggerProps as TextStaggerProps,
+	type MotionEffectTextStaggerSegment as TextStaggerSegment,
+	type MotionEffectTextStaggerTreatment as TextStaggerTreatment,
+	type MotionEffectTextStaggerUnit as TextStaggerUnit,
+} from "./MotionEffectTextStagger";
 export {
 	MotionEffectUnderlineText as UnderlineText,
 	type MotionEffectUnderlineTextProps as UnderlineTextProps,

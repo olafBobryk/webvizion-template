@@ -200,4 +200,5 @@ Vercel Blob for `BLOB_READ_WRITE_TOKEN`, and a project-specific
 
 - [Payload on Vercel with Neon and Blob](docs/operations/payload-vercel-neon-blob.md)
 - [Scroll-performance workflow](docs/operations/scroll-performance.md)
+- [Published and legacy skill inventory](docs/skills/README.md)
 - [Benchmarks](docs/benchmarks/README.md)

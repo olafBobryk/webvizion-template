@@ -1,6 +1,6 @@
 import { fallbackMarketingPages } from "@/lib/marketing-content/fallback";
 import type {
-	MarketingPageDocument,
+	MarketingPageBySlug,
 	MarketingPageSlug,
 } from "@/lib/marketing-content/types";
 import { isPayloadConfigured } from "@/payload/isPayloadConfigured";
@@ -36,10 +36,12 @@ async function readPublishedPayloadMarketingPage(slug: MarketingPageSlug) {
 	return page;
 }
 
-export async function getConfiguredMarketingPage(
-	slug: MarketingPageSlug,
+export async function getConfiguredMarketingPage<
+	TSlug extends MarketingPageSlug,
+>(
+	slug: TSlug,
 	options: MarketingPageSourceOptions = {},
-): Promise<MarketingPageDocument> {
+): Promise<MarketingPageBySlug[TSlug]> {
 	const mode = getMarketingContentSource(options.mode);
 	if (mode === "fallback") return fallbackMarketingPages[slug];
 

@@ -29,7 +29,7 @@ export function MotionSourceSequence({
 	children,
 	as: Tag = "div",
 	className,
-	once = true,
+	once = false,
 	stagger = 0.18,
 }: MotionSourceSequenceProps) {
 	const wrapperRef = useRef<HTMLElement | null>(null);

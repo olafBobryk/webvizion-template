@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/primitives/Button";
 import { Panel } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
 import { formatCatalogOwnerContract } from "@/lib/component-catalog/contract";
+import type { MotionCompositionMetadata } from "../compositionMetadata";
 import * as MotionSource from "./index";
 import { catalogContract } from "./MotionSource.catalog";
 
@@ -201,6 +202,13 @@ export const RevealSequence: Story = {
 		</MotionSource.Sequence>
 	),
 	play: async ({ canvas, canvasElement }) => {
+		const sequence = canvasElement.querySelector(
+			"[data-motion-source-sequence]",
+		);
+		await expect(sequence).toHaveAttribute(
+			"data-motion-source-sequence-once",
+			"false",
+		);
 		await waitFor(() =>
 			expect(canvas.getByText("First participant")).toBeVisible(),
 		);
@@ -232,7 +240,6 @@ export const RevealViewportReentry: Story = {
 		<div className="min-h-[260vh] bg-background p-8">
 			<MotionSource.Sequence
 				className="grid max-w-3xl gap-4 sm:grid-cols-3"
-				once={false}
 				stagger={0.1}
 			>
 				{["First", "Second", "Third"].map((label) => (
@@ -283,6 +290,160 @@ export const RevealViewportReentry: Story = {
 
 		view.scrollTo(0, 0);
 		await waitFor(() => expect(allAtOpacity(1)).toBe(true), { timeout: 3000 });
+	},
+};
+
+function FooterHeadingHandoffSurface() {
+	const [active, setActive] = useState(false);
+	return (
+		<section
+			aria-label="Footer heading handoff composition"
+			className="grid min-h-[30rem] content-end gap-8 bg-background p-8 text-foreground"
+		>
+			<Button
+				onClick={() => setActive((value) => !value)}
+				size="sm"
+				variant="primary"
+			>
+				{active ? "Reset footer heading" : "Complete footer heading"}
+			</Button>
+			<MotionSource.Root
+				strategy={{ type: "boolean", active, timing: "grand" }}
+			>
+				<Text as="h2" theme="dark" variant="headingPage">
+					<MotionEffect.TextStagger
+						as="span"
+						className="block"
+						range={[0, 0.72]}
+						theme="dark"
+						treatment="blur"
+						unit="words"
+					>
+						Finish the story
+					</MotionEffect.TextStagger>
+					<MotionEffect.TextShift className="mt-2 block" range={[0.18, 1]}>
+						<MotionEffect.TextStagger
+							as="span"
+							theme="dark"
+							treatment="blur"
+							unit="words"
+						>
+							with a clear next step
+						</MotionEffect.TextStagger>
+					</MotionEffect.TextShift>
+				</Text>
+			</MotionSource.Root>
+		</section>
+	);
+}
+
+export const FooterHeadingHandoff: Story = {
+	args: {
+		children: <span>Footer heading handoff</span>,
+		strategy: { type: "boolean", active: false },
+	},
+	parameters: {
+		motionComposition: {
+			effects: ["text-stagger", "text-shift"],
+			focusHints: ["shell", "page"],
+			role: "footer-heading-handoff",
+			schemaVersion: 1,
+			staticPattern: "split-heading",
+			sources: ["boolean"],
+			status: "approved",
+		} satisfies MotionCompositionMetadata,
+	},
+	render: () => <FooterHeadingHandoffSurface />,
+	play: async ({ canvas, canvasElement }) => {
+		await expect(
+			canvas.getByRole("heading", { name: /finish the story/i }),
+		).toBeInTheDocument();
+		await expect(
+			canvasElement.querySelectorAll('[data-motion-effect="text-stagger"]'),
+		).toHaveLength(2);
+		await expect(
+			canvasElement.querySelector('[data-motion-effect="text-shift"]'),
+		).not.toBeNull();
+		await userEvent.click(
+			canvas.getByRole("button", { name: "Complete footer heading" }),
+		);
+		const firstToken = canvasElement.querySelector<HTMLElement>(
+			"[data-motion-effect-text-stagger-token] > span",
+		);
+		if (!firstToken)
+			throw new Error("Footer heading did not render text tokens.");
+		await waitFor(() =>
+			expect(Number(getComputedStyle(firstToken).opacity)).toBe(1),
+		);
+	},
+};
+
+export const QuoteScrollHighlight: Story = {
+	args: {
+		children: <span>Quote scroll highlight composition</span>,
+		strategy: { type: "scroll" },
+	},
+	parameters: {
+		motionComposition: {
+			effects: ["entrance", "text-highlight", "grid-clip"],
+			focusHints: ["section", "page"],
+			role: "quote-scroll-highlight",
+			schemaVersion: 1,
+			staticPattern: "quote-with-supporting-media",
+			sources: ["scroll"],
+			status: "approved",
+		} satisfies MotionCompositionMetadata,
+	},
+	render: () => (
+		<div className="min-h-[220vh] bg-background px-8 py-[80vh] text-foreground">
+			<section
+				aria-label="Quote scroll highlight composition"
+				className="mx-auto max-w-5xl"
+			>
+				<MotionSource.Root
+					className="grid gap-10 md:grid-cols-[minmax(0,1fr)_minmax(16rem,0.7fr)] md:items-end"
+					strategy={{
+						offset: ["start 84%", "start 38%"],
+						smooth: true,
+						staticProgress: 1,
+						type: "scroll",
+					}}
+				>
+					<div className="grid gap-6">
+						<MotionEffect.Entrance>
+							<MotionEffect.TextHighlight
+								as="blockquote"
+								theme="dark"
+								variant="headingLg"
+							>
+								A clear conviction earns attention before it asks for action.
+							</MotionEffect.TextHighlight>
+						</MotionEffect.Entrance>
+					</div>
+					<MotionEffect.GridClip className="aspect-[4/5] overflow-hidden rounded-xl">
+						<div
+							aria-label="Abstract supporting media"
+							className="h-full bg-[radial-gradient(circle_at_30%_24%,var(--color-primary),transparent_28%),linear-gradient(145deg,var(--color-surface),var(--color-foreground))]"
+							role="img"
+						/>
+					</MotionEffect.GridClip>
+				</MotionSource.Root>
+			</section>
+		</div>
+	),
+	play: async ({ canvas, canvasElement }) => {
+		await expect(
+			canvas.getByText(/clear conviction earns attention/i),
+		).toBeInTheDocument();
+		await expect(
+			canvasElement.querySelector('[data-motion-source-strategy="scroll"]'),
+		).not.toBeNull();
+		await expect(
+			canvasElement.querySelector('[data-motion-effect="text-highlight"]'),
+		).not.toBeNull();
+		await expect(
+			canvasElement.querySelector('[data-motion-effect="grid-clip"]'),
+		).not.toBeNull();
 	},
 };
 

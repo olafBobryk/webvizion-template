@@ -1,12 +1,20 @@
 // components/ui/DateIndicator.tsx
+import type { VariantProps } from "class-variance-authority";
 import type * as React from "react";
-import { Text, type TextProps } from "@/components/ui/primitives/Text";
+import { Text, type textVariants } from "@/components/ui/primitives/Text";
 
 type DateInput = Date | string | number;
+type TextVariantProps = {
+	[TKey in keyof VariantProps<typeof textVariants>]: Exclude<
+		VariantProps<typeof textVariants>[TKey],
+		null
+	>;
+};
 type ParagraphTextProps = Omit<
-	Extract<TextProps, { as: "p" }>,
-	"as" | "children"
->;
+	React.HTMLAttributes<HTMLParagraphElement>,
+	"children"
+> &
+	TextVariantProps;
 
 type DateIndicatorProps = ParagraphTextProps & {
 	date?: DateInput;

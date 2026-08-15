@@ -146,6 +146,7 @@ function SectionRoot<T extends ElementType = "section">({
 	return (
 		<Tag
 			className={outerClass}
+			data-section-root=""
 			data-surface-context={background ?? undefined}
 			{...(rest as ComponentPropsWithoutRef<ElementType>)}
 		>
@@ -173,7 +174,9 @@ function SectionRoot<T extends ElementType = "section">({
 					))}
 				</div>
 			) : null}
-			<div className={innerClass}>{foregroundChildren}</div>
+			<div className={innerClass} data-section-frame="">
+				{foregroundChildren}
+			</div>
 		</Tag>
 	);
 }

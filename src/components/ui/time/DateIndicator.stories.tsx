@@ -24,7 +24,13 @@ export default meta;
 type Story = StoryObj;
 
 export const CalendarOutput: Story = {
-	args: { date: "2025-01-13T12:00:00Z", leadingText: "Published" },
+	args: {
+		date: "2025-01-13T12:00:00Z",
+		interactive: false,
+		leadingText: "Published",
+		tone: "muted",
+		variant: "caption",
+	},
 	play: async ({ canvas }) => {
 		await expect(
 			canvas.getByText("Published Monday, 13th January"),

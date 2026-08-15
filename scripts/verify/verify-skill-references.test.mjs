@@ -89,7 +89,7 @@ test("reports an unknown npm script", async () => {
 test("rejects retired guide and compatibility-skill sources in the router", async () => {
 	const root = await createFixture({
 		context:
-			"- `docs/guides/components/forms-and-submission.md`\n- `plugins/averlo/skills/design-system/SKILL.md`",
+			"- `docs/guides/components/forms-and-submission.md`\n- `docs/skills/legacy/design-system/SKILL.md`",
 	});
 	assert.match(
 		collectSkillReferenceErrors(root).join("\n"),

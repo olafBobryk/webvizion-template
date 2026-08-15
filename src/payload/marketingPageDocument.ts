@@ -1,9 +1,12 @@
 import type {
+	DocumentMarketingPageDocument,
 	HomeHeroSectionBlock,
+	HomeMarketingPageDocument,
+	MarkdownDocumentContentBlock,
 	MarketingLink,
+	MarketingPageBySlug,
 	MarketingPageDocument,
 	MarketingPageSlug,
-	MarketingSection,
 	TemplateServiceSurfaceId,
 } from "@/lib/marketing-content/types";
 import {
@@ -14,26 +17,46 @@ import { isStaticAppSurfaceId } from "@/lib/routes";
 
 type UnknownRecord = Record<string, unknown>;
 
-export type PayloadMarketingPageInput = {
-	description: string;
-	layout: Array<{
-		blockType: "homeHero";
-		cta:
-			| { href: string; kind: "href"; label: string }
-			| { kind: "surface"; label: string; surfaceId: string };
-		descriptions: Array<{ text: string }>;
-		headline: string;
-		id?: string;
-		services: Array<{
-			description: string;
-			serviceId: string;
-			surfaceIds: TemplateServiceSurfaceId[];
-			title: string;
-		}>;
+type PayloadHomeHeroInput = {
+	blockType: "homeHero";
+	cta:
+		| { href: string; kind: "href"; label: string }
+		| { kind: "surface"; label: string; surfaceId: string };
+	descriptions: Array<{ text: string }>;
+	headline: string;
+	id?: string;
+	services: Array<{
+		description: string;
+		serviceId: string;
+		surfaceIds: TemplateServiceSurfaceId[];
+		title: string;
 	}>;
-	slug: MarketingPageSlug;
+};
+
+type PayloadMarkdownDocumentInput = {
+	blockType: "markdownDocument";
+	date: string;
+	id?: string;
+	markdown: string;
+};
+
+export type PayloadHomeMarketingPageInput = {
+	description: string;
+	layout: PayloadHomeHeroInput[];
+	slug: "home";
 	title: string;
 };
+
+export type PayloadDocumentMarketingPageInput = {
+	description: string;
+	layout: [PayloadMarkdownDocumentInput];
+	slug: "document";
+	title: string;
+};
+
+export type PayloadMarketingPageInput =
+	| PayloadDocumentMarketingPageInput
+	| PayloadHomeMarketingPageInput;
 
 function asRecord(value: unknown, path: string): UnknownRecord {
 	if (!value || typeof value !== "object" || Array.isArray(value)) {
@@ -49,6 +72,16 @@ function requiredString(value: unknown, path: string) {
 		);
 	}
 	return value;
+}
+
+function requiredDateString(value: unknown, path: string) {
+	const date = requiredString(value, path);
+	if (Number.isNaN(Date.parse(date))) {
+		throw new Error(
+			`Payload marketing page requires a valid date string at ${path}.`,
+		);
+	}
+	return date;
 }
 
 function optionalString(value: unknown, path: string) {
@@ -148,15 +181,40 @@ function normalizeHomeHero(value: unknown, path: string): HomeHeroSectionBlock {
 	};
 }
 
-function normalizeSection(value: unknown, path: string): MarketingSection {
+function normalizeMarkdownDocument(
+	value: unknown,
+	path: string,
+): MarkdownDocumentContentBlock {
+	const input = asRecord(value, path);
+	const id = optionalString(input.id, `${path}.id`);
+
+	return {
+		blockType: "markdownDocument",
+		...(id ? { id } : {}),
+		date: requiredDateString(input.date, `${path}.date`),
+		markdown: requiredString(input.markdown, `${path}.markdown`),
+	};
+}
+
+function normalizeHomeSection(
+	value: unknown,
+	path: string,
+): HomeHeroSectionBlock {
 	const input = asRecord(value, path);
 	const blockType = requiredString(input.blockType, `${path}.blockType`);
 	if (blockType === "homeHero") return normalizeHomeHero(input, path);
 	throw new Error(
-		`Payload marketing page has unsupported blockType ${blockType} at ${path}.`,
+		`Payload home page has unsupported blockType ${blockType} at ${path}.`,
 	);
 }
 
+export function normalizePayloadMarketingPage<TSlug extends MarketingPageSlug>(
+	value: unknown,
+	expectedSlug: TSlug,
+): MarketingPageBySlug[TSlug];
+export function normalizePayloadMarketingPage(
+	value: unknown,
+): MarketingPageDocument;
 export function normalizePayloadMarketingPage(
 	value: unknown,
 	expectedSlug?: MarketingPageSlug,
@@ -172,14 +230,45 @@ export function normalizePayloadMarketingPage(
 		);
 	}
 
+	const description = requiredString(
+		input.description,
+		"marketingPage.description",
+	);
+	const title = requiredString(input.title, "marketingPage.title");
+	const layout = requiredArray(input.layout, "marketingPage.layout");
+
+	if (slug === "document") {
+		if (layout.length !== 1) {
+			throw new Error(
+				"Payload document page requires exactly one Markdown document block at marketingPage.layout.",
+			);
+		}
+		const block = asRecord(layout[0], "marketingPage.layout[0]");
+		const blockType = requiredString(
+			block.blockType,
+			"marketingPage.layout[0].blockType",
+		);
+		if (blockType !== "markdownDocument") {
+			throw new Error(
+				`Payload document page requires a markdownDocument block at marketingPage.layout[0]; received ${blockType}.`,
+			);
+		}
+
+		return {
+			description,
+			layout: [normalizeMarkdownDocument(block, "marketingPage.layout[0]")],
+			slug: "document",
+			title,
+		};
+	}
+
 	return {
-		description: requiredString(input.description, "marketingPage.description"),
-		layout: requiredArray(input.layout, "marketingPage.layout").map(
-			(section, index) =>
-				normalizeSection(section, `marketingPage.layout[${index}]`),
+		description,
+		layout: layout.map((section, index) =>
+			normalizeHomeSection(section, `marketingPage.layout[${index}]`),
 		),
-		slug: slug as MarketingPageSlug,
-		title: requiredString(input.title, "marketingPage.title"),
+		slug: "home",
+		title,
 	};
 }
 
@@ -195,24 +284,52 @@ function serializeLink(link: MarketingLink) {
 }
 
 export function serializeMarketingPageForPayload(
+	page: DocumentMarketingPageDocument,
+): PayloadDocumentMarketingPageInput;
+export function serializeMarketingPageForPayload(
+	page: HomeMarketingPageDocument,
+): PayloadHomeMarketingPageInput;
+export function serializeMarketingPageForPayload(
+	page: MarketingPageDocument,
+): PayloadMarketingPageInput;
+export function serializeMarketingPageForPayload(
 	page: MarketingPageDocument,
 ): PayloadMarketingPageInput {
+	if (page.slug === "document") {
+		const [document] = page.layout;
+		return {
+			description: page.description,
+			layout: [
+				{
+					blockType: "markdownDocument",
+					...(document.id ? { id: document.id } : {}),
+					date: document.date,
+					markdown: document.markdown,
+				},
+			],
+			slug: "document",
+			title: page.title,
+		};
+	}
+
 	return {
 		description: page.description,
-		layout: page.layout.map((section) => ({
-			blockType: "homeHero",
-			...(section.id ? { id: section.id } : {}),
-			cta: serializeLink(section.cta),
-			descriptions: section.descriptions.map(({ text }) => ({ text })),
-			headline: section.headline,
-			services: section.services.map((service) => ({
-				description: service.description,
-				serviceId: service.id,
-				surfaceIds: [...service.surfaceIds],
-				title: service.title,
-			})),
-		})),
-		slug: page.slug,
+		layout: page.layout.map((section) => {
+			return {
+				blockType: "homeHero" as const,
+				...(section.id ? { id: section.id } : {}),
+				cta: serializeLink(section.cta),
+				descriptions: section.descriptions.map(({ text }) => ({ text })),
+				headline: section.headline,
+				services: section.services.map((service) => ({
+					description: service.description,
+					serviceId: service.id,
+					surfaceIds: [...service.surfaceIds],
+					title: service.title,
+				})),
+			};
+		}),
+		slug: "home",
 		title: page.title,
 	};
 }

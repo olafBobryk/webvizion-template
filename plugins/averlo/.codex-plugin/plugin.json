@@ -19,6 +19,8 @@
 		"storybook",
 		"backport",
 		"visual-parity",
+		"composition",
+		"motion",
 		"export"
 	],
 	"skills": "./skills/",
@@ -33,7 +35,8 @@
 		"defaultPrompt": [
 			"Audit this entity UI against Averlo",
 			"Review this route surface registry",
-			"Backport approved Storybook stories into the Averlo template"
+			"Backport approved Storybook stories into the Averlo template",
+			"Compose and animate this focused surface in a generated Averlo instance"
 		]
 	}
 }

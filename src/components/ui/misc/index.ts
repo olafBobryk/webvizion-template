@@ -13,6 +13,11 @@ export {
 	type AccordionTriggerRenderProps,
 } from "./accordion/Accordion";
 export {
+	Carousel,
+	type CarouselItem,
+	type CarouselProps,
+} from "./Carousel";
+export {
 	Chip,
 	type ChipContentMode,
 	type ChipProps,
