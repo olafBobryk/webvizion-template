@@ -1,7 +1,0 @@
-interface:
-  display_name: "Averlo Next · Publish Project"
-  short_description: "Publish privately to GitLab and Vercel"
-  default_prompt: "Use $averlo-next:publish-project to publish this verified Averlo project to private GitLab and production Vercel targets."
-
-policy:
-  allow_implicit_invocation: false

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Averlo Next · Surfaces"
-  short_description: "Keep Averlo Next route surfaces canonical"
-  default_prompt: "Use $averlo-next:surfaces to audit this route or dashboard surface against its canonical registry."

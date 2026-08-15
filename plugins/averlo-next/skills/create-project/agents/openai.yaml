@@ -1,4 +1,0 @@
-interface:
-  display_name: "Averlo Next · Create Project"
-  short_description: "Initialize a verified local Averlo project"
-  default_prompt: "Use $averlo-next:create-project to create and verify a clean local Averlo project from the published initializer."

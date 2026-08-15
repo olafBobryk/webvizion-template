@@ -1,6 +1,0 @@
-interface:
-  display_name: "Averlo Next · Design System Parity Port"
-  short_description: "One-shot page build and zero-regression system port"
-  default_prompt: "Use $averlo-next:design-system-parity-port to build this authoritative page reference, freeze the matched renderer, and complete a zero-regression port into Averlo's canonical design system."
-policy:
-  allow_implicit_invocation: false

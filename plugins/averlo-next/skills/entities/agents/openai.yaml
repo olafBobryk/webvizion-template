@@ -1,4 +1,0 @@
-interface:
-  display_name: "Averlo Next · Entities"
-  short_description: "Discover and shape Averlo Next entity UI"
-  default_prompt: "Use $averlo-next:entities to map this repository entity frontend before implementing it."
