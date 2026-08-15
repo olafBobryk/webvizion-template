@@ -13,6 +13,7 @@ const AGENT_PORT_END = 3099;
 
 const require = createRequire(import.meta.url);
 const args = process.argv.slice(2);
+const supportedFlags = new Set(["--dry-run", "--prewarm", "--random"]);
 const requestedMode = args.find((arg) => !arg.startsWith("-")) ?? "preview";
 const mode =
 	requestedMode === "agent"
@@ -22,17 +23,25 @@ const mode =
 			: requestedMode;
 const isDryRun = args.includes("--dry-run");
 const shouldPrewarm = args.includes("--prewarm");
-const shouldEnableInspector = args.includes("--inspect");
 const useRandomPort = args.includes("--random");
 const checkoutRoot = process.cwd();
 const previewMetadataPath = path.join(checkoutRoot, ".codex", "preview.json");
 
 const printUsageAndExit = () => {
 	console.error(
-		"Usage: node scripts/dev-server.mjs <preview|local> [--dry-run] [--inspect] [--prewarm] [--random]",
+		"Usage: node scripts/dev-server.mjs <preview|local> [--dry-run] [--prewarm] [--random]",
 	);
 	process.exit(1);
 };
+
+const unsupportedFlag = args.find(
+	(arg) => arg.startsWith("-") && !supportedFlags.has(arg),
+);
+
+if (unsupportedFlag) {
+	console.error(`Unknown option: ${unsupportedFlag}`);
+	printUsageAndExit();
+}
 
 const canListenOnHost = (port, host) =>
 	new Promise((resolve, reject) => {
@@ -294,12 +303,7 @@ const start = async () => {
 				...process.env,
 				NEXT_DEV_DIST_DIR: target.distDir,
 				NEXT_DEV_SERVER_MODE: target.label,
-				NEXT_DEV_CODE_INSPECTOR:
-					shouldEnableInspector || process.env.NEXT_DEV_CODE_INSPECTOR === "1"
-						? "1"
-						: "0",
 				NEXT_DEV_TSCONFIG_PATH: target.tsconfigPath,
-				NEXT_WORKTREE_ROOT: checkoutRoot,
 				PORT: String(target.port),
 			},
 			stdio: "inherit",

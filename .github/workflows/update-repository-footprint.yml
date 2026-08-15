@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths-ignore:
-      - src/app/(site)/(dev)/internal/playground/footprint/_data/repository-footprint.json
+      - src/app/(site)/(marketing)/repository-footprint/_data/repository-footprint.json
   workflow_dispatch:
 
 permissions:
@@ -28,10 +28,10 @@ jobs:
 
       - name: Commit updated footprint
         run: |
-          git diff --quiet -- src/app/'(site)'/'(dev)'/internal/playground/footprint/_data/repository-footprint.json || (
+          git diff --quiet -- src/app/'(site)'/'(marketing)'/repository-footprint/_data/repository-footprint.json || (
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add src/app/'(site)'/'(dev)'/internal/playground/footprint/_data/repository-footprint.json
+            git add src/app/'(site)'/'(marketing)'/repository-footprint/_data/repository-footprint.json
             git commit -m "chore: update repository footprint"
             git push
           )

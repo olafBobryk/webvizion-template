@@ -1,6 +1,9 @@
+import { templateCapabilities } from "@/config/capabilities";
 import type { StaticAppSurfaceId } from "@/lib/routes";
 
-export type MarketingPageSlug = "home";
+export const marketingPageSlugs = ["home"] as const;
+
+export type MarketingPageSlug = (typeof marketingPageSlugs)[number];
 
 export type HeaderIconName = "close" | "menu" | "search" | "dot";
 
@@ -46,13 +49,23 @@ export type HomeHeroSectionBlock = MarketingSectionBase<"homeHero"> & {
 	services: HomeHeroServiceItem[];
 };
 
+const allTemplateServiceSurfaceIds = [
+	"demo",
+	"demoPrimitives",
+	"fullStart",
+	"assembly",
+	"thinStart",
+	"repositoryFootprint",
+] as const;
+
 export type TemplateServiceSurfaceId =
-	| "demo"
-	| "demoPrimitives"
-	| "fullStart"
-	| "playground"
-	| "assembly"
-	| "thinStart";
+	(typeof allTemplateServiceSurfaceIds)[number];
+
+export const templateServiceSurfaceIds = allTemplateServiceSurfaceIds.filter(
+	(surfaceId) =>
+		surfaceId !== "repositoryFootprint" ||
+		templateCapabilities.repositoryFootprint,
+);
 
 export type HomeHeroServiceItem = {
 	id: string;
@@ -64,6 +77,7 @@ export type HomeHeroServiceItem = {
 export type MarketingSection = HomeHeroSectionBlock;
 
 export type MarketingPageDocument = {
+	description: string;
 	slug: MarketingPageSlug;
 	title: string;
 	layout: MarketingSection[];

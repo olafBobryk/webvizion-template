@@ -160,14 +160,17 @@ already occurred.
 
 ## Activation Checklist
 
-The current scaffold is Payload-ready, not Payload-powered. It includes a
-guarded, published-only readback path for the shared site layout. The default
-`MARKETING_CONTENT_SOURCE=fallback` never initializes Payload. After database
-setup, seed and verify the global before selecting Payload:
+The current scaffold is Payload-ready, not Payload-powered. It includes guarded,
+published-only readback paths for the shared site layout and source-neutral
+marketing page documents. The default `MARKETING_CONTENT_SOURCE=fallback` never
+initializes Payload. After database setup, seed and verify both content owners
+before selecting Payload:
 
 ```bash
 npm run payload:seed:site-layout
 npm run payload:verify:site-layout
+npm run payload:seed:marketing-pages
+npm run payload:verify:marketing-pages
 ```
 
 Only then set `MARKETING_CONTENT_SOURCE=payload`. In that mode missing Payload
@@ -183,13 +186,13 @@ To complete full Payload activation:
 3. Keep `payload.config.ts` wired through `@payload-config`.
 4. Refine the existing Payload collections, globals, and blocks for the site's
    editorial contract without replacing the established frontend layout model.
-5. Keep the existing guarded `getSiteLayout()` Local API readback and extend the
-   same source boundary to `getMarketingPage()` when page content is migrated.
+5. Keep the existing guarded `getSiteLayout()` and `getMarketingPage()` Local
+   API readback boundaries.
 6. Map Payload documents into the existing `MarketingPageDocument`,
    `SiteLayoutDocument`, and typed section render contracts used by the
    marketing frontend.
-7. Keep fallback documents for no-env, no-content, local clone, and preview
-   safety.
+7. Keep fallback documents as the static/Payload-ready source and recovery
+   baseline; an explicitly authoritative Payload read must still fail closed.
 8. Run a production build and verify `/admin`, `/api`, and the public marketing
    pages with Vercel env vars present.
 

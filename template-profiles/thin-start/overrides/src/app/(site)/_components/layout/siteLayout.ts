@@ -84,21 +84,7 @@ function omitMissingLinks<T>(items: Array<T | null>): T[] {
 }
 
 const demoLink = getAvailableInternalRouteLink("Component Sweep", "demo");
-const playgroundLink = getAvailableInternalRouteLink(
-	"Playground",
-	"playground",
-);
-const dictionaryLink = getAvailableInternalRouteLink(
-	"Dictionary",
-	"dictionary",
-);
-const referenceLink = getAvailableInternalRouteLink("Reference", "reference");
-const internalRouteLinks = omitMissingLinks<SiteLink>([
-	demoLink,
-	playgroundLink,
-	dictionaryLink,
-	referenceLink,
-]);
+const internalRouteLinks = omitMissingLinks<SiteLink>([demoLink]);
 const developerMenuGroup: SiteMenuGroup | null =
 	internalRouteLinks.length > 0
 		? {
@@ -148,7 +134,7 @@ export const defaultSiteLayout: SiteLayoutDocument = {
 					},
 				],
 			},
-			...omitMissingLinks<SiteNavLink>([demoLink, playgroundLink]),
+			...omitMissingLinks<SiteNavLink>([demoLink]),
 		],
 		search: {
 			ariaLabel: "Search pages",
@@ -166,7 +152,7 @@ export const defaultSiteLayout: SiteLayoutDocument = {
 		],
 		topNavLinks: [
 			{ label: "Home", surfaceId: "marketing.home" },
-			...omitMissingLinks([demoLink, playgroundLink]),
+			...omitMissingLinks([demoLink]),
 		],
 	},
 	socialLinks: [],

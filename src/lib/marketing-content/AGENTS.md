@@ -11,4 +11,4 @@
 - Run `npm run verify:marketing-sections` after adding, moving, removing, or renaming a marketing section.
 - Public navigation and CTAs use the exclusive `surfaceId` or `href` link contract. Registered destinations use installed Marketing or Auth surface IDs; profile-installed internal routes remain plain generated links and stay outside marketing content documents.
 - Static assembly excludes Payload completely. Payload-ready assembly adds the guarded source adapter without changing these frontend contracts.
-- Keep `MARKETING_CONTENT_SOURCE=fallback` until the published `site-layout` global has passed seed/readback verification. Once explicitly set to `payload`, configured read or normalization failures are fatal; do not silently replace authoritative CMS content with stale fallback data.
+- Keep `MARKETING_CONTENT_SOURCE=fallback` until the published `site-layout` global and marketing page documents have passed seed/readback verification. Once explicitly set to `payload`, configured read or normalization failures are fatal; do not silently replace authoritative CMS content with stale fallback data.

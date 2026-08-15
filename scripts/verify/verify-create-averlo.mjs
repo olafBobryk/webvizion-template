@@ -101,6 +101,7 @@ async function assertGeneratedProject(targetRoot, { installed }) {
 		"PRODUCT.md",
 		"docs/README.md",
 		"package-lock.json",
+		"src/app/(site)/(marketing)/internal/testing/page.tsx",
 	]) {
 		if (!(await exists(path.join(targetRoot, requiredPath)))) {
 			throw new Error(`Generated project is missing ${requiredPath}.`);
@@ -109,6 +110,10 @@ async function assertGeneratedProject(targetRoot, { installed }) {
 	for (const retiredPath of [
 		"docs/project/README.md",
 		"docs/project/source/README.md",
+		"src/app/(site)/(dev)/internal/dictionary",
+		"src/app/(site)/(dev)/internal/playground",
+		"src/app/(site)/(dev)/internal/reference",
+		"src/app/(site)/(marketing)/repository-footprint",
 	]) {
 		if (await exists(path.join(targetRoot, retiredPath))) {
 			throw new Error(`Generated project retained ${retiredPath}.`);

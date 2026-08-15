@@ -1,6 +1,19 @@
 import type { MarketingPageDocument, SiteLayoutDocument } from "./types";
 
+const developmentMenuGroups =
+	process.env.NODE_ENV !== "production"
+		? [
+				{
+					label: "Development",
+					icon: "dot" as const,
+					links: [{ label: "Testing", href: "/internal/testing" }],
+				},
+			]
+		: [];
+
 export const fallbackHomePage: MarketingPageDocument = {
+	description:
+		"A focused website starter built from a small, source-neutral content contract.",
 	slug: "home",
 	title: "Home",
 	layout: [
@@ -24,13 +37,6 @@ export const fallbackHomePage: MarketingPageDocument = {
 					description:
 						"Build with the canonical Button, Panel, Card, Text, Section, form, and overlay contracts.",
 					surfaceIds: ["demo", "demoPrimitives"],
-				},
-				{
-					id: "motion",
-					title: "Motion",
-					description:
-						"Keep the intro-aware reveal system, shared timing, and reduced-motion behavior intact.",
-					surfaceIds: ["playground"],
 				},
 				{
 					id: "content",
@@ -58,6 +64,10 @@ export const fallbackHomePage: MarketingPageDocument = {
 	],
 };
 
+export const fallbackMarketingPages = {
+	home: fallbackHomePage,
+} satisfies Record<"home", MarketingPageDocument>;
+
 export const fallbackSiteLayout: SiteLayoutDocument = {
 	header: {
 		cta: {
@@ -79,6 +89,7 @@ export const fallbackSiteLayout: SiteLayoutDocument = {
 					{ label: "Contact", surfaceId: "marketing.contact" },
 				],
 			},
+			...developmentMenuGroups,
 		],
 		mobile: {
 			closeAriaLabel: "Close navigation",

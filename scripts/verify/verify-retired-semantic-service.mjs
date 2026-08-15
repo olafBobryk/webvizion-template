@@ -8,6 +8,8 @@ const root = process.cwd();
 const verifierPath = "scripts/verify/verify-retired-semantic-service.mjs";
 const historicalRunsPath =
 	"docs/benchmarks/history/template-intelligence-runs.jsonl";
+const repositoryFootprintHistoryPath =
+	"src/app/(site)/(marketing)/repository-footprint/_data/repository-footprint.json";
 const retiredServiceName = "serena";
 
 const output = execFileSync(
@@ -79,7 +81,11 @@ for (const relativePath of paths) {
 		violations.push(`path: ${relativePath}`);
 	}
 
-	if (relativePath === verifierPath || relativePath === historicalRunsPath) {
+	if (
+		relativePath === verifierPath ||
+		relativePath === historicalRunsPath ||
+		relativePath === repositoryFootprintHistoryPath
+	) {
 		continue;
 	}
 

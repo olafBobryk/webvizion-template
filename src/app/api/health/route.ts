@@ -1,49 +1,25 @@
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
+import { fixtureServiceHealth, isFixtureServiceId } from "@/lib/health/fixture";
 
-type HealthServiceStatus = {
-	status: "healthy" | "unhealthy";
-	message: string;
-	latencyMs?: number;
-};
+export function GET(request: NextRequest) {
+	const service = request.nextUrl.searchParams.get("service");
+	const checkedAt = new Date().toISOString();
+	if (service) {
+		if (!isFixtureServiceId(service)) {
+			return NextResponse.json(
+				{ message: "Unknown fixture service." },
+				{ status: 404 },
+			);
+		}
 
-type AppHealthResponse = {
-	status: "healthy" | "degraded";
-	checkedAt: string;
-	services: {
-		app: HealthServiceStatus;
-		supabase: HealthServiceStatus;
-	};
-};
+		return NextResponse.json(
+			{ checkedAt, service: fixtureServiceHealth[service] },
+			{ headers: { "Cache-Control": "no-store" } },
+		);
+	}
 
-function getLatency() {
-	return Math.floor(40 + Math.random() * 160);
-}
-
-export function GET() {
-	const supabaseIsHealthy = Math.random() >= 0.25;
-	const body: AppHealthResponse = {
-		status: supabaseIsHealthy ? "healthy" : "degraded",
-		checkedAt: new Date().toISOString(),
-		services: {
-			app: {
-				status: "healthy",
-				message: "Application route is responding.",
-				latencyMs: getLatency(),
-			},
-			supabase: {
-				status: supabaseIsHealthy ? "healthy" : "unhealthy",
-				message: supabaseIsHealthy
-					? "Supabase connection is healthy."
-					: "Supabase connection is temporarily unavailable.",
-				latencyMs: getLatency(),
-			},
-		},
-	};
-
-	return NextResponse.json(body, {
-		status: supabaseIsHealthy ? 200 : 503,
-		headers: {
-			"Cache-Control": "no-store",
-		},
-	});
+	return NextResponse.json(
+		{ checkedAt, services: fixtureServiceHealth },
+		{ headers: { "Cache-Control": "no-store" } },
+	);
 }

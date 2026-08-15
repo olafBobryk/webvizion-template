@@ -240,7 +240,7 @@ export function DashboardFrame({
 								)}
 								href={hrefFor("dashboard.overview")}
 								size="sm"
-								tone="muted"
+								tone="dark"
 							/>
 						</div>
 					}

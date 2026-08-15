@@ -1,6 +1,6 @@
 {
 	"encoding": "o200k_base",
-	"head": "143550bdb8b1dc8ad020fa155310e9ea75c508a6",
+	"head": "a8f82c045c74c45d98055d89a31ac7cbbefc75bf",
 	"scope": "all-authored-text",
 	"snapshots": [
 		{
@@ -1946,6 +1946,33 @@
 			"lines": 115768,
 			"textBytes": 3346095,
 			"tokens": 862544
+		},
+		{
+			"date": "2026-08-15",
+			"hash": "313079fb5569648e10258ed2b391095ac97e3038",
+			"subject": "refactor: consolidate Averlo repository workflows",
+			"files": 1081,
+			"lines": 114395,
+			"textBytes": 3370229,
+			"tokens": 861820
+		},
+		{
+			"date": "2026-08-15",
+			"hash": "5ba40278bd5a66c25dc38e0712ee72b7f0d44753",
+			"subject": "chore: remove superseded Averlo plugin source",
+			"files": 1021,
+			"lines": 109562,
+			"textBytes": 3196471,
+			"tokens": 820570
+		},
+		{
+			"date": "2026-08-15",
+			"hash": "a8f82c045c74c45d98055d89a31ac7cbbefc75bf",
+			"subject": "feat: add repository footprint playground",
+			"files": 1025,
+			"lines": 110284,
+			"textBytes": 3215039,
+			"tokens": 825665
 		}
 	],
 	"version": 1

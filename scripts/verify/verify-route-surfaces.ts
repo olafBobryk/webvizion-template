@@ -23,6 +23,7 @@ const familyRoots = {
 
 const normalize = (value: string) => value.replaceAll("\\", "/");
 const routeSurfaces: readonly RouteSurfaceBase[] = appSurfaceRegistry;
+const developmentOnlyInternalHrefs = new Set(["/internal/testing"]);
 
 function pagePathForSurface(surface: RouteSurfaceBase) {
 	if (surface.family === "marketing") {
@@ -88,11 +89,27 @@ async function main() {
 		(href) => href.split("/").filter(Boolean).length === 2,
 	);
 	for (const href of topLevelInternalHrefs) {
+		if (developmentOnlyInternalHrefs.has(href)) continue;
 		assert.ok(
 			installedShellHrefs.has(href),
 			`Installed internal route ${href} is missing from the header menu.`,
 		);
 	}
+	const proxySource = readFileSync(resolve(root, "src/proxy.ts"), "utf8");
+	assert.match(
+		proxySource,
+		/"\/internal\/testing"/,
+		"Testing must be guarded from production requests.",
+	);
+	assert.match(
+		proxySource,
+		/"\/internal\/testing\/:path\*"/,
+		"Testing must be matched by the production proxy.",
+	);
+	assert.ok(
+		!installedShellHrefs.has("/internal/testing"),
+		"Testing is direct-only for app-only projects, not installed application navigation.",
+	);
 	for (const surface of routeSurfaces) {
 		if (surface.family !== "marketing" || surface.match !== "exact") continue;
 		assert.ok(

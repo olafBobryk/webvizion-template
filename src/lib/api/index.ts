@@ -7,10 +7,6 @@ export {
 	updateStoredSessionUser,
 } from "./auth";
 export {
-	checkHealth,
-	type HealthResponse,
-} from "./checkHealth";
-export {
 	type ApiClient,
 	type ApiClientOptions,
 	type ApiError,
@@ -27,7 +23,3 @@ export {
 	type MockRequestContext,
 	type MockRoute,
 } from "./createMockFetch";
-export {
-	type SpamProtectedExampleSubmission,
-	submitSpamProtectedExample,
-} from "./submitSpamProtectedExample";

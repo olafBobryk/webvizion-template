@@ -1,26 +1,27 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { expect, fn, userEvent } from "storybook/test";
+import { expect, fn } from "storybook/test";
 import { formatCatalogOwnerContract } from "@/lib/component-catalog/contract";
 import { HealthCheckIndicator } from "./HealthCheckIndicator";
 import { catalogContract } from "./HealthCheckIndicator.catalog";
 
-const healthyResponse = {
-	status: "healthy",
-	checkedAt: "2026-08-01T12:00:00.000Z",
-	services: {
-		app: { status: "healthy", message: "App is available." },
-		supabase: {
-			status: "healthy",
-			message: "Database is available.",
-			latencyMs: 18,
-		},
+const fixtureResponses = {
+	auth: {
+		label: "Fixture sign-in",
+		message: "Fixture credentials and session storage are available.",
+		status: "available",
+	},
+	platform: {
+		label: "Platform fixtures",
+		message: "Support and report fixtures are ready for internal review.",
+		status: "available",
 	},
 };
+
 const meta = {
 	id: "ui-misc-health-check-indicator",
 	title: "UI/Misc/HealthCheckIndicator",
 	component: HealthCheckIndicator,
-	excludeStories: ["catalogContract", "healthyResponse"],
+	excludeStories: ["catalogContract", "fixtureResponses"],
 	tags: ["autodocs"],
 	parameters: {
 		catalogContract,
@@ -31,13 +32,30 @@ const meta = {
 	},
 	beforeEach: () => {
 		const originalFetch = globalThis.fetch;
-		globalThis.fetch = fn(
-			async () =>
-				new Response(JSON.stringify(healthyResponse), {
-					status: 200,
-					headers: { "Content-Type": "application/json" },
-				}),
-		);
+		globalThis.fetch = fn(async (input) => {
+			const url = new URL(`${input}`, "https://storybook.local");
+			if (url.pathname.endsWith("-checking")) {
+				return new Promise<Response>(() => undefined);
+			}
+			if (url.pathname.endsWith("-unavailable")) {
+				return new Response(
+					JSON.stringify({ message: "Fixture service is unavailable." }),
+					{
+						status: 503,
+						headers: { "Content-Type": "application/json" },
+					},
+				);
+			}
+			const service = url.searchParams.get("service");
+			const response =
+				service === "platform"
+					? fixtureResponses.platform
+					: fixtureResponses.auth;
+			return new Response(JSON.stringify({ service: response }), {
+				status: 200,
+				headers: { "Content-Type": "application/json" },
+			});
+		});
 		return () => {
 			globalThis.fetch = originalFetch;
 		};
@@ -45,31 +63,56 @@ const meta = {
 } satisfies Meta<typeof HealthCheckIndicator>;
 export default meta;
 type Story = StoryObj<typeof meta>;
+
 export const OperationalContract: Story = {
-	args: { endpoint: "/storybook-health", label: "Database" },
+	args: { endpoint: "/storybook-health", service: "auth" },
 	parameters: { a11y: { test: "error" } },
 	play: async ({ canvas }) => {
-		const label = await canvas.findByText("Database: Operational");
+		const label = await canvas.findByText("Fixture sign-in: Available");
 		const status = label.closest('[aria-live="polite"]');
 		await expect(status).toHaveAttribute("aria-live", "polite");
 		await expect(label).toBeVisible();
 		await expect(status).toHaveAttribute(
 			"title",
-			"Database is available. 18ms",
+			"Fixture credentials and session storage are available.",
 		);
-		await userEvent.click(canvas.getByRole("button", { name: "Refresh" }));
-		await expect(
-			await canvas.findByText("Database: Operational"),
-		).toBeVisible();
 	},
 };
-export const CompactContract: Story = {
-	args: { endpoint: "/storybook-health", label: "API", variant: "sm" },
+
+export const CheckingContract: Story = {
+	args: { endpoint: "/storybook-health-checking", service: "auth" },
 	parameters: { a11y: { test: "error" } },
 	play: async ({ canvas }) => {
-		await expect(await canvas.findByText("API: Operational")).toBeVisible();
+		const label = await canvas.findByText("Fixture sign-in: Checking");
+		const status = label.closest('[aria-live="polite"]');
+		await expect(label).toBeVisible();
+		await expect(status).toHaveAttribute("title", "Checking fixture sign-in.");
+	},
+};
+
+export const PlatformFixtureContract: Story = {
+	args: { endpoint: "/storybook-health", service: "platform" },
+	parameters: { a11y: { test: "error" } },
+	play: async ({ canvas }) => {
+		await expect(
+			await canvas.findByText("Platform fixtures: Available"),
+		).toBeVisible();
 		await expect(
 			canvas.queryByRole("button", { name: "Refresh" }),
 		).not.toBeInTheDocument();
+	},
+};
+
+export const UnavailableContract: Story = {
+	args: { endpoint: "/storybook-health-unavailable", service: "platform" },
+	parameters: { a11y: { test: "error" } },
+	play: async ({ canvas }) => {
+		const label = await canvas.findByText("Platform fixtures: Unavailable");
+		const status = label.closest('[aria-live="polite"]');
+		await expect(label).toBeVisible();
+		await expect(status).toHaveAttribute(
+			"title",
+			"Fixture service is unavailable.",
+		);
 	},
 };

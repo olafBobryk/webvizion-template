@@ -82,4 +82,22 @@ assert.deepStrictEqual(
 	},
 );
 
+const templateMenuGroup = fallbackSiteLayout.header.menuGroups.find(
+	(group) => group.label === "Template",
+);
+assert.deepStrictEqual(templateMenuGroup?.links, [
+	{ href: "/repository-footprint", label: "Repository Footprint" },
+]);
+for (const link of [
+	...fallbackSiteLayout.header.navLinks,
+	...fallbackSiteLayout.header.topNavLinks,
+	...fallbackSiteLayout.footer.navLinks,
+]) {
+	assert.notEqual(
+		link.href,
+		"/repository-footprint",
+		"Repository Footprint belongs only in the canonical header menu.",
+	);
+}
+
 console.log("Marketing site-layout fallback and Payload mapping verified.");

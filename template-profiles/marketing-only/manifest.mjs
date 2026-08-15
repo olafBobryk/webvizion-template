@@ -9,15 +9,7 @@ export const marketingOnlyProfile = {
 		default: "payload-ready",
 	},
 	assembly: {
-		surfaces: [
-			"marketing",
-			"demo",
-			"scrollPerformance",
-			"playground",
-			"dictionary",
-			"reference",
-			"payload",
-		],
+		surfaces: ["marketing", "demo", "scrollPerformance", "testing", "payload"],
 	},
 	sharedFiles: ["src/lib/marketing-content/fallback.ts"],
 	overrides: [],

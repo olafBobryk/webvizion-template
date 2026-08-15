@@ -9,10 +9,13 @@ const verifierPath = "scripts/verify/verify-retired-template-intelligence.mjs";
 const historicalRunsPath =
 	"docs/benchmarks/history/template-intelligence-runs.jsonl";
 const benchmarksIndexPath = "docs/benchmarks/README.md";
+const repositoryFootprintHistoryPath =
+	"src/app/(site)/(marketing)/repository-footprint/_data/repository-footprint.json";
 const allowedPaths = new Set([
 	verifierPath,
 	"scripts/verify/verify-retired-semantic-service.mjs",
 	historicalRunsPath,
+	repositoryFootprintHistoryPath,
 ]);
 const retiredContentTokens = [
 	"template intelligence",
@@ -54,9 +57,7 @@ for (const relativePath of paths) {
 	if (relativePath === benchmarksIndexPath) {
 		if (
 			content === null ||
-			!content.includes(
-				"./history/template-intelligence-runs.jsonl",
-			)
+			!content.includes("./history/template-intelligence-runs.jsonl")
 		) {
 			violations.push(`historical benchmark index: ${relativePath}`);
 		}

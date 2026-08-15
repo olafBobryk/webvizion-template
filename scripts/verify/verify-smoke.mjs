@@ -28,7 +28,7 @@ async function getExpectations() {
 			route: "/",
 			statuses: hasMarketing ? new Set([200]) : new Set([307, 308]),
 		},
-		{ route: "/api/health", statuses: new Set([200, 503]) },
+		{ route: "/api/health", statuses: new Set([200]) },
 	];
 
 	if (hasDashboard) {

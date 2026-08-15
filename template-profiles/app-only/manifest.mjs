@@ -11,14 +11,7 @@ export const appOnlyProfile = {
 		default: "static",
 	},
 	assembly: {
-		surfaces: [
-			"dashboard",
-			"demo",
-			"scrollPerformance",
-			"playground",
-			"dictionary",
-			"reference",
-		],
+		surfaces: ["dashboard", "demo", "scrollPerformance", "testing"],
 	},
 	sharedFiles: [],
 	overrides: [

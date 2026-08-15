@@ -102,68 +102,6 @@ const getDevIsolationConfig = (
 	};
 };
 
-const shouldEnableCodeInspector = (phase: string) =>
-	phase === PHASE_DEVELOPMENT_SERVER &&
-	process.env.NEXT_DEV_CODE_INSPECTOR === "1";
-
-const getCodeInspectorDevServerPort = () => {
-	const distDir = process.env.NEXT_DEV_DIST_DIR;
-	const distDirPort =
-		distDir === ".next-user"
-			? 3000
-			: Number.parseInt(distDir?.match(/-(\d{4})$/)?.[1] ?? "", 10);
-	const envPort = Number.parseInt(process.env.PORT ?? "", 10);
-
-	return Number.isFinite(distDirPort) ? distDirPort : envPort;
-};
-
-const getCodeInspectorPort = () => {
-	const explicitPort = Number.parseInt(
-		process.env.CODE_INSPECTOR_PORT ?? "",
-		10,
-	);
-
-	if (Number.isFinite(explicitPort)) {
-		return explicitPort;
-	}
-
-	const devServerPort = getCodeInspectorDevServerPort();
-
-	if (!Number.isFinite(devServerPort)) {
-		return 5678;
-	}
-
-	return 5678 + Math.max(devServerPort - 3000, 0);
-};
-
-const getCodeInspectorWorkspaceRoot = () =>
-	process.env.NEXT_WORKTREE_ROOT ?? process.cwd();
-
-const getCodeInspectorRules = (phase: string) => {
-	if (!shouldEnableCodeInspector(phase)) {
-		return {};
-	}
-
-	const { codeInspectorPlugin } =
-		require("code-inspector-plugin") as typeof import("code-inspector-plugin");
-
-	return codeInspectorPlugin({
-		bundler: "turbopack",
-		dev: true,
-		editor: "code",
-		launchType: "exec",
-		pathFormat: [
-			"--reuse-window",
-			getCodeInspectorWorkspaceRoot(),
-			"--goto",
-			"{file}:{line}:{column}",
-		],
-		pathType: "absolute",
-		port: getCodeInspectorPort(),
-		printServer: true,
-	});
-};
-
 const getAssistantHarnessAliases = (phase: string): Record<string, string> =>
 	phase === PHASE_DEVELOPMENT_SERVER
 		? {}
@@ -189,7 +127,6 @@ const createNextConfig = (phase: string): NextConfig => ({
 	turbopack: {
 		root: PROJECT_ROOT,
 		resolveAlias: getAssistantHarnessAliases(phase),
-		rules: getCodeInspectorRules(phase),
 	},
 });
 

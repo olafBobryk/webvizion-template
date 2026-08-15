@@ -29,12 +29,6 @@ const renderedSurfaces = {
 		width: 1280,
 		height: 2183,
 	},
-	playground: {
-		name: "Playground",
-		src: "/template-services/playground.png",
-		width: 1280,
-		height: 590,
-	},
 	assembly: {
 		name: "Positive assembly plan",
 		src: "/template-services/assembly.png",
@@ -46,6 +40,12 @@ const renderedSurfaces = {
 		src: "/template-services/thin-start.png",
 		width: 1280,
 		height: 930,
+	},
+	repositoryFootprint: {
+		name: "Repository footprint",
+		src: "/template-services/repository-footprint.png",
+		width: 1280,
+		height: 900,
 	},
 	fullStart: {
 		name: "Full start dashboard",
@@ -110,7 +110,7 @@ function InteractiveSurfaceHitbox({
 		(surfaceId) => renderedSurfaces[surfaceId].name,
 	);
 	const alignsEnd = service.surfaceIds.some((surfaceId) =>
-		["fullStart", "playground", "thinStart"].includes(surfaceId),
+		["fullStart", "thinStart"].includes(surfaceId),
 	);
 
 	return (
@@ -176,16 +176,25 @@ function SurfaceGroup({
 
 	if (!service) return null;
 
+	const availableSurfaceIds = surfaceIds.filter((surfaceId) =>
+		service.surfaceIds.includes(surfaceId),
+	);
+
 	if (skeleton) {
 		return (
 			<div className="grid gap-4">
-				{surfaceIds.map((surfaceId) => (
+				{availableSurfaceIds.map((surfaceId) => (
 					<SurfaceSkeleton key={surfaceId} surfaceId={surfaceId} />
 				))}
 			</div>
 		);
 	}
-	return <InteractiveSurfaceHitbox service={service} surfaceIds={surfaceIds} />;
+	return (
+		<InteractiveSurfaceHitbox
+			service={service}
+			surfaceIds={availableSurfaceIds}
+		/>
+	);
 }
 
 function PreviewCollageGrid({
@@ -231,15 +240,10 @@ function PreviewCollageGrid({
 						<SurfaceGroup
 							services={services}
 							skeleton={skeleton}
-							surfaceIds={["thinStart"]}
+							surfaceIds={["thinStart", "repositoryFootprint"]}
 						/>
 					</div>
 					<div className="mt-28 grid gap-y-[8rem]">
-						<SurfaceGroup
-							services={services}
-							skeleton={skeleton}
-							surfaceIds={["playground"]}
-						/>
 						<SurfaceGroup
 							services={services}
 							skeleton={skeleton}

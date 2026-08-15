@@ -5,6 +5,7 @@ import {
 	type SiteMenuGroup,
 	type SiteNavLink,
 } from "@/app/(site)/_components/layout/siteLayout";
+import { templateCapabilities } from "@/config/capabilities";
 import { getMarketingSiteLinks, publicSocialLinks } from "./links";
 import type { MarketingPageDocument, MarketingPageSlug } from "./types";
 
@@ -15,9 +16,7 @@ function omitMissingLinks<T>(items: Array<T | null>): T[] {
 const siteLinks = getMarketingSiteLinks();
 const internalRouteLinks = omitMissingLinks<SiteLink>([
 	siteLinks.demo,
-	siteLinks.playground,
-	siteLinks.dictionary,
-	siteLinks.reference,
+	siteLinks.testing,
 ]);
 const developerMenuGroup: SiteMenuGroup | null =
 	internalRouteLinks.length > 0
@@ -36,6 +35,8 @@ if (!fallbackHeroCta) {
 }
 
 export const fallbackHomePage: MarketingPageDocument = {
+	description:
+		"An agent-ready Next.js template for lightweight design-system scaffolds.",
 	slug: "home",
 	title: "Home",
 	layout: [
@@ -60,13 +61,6 @@ export const fallbackHomePage: MarketingPageDocument = {
 					surfaceIds: ["demo", "demoPrimitives"],
 				},
 				{
-					id: "playground",
-					title: "Playground",
-					description:
-						"Try reveal, scroll, and choreography ideas in isolation before they enter the system.",
-					surfaceIds: ["playground"],
-				},
-				{
 					id: "assembly",
 					title: "Assembly",
 					description:
@@ -78,7 +72,12 @@ export const fallbackHomePage: MarketingPageDocument = {
 					title: "Thin start",
 					description:
 						"Keep the canonical visual core in a minimal, independently verifiable workspace.",
-					surfaceIds: ["thinStart"],
+					surfaceIds: [
+						"thinStart",
+						...(templateCapabilities.repositoryFootprint
+							? (["repositoryFootprint"] as const)
+							: []),
+					],
 				},
 				{
 					id: "full-start",
@@ -109,6 +108,14 @@ export const fallbackSiteLayout: SiteLayoutDocument = {
 					siteLinks.settings,
 				]),
 			},
+			...omitMissingLinks([
+				siteLinks.repositoryFootprint
+					? {
+							label: "Template",
+							links: [siteLinks.repositoryFootprint],
+						}
+					: null,
+			]),
 			...omitMissingLinks([developerMenuGroup]),
 		],
 		mobile: {
@@ -129,7 +136,6 @@ export const fallbackSiteLayout: SiteLayoutDocument = {
 			},
 			siteLinks.contact,
 			siteLinks.demo,
-			siteLinks.playground,
 			siteLinks.settings,
 		]),
 		search: {
@@ -152,7 +158,6 @@ export const fallbackSiteLayout: SiteLayoutDocument = {
 		topNavLinks: omitMissingLinks([
 			siteLinks.home,
 			siteLinks.demo,
-			siteLinks.playground,
 			siteLinks.settings,
 		]),
 	},

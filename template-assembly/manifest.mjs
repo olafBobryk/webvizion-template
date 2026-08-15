@@ -7,6 +7,7 @@ export const assemblyGeneratedPaths = new Set([
 	"package-lock.json",
 	"package.json",
 	"src/config/surfaces.ts",
+	"src/config/surfaces/marketing.ts",
 	"src/lib/api/index.ts",
 	"src/lib/marketing-content/source.ts",
 	"tsconfig.json",
@@ -18,6 +19,7 @@ export const assemblyTemplateOnlyPaths = new Set([
 	"docs/benchmarks/design-system-agent-benchmark.md",
 	"docs/benchmarks/design-system-agent-benchmark-runs.jsonl",
 	"docs/benchmarks/design-system-agent-benchmark-runs.md",
+	"public/template-services/repository-footprint.png",
 	"scripts/create-template-profile.mjs",
 	"scripts/dev-thin.mjs",
 	"scripts/generate-repository-footprint.mjs",
@@ -38,6 +40,7 @@ export const assemblyTemplateOnlyRoots = [
 	"template-assembly",
 	"template-profiles",
 	"template-surfaces",
+	"src/app/(site)/(marketing)/repository-footprint",
 ];
 
 export const assemblyCoreRoots = [
@@ -75,10 +78,8 @@ export const assemblyTemplateOnlyDevDependencies = new Set(["js-tiktoken"]);
 export const assemblyCoreScripts = new Set([
 	"dev",
 	"dev:local",
-	"dev:inspect",
 	"predev",
 	"predev:local",
-	"predev:inspect",
 	"prebuild",
 	"build-storybook",
 	"build",
@@ -95,6 +96,7 @@ export const assemblyCoreScripts = new Set([
 	"verify:retired-template-intelligence",
 	"verify:skill-references",
 	"verify:route-surfaces",
+	"verify:route-metadata",
 	"verify:component-skeletons",
 	"verify:route-skeletons",
 	"storybook",
@@ -150,7 +152,6 @@ export const assemblyCoreDevDependencies = new Set([
 	"@types/react-dom",
 	"@vitest/browser-playwright",
 	"@vitest/coverage-v8",
-	"code-inspector-plugin",
 	"playwright",
 	"storybook",
 	"tailwindcss",

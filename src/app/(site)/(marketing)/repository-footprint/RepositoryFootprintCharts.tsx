@@ -13,7 +13,6 @@ import {
 import { Button } from "@/components/ui/primitives/Button";
 import { Card, Float, Panel } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
-import { InternalPageHeader } from "../../_components/InternalPage";
 
 type FootprintSnapshot = {
 	date: string;
@@ -311,12 +310,8 @@ function SnapshotChart({
 }
 
 export function RepositoryFootprintCharts({
-	encoding,
-	scope,
 	snapshots,
 }: {
-	encoding: string;
-	scope: string;
 	snapshots: readonly FootprintSnapshot[];
 }) {
 	const chartSnapshots = snapshots.map((snapshot, index) => ({
@@ -337,30 +332,8 @@ export function RepositoryFootprintCharts({
 		zoomIn,
 		zoomOut,
 	} = useFootprintZoom(chartSnapshots.length);
-	const startSnapshot = chartSnapshots[0];
-	const endSnapshot = chartSnapshots.at(-1);
-	const description =
-		startSnapshot && endSnapshot
-			? `${numberFormatter.format(chartSnapshots.length)} authored commits · ${formatDate(startSnapshot.date)} — ${formatDate(endSnapshot.date)} · ${scope.replaceAll("-", " ")} · ${encoding}`
-			: "No repository footprint has been generated yet.";
-
 	return (
 		<>
-			<InternalPageHeader
-				title="Repository footprint"
-				description={description}
-				action={
-					<Button
-						href="/internal/playground"
-						size="sm"
-						variant="ghost"
-						className="w-fit"
-					>
-						Back to playground
-					</Button>
-				}
-			/>
-
 			{chartSnapshots.length === 0 ? (
 				<Panel background="muted" border="subtle" padding="md">
 					<Text variant="body" tone="muted">

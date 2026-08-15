@@ -10,6 +10,9 @@ surfaces without turning the generated project into a demo-heavy product. Its
 frontend stays source-agnostic: server-side resolvers turn fallback or Payload
 documents into lightweight page, layout, and section props.
 
+The canonical template also publishes `/repository-footprint`, a commit-history
+snapshot of its authored repository size. Generated projects do not include it.
+
 ## Instant Setup
 
 Template repository: [github.com/olafBobryk/averlo-next-template](https://github.com/olafBobryk/averlo-next-template)
@@ -177,7 +180,6 @@ measured or optimized against real page-scroll evidence; see
 | `npm run create:project`                | Materialize a route profile into a project workspace.                                |
 | `npm run dev`                           | Start an isolated, prewarmed preview on a random port.                               |
 | `npm run dev:local`                     | Start the former local server flow on port 3000–3010.                                |
-| `npm run dev:inspect`                   | Start a preview with the code-inspector sidecar enabled.                             |
 | `npm run storybook:preview`             | Start or reuse the current checkout's Storybook server.                              |
 | `npm run storybook:status`              | Show the paired preview and Storybook URLs.                                          |
 | `npm run storybook:stop`                | Stop only a Storybook server launched by the coordinator.                            |

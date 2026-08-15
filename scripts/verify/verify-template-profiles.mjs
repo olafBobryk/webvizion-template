@@ -159,6 +159,74 @@ async function assertGeneratedSurfaceContract(outputRoot, profileCase) {
 		path.join(outputRoot, "src/app/(site)/_components/layout/siteLayout.ts"),
 		"utf8",
 	);
+	const internalTestingPath = path.join(
+		outputRoot,
+		expectedFamilies.has("marketing")
+			? "src/app/(site)/(marketing)/internal/testing/page.tsx"
+			: "src/app/(site)/(dev)/internal/testing/page.tsx",
+	);
+	if (!(await pathExists(internalTestingPath))) {
+		throw new Error(
+			`${profileCase.profileId}/${profileCase.content} is missing the development-only Testing workbench.`,
+		);
+	}
+	if (!generatedRegistry.includes('testing: "/internal/testing"')) {
+		throw new Error(
+			`${profileCase.profileId}/${profileCase.content} is missing the Testing internal route identity.`,
+		);
+	}
+	const proxySource = await fs.readFile(
+		path.join(outputRoot, "src/proxy.ts"),
+		"utf8",
+	);
+	if (
+		!proxySource.includes('"/internal/testing"') ||
+		!proxySource.includes('"/internal/testing/:path*"')
+	) {
+		throw new Error(
+			`${profileCase.profileId}/${profileCase.content} does not production-guard Testing.`,
+		);
+	}
+	for (const forbiddenPath of [
+		"src/app/(site)/(dev)/internal/dictionary",
+		"src/app/(site)/(dev)/internal/playground",
+		"src/app/(site)/(dev)/internal/reference",
+		"src/app/(site)/(marketing)/repository-footprint",
+	]) {
+		if (await pathExists(path.join(outputRoot, forbiddenPath))) {
+			throw new Error(
+				`${profileCase.profileId}/${profileCase.content} retained excluded developer or template-only surface ${forbiddenPath}.`,
+			);
+		}
+	}
+	const generatedPackage = await readJson(
+		path.join(outputRoot, "package.json"),
+	);
+	for (const metadataPath of [
+		"scripts/verify/verify-route-metadata.ts",
+		"src/config/metadataConfig.ts",
+		"src/lib/metadata.ts",
+	]) {
+		if (!(await pathExists(path.join(outputRoot, metadataPath)))) {
+			throw new Error(
+				`${profileCase.profileId}/${profileCase.content} is missing ${metadataPath}.`,
+			);
+		}
+	}
+	if (typeof generatedPackage.scripts?.["verify:route-metadata"] !== "string") {
+		throw new Error(
+			`${profileCase.profileId}/${profileCase.content} is missing verify:route-metadata.`,
+		);
+	}
+	if (
+		generatedPackage.scripts?.["footprint:generate"] !== undefined ||
+		generatedPackage.dependencies?.recharts !== undefined ||
+		generatedPackage.devDependencies?.["js-tiktoken"] !== undefined
+	) {
+		throw new Error(
+			`${profileCase.profileId}/${profileCase.content} retained template-only Repository Footprint tooling.`,
+		);
+	}
 	if (generatedSiteLayout.includes("process.env.NODE_ENV")) {
 		throw new Error(
 			`${profileCase.profileId}/${profileCase.content} removes installed navigation in production.`,
@@ -236,16 +304,32 @@ async function assertGeneratedSurfaceContract(outputRoot, profileCase) {
 			"utf8",
 		);
 		const hasPayload = profileCase.content === "payload-ready";
-		if (contentSource.includes("@/payload/siteLayoutSource") !== hasPayload) {
+		if (
+			!contentSource.includes("getConfiguredMarketingPage") ||
+			contentSource.includes("@/payload/siteLayoutSource") !== hasPayload ||
+			contentSource.includes("@/payload/marketingPageSource") !== hasPayload
+		) {
 			throw new Error(
 				`${profileCase.profileId}/${profileCase.content} generated the wrong marketing content source bridge.`,
 			);
 		}
 
-		const pkg = await readJson(path.join(outputRoot, "package.json"));
+		const pkg = generatedPackage;
+		const generatedMarketingRegistry = await fs.readFile(
+			path.join(outputRoot, "src/config/surfaces/marketing.ts"),
+			"utf8",
+		);
+		if (generatedMarketingRegistry.includes("marketing.repositoryFootprint")) {
+			throw new Error(
+				`${profileCase.profileId}/${profileCase.content} retained the template-only Repository Footprint route.`,
+			);
+		}
 		for (const scriptName of [
+			"payload:seed:marketing-pages",
 			"payload:seed:site-layout",
+			"payload:verify:marketing-pages",
 			"payload:verify:site-layout",
+			"verify:payload-pages",
 			"verify:payload-site-layout",
 		]) {
 			if ((typeof pkg.scripts?.[scriptName] === "string") !== hasPayload) {

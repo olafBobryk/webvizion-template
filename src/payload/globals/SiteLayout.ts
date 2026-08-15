@@ -1,81 +1,5 @@
-import type {
-	GlobalConfig,
-	SelectFieldSingleValidation,
-	TextFieldSingleValidation,
-} from "payload";
-import { appSurfaceRegistry } from "@/config/surfaces";
-import { isStaticAppSurfaceId } from "@/lib/routes";
-
-const surfaceOptions = appSurfaceRegistry
-	.filter((surface) => surface.match === "exact")
-	.map((surface) => ({ label: surface.id, value: surface.id }));
-
-const validateSurfaceId: SelectFieldSingleValidation = (
-	value,
-	{ siblingData },
-) => {
-	const kind = (siblingData as { kind?: unknown }).kind;
-	if (kind === "surface") {
-		return (
-			(typeof value === "string" && isStaticAppSurfaceId(value)) ||
-			"Select an installed static app surface."
-		);
-	}
-	return !value || "A direct URL cannot also define a surface ID.";
-};
-
-const validateDirectHref: TextFieldSingleValidation = (
-	value,
-	{ siblingData },
-) => {
-	const kind = (siblingData as { kind?: unknown }).kind;
-	if (kind === "href") {
-		return (
-			(typeof value === "string" && value.trim().length > 0) ||
-			"Enter a direct or external URL."
-		);
-	}
-	return !value || "An app surface link cannot also define a direct URL.";
-};
-
-const linkFields = [
-	{
-		name: "label",
-		type: "text",
-		required: true,
-	},
-	{
-		name: "kind",
-		type: "radio",
-		defaultValue: "surface",
-		required: true,
-		options: [
-			{ label: "Installed app surface", value: "surface" },
-			{ label: "Direct or external URL", value: "href" },
-		],
-	},
-	{
-		name: "surfaceId",
-		type: "select",
-		options: surfaceOptions,
-		admin: {
-			condition: (_data, siblingData) => siblingData?.kind === "surface",
-			description:
-				"The installed route registry remains the source of truth for this destination's href.",
-		},
-		validate: validateSurfaceId,
-	},
-	{
-		name: "href",
-		type: "text",
-		admin: {
-			condition: (_data, siblingData) => siblingData?.kind === "href",
-			description:
-				"Use only for fragments, external URLs, or destinations outside the installed route registry.",
-		},
-		validate: validateDirectHref,
-	},
-] satisfies GlobalConfig["fields"];
+import type { GlobalConfig } from "payload";
+import { siteLinkFields } from "@/payload/fields/siteLinkFields";
 
 const directLinkFields = [
 	{
@@ -91,12 +15,12 @@ const directLinkFields = [
 ] satisfies GlobalConfig["fields"];
 
 const navLinkFields = [
-	...linkFields,
+	...siteLinkFields,
 	{
 		name: "sections",
 		type: "array",
 		fields: [
-			...linkFields,
+			...siteLinkFields,
 			{
 				name: "description",
 				type: "textarea",
@@ -122,12 +46,12 @@ const menuGroupFields = [
 	{
 		name: "link",
 		type: "group",
-		fields: linkFields,
+		fields: siteLinkFields,
 	},
 	{
 		name: "links",
 		type: "array",
-		fields: linkFields,
+		fields: siteLinkFields,
 	},
 ] satisfies GlobalConfig["fields"];
 
@@ -161,12 +85,12 @@ export const SiteLayout: GlobalConfig = {
 					name: "cta",
 					type: "group",
 					required: true,
-					fields: linkFields,
+					fields: siteLinkFields,
 				},
 				{
 					name: "topNavLinks",
 					type: "array",
-					fields: linkFields,
+					fields: siteLinkFields,
 				},
 				{
 					name: "navLinks",
@@ -240,7 +164,7 @@ export const SiteLayout: GlobalConfig = {
 				{
 					name: "navLinks",
 					type: "array",
-					fields: linkFields,
+					fields: siteLinkFields,
 				},
 			],
 		},

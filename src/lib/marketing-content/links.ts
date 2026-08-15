@@ -5,6 +5,7 @@ import {
 	type SiteLink,
 	type SiteSocialLink,
 } from "@/app/(site)/_components/layout/siteLayout";
+import { templateCapabilities } from "@/config/capabilities";
 
 export { getSiteLinkHref as getMarketingLinkHref };
 
@@ -54,10 +55,14 @@ export function getMarketingSiteLinks() {
 		contact,
 		dashboard,
 		demo: getAvailableInternalRouteLink("Component Export", "demo"),
-		dictionary: getAvailableInternalRouteLink("Dictionary", "dictionary"),
 		home,
-		playground: getAvailableInternalRouteLink("Playground", "playground"),
-		reference: getAvailableInternalRouteLink("Reference", "reference"),
+		repositoryFootprint: templateCapabilities.repositoryFootprint
+			? { href: "/repository-footprint", label: "Repository Footprint" }
+			: null,
 		settings,
+		testing:
+			process.env.NODE_ENV !== "production"
+				? getAvailableInternalRouteLink("Testing", "testing")
+				: null,
 	};
 }

@@ -1,20 +1,20 @@
-import { fallbackHomePage, fallbackSiteLayout } from "./fallback";
+import { cache } from "react";
+import { getConfiguredMarketingPage, getConfiguredSiteLayout } from "./source";
 import type {
 	MarketingPageDocument,
 	MarketingPageSlug,
 	SiteLayoutDocument,
 } from "./types";
 
-export async function getMarketingPage(
-	slug: MarketingPageSlug,
-): Promise<MarketingPageDocument> {
-	if (slug === "home") {
-		return fallbackHomePage;
-	}
+const getCachedMarketingPage = cache(
+	async (slug: MarketingPageSlug): Promise<MarketingPageDocument> =>
+		getConfiguredMarketingPage(slug),
+);
 
-	return fallbackHomePage;
+export async function getMarketingPage(slug: MarketingPageSlug) {
+	return getCachedMarketingPage(slug);
 }
 
 export async function getSiteLayout(): Promise<SiteLayoutDocument> {
-	return fallbackSiteLayout;
+	return getConfiguredSiteLayout();
 }

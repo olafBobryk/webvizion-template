@@ -79,8 +79,3 @@ export function isInternalRouteId(value: string): value is InternalRouteId {
 export function internalHrefFor(internalRouteId: InternalRouteId) {
 	return internalRoutes[internalRouteId];
 }
-
-export const internalRouteBuilders = {
-	dictionaryEntry: (...segments: string[]) =>
-		`/internal/dictionary/${segments.map(encodeURIComponent).join("/")}`,
-};

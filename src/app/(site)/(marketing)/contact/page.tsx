@@ -1,7 +1,12 @@
+import type { Metadata } from "next";
 import { Button } from "@/components/ui/primitives/Button";
 import { Section } from "@/components/ui/primitives/Section";
 import { Panel } from "@/components/ui/primitives/surfaces";
 import { Text } from "@/components/ui/primitives/Text";
+import { createStaticMarketingPageMetadata } from "@/lib/metadata";
+
+export const metadata: Metadata =
+	createStaticMarketingPageMetadata("marketing.contact");
 
 export default function ContactPage() {
 	return (

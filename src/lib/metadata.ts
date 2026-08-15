@@ -5,9 +5,12 @@ import {
 	siteMetadata,
 	staticPageMetadata,
 } from "@/config/metadataConfig";
+import { hrefFor, type StaticAppSurfaceId } from "@/lib/routes";
 
-type PageMetadataInput = StaticPageMetadataConfig & {
-	noIndex?: boolean;
+type RouteMetadataInput = {
+	description: string;
+	path: string;
+	title: string;
 };
 
 function getMetadataBase() {
@@ -23,10 +26,6 @@ function getMetadataBase() {
 function getAbsoluteUrl(path: string) {
 	const metadataBase = getMetadataBase();
 	return metadataBase ? new URL(path, metadataBase).toString() : undefined;
-}
-
-function createTitle(value: { absoluteTitle?: boolean; title: string }) {
-	return value.absoluteTitle ? { absolute: value.title } : value.title;
 }
 
 export function createRootMetadata(): Metadata {
@@ -61,24 +60,23 @@ export function createRootMetadata(): Metadata {
 	};
 }
 
-export function createPageMetadata({
-	absoluteTitle,
+function createRouteMetadata({
 	description,
-	noIndex = false,
+	index,
 	path,
 	title,
-}: PageMetadataInput): Metadata {
+}: RouteMetadataInput & { index: boolean }): Metadata {
 	const canonicalUrl = getAbsoluteUrl(path);
 
 	return {
-		title: createTitle({ absoluteTitle, title }),
+		title: { absolute: title },
 		description,
 		alternates: {
 			canonical: path,
 		},
 		robots: {
-			index: !noIndex,
-			follow: !noIndex,
+			index,
+			follow: index,
 		},
 		openGraph: {
 			title,
@@ -94,6 +92,43 @@ export function createPageMetadata({
 	};
 }
 
-export function createStaticPageMetadata(key: StaticPageMetadataKey): Metadata {
-	return createPageMetadata(staticPageMetadata[key]);
+export function createPrivateRouteMetadata({
+	description,
+	path,
+	title,
+}: RouteMetadataInput): Metadata {
+	return createRouteMetadata({
+		description,
+		index: false,
+		path,
+		title: `${title} | ${siteMetadata.name}`,
+	});
+}
+
+export function createMarketingPageMetadata({
+	description,
+	home = false,
+	path,
+	title,
+}: RouteMetadataInput & { home?: boolean }): Metadata {
+	return createRouteMetadata({
+		description,
+		index: true,
+		path,
+		title: home ? siteMetadata.name : `${siteMetadata.name} | ${title}`,
+	});
+}
+
+export function createStaticMarketingPageMetadata(
+	key: StaticPageMetadataKey,
+): Metadata {
+	const value: StaticPageMetadataConfig | undefined = staticPageMetadata[key];
+	if (!value) {
+		throw new Error(`Static metadata is not installed for ${key}.`);
+	}
+
+	return createMarketingPageMetadata({
+		...value,
+		path: hrefFor(key as StaticAppSurfaceId),
+	});
 }

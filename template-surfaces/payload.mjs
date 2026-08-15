@@ -5,6 +5,7 @@ export const payloadSurface = {
 			"payload.config.ts",
 			"scripts/payload",
 			"scripts/verify/verify-payload-site-layout-source.ts",
+			"scripts/verify/verify-payload-marketing-pages.ts",
 			"src/payload",
 			"src/app/(payload)",
 			"src/app/api/dev/payload-login",
@@ -20,6 +21,9 @@ export const payloadSurface = {
 		packageScripts: [
 			"payload:seed:site-layout",
 			"payload:verify:site-layout",
+			"payload:seed:marketing-pages",
+			"payload:verify:marketing-pages",
+			"verify:payload-pages",
 			"verify:payload-site-layout",
 		],
 	},

@@ -4,39 +4,28 @@ import clsx from "clsx";
 import * as React from "react";
 import { Chip, type ChipTone } from "@/components/ui/misc/Chip";
 import { Loader } from "@/components/ui/misc/Loader";
-import { Button } from "@/components/ui/primitives/Button";
 import { Text } from "@/components/ui/primitives/Text";
-
-type HealthServiceStatus = {
-	status: "healthy" | "unhealthy";
-	message: string;
-	latencyMs?: number;
-};
-
-type AppHealthResponse = {
-	status: "healthy" | "degraded";
-	checkedAt: string;
-	services: {
-		app: HealthServiceStatus;
-		supabase: HealthServiceStatus;
-	};
-};
+import { getFixtureServiceHealth } from "@/lib/health/client";
+import {
+	type FixtureServiceHealth,
+	type FixtureServiceId,
+	fixtureServiceHealth,
+} from "@/lib/health/fixture";
 
 type HealthCheckIndicatorProps = {
+	service: FixtureServiceId;
 	endpoint?: string;
-	label?: string;
 	className?: string;
-	variant?: "default" | "sm";
 };
 
-type IndicatorState = "checking" | "operational" | "unavailable";
+type IndicatorState = "checking" | "available" | "unavailable";
 
 const statusStyles: Record<IndicatorState, { dot: string; tone: ChipTone }> = {
 	checking: {
 		dot: "text-muted",
 		tone: "neutral",
 	},
-	operational: {
+	available: {
 		dot: "bg-success",
 		tone: "success",
 	},
@@ -47,129 +36,68 @@ const statusStyles: Record<IndicatorState, { dot: string; tone: ChipTone }> = {
 };
 
 function getIndicatorState(
-	response: AppHealthResponse | null,
-	isChecking: boolean,
+	response: FixtureServiceHealth | null,
+	errorMessage: string | null,
 ): IndicatorState {
-	if (isChecking) return "checking";
-	if (response?.services.supabase.status === "healthy") return "operational";
-	return "unavailable";
+	if (errorMessage) return "unavailable";
+	if (response === null) return "checking";
+	return response.status === "available" ? "available" : "unavailable";
 }
 
 function getStatusLabel(state: IndicatorState) {
 	switch (state) {
 		case "checking":
 			return "Checking";
-		case "operational":
-			return "Operational";
+		case "available":
+			return "Available";
 		case "unavailable":
 			return "Unavailable";
 	}
 }
 
-function withRefreshParam(endpoint: string, requestIndex: number) {
-	const separator = endpoint.includes("?") ? "&" : "?";
-	return `${endpoint}${separator}refresh=${requestIndex}`;
-}
-
 export function HealthCheckIndicator({
+	service,
 	endpoint = "/api/health",
-	label = "Service",
 	className,
-	variant = "default",
 }: HealthCheckIndicatorProps) {
-	const [response, setResponse] = React.useState<AppHealthResponse | null>(
+	const [response, setResponse] = React.useState<FixtureServiceHealth | null>(
 		null,
 	);
 	const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
-	const [isChecking, setIsChecking] = React.useState(true);
-	const [requestIndex, setRequestIndex] = React.useState(0);
 
 	React.useEffect(() => {
 		let isActive = true;
 
 		async function checkHealth() {
-			setIsChecking(true);
+			setResponse(null);
 			setErrorMessage(null);
-
 			try {
-				const healthResponse = await fetch(
-					withRefreshParam(endpoint, requestIndex),
-					{
-						cache: "no-store",
-					},
-				);
-				const payload = (await healthResponse.json()) as AppHealthResponse;
-
-				if (!isActive) return;
-
-				setResponse(payload);
-				if (!healthResponse.ok) {
-					setErrorMessage(payload.services.supabase.message);
-				}
+				const fixtureHealth = await getFixtureServiceHealth(service, endpoint);
+				if (isActive) setResponse(fixtureHealth);
 			} catch (error) {
 				if (!isActive) return;
-
-				setResponse(null);
 				setErrorMessage(
-					error instanceof Error ? error.message : "Unable to check health.",
+					error instanceof Error
+						? error.message
+						: "Fixture service is unavailable.",
 				);
-			} finally {
-				if (isActive) {
-					setIsChecking(false);
-				}
 			}
 		}
 
-		checkHealth();
-
+		void checkHealth();
 		return () => {
 			isActive = false;
 		};
-	}, [endpoint, requestIndex]);
+	}, [endpoint, service]);
 
-	const state = getIndicatorState(response, isChecking);
-	const statusLabel = getStatusLabel(state);
+	const state = getIndicatorState(response, errorMessage);
 	const styles = statusStyles[state];
+	const fixture = fixtureServiceHealth[service];
+	const label = response?.label ?? fixture.label;
 	const message =
-		response?.services.supabase.message ?? errorMessage ?? "Checking health.";
-	const latency =
-		typeof response?.services.supabase.latencyMs === "number"
-			? `${response.services.supabase.latencyMs}ms`
-			: null;
-
-	if (variant === "sm") {
-		return (
-			<Chip
-				as="div"
-				contentMode="contents"
-				size="none"
-				tone={styles.tone}
-				className={clsx(
-					"min-w-0 gap-2 px-3 py-1.5 shadow-[0_8px_24px_rgb(0_0_0_/_0.04)] backdrop-blur",
-					className,
-				)}
-				aria-live="polite"
-				title={latency ? `${message} ${latency}` : message}
-			>
-				<span className="flex h-3 w-3 shrink-0 items-center justify-center">
-					{state === "checking" ? (
-						<Loader size="sm" className={styles.dot} />
-					) : (
-						<span className={clsx("h-2 w-2 rounded-full", styles.dot)} />
-					)}
-				</span>
-				<Text
-					as="span"
-					variant="caption"
-					theme="inherit"
-					tone="inherit"
-					className="truncate"
-				>
-					{label}: {statusLabel}
-				</Text>
-			</Chip>
-		);
-	}
+		response?.message ??
+		errorMessage ??
+		`Checking ${fixture.label.toLowerCase()}.`;
 
 	return (
 		<Chip
@@ -177,14 +105,11 @@ export function HealthCheckIndicator({
 			contentMode="contents"
 			size="none"
 			tone={styles.tone}
-			className={clsx(
-				"overflow-hidden gap-2 px-3 py-1.5 shadow-[0_8px_24px_rgb(0_0_0_/_0.04)] backdrop-blur",
-				className,
-			)}
+			className={clsx("min-w-0 gap-2 px-3 py-1.5", className)}
 			aria-live="polite"
-			title={latency ? `${message} ${latency}` : message}
+			title={message}
 		>
-			<span className="flex h-3 w-3 items-center justify-center">
+			<span className="flex h-3 w-3 shrink-0 items-center justify-center">
 				{state === "checking" ? (
 					<Loader size="sm" className={styles.dot} />
 				) : (
@@ -196,21 +121,10 @@ export function HealthCheckIndicator({
 				variant="caption"
 				theme="inherit"
 				tone="inherit"
-				className="whitespace-nowrap"
+				className="truncate"
 			>
-				{label}: {statusLabel}
+				{label}: {getStatusLabel(state)}
 			</Text>
-			<Button
-				type="button"
-				variant="ghost"
-				textVariant={"caption"}
-				size="none"
-				className="text-2xs font-medium text-foreground/80 hover:text-foreground"
-				disabled={isChecking}
-				onClick={() => setRequestIndex((current) => current + 1)}
-			>
-				Refresh
-			</Button>
 		</Chip>
 	);
 }

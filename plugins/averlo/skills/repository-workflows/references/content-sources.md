@@ -67,6 +67,8 @@ Read only the selected content mode and source boundary:
 - Run npm run verify:payload-site-layout and
   npm run payload:verify:site-layout for Payload normalization, seed, or
   readback changes.
+- Run npm run verify:payload-pages and npm run payload:verify:marketing-pages
+  for Payload page schema, normalization, seed, or readback changes.
 - Run npm run verify:profiles when content-mode ownership or installed files
   change.
 - Verify static excludes Payload, Payload-ready stays guarded, and an

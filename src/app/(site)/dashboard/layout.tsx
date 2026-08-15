@@ -1,14 +1,31 @@
+import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { siteMetadata } from "@/config/metadataConfig";
 import {
 	getSafeContinuationPath,
 	withSafeContinuation,
 } from "@/lib/auth/continuation";
 import { applicationAdapters, resolveCurrentSession } from "@/lib/auth/server";
+import { createPrivateRouteMetadata } from "@/lib/metadata";
 import { hrefFor, surfaceHref } from "@/lib/routes";
 import { DashboardFrame } from "./_components/layout/DashboardFrame";
 import { DashboardProviders } from "./_components/providers/DashboardProviders";
 import { formatMemberJoinedDate } from "./_lib/entities/member/presentation";
+import { getDashboardSurface } from "./_registry/surfaceRegistry";
+
+export async function generateMetadata(): Promise<Metadata> {
+	const requestPath =
+		(await headers()).get("x-template-request-path")?.split(/[?#]/, 1)[0] ??
+		hrefFor("dashboard.overview");
+	const surface = getDashboardSurface(requestPath);
+
+	return createPrivateRouteMetadata({
+		description: surface?.description ?? siteMetadata.defaultDescription,
+		path: surface ? requestPath : hrefFor("dashboard.overview"),
+		title: surface?.label ?? "Dashboard",
+	});
+}
 
 export default async function DashboardLayout({
 	children,

@@ -23,6 +23,7 @@ import {
 	renderCapabilitiesFile,
 	renderInternalLayoutFile,
 	renderMarketingContentSourceFile,
+	renderMarketingSurfaceRegistryFile,
 	renderNextConfigFile,
 	renderSurfacesFile,
 	renderTsconfigFile,
@@ -137,6 +138,10 @@ async function buildCopyPlan(sourceRoot, profile, selectedSurfaces) {
 			omitted.push({ path: relativePath, reason: "template-only" });
 			continue;
 		}
+		if (withinAny(relativePath, assemblyTemplateOnlyRoots)) {
+			omitted.push({ path: relativePath, reason: "template-only" });
+			continue;
+		}
 		if (
 			thinInventory &&
 			relativePath.startsWith("src/") &&
@@ -160,11 +165,6 @@ async function buildCopyPlan(sourceRoot, profile, selectedSurfaces) {
 					reason: `surface:${unselectedOwners.join("+")}`,
 				});
 			}
-			continue;
-		}
-
-		if (withinAny(relativePath, assemblyTemplateOnlyRoots)) {
-			omitted.push({ path: relativePath, reason: "template-only" });
 			continue;
 		}
 
@@ -398,10 +398,17 @@ async function writeCentralFiles(
 		[internalLayoutPath, renderInternalLayoutFile(state)],
 	];
 	const marketingContentSource = renderMarketingContentSourceFile(state);
+	const marketingSurfaceRegistry = renderMarketingSurfaceRegistryFile(state);
 	if (marketingContentSource) {
 		targets.push([
 			"src/lib/marketing-content/source.ts",
 			marketingContentSource,
+		]);
+	}
+	if (marketingSurfaceRegistry) {
+		targets.push([
+			"src/config/surfaces/marketing.ts",
+			marketingSurfaceRegistry,
 		]);
 	}
 	const nextConfig = renderNextConfigFile(state);

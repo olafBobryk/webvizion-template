@@ -15,7 +15,7 @@ export const marketingCoreSurfaceRegistry = defineRouteSurfaceRegistry([
 	},
 ] as const);
 
-const marketingSettingsSurfaceRegistry = defineRouteSurfaceRegistry([
+export const marketingSettingsSurfaceRegistry = defineRouteSurfaceRegistry([
 	{
 		family: "marketing",
 		href: "/settings",
@@ -24,9 +24,19 @@ const marketingSettingsSurfaceRegistry = defineRouteSurfaceRegistry([
 	},
 ] as const);
 
+export const marketingTemplateSurfaceRegistry = defineRouteSurfaceRegistry([
+	{
+		family: "marketing",
+		href: "/repository-footprint",
+		id: "marketing.repositoryFootprint",
+		match: "exact",
+	},
+] as const);
+
 export const marketingSurfaceRegistry = defineRouteSurfaceRegistry([
 	...marketingCoreSurfaceRegistry,
 	...marketingSettingsSurfaceRegistry,
+	...marketingTemplateSurfaceRegistry,
 ] as const);
 
 export type MarketingSurface = (typeof marketingSurfaceRegistry)[number];

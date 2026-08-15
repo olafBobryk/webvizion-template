@@ -8,7 +8,7 @@ import o200kBase from "js-tiktoken/ranks/o200k_base";
 
 const rootDirectory = process.cwd();
 const defaultDataOutput =
-	"src/app/(site)/(dev)/internal/playground/footprint/_data/repository-footprint.json";
+	"src/app/(site)/(marketing)/repository-footprint/_data/repository-footprint.json";
 const generatedFootprintCommitSubjects = new Set([
 	"chore: update commit history charts",
 	"chore: update commit line delta chart",
@@ -16,13 +16,12 @@ const generatedFootprintCommitSubjects = new Set([
 ]);
 const excludedExactPaths = new Set([
 	"package-lock.json",
-	"src/app/(site)/(dev)/internal/playground/footprint/_data/repository-footprint.json",
+	"src/app/(site)/(marketing)/repository-footprint/_data/repository-footprint.json",
 ]);
 const excludedPathPatterns = [
 	/(^|\/)node_modules(\/|$)/,
 	/(^|\/)\.next(?:-|\/|$)/,
 	/(^|\/)(?:build|coverage|dist)(\/|$)/,
-	/(^|\/)(?:\.template-intelligence|\.serena|\.understand-anything)(\/|$)/,
 	/(^|\/)_data\//,
 	/\.generated\.[^/]+$/,
 	/^docs\/assets\//,

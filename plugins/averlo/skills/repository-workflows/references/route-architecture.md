@@ -14,6 +14,10 @@ Marketing and auth consume canonical identities without inheriting dashboard
 information architecture. Keep internal developer routes outside the product
 surface registry.
 
+Treat those labels and descriptions as route presentation data. Browser titles,
+canonicals, robots, Open Graph, and Twitter output belong to the conditional
+route-metadata concern and its family factories.
+
 Treat parent identity as semantic information architecture, not filesystem
 nesting or cross-link history. Reuse registry metadata across navigation,
 ancestor trails, headings, loading states, commands, and domain reporting.
@@ -53,9 +57,8 @@ Read only the route family and consumers being changed:
   commands, capability, and domain-source ownership.
 - `src/app/(site)/dashboard/AGENTS.md` for registered page/loading/surface shape.
 - `src/app/(site)/dashboard/platform/AGENTS.md` for the platform access axis.
-- `src/app/(site)/(dev)/internal/AGENTS.md` and
-  `src/app/(site)/(dev)/internal/dictionary/AGENTS.md` only for internal route
-  availability or reference-route behavior.
+- `src/app/(site)/(dev)/internal/AGENTS.md` and the nearest internal route
+  policy only for internal route availability or development-only behavior.
 - `src/app/(site)/(marketing)/_components/AGENTS.md` only when a route identity
   changes public-shell navigation.
 

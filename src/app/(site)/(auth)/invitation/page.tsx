@@ -12,7 +12,6 @@ import { acceptInvitationAction } from "../actions";
 
 export const metadata: Metadata = {
 	referrer: "no-referrer",
-	title: "Review invitation",
 };
 
 export default async function InvitationPage({

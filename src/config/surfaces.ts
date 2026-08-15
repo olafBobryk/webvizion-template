@@ -14,10 +14,7 @@ export type AppSurfaceId = AppSurface["id"];
 
 export const internalRoutes = {
 	demo: "/internal/demo",
-	dictionary: "/internal/dictionary",
-	dictionarySpamProtectedForm: "/internal/dictionary/forms/spam-protected-form",
-	playground: "/internal/playground",
-	reference: "/internal/reference",
+	testing: "/internal/testing",
 } as const;
 
 export type InternalRouteId = keyof typeof internalRoutes;

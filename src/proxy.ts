@@ -1,13 +1,14 @@
 import { type NextRequest, NextResponse } from "next/server";
 
-const PRODUCTION_GUARDED_API_PATH_PREFIXES = [
+const PRODUCTION_GUARDED_PATH_PREFIXES = [
 	"/api/debug",
 	"/api/dev",
 	"/api/internal",
+	"/internal/testing",
 ];
 
-function isProductionGuardedApiPath(pathname: string) {
-	return PRODUCTION_GUARDED_API_PATH_PREFIXES.some(
+function isProductionGuardedPath(pathname: string) {
+	return PRODUCTION_GUARDED_PATH_PREFIXES.some(
 		(prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
 	);
 }
@@ -15,7 +16,7 @@ function isProductionGuardedApiPath(pathname: string) {
 export function proxy(request: NextRequest) {
 	if (
 		process.env.NODE_ENV === "production" &&
-		isProductionGuardedApiPath(request.nextUrl.pathname)
+		isProductionGuardedPath(request.nextUrl.pathname)
 	) {
 		return new NextResponse(null, { status: 404 });
 	}
@@ -34,5 +35,6 @@ export const config = {
 		"/api/debug/:path*",
 		"/api/dev/:path*",
 		"/api/internal/:path*",
+		"/internal/testing/:path*",
 	],
 };

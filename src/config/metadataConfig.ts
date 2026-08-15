@@ -1,14 +1,11 @@
-import "server-only";
-
 import type { Metadata } from "next";
+import { appSurfaceRegistry } from "@/config/surfaces";
 import type { RouteSurfaceFamily } from "@/lib/surfaces/routeSurface";
 
 type RouteSurfaceId = `${RouteSurfaceFamily}.${string}`;
 
 export type StaticPageMetadataConfig = {
-	absoluteTitle?: boolean;
 	description: string;
-	path: string;
 	title: string;
 };
 
@@ -37,15 +34,35 @@ export const siteMetadata = {
 	manifest: "/site.webmanifest",
 } satisfies SiteMetadataConfig;
 
-export const staticPageMetadata = {
-	"marketing.home": {
-		title: siteMetadata.name,
-		description: siteMetadata.defaultDescription,
-		path: "/",
-		absoluteTitle: true,
+const staticPageMetadataDefinitions = {
+	"marketing.contact": {
+		description: "Choose the contact channel or form that fits this project.",
+		title: "Contact",
+	},
+	"marketing.settings": {
+		description:
+			"Manage appearance and accessibility preferences for this application.",
+		title: "Settings",
+	},
+	"marketing.repositoryFootprint": {
+		description:
+			"Explore the authored repository history measured as files, text, and tokens.",
+		title: "Repository Footprint",
 	},
 } satisfies Partial<Record<RouteSurfaceId, StaticPageMetadataConfig>>;
 
-export type StaticPageMetadataKey = keyof typeof staticPageMetadata;
+export type StaticPageMetadataKey = keyof typeof staticPageMetadataDefinitions;
+
+const installedSurfaceIds = new Set<string>(
+	appSurfaceRegistry.map((surface) => surface.id),
+);
+
+export const staticPageMetadata = Object.fromEntries(
+	Object.entries(staticPageMetadataDefinitions).filter(([surfaceId]) =>
+		installedSurfaceIds.has(surfaceId),
+	),
+) as Partial<Record<StaticPageMetadataKey, StaticPageMetadataConfig>>;
+
+export const marketingDocumentSurfaceIds = ["marketing.home"] as const;
 
 export const KEYWORDS = siteMetadata.keywords;

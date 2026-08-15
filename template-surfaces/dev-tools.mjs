@@ -27,14 +27,15 @@ export const devToolSurfaces = {
 		],
 		packageDependencies: ["playwright"],
 	},
-	playground: {
-		ownedPaths: ["src/app/(site)/(dev)/internal/playground"],
+	testing: {
+		ownedPaths: ["src/app/(site)/(dev)/internal/testing"],
+	},
+	repositoryFootprint: {
+		ownedPaths: [
+			"src/app/(site)/(marketing)/repository-footprint",
+			"scripts/generate-repository-footprint.mjs",
+			".github/workflows/update-repository-footprint.yml",
+		],
 		packageDependencies: ["recharts"],
-	},
-	dictionary: {
-		ownedPaths: ["src/app/(site)/(dev)/internal/dictionary"],
-	},
-	reference: {
-		ownedPaths: ["src/app/(site)/(dev)/internal/reference"],
 	},
 };

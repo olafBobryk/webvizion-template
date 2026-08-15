@@ -9,7 +9,8 @@ experiment, not product work.
 
 ### `account-settings-v1`
 
-Use a disposable, unlinked noindex route under the internal playground. The
+Use a disposable, unlinked noindex route under `/internal/testing/<change>/`.
+Delete that temporary route with the benchmark worktree after review. The
 agent builds an Account Settings page with a brief loading skeleton, full name,
 email, phone, time-zone, and notification-preference controls; a real validated
 form; a duplicate-safe local async save using the shared promise-toast facade;

@@ -6,11 +6,10 @@ export function createProjectState(selectedSurfaceIds) {
 	return {
 		hasAssistant: selected.has("assistant"),
 		hasMarketing: selected.has("marketing"),
+		hasMarketingSettings: selected.has("marketing"),
 		hasDashboard: selected.has("dashboard"),
 		hasDemo: selected.has("demo"),
-		hasPlayground: selected.has("playground"),
-		hasDictionary: selected.has("dictionary"),
-		hasReference: selected.has("reference"),
+		hasTesting: selected.has("testing"),
 		hasPayload: selected.has("payload"),
 	};
 }
@@ -19,6 +18,7 @@ export function renderCapabilitiesFile(state) {
 	return [
 		"export const templateCapabilities = {",
 		`\tassistant: ${state.hasAssistant},`,
+		"\trepositoryFootprint: false,",
 		"} as const;",
 		"",
 	].join("\n");
@@ -29,13 +29,19 @@ export function renderMarketingContentSourceFile(state) {
 
 	if (state.hasPayload) {
 		return [
+			'export { getConfiguredMarketingPage } from "@/payload/marketingPageSource";',
 			'export { getConfiguredSiteLayout } from "@/payload/siteLayoutSource";',
 			"",
 		].join("\n");
 	}
 
 	return [
-		'import { fallbackSiteLayout } from "./fallback";',
+		'import { fallbackMarketingPages, fallbackSiteLayout } from "./fallback";',
+		'import type { MarketingPageSlug } from "./types";',
+		"",
+		"export async function getConfiguredMarketingPage(slug: MarketingPageSlug) {",
+		"\treturn fallbackMarketingPages[slug];",
+		"}",
 		"",
 		"export async function getConfiguredSiteLayout() {",
 		"\treturn fallbackSiteLayout;",
@@ -51,15 +57,9 @@ export function renderSurfacesFile(state) {
 
 	if (state.hasMarketing) {
 		imports.push(
-			state.hasMarketingSettings
-				? 'import { marketingSurfaceRegistry } from "@/config/surfaces/marketing";'
-				: 'import { marketingCoreSurfaceRegistry } from "@/config/surfaces/marketing";',
+			'import { marketingSurfaceRegistry } from "@/config/surfaces/marketing";',
 		);
-		registrySpreads.push(
-			state.hasMarketingSettings
-				? "\t...marketingSurfaceRegistry,"
-				: "\t...marketingCoreSurfaceRegistry,",
-		);
+		registrySpreads.push("\t...marketingSurfaceRegistry,");
 	}
 	if (state.hasDashboard) {
 		imports.push(
@@ -75,17 +75,8 @@ export function renderSurfacesFile(state) {
 	if (state.hasDemo) {
 		internalRouteLines.push('\tdemo: "/internal/demo",');
 	}
-	if (state.hasDictionary) {
-		internalRouteLines.push(
-			'\tdictionary: "/internal/dictionary",',
-			'\tdictionarySpamProtectedForm: "/internal/dictionary/forms/spam-protected-form",',
-		);
-	}
-	if (state.hasPlayground) {
-		internalRouteLines.push('\tplayground: "/internal/playground",');
-	}
-	if (state.hasReference) {
-		internalRouteLines.push('\treference: "/internal/reference",');
+	if (state.hasTesting) {
+		internalRouteLines.push('\ttesting: "/internal/testing",');
 	}
 
 	return [
@@ -108,16 +99,67 @@ export function renderSurfacesFile(state) {
 	].join("\n");
 }
 
+export function renderMarketingSurfaceRegistryFile(state) {
+	if (!state.hasMarketing) return null;
+
+	const settingsSurface = state.hasMarketingSettings
+		? [
+				"export const marketingSettingsSurfaceRegistry = defineRouteSurfaceRegistry([",
+				"\t{",
+				'\t\tfamily: "marketing",',
+				'\t\thref: "/settings",',
+				'\t\tid: "marketing.settings",',
+				'\t\tmatch: "exact",',
+				"\t},",
+				"] as const);",
+				"",
+			]
+		: [
+				"export const marketingSettingsSurfaceRegistry = defineRouteSurfaceRegistry([] as const);",
+				"",
+			];
+
+	return [
+		'import { defineRouteSurfaceRegistry } from "@/lib/surfaces/routeSurface";',
+		"",
+		"export const marketingCoreSurfaceRegistry = defineRouteSurfaceRegistry([",
+		"\t{",
+		'\t\tfamily: "marketing",',
+		'\t\thref: "/",',
+		'\t\tid: "marketing.home",',
+		'\t\tmatch: "exact",',
+		"\t},",
+		"\t{",
+		'\t\tfamily: "marketing",',
+		'\t\thref: "/contact",',
+		'\t\tid: "marketing.contact",',
+		'\t\tmatch: "exact",',
+		"\t},",
+		"] as const);",
+		"",
+		...settingsSurface,
+		"export const marketingSurfaceRegistry = defineRouteSurfaceRegistry([",
+		"\t...marketingCoreSurfaceRegistry,",
+		"\t...marketingSettingsSurfaceRegistry,",
+		"] as const);",
+		"",
+		"export type MarketingSurface = (typeof marketingSurfaceRegistry)[number];",
+		'export type MarketingSurfaceId = MarketingSurface["id"];',
+		"",
+	].join("\n");
+}
+
 export function renderInternalLayoutFile(state) {
 	const shared = [
 		'import type { Metadata } from "next";',
+		'import { siteMetadata } from "@/config/metadataConfig";',
+		'import { createPrivateRouteMetadata } from "@/lib/metadata";',
 		"",
-		"export const metadata: Metadata = {",
-		"\trobots: {",
-		"\t\tindex: false,",
-		"\t\tfollow: false,",
-		"\t},",
-		"};",
+		"export const metadata: Metadata = createPrivateRouteMetadata({",
+		"\tdescription: siteMetadata.defaultDescription,",
+		'\tpath: "/internal",',
+		'\ttitle: "Internal",',
+		"});",
 		"",
 		"export default function InternalLayout({",
 		"\tchildren,",
@@ -251,61 +293,6 @@ export function renderNextConfigFile(state) {
 		"\t};",
 		"};",
 		"",
-		"const getCodeInspectorPort = () => {",
-		'\tconst explicitPort = Number.parseInt(process.env.CODE_INSPECTOR_PORT ?? "", 10);',
-		"",
-		"\tif (Number.isFinite(explicitPort)) {",
-		"\t\treturn explicitPort;",
-		"\t}",
-		"",
-		"\tconst distDir = process.env.NEXT_DEV_DIST_DIR;",
-		"\tconst distDirPort =",
-		'\t\tdistDir === ".next-user"',
-		"\t\t\t? 3000",
-		'\t\t\t: Number.parseInt(distDir?.match(/-(\\d{4})$/)?.[1] ?? "", 10);',
-		'\tconst envPort = Number.parseInt(process.env.PORT ?? "", 10);',
-		"\tconst devServerPort = Number.isFinite(distDirPort) ? distDirPort : envPort;",
-		"",
-		"\tif (!Number.isFinite(devServerPort)) {",
-		"\t\treturn 5678;",
-		"\t}",
-		"",
-		"\treturn 5678 + Math.max(devServerPort - 3000, 0);",
-		"};",
-		"",
-		"const getCodeInspectorWorkspaceRoot = () =>",
-		"\tprocess.env.NEXT_WORKTREE_ROOT ?? process.cwd();",
-		"",
-		"const shouldEnableCodeInspector = (phase: string) =>",
-		"\tphase === PHASE_DEVELOPMENT_SERVER &&",
-		'\tprocess.env.NEXT_DEV_CODE_INSPECTOR === "1";',
-		"",
-		"const getCodeInspectorRules = (phase: string) => {",
-		"\tif (!shouldEnableCodeInspector(phase)) {",
-		"\t\treturn {};",
-		"\t}",
-		"",
-		"\tconst { codeInspectorPlugin } = require(",
-		'\t\t"code-inspector-plugin",',
-		'\t) as typeof import("code-inspector-plugin");',
-		"",
-		"\treturn codeInspectorPlugin({",
-		'\t\tbundler: "turbopack",',
-		"\t\tdev: true,",
-		'\t\teditor: "code",',
-		'\t\tlaunchType: "exec",',
-		"\t\tpathFormat: [",
-		'\t\t\t"--reuse-window",',
-		"\t\t\tgetCodeInspectorWorkspaceRoot(),",
-		'\t\t\t"--goto",',
-		'\t\t\t"{file}:{line}:{column}",',
-		"\t\t],",
-		'\t\tpathType: "absolute",',
-		"\t\tport: getCodeInspectorPort(),",
-		"\t\tprintServer: true,",
-		"\t});",
-		"};",
-		"",
 		"const createNextConfig = (phase: string): NextConfig => ({",
 		"\t...getDevIsolationConfig(phase),",
 		"\t...(getDevAllowedOrigins(phase).length > 0",
@@ -322,7 +309,6 @@ export function renderNextConfigFile(state) {
 		"\toutputFileTracingRoot: PROJECT_ROOT,",
 		"\tturbopack: {",
 		"\t\troot: PROJECT_ROOT,",
-		"\t\trules: getCodeInspectorRules(phase),",
 		"\t},",
 		"});",
 		"",
@@ -390,10 +376,6 @@ export function renderApiIndexFile(state) {
 
 	lines.push(
 		"export {",
-		"  checkHealth,",
-		"  type HealthResponse,",
-		'} from "./checkHealth";',
-		"export {",
 		"  type ApiClient,",
 		"  type ApiClientOptions,",
 		"  type ApiError,",
@@ -410,10 +392,6 @@ export function renderApiIndexFile(state) {
 		"  type MockRequestContext,",
 		"  type MockRoute,",
 		'} from "./createMockFetch";',
-		"export {",
-		"  type SpamProtectedExampleSubmission,",
-		"  submitSpamProtectedExample,",
-		'} from "./submitSpamProtectedExample";',
 		"",
 	);
 

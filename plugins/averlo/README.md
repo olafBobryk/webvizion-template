@@ -5,7 +5,8 @@
 Use `$averlo:repository-workflows` as the primary router for implementation and
 implementation review inside Averlo repositories. Governing repository
 instructions may require this explicit-only skill without enabling global
-implicit invocation.
+implicit invocation. Its route workflows also own browser metadata ordering,
+indexability, canonical identity, and provider-backed page metadata routing.
 
 After it selects the applicable workflows and concern contracts, do not invoke
 the overlapping design-system, skeleton, entity, or surface skills again for

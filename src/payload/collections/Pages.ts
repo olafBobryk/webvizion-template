@@ -21,13 +21,21 @@ export const Pages: CollectionConfig = {
 			required: true,
 		},
 		{
+			name: "description",
+			type: "textarea",
+			required: true,
+			admin: {
+				description:
+					"Source-neutral page summary used for document and social metadata.",
+			},
+		},
+		{
 			name: "slug",
 			type: "text",
 			required: true,
 			unique: true,
 			admin: {
-				description:
-					'Use "home" for the homepage. Frontend reads are intentionally deferred in this template version.',
+				description: 'Use "home" for the homepage.',
 			},
 		},
 		{
