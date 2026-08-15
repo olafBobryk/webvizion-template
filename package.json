@@ -3,6 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
+		"footprint:generate": "node scripts/generate-repository-footprint.mjs",
 		"catalog:generate": "node scripts/generate-component-catalog.mjs",
 		"catalog:check": "node scripts/generate-component-catalog.mjs --check",
 		"design-system:evidence": "node scripts/record-design-system-evidence.mjs",
@@ -123,6 +124,7 @@
 		"@vitest/browser-playwright": "^4.1.10",
 		"@vitest/coverage-v8": "^4.1.10",
 		"code-inspector-plugin": "^1.5.1",
+		"js-tiktoken": "^1.0.21",
 		"playwright": "^1.61.1",
 		"storybook": "^10.5.5",
 		"tailwindcss": "^4.1.12",

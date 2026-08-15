@@ -1,0 +1,1952 @@
+{
+	"encoding": "o200k_base",
+	"head": "143550bdb8b1dc8ad020fa155310e9ea75c508a6",
+	"scope": "all-authored-text",
+	"snapshots": [
+		{
+			"date": "2025-08-24",
+			"hash": "96e29b88d851cf5f49d4b70e494f152858347a33",
+			"subject": "Initial commit from Create Next App",
+			"files": 10,
+			"lines": 339,
+			"textBytes": 9123,
+			"tokens": 2404
+		},
+		{
+			"date": "2025-08-25",
+			"hash": "fda3af8cc96d7b87c813bc92be316e64da817b20",
+			"subject": "template complete",
+			"files": 20,
+			"lines": 792,
+			"textBytes": 19363,
+			"tokens": 5439
+		},
+		{
+			"date": "2025-08-25",
+			"hash": "6d98fa33cd04729786912b818283eb0dab148f2b",
+			"subject": "version pinning post script",
+			"files": 21,
+			"lines": 814,
+			"textBytes": 20053,
+			"tokens": 5632
+		},
+		{
+			"date": "2025-08-26",
+			"hash": "0a9b4e0bfa4b7582364b4bd318418ff117f3203f",
+			"subject": "small updates",
+			"files": 21,
+			"lines": 829,
+			"textBytes": 20417,
+			"tokens": 5745
+		},
+		{
+			"date": "2025-08-26",
+			"hash": "e0cb2f1f86ca832803558f0c40121c47000516da",
+			"subject": "keywords config",
+			"files": 22,
+			"lines": 833,
+			"textBytes": 20568,
+			"tokens": 5777
+		},
+		{
+			"date": "2025-09-23",
+			"hash": "d89a1d69feab02f0c2b3d137dc1d707be32796bc",
+			"subject": "vh-max",
+			"files": 22,
+			"lines": 853,
+			"textBytes": 20948,
+			"tokens": 5899
+		},
+		{
+			"date": "2025-10-28",
+			"hash": "f6bf1a36d0ace5d0e0a971503913bdde3a2e859c",
+			"subject": "toast + error + tailwind breakpoint hook",
+			"files": 27,
+			"lines": 1230,
+			"textBytes": 33360,
+			"tokens": 10491
+		},
+		{
+			"date": "2025-12-02",
+			"hash": "31b4033bfba61233424ca83c45cad008b37aaa23",
+			"subject": "portal id feature, nav config simplfied + next16.06",
+			"files": 27,
+			"lines": 1246,
+			"textBytes": 33410,
+			"tokens": 10491
+		},
+		{
+			"date": "2025-12-26",
+			"hash": "c6d6871aff0821a183a017dc447bbc897bf2a754",
+			"subject": "new ui component strategy",
+			"files": 65,
+			"lines": 6796,
+			"textBytes": 185464,
+			"tokens": 55250
+		},
+		{
+			"date": "2025-12-27",
+			"hash": "f65ef72c4a9eca972ca43c9cd96d825c603a8a71",
+			"subject": "coverting rest to new system",
+			"files": 65,
+			"lines": 6886,
+			"textBytes": 188070,
+			"tokens": 57292
+		},
+		{
+			"date": "2025-12-27",
+			"hash": "4558e580d16e6f2bdfd249d3b18f4695dc4ea88c",
+			"subject": "Icon, Layout components, motion components",
+			"files": 74,
+			"lines": 7798,
+			"textBytes": 212375,
+			"tokens": 64294
+		},
+		{
+			"date": "2025-12-27",
+			"hash": "a63133a22e5c8223b3934710df5d9c64ffaea8e5",
+			"subject": "More heading sizes",
+			"files": 74,
+			"lines": 7800,
+			"textBytes": 212552,
+			"tokens": 64354
+		},
+		{
+			"date": "2025-12-27",
+			"hash": "1fd668b9ef0b16b8d84ff780d9b0de7674c7ccc2",
+			"subject": "Small heading correction",
+			"files": 74,
+			"lines": 7801,
+			"textBytes": 212556,
+			"tokens": 64355
+		},
+		{
+			"date": "2025-12-28",
+			"hash": "ac3c0394b1a966889baa9f319af81577f3ce5611",
+			"subject": "site map config",
+			"files": 75,
+			"lines": 7789,
+			"textBytes": 211922,
+			"tokens": 64126
+		},
+		{
+			"date": "2025-12-28",
+			"hash": "de4635f92dd0ad01c962b10a39e77331cbff286b",
+			"subject": "crash and not found with section",
+			"files": 75,
+			"lines": 7791,
+			"textBytes": 212105,
+			"tokens": 64167
+		},
+		{
+			"date": "2026-01-01",
+			"hash": "719c6bccd826821a6c2ad5fda4b95021eb850586",
+			"subject": "small edits",
+			"files": 75,
+			"lines": 7790,
+			"textBytes": 212258,
+			"tokens": 64199
+		},
+		{
+			"date": "2026-01-07",
+			"hash": "d724780b0f734d6ccb60b9e59ef0f3ffab879ba0",
+			"subject": "layout fixes",
+			"files": 76,
+			"lines": 7910,
+			"textBytes": 215064,
+			"tokens": 64903
+		},
+		{
+			"date": "2026-01-10",
+			"hash": "c9c48f86e4d13fb000b450a62315ee3c29096313",
+			"subject": "small fix",
+			"files": 76,
+			"lines": 7910,
+			"textBytes": 215074,
+			"tokens": 64907
+		},
+		{
+			"date": "2026-01-11",
+			"hash": "12af7b1c76038317b051c4a014e890bcfa8d3482",
+			"subject": "small updates",
+			"files": 76,
+			"lines": 8026,
+			"textBytes": 218176,
+			"tokens": 65759
+		},
+		{
+			"date": "2026-02-18",
+			"hash": "71cf5f43dde220ae32db59552126e19af1a61dd8",
+			"subject": "Best from 8-ball project",
+			"files": 102,
+			"lines": 13754,
+			"textBytes": 384928,
+			"tokens": 112502
+		},
+		{
+			"date": "2026-02-18",
+			"hash": "b89805465488bb3e3ac09ca8ddb5cf83f867b8b7",
+			"subject": "a",
+			"files": 102,
+			"lines": 13753,
+			"textBytes": 384856,
+			"tokens": 112488
+		},
+		{
+			"date": "2026-03-13",
+			"hash": "9e6aed3f5541fd8bf689365662a114bd02540c16",
+			"subject": "Best from Argos",
+			"files": 143,
+			"lines": 19160,
+			"textBytes": 549053,
+			"tokens": 151976
+		},
+		{
+			"date": "2026-03-13",
+			"hash": "43d28e6affb65e35651696c9e19ab1532145354c",
+			"subject": "Read me updates",
+			"files": 143,
+			"lines": 19181,
+			"textBytes": 549346,
+			"tokens": 151964
+		},
+		{
+			"date": "2026-03-14",
+			"hash": "160f18705e28da989ee213aa2a249107d62a7888",
+			"subject": "Small changes",
+			"files": 143,
+			"lines": 19220,
+			"textBytes": 550630,
+			"tokens": 152315
+		},
+		{
+			"date": "2026-03-18",
+			"hash": "e53e12aa743f9cae7c856be453a5d2cf0e3669d5",
+			"subject": "UPgrades from madad",
+			"files": 147,
+			"lines": 20168,
+			"textBytes": 578515,
+			"tokens": 159438
+		},
+		{
+			"date": "2026-03-30",
+			"hash": "83c84152cbe1533d06b214465ae3170ab8722747",
+			"subject": "Additional Madad updates",
+			"files": 157,
+			"lines": 21428,
+			"textBytes": 613160,
+			"tokens": 168443
+		},
+		{
+			"date": "2026-04-16",
+			"hash": "6c69df2f678bf7aa62c404be0156986ea3dd6163",
+			"subject": "Tazweed updates",
+			"files": 162,
+			"lines": 21834,
+			"textBytes": 623878,
+			"tokens": 171190
+		},
+		{
+			"date": "2026-04-19",
+			"hash": "6a7b5c8f09705294c320a003cced5c32fdfd26f6",
+			"subject": "Dashboard + Dictionary",
+			"files": 208,
+			"lines": 24385,
+			"textBytes": 689455,
+			"tokens": 187928
+		},
+		{
+			"date": "2026-04-19",
+			"hash": "e166c72d3cc4c85577db26cb0b4d0dca3cbaf338",
+			"subject": "Small fixes",
+			"files": 209,
+			"lines": 25254,
+			"textBytes": 713270,
+			"tokens": 194744
+		},
+		{
+			"date": "2026-04-23",
+			"hash": "65ada20398f0c36a777546a664ab76d98a02b96e",
+			"subject": "Dashboard polish",
+			"files": 211,
+			"lines": 25673,
+			"textBytes": 724301,
+			"tokens": 197444
+		},
+		{
+			"date": "2026-04-28",
+			"hash": "687794930ee07ba6136a3fc63de51b1c1b617092",
+			"subject": "Partial from Zero Emisions Platform V2",
+			"files": 216,
+			"lines": 26254,
+			"textBytes": 739861,
+			"tokens": 201788
+		},
+		{
+			"date": "2026-05-03",
+			"hash": "4a15195bef98b5e35dcb30f10740ae7622073fa6",
+			"subject": "Zero emisions full port + workflow updates",
+			"files": 234,
+			"lines": 29885,
+			"textBytes": 839659,
+			"tokens": 226728
+		},
+		{
+			"date": "2026-05-16",
+			"hash": "ffc9603321ff82d95886f396c4433b1eb222f494",
+			"subject": "Add Payload-ready marketing content scaffold",
+			"files": 253,
+			"lines": 32027,
+			"textBytes": 896624,
+			"tokens": 242065
+		},
+		{
+			"date": "2026-05-16",
+			"hash": "2b8b6afcc2181dc91690580f478699f8e4d30fb3",
+			"subject": "Ignore local worktree and dev outputs",
+			"files": 253,
+			"lines": 32032,
+			"textBytes": 896706,
+			"tokens": 242087
+		},
+		{
+			"date": "2026-05-16",
+			"hash": "0b8c8737f6c6a829b01f695c3ddc55920ed8c34e",
+			"subject": "chore: clean lint and dependency warnings",
+			"files": 253,
+			"lines": 32183,
+			"textBytes": 899337,
+			"tokens": 243190
+		},
+		{
+			"date": "2026-05-16",
+			"hash": "9ffc0ec470d47c7918dbd80773e303e093fee7bc",
+			"subject": "chore: update dependency patch set",
+			"files": 253,
+			"lines": 32199,
+			"textBytes": 899753,
+			"tokens": 243330
+		},
+		{
+			"date": "2026-05-16",
+			"hash": "97a6087235739771678a1bebe3b2498741032a23",
+			"subject": "chore: verify TypeScript 6 compatibility",
+			"files": 253,
+			"lines": 32199,
+			"textBytes": 899751,
+			"tokens": 243330
+		},
+		{
+			"date": "2026-05-16",
+			"hash": "af3436966553966ee98d5431c63fbbdbfd41551c",
+			"subject": "feat: finalize template worktree ports",
+			"files": 254,
+			"lines": 32753,
+			"textBytes": 915919,
+			"tokens": 247757
+		},
+		{
+			"date": "2026-05-16",
+			"hash": "b1e3dfe86c53418eac51863f70c7917866905ee2",
+			"subject": "feat: add image switcher primitive",
+			"files": 254,
+			"lines": 32756,
+			"textBytes": 915961,
+			"tokens": 247768
+		},
+		{
+			"date": "2026-05-16",
+			"hash": "2b4569d38e54336317c51b84607550d3c905446b",
+			"subject": "Add reveal group item scheduler",
+			"files": 254,
+			"lines": 33352,
+			"textBytes": 930224,
+			"tokens": 251560
+		},
+		{
+			"date": "2026-05-16",
+			"hash": "fb3cc993b66658a49ee7cae8fb1bb3d93de78b05",
+			"subject": "fix: stabilize image switcher preload keys",
+			"files": 254,
+			"lines": 33375,
+			"textBytes": 930782,
+			"tokens": 251706
+		},
+		{
+			"date": "2026-05-17",
+			"hash": "76f8938381f3c1e01006272949c95f904bafdcd5",
+			"subject": "Move playground into marketing internal group",
+			"files": 254,
+			"lines": 33375,
+			"textBytes": 930797,
+			"tokens": 251711
+		},
+		{
+			"date": "2026-05-17",
+			"hash": "0cc70ee840298970f0060a1ed0823ad2758147b9",
+			"subject": "Consolidate reveal image load strategy",
+			"files": 251,
+			"lines": 32743,
+			"textBytes": 915402,
+			"tokens": 247436
+		},
+		{
+			"date": "2026-05-18",
+			"hash": "877486dc83e9c1776212a723d0575a65e3722f32",
+			"subject": "Local",
+			"files": 252,
+			"lines": 32996,
+			"textBytes": 923228,
+			"tokens": 249375
+		},
+		{
+			"date": "2026-05-19",
+			"hash": "b96eb5979509788f5aae7d5c8c1a7af788316843",
+			"subject": "Document responsive rendering breakpoint guidance",
+			"files": 255,
+			"lines": 33360,
+			"textBytes": 932752,
+			"tokens": 251763
+		},
+		{
+			"date": "2026-05-23",
+			"hash": "73f29d6d044e032a4bd49bd0817279b04e336d44",
+			"subject": "Checkpoint main interaction updates",
+			"files": 255,
+			"lines": 33425,
+			"textBytes": 935406,
+			"tokens": 252394
+		},
+		{
+			"date": "2026-05-23",
+			"hash": "302871ea5884d3236df250815cf8454403802191",
+			"subject": "Ship production updates",
+			"files": 272,
+			"lines": 34693,
+			"textBytes": 967746,
+			"tokens": 260702
+		},
+		{
+			"date": "2026-05-23",
+			"hash": "1b71eb3ed2e804f1ba57d7030382e39752d49535",
+			"subject": "Add template intelligence surface",
+			"files": 279,
+			"lines": 36364,
+			"textBytes": 1021440,
+			"tokens": 274314
+		},
+		{
+			"date": "2026-05-25",
+			"hash": "ce1467bc8f1d48a04b10efad90265789b1efe788",
+			"subject": "Ship production updates",
+			"files": 293,
+			"lines": 40861,
+			"textBytes": 1160642,
+			"tokens": 311971
+		},
+		{
+			"date": "2026-05-25",
+			"hash": "b569257441b0a5f7d941f666fb9b2880531e9274",
+			"subject": "Allow template internal routes in production",
+			"files": 293,
+			"lines": 40905,
+			"textBytes": 1162090,
+			"tokens": 312303
+		},
+		{
+			"date": "2026-06-09",
+			"hash": "76d6314ab7592ddf970b593302d4ec5231db641e",
+			"subject": "Add optional thin-start activation path",
+			"files": 181,
+			"lines": 19757,
+			"textBytes": 606053,
+			"tokens": 156872
+		},
+		{
+			"date": "2026-06-09",
+			"hash": "84cd3c6e4f98d57397921104273fe859cf57a565",
+			"subject": "Revert \"Add optional thin-start activation path\"",
+			"files": 293,
+			"lines": 40905,
+			"textBytes": 1162090,
+			"tokens": 312303
+		},
+		{
+			"date": "2026-06-09",
+			"hash": "19f465b3b39ac40a2314f3f4271cb09467206f12",
+			"subject": "Add optional thin-start activation tooling",
+			"files": 297,
+			"lines": 44117,
+			"textBytes": 1246050,
+			"tokens": 334260
+		},
+		{
+			"date": "2026-06-09",
+			"hash": "36d0239dc4e2ae499cbd0480f65ebbfdf5ce4be4",
+			"subject": "Document thin-start instance activation path",
+			"files": 297,
+			"lines": 44177,
+			"textBytes": 1248445,
+			"tokens": 334779
+		},
+		{
+			"date": "2026-06-09",
+			"hash": "7235466cf35d8084fce3bed290af3f6df948b701",
+			"subject": "Harden lightweight prune reset path",
+			"files": 299,
+			"lines": 44664,
+			"textBytes": 1264662,
+			"tokens": 339287
+		},
+		{
+			"date": "2026-06-09",
+			"hash": "c7397aab2e4aa9ed18485cbc467f8bf04b73ef34",
+			"subject": "Ship production updates",
+			"files": 181,
+			"lines": 20072,
+			"textBytes": 586200,
+			"tokens": 152937
+		},
+		{
+			"date": "2026-06-29",
+			"hash": "4ef60eef464b3613b9420c8049aebd8e8be6a034",
+			"subject": "chore: publish Averlo Next Template",
+			"files": 183,
+			"lines": 20693,
+			"textBytes": 604280,
+			"tokens": 157788
+		},
+		{
+			"date": "2026-06-29",
+			"hash": "76e04f36ffbda5338954d1ba6c4dbd308de034ce",
+			"subject": "docs: finalize Averlo README",
+			"files": 183,
+			"lines": 20698,
+			"textBytes": 604258,
+			"tokens": 157870
+		},
+		{
+			"date": "2026-07-03",
+			"hash": "948efcd6c24599ae17c708e019611496fd3d81dc",
+			"subject": "Restore full template surface after accidental prune",
+			"files": 306,
+			"lines": 46352,
+			"textBytes": 1343079,
+			"tokens": 359111
+		},
+		{
+			"date": "2026-07-03",
+			"hash": "18baf59b75ce4f899a80e7540a92237c962b83ed",
+			"subject": "Refresh backport ledger after template recovery",
+			"files": 306,
+			"lines": 46361,
+			"textBytes": 1345919,
+			"tokens": 359799
+		},
+		{
+			"date": "2026-07-03",
+			"hash": "876b9b9a77dc0217ecf7750c689d0151532094a0",
+			"subject": "Backport modal focus management",
+			"files": 306,
+			"lines": 46456,
+			"textBytes": 1349204,
+			"tokens": 360634
+		},
+		{
+			"date": "2026-07-03",
+			"hash": "24ee03b7b46e5b77d5de706ddc36f3a3ccd46103",
+			"subject": "Backport generic metadata helper",
+			"files": 307,
+			"lines": 46591,
+			"textBytes": 1353396,
+			"tokens": 361634
+		},
+		{
+			"date": "2026-07-04",
+			"hash": "80d4d72d0474bd8ec4a2704546dce61ced122de6",
+			"subject": "Backport markdown renderer",
+			"files": 310,
+			"lines": 47218,
+			"textBytes": 1372144,
+			"tokens": 366750
+		},
+		{
+			"date": "2026-07-04",
+			"hash": "7e859b84c3ddb08d2c010432db1f097916a3f5bc",
+			"subject": "Reuse choice indicator in markdown tasks",
+			"files": 310,
+			"lines": 47227,
+			"textBytes": 1372673,
+			"tokens": 366883
+		},
+		{
+			"date": "2026-07-04",
+			"hash": "9302a7e2a4a09d8582ad4b9182b0bbeb46a579fe",
+			"subject": "Move markdown renderer to composites",
+			"files": 311,
+			"lines": 47383,
+			"textBytes": 1378611,
+			"tokens": 368362
+		},
+		{
+			"date": "2026-07-04",
+			"hash": "3ac8890baea2d3321d59d32c68d2e59d05592ee9",
+			"subject": "Include choice inputs in thin start",
+			"files": 311,
+			"lines": 47980,
+			"textBytes": 1395137,
+			"tokens": 372618
+		},
+		{
+			"date": "2026-07-04",
+			"hash": "442a4ad2e158b1df1ba1328de7c52cdda7f5e480",
+			"subject": "Backport scroll performance tooling",
+			"files": 319,
+			"lines": 49901,
+			"textBytes": 1450711,
+			"tokens": 386964
+		},
+		{
+			"date": "2026-07-04",
+			"hash": "5f0a8ac9c29d69e617e5eb1a2a6b7cddd8ddfd34",
+			"subject": "Rebuild scroll performance tooling around page targets",
+			"files": 318,
+			"lines": 49636,
+			"textBytes": 1443003,
+			"tokens": 384812
+		},
+		{
+			"date": "2026-07-04",
+			"hash": "9a50fe8be1d3b6afdd14535f0a4d5a8119efead6",
+			"subject": "Add normalized scroll performance scoring gates",
+			"files": 318,
+			"lines": 49927,
+			"textBytes": 1454084,
+			"tokens": 387853
+		},
+		{
+			"date": "2026-07-04",
+			"hash": "cfb763f61cfcb3eb2e57eca6af21878a9e77bd6f",
+			"subject": "Document scroll performance autoresearch harness",
+			"files": 318,
+			"lines": 49952,
+			"textBytes": 1455373,
+			"tokens": 388139
+		},
+		{
+			"date": "2026-07-04",
+			"hash": "94ed9a8d09c455529703e3c31c301620d3e26f45",
+			"subject": "Generalize fallback marketing page map",
+			"files": 318,
+			"lines": 49959,
+			"textBytes": 1456150,
+			"tokens": 388293
+		},
+		{
+			"date": "2026-07-04",
+			"hash": "2416a89d7a396d2451cdc5fc662d6ebb45af044d",
+			"subject": "Make Serena warm optional",
+			"files": 319,
+			"lines": 50563,
+			"textBytes": 1473743,
+			"tokens": 392765
+		},
+		{
+			"date": "2026-07-04",
+			"hash": "149a3cda6d9781addafbe5c91aa0ae135f1ab4b0",
+			"subject": "Document warm optional agent harnesses",
+			"files": 319,
+			"lines": 50573,
+			"textBytes": 1474335,
+			"tokens": 392897
+		},
+		{
+			"date": "2026-07-04",
+			"hash": "2cb3408b3529521e21a368c3accf21158c4310ec",
+			"subject": "Link scroll autoresearch harness",
+			"files": 319,
+			"lines": 50575,
+			"textBytes": 1474425,
+			"tokens": 392925
+		},
+		{
+			"date": "2026-07-05",
+			"hash": "a19ed47c4a919a2e7ca82954e5411e3c2298c641",
+			"subject": "Add repo intelligence benchmark pilot",
+			"files": 319,
+			"lines": 50731,
+			"textBytes": 1480598,
+			"tokens": 394536
+		},
+		{
+			"date": "2026-07-06",
+			"hash": "6bf5bfeb486ec64d2e0f3d95275de1e5b49fc280",
+			"subject": "Ship template orchestration and review workflow updates",
+			"files": 320,
+			"lines": 51097,
+			"textBytes": 1490351,
+			"tokens": 397285
+		},
+		{
+			"date": "2026-07-06",
+			"hash": "06f0121360d91e6c159b8d6b87dc36123c7dd9a0",
+			"subject": "Port generic layer flood loading mount",
+			"files": 321,
+			"lines": 51245,
+			"textBytes": 1494282,
+			"tokens": 398351
+		},
+		{
+			"date": "2026-07-07",
+			"hash": "774b513fb0a655aadf1bf19fb986f88443f65154",
+			"subject": "Keep loading skip override only",
+			"files": 320,
+			"lines": 51113,
+			"textBytes": 1490692,
+			"tokens": 397370
+		},
+		{
+			"date": "2026-07-07",
+			"hash": "840c057b98d75770e244fc6591ce59a8c2f5e03d",
+			"subject": "Prevent loading skip flicker",
+			"files": 320,
+			"lines": 51132,
+			"textBytes": 1491546,
+			"tokens": 397565
+		},
+		{
+			"date": "2026-07-07",
+			"hash": "d6c70831e8afca6dcd8f6e3900f94c2a8aa56a8e",
+			"subject": "Backport reveal automation overrides",
+			"files": 320,
+			"lines": 51195,
+			"textBytes": 1494126,
+			"tokens": 398215
+		},
+		{
+			"date": "2026-07-07",
+			"hash": "74864db412e9680cea9ff87a27d3069ac5a4e648",
+			"subject": "Refactor reveal scheduler internals",
+			"files": 323,
+			"lines": 51280,
+			"textBytes": 1496396,
+			"tokens": 398709
+		},
+		{
+			"date": "2026-07-07",
+			"hash": "59c1b27c9fe4cb067ab8da36e5b6c21b382f3459",
+			"subject": "Backport reusable motion and UI references",
+			"files": 318,
+			"lines": 52284,
+			"textBytes": 1522560,
+			"tokens": 405725
+		},
+		{
+			"date": "2026-07-18",
+			"hash": "86542228325436383ff14c2f9d6e24ea8b43aa99",
+			"subject": "Stage template profile architecture decisions",
+			"files": 319,
+			"lines": 52319,
+			"textBytes": 1524564,
+			"tokens": 406080
+		},
+		{
+			"date": "2026-07-18",
+			"hash": "9dbf0093f0e357f2e06110e39cac7eb7123b46a6",
+			"subject": "Stage Panel and Card architecture",
+			"files": 319,
+			"lines": 52335,
+			"textBytes": 1526115,
+			"tokens": 406392
+		},
+		{
+			"date": "2026-07-18",
+			"hash": "7496b4d93778689a846f678ee471fffc1fde011e",
+			"subject": "Stage parallel template profile architecture",
+			"files": 319,
+			"lines": 52348,
+			"textBytes": 1527290,
+			"tokens": 406595
+		},
+		{
+			"date": "2026-07-18",
+			"hash": "138fc9a3b7a9922d035dc76fe03d34c1f148bdc7",
+			"subject": "Stage dashboard foundation architecture",
+			"files": 319,
+			"lines": 52371,
+			"textBytes": 1528787,
+			"tokens": 406850
+		},
+		{
+			"date": "2026-07-18",
+			"hash": "7c5dd7213eff5dbc93059f217bb7ee6753fa6a98",
+			"subject": "Stage organization-first dashboard routes",
+			"files": 319,
+			"lines": 52392,
+			"textBytes": 1530649,
+			"tokens": 407170
+		},
+		{
+			"date": "2026-07-18",
+			"hash": "2987908a23e6d249325de922f01f1f33039c69da",
+			"subject": "Stage organization context architecture",
+			"files": 319,
+			"lines": 52420,
+			"textBytes": 1532365,
+			"tokens": 407442
+		},
+		{
+			"date": "2026-07-18",
+			"hash": "35e8a854aa58a91428fc19f54265362f7028444b",
+			"subject": "Stage organization selection and record interactions",
+			"files": 319,
+			"lines": 52436,
+			"textBytes": 1533868,
+			"tokens": 407689
+		},
+		{
+			"date": "2026-07-18",
+			"hash": "381da0b27f06e580dcaccecb6b4136941f3f4073",
+			"subject": "Stage organization selection and settings architecture",
+			"files": 319,
+			"lines": 52451,
+			"textBytes": 1535454,
+			"tokens": 407949
+		},
+		{
+			"date": "2026-07-18",
+			"hash": "f751989566360ac153b8d91b784342d18bf9a868",
+			"subject": "Stage template instance activation boundary",
+			"files": 319,
+			"lines": 52460,
+			"textBytes": 1536575,
+			"tokens": 408123
+		},
+		{
+			"date": "2026-07-18",
+			"hash": "b96a62fc6b5dc4c23493cf932f627693909937ce",
+			"subject": "Stage final architecture disposition",
+			"files": 319,
+			"lines": 52465,
+			"textBytes": 1536916,
+			"tokens": 408180
+		},
+		{
+			"date": "2026-07-18",
+			"hash": "601cf77b616996bd3af0d13cb8ce117a0df5910f",
+			"subject": "Stage template visual system parity",
+			"files": 319,
+			"lines": 52478,
+			"textBytes": 1538753,
+			"tokens": 408504
+		},
+		{
+			"date": "2026-07-18",
+			"hash": "4f0a56a0f0e9732924c01fe2ae7e313a07bb3c65",
+			"subject": "Stage architecture consolidation safeguards",
+			"files": 319,
+			"lines": 52480,
+			"textBytes": 1539051,
+			"tokens": 408553
+		},
+		{
+			"date": "2026-07-19",
+			"hash": "609bbad9ca2f206acc3b88ea10a87db01970f1c4",
+			"subject": "Pin Inference Console visual baseline",
+			"files": 319,
+			"lines": 52481,
+			"textBytes": 1539061,
+			"tokens": 408576
+		},
+		{
+			"date": "2026-07-19",
+			"hash": "0f15cbdefbe6c130b3908e89bb427319b5156476",
+			"subject": "Stage final architecture structure",
+			"files": 319,
+			"lines": 52484,
+			"textBytes": 1539666,
+			"tokens": 408671
+		},
+		{
+			"date": "2026-07-19",
+			"hash": "b1078909ec83dcd2b0311e5bf5e04c2dc25c6441",
+			"subject": "Stage additional component convergence",
+			"files": 319,
+			"lines": 52511,
+			"textBytes": 1543761,
+			"tokens": 409450
+		},
+		{
+			"date": "2026-07-19",
+			"hash": "8475bf89aba329a6d8d28c9372044060700b7124",
+			"subject": "Stage component dependency and parity boundaries",
+			"files": 319,
+			"lines": 52521,
+			"textBytes": 1545225,
+			"tokens": 409694
+		},
+		{
+			"date": "2026-07-19",
+			"hash": "ff2c9de8c059c630a487f8515821160f0f33ee7d",
+			"subject": "Consolidate template architecture",
+			"files": 320,
+			"lines": 52717,
+			"textBytes": 1562540,
+			"tokens": 412787
+		},
+		{
+			"date": "2026-07-19",
+			"hash": "90fd6236f685445987c4c1f599a391e80f7a35f0",
+			"subject": "Complete architecture parity review",
+			"files": 320,
+			"lines": 52718,
+			"textBytes": 1562724,
+			"tokens": 412826
+		},
+		{
+			"date": "2026-07-19",
+			"hash": "58256ab13d7a3378e1b5dfb9376298b976aa67d6",
+			"subject": "Extend dashboard entity architecture",
+			"files": 320,
+			"lines": 52773,
+			"textBytes": 1571714,
+			"tokens": 414348
+		},
+		{
+			"date": "2026-07-19",
+			"hash": "3ee4d970e4c8f77ecff987aecab33b3bca97c2fc",
+			"subject": "Refine dashboard presentation boundaries",
+			"files": 320,
+			"lines": 52781,
+			"textBytes": 1573797,
+			"tokens": 414701
+		},
+		{
+			"date": "2026-07-19",
+			"hash": "7469a0a8dc29cebbef9e4521bd852d020d54e82e",
+			"subject": "Stage authentication lifecycle architecture",
+			"files": 320,
+			"lines": 52800,
+			"textBytes": 1576051,
+			"tokens": 415080
+		},
+		{
+			"date": "2026-07-19",
+			"hash": "9b66eee5fc1b452844ce881517af571384530e1b",
+			"subject": "Stage dashboard component state contracts",
+			"files": 320,
+			"lines": 52807,
+			"textBytes": 1577259,
+			"tokens": 415297
+		},
+		{
+			"date": "2026-07-19",
+			"hash": "efdde7804adbe56caa461112be01b131c8918806",
+			"subject": "Stage selective component boundaries",
+			"files": 320,
+			"lines": 52809,
+			"textBytes": 1577681,
+			"tokens": 415366
+		},
+		{
+			"date": "2026-07-19",
+			"hash": "eda5e929dc0f40eaa62a7d0c52d2dc343b7de7b5",
+			"subject": "Stage command and input convergence",
+			"files": 320,
+			"lines": 52816,
+			"textBytes": 1579063,
+			"tokens": 415600
+		},
+		{
+			"date": "2026-07-19",
+			"hash": "63c133ab86b74e34f0e162e724be2a3e497f4bc2",
+			"subject": "Stage remaining reusable surface contracts",
+			"files": 320,
+			"lines": 52821,
+			"textBytes": 1580265,
+			"tokens": 415800
+		},
+		{
+			"date": "2026-07-19",
+			"hash": "feb352b2e35d4f9f692914824ea4c054c2f87212",
+			"subject": "Consolidate source rescan architecture",
+			"files": 320,
+			"lines": 52864,
+			"textBytes": 1586435,
+			"tokens": 416857
+		},
+		{
+			"date": "2026-07-19",
+			"hash": "8dcc3f2b9fa95cad9ee226b5b387966547a40538",
+			"subject": "Review consolidated architecture contracts",
+			"files": 320,
+			"lines": 52864,
+			"textBytes": 1586449,
+			"tokens": 416872
+		},
+		{
+			"date": "2026-07-19",
+			"hash": "50616826610a9acded69625133e476694cdf3358",
+			"subject": "Refine thin-start and shared Card surfaces",
+			"files": 320,
+			"lines": 53129,
+			"textBytes": 1591656,
+			"tokens": 418407
+		},
+		{
+			"date": "2026-07-19",
+			"hash": "6cb2c99465d89bfcda14f5b99c24e2be1e0e0069",
+			"subject": "Initialize filesystem-backed inference port",
+			"files": 362,
+			"lines": 53232,
+			"textBytes": 1602844,
+			"tokens": 421093
+		},
+		{
+			"date": "2026-07-19",
+			"hash": "5d79e06656be854010676e468501faa2a86d975f",
+			"subject": "Port shared inference visual system",
+			"files": 378,
+			"lines": 56881,
+			"textBytes": 1707216,
+			"tokens": 448822
+		},
+		{
+			"date": "2026-07-19",
+			"hash": "66a08e1169757c7eece2621adfb236bcdf242b33",
+			"subject": "Add provider-neutral auth and organizations",
+			"files": 403,
+			"lines": 59007,
+			"textBytes": 1773025,
+			"tokens": 464295
+		},
+		{
+			"date": "2026-07-20",
+			"hash": "8140fc387b9d9ae293c2ce324938f37508aa9769",
+			"subject": "Build registry-driven dashboard shell",
+			"files": 423,
+			"lines": 59751,
+			"textBytes": 1798758,
+			"tokens": 470230
+		},
+		{
+			"date": "2026-07-20",
+			"hash": "f88f569b6bd7eb52acf5ed9d81318afebf7a0b64",
+			"subject": "Complete dashboard reference entity port",
+			"files": 467,
+			"lines": 63903,
+			"textBytes": 1925549,
+			"tokens": 500598
+		},
+		{
+			"date": "2026-07-20",
+			"hash": "d5cd83fe38d493ed6fb80eaa3fc14c8846f72320",
+			"subject": "Match Card defaults to pinned source",
+			"files": 467,
+			"lines": 63932,
+			"textBytes": 1928583,
+			"tokens": 501338
+		},
+		{
+			"date": "2026-07-20",
+			"hash": "0faa24a0b4e1ddd0d4770c92d46669315a8a3f85",
+			"subject": "Make labeled dividers surface neutral",
+			"files": 467,
+			"lines": 63963,
+			"textBytes": 1930810,
+			"tokens": 501840
+		},
+		{
+			"date": "2026-07-20",
+			"hash": "b0c0505e29684e952fc5803ab00a53adc6ba6c5f",
+			"subject": "Match InputFrame defaults to pinned source",
+			"files": 467,
+			"lines": 63975,
+			"textBytes": 1931026,
+			"tokens": 501834
+		},
+		{
+			"date": "2026-07-20",
+			"hash": "b6855b869284b2466c9d5a2822d02d6510036694",
+			"subject": "Reorganize Button hierarchy and danger tone",
+			"files": 467,
+			"lines": 64064,
+			"textBytes": 1932463,
+			"tokens": 502014
+		},
+		{
+			"date": "2026-07-23",
+			"hash": "7942996edde92da76239cb7f376fe216afbfe072",
+			"subject": "Checkpoint accumulated port review work",
+			"files": 552,
+			"lines": 76232,
+			"textBytes": 2291117,
+			"tokens": 585792
+		},
+		{
+			"date": "2026-07-20",
+			"hash": "a2da0535f2ee8cd72cddd3cc39722d8650178197",
+			"subject": "Stage async mutation policy port",
+			"files": 467,
+			"lines": 64016,
+			"textBytes": 1934329,
+			"tokens": 502545
+		},
+		{
+			"date": "2026-07-20",
+			"hash": "3c046bbc846e45610f46419374b438ba6e2ef267",
+			"subject": "Consolidate async mutation architecture",
+			"files": 467,
+			"lines": 64025,
+			"textBytes": 1937089,
+			"tokens": 503042
+		},
+		{
+			"date": "2026-07-20",
+			"hash": "c3f7e4d1334a1db0e0022d831f0501adcee51540",
+			"subject": "Review mutation architecture consolidation",
+			"files": 467,
+			"lines": 64025,
+			"textBytes": 1937126,
+			"tokens": 503048
+		},
+		{
+			"date": "2026-07-20",
+			"hash": "415a11d179494ebb5d10185d4a6fba3b82f07521",
+			"subject": "Standardize modal mutation handoffs",
+			"files": 468,
+			"lines": 64615,
+			"textBytes": 1958648,
+			"tokens": 507913
+		},
+		{
+			"date": "2026-07-23",
+			"hash": "b5e0fc6202322dc152b8908f258b7b18cbdd526f",
+			"subject": "Integrate mutation policy with polished port",
+			"files": 553,
+			"lines": 76819,
+			"textBytes": 2317059,
+			"tokens": 591393
+		},
+		{
+			"date": "2026-07-23",
+			"hash": "f8aa224e5232f718706a47e3b76b8f5e02319280",
+			"subject": "Harden dependencies and close out inference port",
+			"files": 553,
+			"lines": 76882,
+			"textBytes": 2320966,
+			"tokens": 592322
+		},
+		{
+			"date": "2026-07-23",
+			"hash": "ec620dc5ba30af6f334a24d6c7a9ed010f6ba2fb",
+			"subject": "Keep dependency pinning idempotent",
+			"files": 553,
+			"lines": 76882,
+			"textBytes": 2320969,
+			"tokens": 592322
+		},
+		{
+			"date": "2026-07-23",
+			"hash": "8f9e913c8728886e4293492172f7bee0b7d6d2e6",
+			"subject": "Finalize inference port handoff",
+			"files": 553,
+			"lines": 76885,
+			"textBytes": 2321224,
+			"tokens": 592387
+		},
+		{
+			"date": "2026-07-23",
+			"hash": "c705d0c9a0451ec3a1fe7331846c569f6d527a45",
+			"subject": "Stage benchmark evidence recording policy",
+			"files": 553,
+			"lines": 76924,
+			"textBytes": 2323963,
+			"tokens": 592894
+		},
+		{
+			"date": "2026-07-23",
+			"hash": "71ae98cd5435d498ab6115354459b06bd411f206",
+			"subject": "Make intelligence benchmarks evidence driven",
+			"files": 556,
+			"lines": 77628,
+			"textBytes": 2346991,
+			"tokens": 598613
+		},
+		{
+			"date": "2026-07-23",
+			"hash": "01a4f1ed4de2fc624c066afdbfe54bc565c9d377",
+			"subject": "Narrow intelligence architecture to cleanup",
+			"files": 556,
+			"lines": 77610,
+			"textBytes": 2345611,
+			"tokens": 598352
+		},
+		{
+			"date": "2026-07-23",
+			"hash": "5cc2c7db82efbc1042e4f3eec816bf5ed38ee1a6",
+			"subject": "Clarify benchmark cleanup disposition",
+			"files": 556,
+			"lines": 77613,
+			"textBytes": 2345878,
+			"tokens": 598398
+		},
+		{
+			"date": "2026-07-23",
+			"hash": "1d4a3c42ce45f932dacc31882a37e2162a565514",
+			"subject": "Add prune-aware dashboard intelligence",
+			"files": 562,
+			"lines": 79253,
+			"textBytes": 2404791,
+			"tokens": 614082
+		},
+		{
+			"date": "2026-07-23",
+			"hash": "581e7e72b687c12eb0284196b27b3eb4f74b6e1f",
+			"subject": "Integrate template intelligence updates",
+			"files": 562,
+			"lines": 79253,
+			"textBytes": 2404791,
+			"tokens": 614082
+		},
+		{
+			"date": "2026-07-23",
+			"hash": "c2bd2391f522267e725307e4bdce999e68cc3dcc",
+			"subject": "Integrate service assembly into homepage hero",
+			"files": 554,
+			"lines": 77649,
+			"textBytes": 2341316,
+			"tokens": 597897
+		},
+		{
+			"date": "2026-07-23",
+			"hash": "ef95119c479d998b43d04580c06804a024ff6f38",
+			"subject": "Integrate homepage service assembly",
+			"files": 563,
+			"lines": 80017,
+			"textBytes": 2424876,
+			"tokens": 619590
+		},
+		{
+			"date": "2026-07-23",
+			"hash": "867bf1ad7d2689fb2d0fc6ac1d26d3d0dedcb8d2",
+			"subject": "Reorganize frontend ownership surfaces",
+			"files": 554,
+			"lines": 76577,
+			"textBytes": 2317812,
+			"tokens": 590526
+		},
+		{
+			"date": "2026-07-23",
+			"hash": "5cdcde78114dac63c78c2ee02cc4f958072fa331",
+			"subject": "Integrate frontend ownership cleanup",
+			"files": 564,
+			"lines": 79709,
+			"textBytes": 2421511,
+			"tokens": 617741
+		},
+		{
+			"date": "2026-07-23",
+			"hash": "8ff7fe123e02f073217f3395fa92c1faea3d7ce2",
+			"subject": "Align thin profile integration contracts",
+			"files": 564,
+			"lines": 79711,
+			"textBytes": 2421627,
+			"tokens": 617770
+		},
+		{
+			"date": "2026-07-23",
+			"hash": "5b31bc39f2d40f0f482d2ec7c872b7a495fcde0e",
+			"subject": "Make home hero callouts hover only",
+			"files": 564,
+			"lines": 79688,
+			"textBytes": 2420592,
+			"tokens": 617536
+		},
+		{
+			"date": "2026-07-23",
+			"hash": "7c49f3b7c757ed51ce5c76adb4ac41930140dbc7",
+			"subject": "Restore home hero callout layout motion",
+			"files": 564,
+			"lines": 79705,
+			"textBytes": 2421273,
+			"tokens": 617678
+		},
+		{
+			"date": "2026-07-23",
+			"hash": "a571de591382e2ca81699bf6b4e5c952fd195ab3",
+			"subject": "Show dashboard redirect state reliably",
+			"files": 565,
+			"lines": 79737,
+			"textBytes": 2422076,
+			"tokens": 617851
+		},
+		{
+			"date": "2026-07-23",
+			"hash": "94ca2124cae28386ef6a022d738e6450647d25c1",
+			"subject": "Center dashboard status frames",
+			"files": 565,
+			"lines": 79737,
+			"textBytes": 2422095,
+			"tokens": 617859
+		},
+		{
+			"date": "2026-07-23",
+			"hash": "d9d3354296ffb31621d52f014b2bd7467ef4b815",
+			"subject": "Canonicalize dashboard overview route",
+			"files": 566,
+			"lines": 79742,
+			"textBytes": 2422225,
+			"tokens": 617882
+		},
+		{
+			"date": "2026-07-24",
+			"hash": "732b630cf5cf1df12d8219da321b30bfbe72c47e",
+			"subject": "Standardize dashboard page surface ownership",
+			"files": 601,
+			"lines": 80260,
+			"textBytes": 2442213,
+			"tokens": 621726
+		},
+		{
+			"date": "2026-07-24",
+			"hash": "95ae3add3c8ac512cfa3cf42a23940055ed8e375",
+			"subject": "Split internal demo catalogue by page family",
+			"files": 627,
+			"lines": 80471,
+			"textBytes": 2447580,
+			"tokens": 623586
+		},
+		{
+			"date": "2026-07-25",
+			"hash": "de19f911407da3ee5e845a49ff28b8190aba2fa3",
+			"subject": "Add skeleton overlap geometry pilot",
+			"files": 631,
+			"lines": 81382,
+			"textBytes": 2473746,
+			"tokens": 630250
+		},
+		{
+			"date": "2026-07-25",
+			"hash": "37cee753127ac0aed5914b0a5fb36dfac6c8094d",
+			"subject": "Ship production updates",
+			"files": 628,
+			"lines": 80769,
+			"textBytes": 2456470,
+			"tokens": 625866
+		},
+		{
+			"date": "2026-07-26",
+			"hash": "96248e8a4a1ddbfe3dcb17ffad82322af220ad26",
+			"subject": "feat: add template profile materialization",
+			"files": 642,
+			"lines": 81073,
+			"textBytes": 2469408,
+			"tokens": 628631
+		},
+		{
+			"date": "2026-07-26",
+			"hash": "0bf79f46da8bbbf338b55a28a1b330050ffc7c81",
+			"subject": "feat: add positive template assembly engine",
+			"files": 648,
+			"lines": 82332,
+			"textBytes": 2510512,
+			"tokens": 639069
+		},
+		{
+			"date": "2026-07-26",
+			"hash": "3578e63645f852517b9f92809ea1a77d345865f2",
+			"subject": "Ship production updates",
+			"files": 649,
+			"lines": 82568,
+			"textBytes": 2522016,
+			"tokens": 641353
+		},
+		{
+			"date": "2026-07-26",
+			"hash": "876b384f172f0d7525d0357b06a4eaee27992222",
+			"subject": "Ship production updates",
+			"files": 649,
+			"lines": 82459,
+			"textBytes": 2516160,
+			"tokens": 639951
+		},
+		{
+			"date": "2026-07-26",
+			"hash": "c7b96f892ce67b7543687d22574f256027b46484",
+			"subject": "Persist fixture sessions across redirects",
+			"files": 649,
+			"lines": 82556,
+			"textBytes": 2518583,
+			"tokens": 640566
+		},
+		{
+			"date": "2026-07-26",
+			"hash": "c4033989c4d6e8050af53060549a746aca8c161b",
+			"subject": "fix: separate compact header menu gutters",
+			"files": 649,
+			"lines": 82567,
+			"textBytes": 2519149,
+			"tokens": 640681
+		},
+		{
+			"date": "2026-07-26",
+			"hash": "231f622975b08f7c96e7009ad762a20d076e582d",
+			"subject": "chore: add compact header architecture demo",
+			"files": 650,
+			"lines": 82648,
+			"textBytes": 2521268,
+			"tokens": 641249
+		},
+		{
+			"date": "2026-07-26",
+			"hash": "d28af2dda1b3ec64c93125ab68252c0bbb9ea657",
+			"subject": "chore: extend header architecture demo to desktop",
+			"files": 650,
+			"lines": 82673,
+			"textBytes": 2521917,
+			"tokens": 641409
+		},
+		{
+			"date": "2026-07-26",
+			"hash": "fb3a789da9a72fa3f1acfc24693b6d92fa211e3c",
+			"subject": "fix: decentralize desktop header gutters",
+			"files": 650,
+			"lines": 82676,
+			"textBytes": 2522080,
+			"tokens": 641432
+		},
+		{
+			"date": "2026-07-26",
+			"hash": "1120941920e9f69c83ee37ba2ad2f1fbad30a837",
+			"subject": "Ship production updates",
+			"files": 649,
+			"lines": 82571,
+			"textBytes": 2519394,
+			"tokens": 640715
+		},
+		{
+			"date": "2026-07-28",
+			"hash": "3b74ada842ecb6250d40ffe3ade85db6edc29442",
+			"subject": "Ship production updates",
+			"files": 649,
+			"lines": 82619,
+			"textBytes": 2521383,
+			"tokens": 641225
+		},
+		{
+			"date": "2026-07-29",
+			"hash": "edd255a6a04bb5a1c931e80d6213d9ba11ebcf51",
+			"subject": "Ship production updates",
+			"files": 650,
+			"lines": 82773,
+			"textBytes": 2525995,
+			"tokens": 642494
+		},
+		{
+			"date": "2026-07-29",
+			"hash": "d15116054f814425fc62cf42cadd32474e733417",
+			"subject": "feat: route marketing CTAs to dashboard login",
+			"files": 650,
+			"lines": 82773,
+			"textBytes": 2525994,
+			"tokens": 642493
+		},
+		{
+			"date": "2026-07-29",
+			"hash": "3c96130980bef3fb55d5975ecd70b66aded367d4",
+			"subject": "fix: align account identity spacing",
+			"files": 650,
+			"lines": 82776,
+			"textBytes": 2526016,
+			"tokens": 642509
+		},
+		{
+			"date": "2026-07-29",
+			"hash": "bfe407a748f1c0bad36116eea2ecf783b1ae956c",
+			"subject": "refactor: compose settings account identity",
+			"files": 650,
+			"lines": 82764,
+			"textBytes": 2525573,
+			"tokens": 642320
+		},
+		{
+			"date": "2026-07-29",
+			"hash": "ce958b1ceff0fec2d5776dfcbce30b80d0001af9",
+			"subject": "fix: align organization identity spacing",
+			"files": 650,
+			"lines": 82764,
+			"textBytes": 2525577,
+			"tokens": 642324
+		},
+		{
+			"date": "2026-07-29",
+			"hash": "716eaad936ba6dca386e74be737d6852513959d2",
+			"subject": "fix: unify identity presentation spacing",
+			"files": 650,
+			"lines": 82768,
+			"textBytes": 2525573,
+			"tokens": 642331
+		},
+		{
+			"date": "2026-07-29",
+			"hash": "15e062baa76c7c21acd6d3bcad20f464d049c2f5",
+			"subject": "fix: unify entity identity presentation",
+			"files": 650,
+			"lines": 82732,
+			"textBytes": 2525089,
+			"tokens": 642131
+		},
+		{
+			"date": "2026-07-29",
+			"hash": "a6ceefa8ca620ee129d4de830777a11e2d8da9c8",
+			"subject": "refactor: centralize entity identity layout",
+			"files": 651,
+			"lines": 82841,
+			"textBytes": 2526980,
+			"tokens": 642509
+		},
+		{
+			"date": "2026-07-29",
+			"hash": "5b5a3d754068671fffe001f08b55464e1e93433e",
+			"subject": "refactor: improve code clarity and modularize dropdown",
+			"files": 658,
+			"lines": 82591,
+			"textBytes": 2521250,
+			"tokens": 640102
+		},
+		{
+			"date": "2026-07-29",
+			"hash": "146bfc2e5ddc47cbcbf4e0da8ea8a0b5ee6cc5bb",
+			"subject": "refactor: decouple positive assembly from prune",
+			"files": 659,
+			"lines": 83013,
+			"textBytes": 2533342,
+			"tokens": 644022
+		},
+		{
+			"date": "2026-07-29",
+			"hash": "ab04dd191386e786c910837438b5870be7b6e9bb",
+			"subject": "feat: add positive template content selection",
+			"files": 659,
+			"lines": 83217,
+			"textBytes": 2539212,
+			"tokens": 645497
+		},
+		{
+			"date": "2026-07-29",
+			"hash": "315a5a1be38201b96028ec0dfd95dc5bc9c42723",
+			"subject": "refactor: make positive assembly the only project creator",
+			"files": 658,
+			"lines": 82734,
+			"textBytes": 2524720,
+			"tokens": 641730
+		},
+		{
+			"date": "2026-07-29",
+			"hash": "6f21c2f5cf862665d99c7c4502a46a663b6921b9",
+			"subject": "refactor: retire template prune compatibility",
+			"files": 656,
+			"lines": 81099,
+			"textBytes": 2474025,
+			"tokens": 628342
+		},
+		{
+			"date": "2026-07-29",
+			"hash": "7dbf647f2d3eac4a52c643c4ee60a94012391fba",
+			"subject": "refactor: remove legacy prune terminology",
+			"files": 654,
+			"lines": 80993,
+			"textBytes": 2470210,
+			"tokens": 627258
+		},
+		{
+			"date": "2026-07-29",
+			"hash": "83612d210d76be5abe5c58c0723689a4b2cf0af0",
+			"subject": "refactor: modularize markdown editor internals",
+			"files": 661,
+			"lines": 81087,
+			"textBytes": 2473461,
+			"tokens": 627969
+		},
+		{
+			"date": "2026-07-29",
+			"hash": "abf60a33c15db9563f9dbae214636dfc7b282814",
+			"subject": "refactor: namespace markdown composite exports",
+			"files": 661,
+			"lines": 81129,
+			"textBytes": 2475410,
+			"tokens": 628395
+		},
+		{
+			"date": "2026-07-29",
+			"hash": "722a81fb287029825f5326c90d26f1360a17727d",
+			"subject": "docs: clarify component API ownership",
+			"files": 661,
+			"lines": 81153,
+			"textBytes": 2474933,
+			"tokens": 628347
+		},
+		{
+			"date": "2026-07-29",
+			"hash": "839828e61e20410c84df669c0af64d0f65546d16",
+			"subject": "docs: name component API patterns semantically",
+			"files": 661,
+			"lines": 81153,
+			"textBytes": 2475034,
+			"tokens": 628352
+		},
+		{
+			"date": "2026-07-29",
+			"hash": "7873a452b416c6c1b48d701aecb7893d6d329001",
+			"subject": "refactor: organize documentation by ownership",
+			"files": 650,
+			"lines": 78776,
+			"textBytes": 2257933,
+			"tokens": 583118
+		},
+		{
+			"date": "2026-07-29",
+			"hash": "e72d4056e65ab48baa7304da4f8e274496ec5cb2",
+			"subject": "docs: organize component conventions by pattern",
+			"files": 658,
+			"lines": 79289,
+			"textBytes": 2270911,
+			"tokens": 585936
+		},
+		{
+			"date": "2026-07-30",
+			"hash": "812190ec1ee08e5d838feb96db9b797cb0ee9a5c",
+			"subject": "Ship production updates",
+			"files": 667,
+			"lines": 78785,
+			"textBytes": 2257378,
+			"tokens": 582412
+		},
+		{
+			"date": "2026-07-30",
+			"hash": "666f8225a1ac12e76bf5d52c14a7d6b77a8c9ab9",
+			"subject": "Ship production updates",
+			"files": 672,
+			"lines": 79408,
+			"textBytes": 2273926,
+			"tokens": 586989
+		},
+		{
+			"date": "2026-07-30",
+			"hash": "f1580f95ed2377ced44326b634186d196d552542",
+			"subject": "Ship production updates",
+			"files": 672,
+			"lines": 79400,
+			"textBytes": 2273484,
+			"tokens": 586880
+		},
+		{
+			"date": "2026-07-30",
+			"hash": "7f7f5de88c9f9e3ec19371c3ea4c1e2158d4a2e2",
+			"subject": "Ship production updates",
+			"files": 684,
+			"lines": 82206,
+			"textBytes": 2354319,
+			"tokens": 607579
+		},
+		{
+			"date": "2026-07-30",
+			"hash": "8aced5ad0e2146470ed31314a88146fa96448649",
+			"subject": "Ship production updates",
+			"files": 685,
+			"lines": 82287,
+			"textBytes": 2357006,
+			"tokens": 608382
+		},
+		{
+			"date": "2026-08-02",
+			"hash": "344e7e0211eb02eb4aa51d71bd86462e8c632e2f",
+			"subject": "Ship production updates",
+			"files": 928,
+			"lines": 108320,
+			"textBytes": 3069338,
+			"tokens": 795279
+		},
+		{
+			"date": "2026-08-02",
+			"hash": "42b2d625f9de1cf23d9cf37e7fc2253956120432",
+			"subject": "Ship production updates",
+			"files": 929,
+			"lines": 108358,
+			"textBytes": 3070607,
+			"tokens": 795588
+		},
+		{
+			"date": "2026-08-02",
+			"hash": "4814b0c546d1b597177a35e2b53e497a8ed1cb5f",
+			"subject": "fix: cap marketing header links",
+			"files": 929,
+			"lines": 108363,
+			"textBytes": 3070731,
+			"tokens": 795624
+		},
+		{
+			"date": "2026-08-02",
+			"hash": "4ff3707946438b177729e3ee76459ae3c96d4820",
+			"subject": "Ship production updates",
+			"files": 929,
+			"lines": 108434,
+			"textBytes": 3072907,
+			"tokens": 796132
+		},
+		{
+			"date": "2026-08-02",
+			"hash": "9850fd71f7ddc22e778fb9a431838ccd1537d455",
+			"subject": "style: compact dashboard shell",
+			"files": 929,
+			"lines": 108438,
+			"textBytes": 3073222,
+			"tokens": 796208
+		},
+		{
+			"date": "2026-08-02",
+			"hash": "e35ed9753af879bd739e24a92ea0d5a5df745253",
+			"subject": "style: compact dashboard navigation",
+			"files": 929,
+			"lines": 108447,
+			"textBytes": 3073733,
+			"tokens": 796357
+		},
+		{
+			"date": "2026-08-02",
+			"hash": "a4d4da9ea2e5ce7f1345626f97439eab13abf6ea",
+			"subject": "fix: avoid empty sidebar accordions",
+			"files": 929,
+			"lines": 108460,
+			"textBytes": 3074293,
+			"tokens": 796491
+		},
+		{
+			"date": "2026-08-02",
+			"hash": "3c9d5e24ceaff5256a005888fc49b71c553c54c1",
+			"subject": "style: align sidebar disclosure action",
+			"files": 929,
+			"lines": 108461,
+			"textBytes": 3074358,
+			"tokens": 796512
+		},
+		{
+			"date": "2026-08-02",
+			"hash": "80f7310c15cdd82e8a0bf4447f2c95a3c9fb06aa",
+			"subject": "fix: constrain collapsed sidebar track",
+			"files": 929,
+			"lines": 108462,
+			"textBytes": 3074456,
+			"tokens": 796550
+		},
+		{
+			"date": "2026-08-02",
+			"hash": "cf20f081edca68b5c18942e5255f9e4f3874d238",
+			"subject": "fix: scale compact organization avatar",
+			"files": 929,
+			"lines": 108467,
+			"textBytes": 3074762,
+			"tokens": 796640
+		},
+		{
+			"date": "2026-08-02",
+			"hash": "f66c88bfc2d167b525f93274a1bc268bc4638b18",
+			"subject": "style: refine compact organization avatar",
+			"files": 929,
+			"lines": 108470,
+			"textBytes": 3074872,
+			"tokens": 796660
+		},
+		{
+			"date": "2026-08-02",
+			"hash": "7385a5a2eaa36aff9737b2f2daf0b7bcfc39b9e8",
+			"subject": "fix: align compact avatar with nav rows",
+			"files": 929,
+			"lines": 108474,
+			"textBytes": 3074987,
+			"tokens": 796698
+		},
+		{
+			"date": "2026-08-02",
+			"hash": "a687886e4809c0bdfc2f1f29b6c5ff4ec1ee5851",
+			"subject": "style: cap compact organization avatar",
+			"files": 929,
+			"lines": 108474,
+			"textBytes": 3075070,
+			"tokens": 796743
+		},
+		{
+			"date": "2026-08-02",
+			"hash": "64b5aa38cdb66d7f93231d1d811db8915123f19e",
+			"subject": "fix: show logo in open compact sidebar",
+			"files": 929,
+			"lines": 108475,
+			"textBytes": 3075133,
+			"tokens": 796762
+		},
+		{
+			"date": "2026-08-02",
+			"hash": "cfd4d13602b73f4bbf6f8f9b03dd3b47cca6f4b5",
+			"subject": "fix: restore assistant composer surface",
+			"files": 929,
+			"lines": 108477,
+			"textBytes": 3075198,
+			"tokens": 796784
+		},
+		{
+			"date": "2026-08-02",
+			"hash": "698016c1767d852229650f4cd153e681b797d943",
+			"subject": "Ship production updates",
+			"files": 931,
+			"lines": 108791,
+			"textBytes": 3084360,
+			"tokens": 799111
+		},
+		{
+			"date": "2026-08-02",
+			"hash": "67e4031a588263a3f521ec90989c32fc49541b01",
+			"subject": "feat: bundle Averlo Codex plugin",
+			"files": 983,
+			"lines": 112874,
+			"textBytes": 3231997,
+			"tokens": 834174
+		},
+		{
+			"date": "2026-08-02",
+			"hash": "d3bc7eb94db21054278f6a8a194867c2255296fe",
+			"subject": "fix: clear plugin and build warnings",
+			"files": 984,
+			"lines": 112915,
+			"textBytes": 3233244,
+			"tokens": 834487
+		},
+		{
+			"date": "2026-08-02",
+			"hash": "9cc78bb11f3bcb2bfdece880fa8f2238c7447226",
+			"subject": "Ship production updates",
+			"files": 995,
+			"lines": 114072,
+			"textBytes": 3275845,
+			"tokens": 846227
+		},
+		{
+			"date": "2026-08-02",
+			"hash": "308df3a26ad03403ebed9524228830adace59f86",
+			"subject": "Ship production updates",
+			"files": 995,
+			"lines": 114083,
+			"textBytes": 3276355,
+			"tokens": 846367
+		},
+		{
+			"date": "2026-08-06",
+			"hash": "6a3ebd6ac6c59cc5208a6ae7d8c408dcf18468dd",
+			"subject": "Ship production updates",
+			"files": 1005,
+			"lines": 113472,
+			"textBytes": 3275326,
+			"tokens": 844557
+		},
+		{
+			"date": "2026-08-06",
+			"hash": "11e44ceb45e5787d5dec5fe62cca4933e5d3a60b",
+			"subject": "Ship production updates",
+			"files": 1005,
+			"lines": 113472,
+			"textBytes": 3275529,
+			"tokens": 844586
+		},
+		{
+			"date": "2026-08-06",
+			"hash": "5871b8ec46ed0095e9dd0469016b39ddc49a4e57",
+			"subject": "fix(template): verify profile-owned surfaces",
+			"files": 1005,
+			"lines": 113504,
+			"textBytes": 3276880,
+			"tokens": 844878
+		},
+		{
+			"date": "2026-08-07",
+			"hash": "7dfe099ca51315b0a7ddace56cde61e034e96f7b",
+			"subject": "feat: harden scroll performance benchmarking",
+			"files": 1007,
+			"lines": 114166,
+			"textBytes": 3299543,
+			"tokens": 850536
+		},
+		{
+			"date": "2026-08-08",
+			"hash": "66c37f4dbc59de8644d600e69d79b7610921db5d",
+			"subject": "Ship production updates",
+			"files": 1007,
+			"lines": 114049,
+			"textBytes": 3292837,
+			"tokens": 849027
+		},
+		{
+			"date": "2026-08-08",
+			"hash": "341d1b46538a5c25bc000e179d247d112795cf93",
+			"subject": "Ship production updates",
+			"files": 1011,
+			"lines": 113844,
+			"textBytes": 3287783,
+			"tokens": 847690
+		},
+		{
+			"date": "2026-08-12",
+			"hash": "e3360f052f33523221dc881581534927bc89a0a7",
+			"subject": "feat: add create-averlo initializer",
+			"files": 1026,
+			"lines": 115148,
+			"textBytes": 3324747,
+			"tokens": 857263
+		},
+		{
+			"date": "2026-08-12",
+			"hash": "5588de098ab813b83336b3a8f25b3255f90f906c",
+			"subject": "feat: add Averlo project workflow skills",
+			"files": 1032,
+			"lines": 115766,
+			"textBytes": 3345943,
+			"tokens": 862542
+		},
+		{
+			"date": "2026-08-12",
+			"hash": "1e2066c50c6568a06d1382cf5b0fa347dae57467",
+			"subject": "fix: namespace Storybook backport skill",
+			"files": 1032,
+			"lines": 115766,
+			"textBytes": 3345967,
+			"tokens": 862548
+		},
+		{
+			"date": "2026-08-12",
+			"hash": "88db1ec1665dcf3eafab268934ef46f79417edde",
+			"subject": "fix: validate Storybook backport metadata",
+			"files": 1032,
+			"lines": 115766,
+			"textBytes": 3345970,
+			"tokens": 862551
+		},
+		{
+			"date": "2026-08-12",
+			"hash": "2333e3c389d48ce97cee77a25cdb324cae0e8790",
+			"subject": "feat: prefix Storybook backport skill identity",
+			"files": 1032,
+			"lines": 115766,
+			"textBytes": 3346006,
+			"tokens": 862563
+		},
+		{
+			"date": "2026-08-12",
+			"hash": "143550bdb8b1dc8ad020fa155310e9ea75c508a6",
+			"subject": "chore: refresh Averlo plugin cache",
+			"files": 1032,
+			"lines": 115768,
+			"textBytes": 3346095,
+			"tokens": 862544
+		}
+	],
+	"version": 1
+}

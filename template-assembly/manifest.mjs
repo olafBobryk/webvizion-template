@@ -20,6 +20,7 @@ export const assemblyTemplateOnlyPaths = new Set([
 	"docs/benchmarks/design-system-agent-benchmark-runs.md",
 	"scripts/create-template-profile.mjs",
 	"scripts/dev-thin.mjs",
+	"scripts/generate-repository-footprint.mjs",
 	"scripts/generate-template-assembly-inventory.mjs",
 	"scripts/measure-storybook-performance.mjs",
 	"scripts/review-thin-start-api.mjs",
@@ -27,6 +28,7 @@ export const assemblyTemplateOnlyPaths = new Set([
 	"scripts/verify/verify-template-profiles.mjs",
 	"scripts/verify/verify-create-averlo.mjs",
 	".github/workflows/publish-create-averlo.yml",
+	".github/workflows/update-repository-footprint.yml",
 ]);
 
 export const assemblyTemplateOnlyRoots = [
@@ -58,6 +60,7 @@ export const assemblyCoreRoots = [
 export const assemblyTemplateOnlyScripts = new Set([
 	"create:project",
 	"dev:thin",
+	"footprint:generate",
 	"review:thin-start-api",
 	"measure:storybook-performance",
 	"generate:design-system-agent-benchmark-report",
@@ -67,7 +70,7 @@ export const assemblyTemplateOnlyScripts = new Set([
 	"verify:create-averlo",
 ]);
 
-export const assemblyTemplateOnlyDevDependencies = new Set([]);
+export const assemblyTemplateOnlyDevDependencies = new Set(["js-tiktoken"]);
 
 export const assemblyCoreScripts = new Set([
 	"dev",

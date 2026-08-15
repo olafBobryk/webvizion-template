@@ -4,7 +4,20 @@ import { Text } from "@/components/ui/primitives/Text";
 import { InternalPage, InternalPageHeader } from "../_components/InternalPage";
 
 const playgroundGroups = [
-	{
+		{
+		id: "repository",
+		title: "Repository",
+		description: "Local tools for inspecting this template's own history.",
+		links: [
+			{
+				href: "/internal/playground/footprint",
+				title: "Repository Footprint",
+				description:
+					"Track authored text lines, bytes, and o200k_base tokens across repository history.",
+			},
+		],
+		},
+		{
 		id: "motion",
 		title: "Motion",
 		description: "Loose prototypes for reveal, scroll, and choreography ideas.",
