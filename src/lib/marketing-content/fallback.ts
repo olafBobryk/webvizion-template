@@ -73,6 +73,13 @@ export const fallbackHomePage: HomeMarketingPageDocument = {
 					surfaceIds: ["assembly"],
 				},
 				{
+					id: "skills-pack",
+					title: "Averlo skills pack",
+					description:
+						"Use focused workflows for visual parity, static composition, motion composition, and complete page composition.",
+					surfaceIds: ["skillsPack"],
+				},
+				{
 					id: "thin-start",
 					title: "Thin start",
 					description:

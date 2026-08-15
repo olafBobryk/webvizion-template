@@ -47,6 +47,7 @@ const allTemplateServiceSurfaceIds = [
 	"demoPrimitives",
 	"fullStart",
 	"assembly",
+	"skillsPack",
 	"thinStart",
 	"repositoryFootprint",
 ] as const;

@@ -12,11 +12,11 @@ import type {
 type RenderedSurface = {
 	height: number;
 	name: string;
-	src: string;
+	src?: string;
 	width: number;
 };
 
-const renderedSurfaces = {
+const renderedSurfaces: Record<TemplateServiceSurfaceId, RenderedSurface> = {
 	demo: {
 		name: "Demo Index",
 		src: "/template-services/demo.png",
@@ -34,6 +34,11 @@ const renderedSurfaces = {
 		src: "/template-services/assembly.png",
 		width: 920,
 		height: 1200,
+	},
+	skillsPack: {
+		name: "Averlo skills pack",
+		width: 920,
+		height: 900,
 	},
 	thinStart: {
 		name: "Thin start homepage hero",
@@ -65,6 +70,10 @@ const previewCollageHostClassName =
 	"pointer-events-none absolute inset-0 z-10 overflow-x-clip overflow-y-visible";
 function RealSurface({ surfaceId }: { surfaceId: TemplateServiceSurfaceId }) {
 	const surface = renderedSurfaces[surfaceId];
+	if (surfaceId === "skillsPack") {
+		return <SkillsPackSurface />;
+	}
+	if (!surface.src) return null;
 
 	return (
 		<div
@@ -80,6 +89,39 @@ function RealSurface({ surfaceId }: { surfaceId: TemplateServiceSurfaceId }) {
 				src={surface.src}
 				width={surface.width}
 			/>
+		</div>
+	);
+}
+
+function SkillsPackSurface() {
+	return (
+		<div
+			className="grid aspect-[46/45] gap-4 rounded-lg bg-background p-4 ring-1 ring-foreground/10"
+			data-surface="Averlo skills pack"
+		>
+			<div className="grid gap-1">
+				<Text as="p" variant="caption" tone="muted" interactive={false}>
+					Averlo
+				</Text>
+				<Text as="p" variant="headingXs" interactive={false}>
+					Skills pack
+				</Text>
+			</div>
+			<div className="grid content-start gap-2 border-t border-foreground/10 pt-3">
+				{[
+					"Visual parity",
+					"Static composition",
+					"Motion composition",
+					"Compose",
+				].map((skill) => (
+					<div className="flex items-center gap-2" key={skill}>
+						<span className="size-1.5 rounded-full bg-primary" />
+						<Text as="span" variant="caption" interactive={false}>
+							{skill}
+						</Text>
+					</div>
+				))}
+			</div>
 		</div>
 	);
 }
@@ -244,6 +286,11 @@ function PreviewCollageGrid({
 						/>
 					</div>
 					<div className="mt-28 grid gap-y-[8rem]">
+						<SurfaceGroup
+							services={services}
+							skeleton={skeleton}
+							surfaceIds={["skillsPack"]}
+						/>
 						<SurfaceGroup
 							services={services}
 							skeleton={skeleton}
