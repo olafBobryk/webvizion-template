@@ -1,6 +1,6 @@
 {
 	"encoding": "o200k_base",
-	"head": "a11a1b3b6eb765796d7dfd8524a0e4dcdc735c06",
+	"head": "6c1f76cea9fc11ad2edc569eff9e3e412ccfef9f",
 	"scope": "all-authored-text",
 	"snapshots": [
 		{
@@ -2005,6 +2005,24 @@
 			"date": "2026-08-16",
 			"hash": "a11a1b3b6eb765796d7dfd8524a0e4dcdc735c06",
 			"subject": "Ship production updates",
+			"files": 1045,
+			"lines": 112216,
+			"textBytes": 3287190,
+			"tokens": 842329
+		},
+		{
+			"date": "2026-08-16",
+			"hash": "f1a7f778ce1e4a55e23aa28fd59a45b549e76d5a",
+			"subject": "fix(ci): synchronize dependency lockfile",
+			"files": 1045,
+			"lines": 112216,
+			"textBytes": 3287190,
+			"tokens": 842329
+		},
+		{
+			"date": "2026-08-16",
+			"hash": "6c1f76cea9fc11ad2edc569eff9e3e412ccfef9f",
+			"subject": "fix(ci): restore npm 10 peer lock entry",
 			"files": 1045,
 			"lines": 112216,
 			"textBytes": 3287190,
