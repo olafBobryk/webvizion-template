@@ -1,6 +1,6 @@
 {
 	"encoding": "o200k_base",
-	"head": "a8f82c045c74c45d98055d89a31ac7cbbefc75bf",
+	"head": "d53bbd1827d5564242331e395f50306a74861cca",
 	"scope": "all-authored-text",
 	"snapshots": [
 		{
@@ -1973,6 +1973,33 @@
 			"lines": 110284,
 			"textBytes": 3215039,
 			"tokens": 825665
+		},
+		{
+			"date": "2026-08-15",
+			"hash": "2badfac2c624d77d5d42131656b20258e2a830cf",
+			"subject": "feat: consolidate template workflows and product surfaces",
+			"files": 1021,
+			"lines": 109709,
+			"textBytes": 3207970,
+			"tokens": 822468
+		},
+		{
+			"date": "2026-08-16",
+			"hash": "8d587f6b21d6532917ebb4f23c5be8c0114afeb1",
+			"subject": "Ship production updates",
+			"files": 1045,
+			"lines": 112160,
+			"textBytes": 3285702,
+			"tokens": 841897
+		},
+		{
+			"date": "2026-08-16",
+			"hash": "d53bbd1827d5564242331e395f50306a74861cca",
+			"subject": "feat: add skills pack to hero collage",
+			"files": 1045,
+			"lines": 112216,
+			"textBytes": 3287190,
+			"tokens": 842329
 		}
 	],
 	"version": 1
