@@ -11,6 +11,8 @@ Target: <route, selector, or Storybook story>
 Target identity: <current repository revision plus dirty-worktree identity>
 Effective scope / expansion: <owners inspected and why it changed>
 Source authority: <immutable Figma/export, pinned renderer, or none>
+Figma execution identity: <connector plus whoami result, or not applicable>
+Isolated source working copy: <Agent Space page ID and cloned focus-node ID, or not applicable>
 Source decomposition: <explicit nodes or metadata-derived bounds and matrix order>
 Product sources: <PRODUCT.md#product-sources or not applicable>
 Declared terminal condition: <zero changed RGB pixels or explicit alternative>

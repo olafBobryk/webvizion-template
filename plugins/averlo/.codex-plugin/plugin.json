@@ -1,6 +1,6 @@
 {
 	"name": "averlo",
-	"version": "0.1.0+codex.20260816152009",
+	"version": "0.1.0+codex.20260816153940",
 	"description": "Repository workflows for building, reviewing, and backporting reusable Averlo Next application patterns.",
 	"author": {
 		"name": "Olaf Bobryk",

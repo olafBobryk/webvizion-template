@@ -26,26 +26,48 @@ comparator owns only captures, pixel measurements, and artifacts.
    requested section, page, shell, or site. Never create child goals, a
    conversion state machine, or a goal ledger. The ordered matrix, receipt, and
    goal-turn history are sufficient evidence and working context.
-3. Invoke `$averlo:visual-parity` in its `frame` phase. Default every
+3. When Source is a Figma design, resolve the execution identity and isolate the
+   designer's page before calling `get_design_context`, downloading assets, or
+   framing parity:
+   - Default to the installed Figma app connector
+     (`mcp__codex_apps__figma_*`). Call its `whoami` and require
+     `webvizionagency@gmail.com`. Do not default to the separately authenticated
+     generic Figma MCP (`mcp__figma__*`). Use another identity only when the
+     caller explicitly selects it.
+   - If the app connector is unavailable or reports another identity, leave the
+     goal active and report a connector-identity mismatch. Do not ask a designer
+     to change file permissions until the required connector has been checked.
+   - Load the Figma `figma-use` and `figma-design-to-code` skills. Through the
+     app connector, locate the supplied node and its containing `PageNode`,
+     preserve the node's ancestry-index path, and clone that whole page once.
+     Name the clone `Agent Space — <source page> — <target>` and use the ancestry
+     path to resolve the equivalent node in the clone. Verify its type, name,
+     and bounds, then record the connector identity, cloned page ID, and cloned
+     focus-node ID in the packet.
+   - Reuse that exact verified Agent Space page on goal continuations; never
+     create one clone per turn. Never mutate the original page. All subsequent
+     context reads, screenshots, and asset exports use the cloned focus node,
+     while the original URL and node remain the product's visual authority.
+4. Invoke `$averlo:visual-parity` in its `frame` phase. Default every
    source-backed case to literal zero changed RGB pixels unless the caller
    explicitly declared another terminal condition. A zero-diff objective
    cannot use an intentional nonzero exception.
-4. When a persistent external source informs the product, add or update a
+5. When a persistent external source informs the product, add or update a
    `## Product sources` table in `PRODUCT.md` with its canonical source,
    authority, scope, and supplied material. Record provenance, never conversion
    progress, implementation status, or a second component catalogue.
-5. Inspect the complete declared source focus and the target's current tokens,
+6. Inspect the complete declared source focus and the target's current tokens,
    documented owners, variants, and consumers before implementing an individual
    scope. Use the resulting role census as working analysis, not a permanent
    registry.
-6. Preflight every required font and constituent asset. A Figma image or SVG
+7. Preflight every required font and constituent asset. A Figma image or SVG
    asset is usable only when its exact bytes can be retained; a reference
    screenshot is not a constituent asset. When a required font file or other
    source asset is unavailable from Figma, the repository, or a user-supplied
    lawful source, stop before implementation and request it. Leave the goal
    active. The next goal continuation re-invokes this skill from its objective;
    do not silently substitute a font, rasterize text, or weaken the reference.
-7. Invoke `$averlo:repository-workflows` when implementation begins. Select the
+8. Invoke `$averlo:repository-workflows` when implementation begins. Select the
    applicable composition, interaction, route, marketing/shell, catalogue, and
    content concerns from the actual change unit. Do not bypass the router with
    a parallel component-selection workflow.
