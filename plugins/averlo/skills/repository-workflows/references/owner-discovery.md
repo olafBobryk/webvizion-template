@@ -23,6 +23,14 @@ as proof of public support. External consumers use Storybook-supported owners or
 curated family facades. Internal owners may use direct modules when dependency
 direction or cycle avoidance requires it.
 
+Before extending a public variant axis, inspect its complete Storybook contract
+and search current consumers. Compare the proposed role's observable behavior,
+semantic purpose, and full visual signature against every supported value. Reuse
+an equivalent value instead of adding a product-, section-, route-, brand-, or
+source-named alias. When a genuinely new shared value is required, update its
+owner contract, exhaustive teaching evidence, and affected consumers together
+so the next task discovers the current system from its canonical owner.
+
 Keep shared behavior with the narrowest coherent owner. Compose existing owners
 before adding custom UI. Add a wrapper only when it owns distinct reusable
 behavior rather than renaming an owner or forwarding its API. Keep client
@@ -39,6 +47,9 @@ server-safe exports free of client-only dependency paths.
 - Do not invent an API when the selected owner lacks the required contract.
   Report the missing boundary and obtain explicit scope to extend or add an
   owner.
+- Do not add two public variants with equivalent behavior and visual signatures
+  under contextual names, or hide a reusable typography role in caller-owned
+  classes.
 - Preserve public names during behavior-neutral moves. Treat a rename as a
   separate migration with consumer, profile, catalogue, and verifier updates.
 - Keep additive class extensions from removing required semantics, focus,

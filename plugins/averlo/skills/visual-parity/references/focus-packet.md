@@ -9,11 +9,13 @@ Focus: section | page | shell | site
 Target: <route, selector, or Storybook story>
 Effective scope / expansion: <owners inspected and why it changed>
 Source authority: <immutable Figma/export, pinned renderer, or none>
+Product sources: <PRODUCT.md#product-sources or not applicable>
 Matrix: <.codex/visual-parity/<task>/matrix.json>
 Assessment: <.codex/visual-parity/<task>/assessment/summary.json>
 Case verdicts: <case id → exact | accepted-intentional | residual | failed | incomparable | system-fit>
 Intentional residuals: <none | declared differences and owner>
-Responsive system-fit: <width → finding>
+Native implementation: <source/DOM evidence and flattened-reference check>
+Responsive evidence: <width → system-fit finding and artifact; never borrowed parity>
 Approval: pending | approved | bypassed
 ```
 

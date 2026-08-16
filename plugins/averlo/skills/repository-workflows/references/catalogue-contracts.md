@@ -8,6 +8,12 @@ consume the same contract for documentation and executable guarantees.
 Storybook owns supported imports, selection guidance, variants, compounds,
 exclusions, examples, and observable behavior.
 
+When a supported variant axis changes, expose every supported value in the
+lowest owner's teaching story or generated catalogue axis. Representative
+examples alone are not sufficient evidence for an extended axis. Give each
+value source-neutral selection guidance so another task can distinguish reuse
+from a genuinely new role without consulting incidental consumers.
+
 Keep implementation topology in the nearest AGENTS.md. Do not repeat consumer
 contracts in higher-level stories, agent files, generated manifests, or a
 central registry.
@@ -34,6 +40,8 @@ placeholder APIs.
 - Do not import stories or catalogue contracts into product runtime code.
 - Do not remove prior demonstration coverage until its useful variants, states,
   compositions, and failures exist at the correct lowest owners.
+- Do not document a public variant only at the product or section that first
+  requested it.
 
 ## Repository context
 

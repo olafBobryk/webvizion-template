@@ -21,7 +21,13 @@ edit the product.
    ignored `.codex/visual-parity/<task>/matrix.json`. Add one case per named
    route/section/state/viewport. Each side is either an existing PNG (`image`)
    or a live URL with an optional crop `selector`.
-4. Capture and compare every case:
+4. Prove that Target is native product implementation before accepting a
+   comparison: inspect its route source and rendered DOM for real text,
+   controls, layout, and constituent media. A source/reference bitmap that
+   spans the compared surface may appear only on the Source side. If Target
+   renders the reference, a full-frame export, or a reconstructed screenshot as
+   product UI, mark the case `failed` regardless of its pixel score.
+5. Capture and compare every case:
 
    ```bash
    node <visual-parity-skill>/scripts/assess.mjs \
@@ -34,7 +40,7 @@ edit the product.
    `overlay.png`, `diff.png`, `side-by-side.png`, per-case metrics, and one
    `summary.json`. Use `--case <id>` for the next iteration; use
    `--require-exact` only for a deliberate exact gate.
-5. Start with the lowest `matchRating`, inspect its overlay and heatmap, correct
+6. Start with the lowest `matchRating`, inspect its overlay and heatmap, correct
    Target, and rerun that one case. A score is a prioritization signal, never a
    pass threshold: `exact` requires zero changed RGB pixels. Dimension or alpha
    mismatch is `incomparable`; repair the matrix rather than cropping or masking
@@ -52,6 +58,9 @@ edit the product.
 - An exact claim applies only to its matrix case: its static route/selector,
   state, viewport, DPR, fonts, and motion-off capture. Other widths receive a
   system-fit finding, not borrowed pixel parity.
+- A pixel comparator cannot prove implementation independence. `exact` is
+  invalid until the receipt names the native source/DOM evidence and confirms
+  that no flattened reference image owns the compared surface.
 
 ## Hand off
 
