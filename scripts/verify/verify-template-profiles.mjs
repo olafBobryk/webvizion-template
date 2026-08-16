@@ -431,6 +431,20 @@ async function assertGeneratedDocumentation(outputRoot, profileCase) {
 			`${profileCase.profileId}/${profileCase.content} generated PRODUCT.md does not preserve its setup facts and unfinished product definition.`,
 		);
 	}
+
+	const documentation = await fs.readFile(
+		path.join(outputRoot, "docs/README.md"),
+		"utf8",
+	);
+	if (
+		!documentation.includes(
+			"`composition/` contains committed composition records and promoted visual evidence",
+		)
+	) {
+		throw new Error(
+			`${profileCase.profileId}/${profileCase.content} generated docs/README.md does not describe durable composition records.`,
+		);
+	}
 }
 
 async function assertCanonicalAgentContract(templateRoot) {

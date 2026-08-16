@@ -6,9 +6,9 @@ description: Run fast, reproducible source-versus-target static visual assessmen
 # Averlo · Visual Parity
 
 Use one matrix to capture Source (the authority) and Target (the implementation).
-This skill owns case-level interpretation of the comparator's mechanical output
-for the owning workflow, but it does not edit the product or decide when the
-Static Composition goal is complete.
+This skill owns reproducible capture and measurement evidence. It does not edit
+the product, assign composition status, or decide when the Static Composition
+goal is complete.
 
 ## Frame the evidence
 
@@ -21,8 +21,9 @@ Static Composition goal is complete.
 3. Copy [the matrix example](references/matrix.example.json) into the task's
    ignored `.codex/visual-parity/<task>/matrix.json`. Add one case per named
    route, section, state, and source-backed viewport in the order supplied by
-   the owning workflow. Each side is either an existing PNG (`image`) or a live
-   URL with an optional crop `selector`. An image endpoint may specify
+   Static Composition. Use the composition record's stable scope ID as the case
+   ID. Each side is either an existing PNG (`image`) or a live URL with an
+   optional crop `selector`. An image endpoint may specify
    `crop: { x, y, width, height }` to retain the original page background around
    a nested Figma scope.
 4. Record the current Target route, selector, capture conditions, and repository
@@ -58,40 +59,32 @@ Static Composition goal is complete.
    repaired or the owning goal must eventually block. Never reinterpret it as
    completion or mask away Target-owned geometry.
 
-## Interpret for the workflow
+## Preserve the evidence boundary
 
-- With Source, record `exact` only when the case is comparable,
-  `changedPixels` is zero, and native implementation evidence is current.
-  Record a nonzero case as `unresolved`, not as a weaker match class.
-- `accepted-intentional` is available only when an explicitly nonzero workflow
-  declared and approved the exception before capture, the difference is outside
-  Target ownership, and the native route context shows it. It is unavailable
-  whenever the declared objective is zero-diff.
-- Use `incomparable` for a technical comparison incompatibility and
-  `native-invalid` for flattened or otherwise non-native Target evidence.
-  Neither can complete a source-backed case.
-- Without Source, use Target's deterministic capture only as a `system-fit`
-  baseline. Review named widths for structure, content continuity,
-  accessibility, focus behavior, and visual continuity; never invent a pixel
-  parity score against it.
-- An exact claim applies only to its matrix case: static route/selector, state,
-  viewport, DPR, fonts, and motion-off capture. Other widths receive a
-  system-fit finding, not borrowed pixel parity.
-- A pixel comparator cannot prove implementation independence. `exact` is
-  invalid until the receipt names native source/DOM evidence and confirms that
-  no flattened reference image owns the compared surface.
+- Report raw comparable state, dimensions, pixel counts, ratios, channel
+  deltas, artifact paths, capture conditions, and current native evidence.
+  Never translate those values into a composition row status.
+- Without Source, capture Target deterministically for responsive review and
+  record the named viewport and findings. Do not invent a pixel parity score.
+- A source-backed measurement applies only to its matrix case: route or
+  selector, state, viewport, DPR, fonts, and motion-off capture. Other widths
+  remain Target-only responsive evidence.
+- A pixel comparator cannot prove implementation independence. Preserve current
+  source and DOM evidence and the flattened-reference check so Static
+  Composition can interpret the measurement.
+- `comparable: false` and a native-invalid Target are evidence defects, not
+  alternate verdicts. Preserve the technical reason for the owning workflow.
 
 ## Hand off
 
-Run `frame` before static work to save authority, decomposition, matrix order,
-and capture conditions. Run `verify` after the current Target capture and
-separate raw measurements from workflow results in
+Run `frame` before static work to save authority, composition-record identity,
+matrix order, and capture conditions. Run `verify` after the current Target
+capture and write measurements and evidence to
 [the shared focus packet](references/focus-packet.md). A `frame` receipt, an
-assessment from a prior Target revision, or a receipt missing native,
-responsive, or repository-check evidence cannot satisfy Static Composition's
-terminal condition.
+assessment from a prior Target revision, or a receipt missing native evidence
+cannot support a current composition-record update.
 
-Static Composition owns case ordering, correction turns, the goal terminal
-condition, and the approval pause. Motion Composition reuses a current verified
-packet only for motion-off and settled static endpoints, never intermediate
-frames.
+Static Composition owns decomposition, case ordering, measurement
+interpretation, durable status, correction turns, the goal terminal condition,
+and the approval pause. Motion Composition reuses a current verified packet only
+for motion-off and settled static endpoints, never intermediate frames.

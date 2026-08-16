@@ -490,6 +490,7 @@ async function writeProjectDocs(
 			"",
 			"- [PRODUCT.md](../PRODUCT.md) contains this project's product purpose, users, and outcomes.",
 			"- `operations/` contains inherited Averlo external-service runbooks when installed.",
+			"- `composition/` contains committed composition records and promoted visual evidence when a source-backed composition exists.",
 			"- Add project documentation here only when the project has real supporting material to preserve.",
 			"",
 		].join("\n"),

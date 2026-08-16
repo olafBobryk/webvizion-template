@@ -10,10 +10,11 @@ Focus: section | page | shell | site
 Target: <route, selector, or Storybook story>
 Target identity: <current repository revision plus dirty-worktree identity>
 Effective scope / expansion: <owners inspected and why it changed>
+Composition record: <docs/composition/<focus-slug>.md>
+Active scope: <composition-record scope ID>
 Source authority: <immutable Figma/export, pinned renderer, or none>
 Figma execution identity: <connector plus whoami result, or not applicable>
 Isolated source working copy: <Agent Space page ID and cloned focus-node ID, or not applicable>
-Source decomposition: <explicit nodes or metadata-derived bounds and matrix order>
 Product sources: <PRODUCT.md#product-sources or not applicable>
 Declared terminal condition: <zero changed RGB pixels or explicit alternative>
 Matrix: <.codex/visual-parity/<task>/matrix.json>
@@ -24,11 +25,9 @@ Mechanical assessment:
 - Measurements: <case id → comparable, dimensions, total/changed/threshold-changed pixels, ratios, channel deltas>
 - Artifacts: <case id → source, target, overlay, heatmap, side-by-side>
 
-Workflow interpretation:
-- Case results: <case id → exact | unresolved | accepted-intentional | incomparable | native-invalid | system-fit>
-- Approved exceptions: <none | declared nonzero differences and owner; forbidden for zero-diff>
+Evidence:
 - Native implementation: <source/DOM evidence and flattened-reference check>
-- Responsive evidence: <width → system-fit finding and artifact; never borrowed parity>
+- Responsive evidence: <width → Target-only finding and artifact; never borrowed parity>
 - Repository checks: <command → result>
 - Human-review artifacts: <current captures and direct review location>
 - Incompletion: <none | acknowledged blocker and best current evidence>
@@ -42,8 +41,9 @@ or motion setting is a new case, not an update to an existing result. A Target
 code change invalidates only the affected prior measurements but always
 invalidates the final full-page measurement.
 
-A terminal receipt must use `Phase: verify`; match its Target identity and
-assessment to the current implementation; and include current native evidence,
-responsive evidence, repository checks, and human-review artifacts. Treat a
-stale `frame` receipt, an absent required block, or mismatched Target identity as
-unresolved even when an older assessment measured zero changed pixels.
+A receipt used to update the composition record must use `Phase: verify`, match
+its Target identity and assessment to the current implementation, and include
+current native evidence. Treat a stale `frame` receipt, an absent required
+block, or mismatched Target identity as unusable even when an older assessment
+measured zero changed pixels. Static Composition owns the durable status and
+completion interpretation.

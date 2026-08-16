@@ -71,6 +71,7 @@ export const assemblyTemplateOnlyScripts = new Set([
 	"verify:storybook-backport",
 	"verify:profiles",
 	"verify:create-averlo",
+	"verify:composition-record",
 ]);
 
 export const assemblyTemplateOnlyDevDependencies = new Set(["js-tiktoken"]);
