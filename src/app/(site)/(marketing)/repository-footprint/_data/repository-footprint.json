@@ -1,6 +1,6 @@
 {
 	"encoding": "o200k_base",
-	"head": "d53bbd1827d5564242331e395f50306a74861cca",
+	"head": "a11a1b3b6eb765796d7dfd8524a0e4dcdc735c06",
 	"scope": "all-authored-text",
 	"snapshots": [
 		{
@@ -1996,6 +1996,15 @@
 			"date": "2026-08-16",
 			"hash": "d53bbd1827d5564242331e395f50306a74861cca",
 			"subject": "feat: add skills pack to hero collage",
+			"files": 1045,
+			"lines": 112216,
+			"textBytes": 3287190,
+			"tokens": 842329
+		},
+		{
+			"date": "2026-08-16",
+			"hash": "a11a1b3b6eb765796d7dfd8524a0e4dcdc735c06",
+			"subject": "Ship production updates",
 			"files": 1045,
 			"lines": 112216,
 			"textBytes": 3287190,
