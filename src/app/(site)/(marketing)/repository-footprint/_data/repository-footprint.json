@@ -1,6 +1,6 @@
 {
 	"encoding": "o200k_base",
-	"head": "d53bbd1827d5564242331e395f50306a74861cca",
+	"head": "28df64897cf24e541d6d026c1a6060774fbe7e65",
 	"scope": "all-authored-text",
 	"snapshots": [
 		{
@@ -2000,6 +2000,24 @@
 			"lines": 112216,
 			"textBytes": 3287190,
 			"tokens": 842329
+		},
+		{
+			"date": "2026-08-16",
+			"hash": "a11a1b3b6eb765796d7dfd8524a0e4dcdc735c06",
+			"subject": "Ship production updates",
+			"files": 1045,
+			"lines": 112216,
+			"textBytes": 3287190,
+			"tokens": 842329
+		},
+		{
+			"date": "2026-08-16",
+			"hash": "28df64897cf24e541d6d026c1a6060774fbe7e65",
+			"subject": "fix: harden static composition workflow",
+			"files": 1046,
+			"lines": 112349,
+			"textBytes": 3295194,
+			"tokens": 843924
 		}
 	],
 	"version": 1
