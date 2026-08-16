@@ -12,12 +12,13 @@ const DEFAULT_THRESHOLD = 16;
 function usage() {
 	return `Usage:
   node assess.mjs --matrix <matrix.json> --out <artifact-directory>
-    [--case <case-id>] [--threshold <0-255>] [--require-exact]
+    [--case <case-id>] [--threshold <0-255>]
 
 The matrix declares one authoritative source and one target per case. An
 endpoint is either { "image": "/absolute-or-relative/file.png" } or
 { "url": "http://…", "selector": "[data-parity-root]" }. URL endpoints are
-captured with Playwright using the case viewport, DPR, theme, and reduced motion.`;
+captured with Playwright using the case viewport, DPR, theme, and reduced motion.
+Image endpoints may include crop: { x, y, width, height }.`;
 }
 
 function parseArgs(argv) {
@@ -29,8 +30,9 @@ function parseArgs(argv) {
 			continue;
 		}
 		if (argument === "--require-exact") {
-			options.requireExact = true;
-			continue;
+			throw new Error(
+				"--require-exact has been retired; interpret measurements in the owning workflow.",
+			);
 		}
 		if (!argument.startsWith("--"))
 			throw new Error(`Unexpected argument: ${argument}`);
@@ -59,7 +61,12 @@ async function loadPlaywright() {
 	const requireFromRepository = createRequire(
 		path.join(process.cwd(), "package.json"),
 	);
-	const modulePath = requireFromRepository.resolve("playwright");
+	let modulePath;
+	try {
+		modulePath = requireFromRepository.resolve("playwright");
+	} catch {
+		modulePath = requireFromRepository.resolve("playwright-core");
+	}
 	const module = await import(pathToFileURL(modulePath).href);
 	const chromium = module.chromium ?? module.default?.chromium;
 	if (!chromium)
@@ -82,6 +89,70 @@ function dataUrl(buffer) {
 	return `data:image/png;base64,${buffer.toString("base64")}`;
 }
 
+function validateCrop(crop, caseId) {
+	if (!crop) return null;
+	for (const key of ["x", "y", "width", "height"]) {
+		if (!Number.isInteger(crop[key]))
+			throw new Error(`${caseId}: image crop.${key} must be an integer.`);
+	}
+	if (crop.x < 0 || crop.y < 0 || crop.width <= 0 || crop.height <= 0)
+		throw new Error(
+			`${caseId}: image crop needs non-negative x/y and positive width/height.`,
+		);
+	return crop;
+}
+
+async function cropImage({ browser, buffer, crop, outputPath, caseId }) {
+	const context = await browser.newContext({
+		viewport: { width: crop.width, height: crop.height },
+	});
+	try {
+		const page = await context.newPage();
+		const croppedDataUrl = await page.evaluate(
+			async ({ sourceUrl, cropValue, caseIdValue }) => {
+				const image = await new Promise((resolve, reject) => {
+					const candidate = new Image();
+					candidate.onload = () => resolve(candidate);
+					candidate.onerror = () => reject(new Error("Unable to decode PNG."));
+					candidate.src = sourceUrl;
+				});
+				if (
+					cropValue.x + cropValue.width > image.naturalWidth ||
+					cropValue.y + cropValue.height > image.naturalHeight
+				) {
+					throw new Error(
+						`${caseIdValue}: image crop exceeds ${image.naturalWidth}x${image.naturalHeight} source bounds.`,
+					);
+				}
+				const canvas = document.createElement("canvas");
+				canvas.width = cropValue.width;
+				canvas.height = cropValue.height;
+				canvas
+					.getContext("2d")
+					.drawImage(
+						image,
+						cropValue.x,
+						cropValue.y,
+						cropValue.width,
+						cropValue.height,
+						0,
+						0,
+						cropValue.width,
+						cropValue.height,
+					);
+				return canvas.toDataURL("image/png");
+			},
+			{ sourceUrl: dataUrl(buffer), cropValue: crop, caseIdValue: caseId },
+		);
+		await fs.writeFile(
+			outputPath,
+			Buffer.from(croppedDataUrl.split(",", 2)[1], "base64"),
+		);
+	} finally {
+		await context.close();
+	}
+}
+
 async function captureEndpoint({
 	browser,
 	endpoint,
@@ -91,13 +162,28 @@ async function captureEndpoint({
 }) {
 	if (endpoint.image) {
 		const imagePath = resolveMatrixPath(matrixPath, endpoint.image);
-		await assertPng(imagePath);
-		await fs.copyFile(imagePath, outputPath);
-		return { kind: "image", value: imagePath };
+		const buffer = await assertPng(imagePath);
+		const crop = validateCrop(endpoint.crop, caseDefinition.id);
+		if (crop) {
+			await cropImage({
+				browser,
+				buffer,
+				crop,
+				outputPath,
+				caseId: caseDefinition.id,
+			});
+		} else {
+			await fs.copyFile(imagePath, outputPath);
+		}
+		return { kind: "image", value: imagePath, ...(crop ? { crop } : {}) };
 	}
 
 	if (!endpoint.url)
 		throw new Error("Each endpoint needs either image or url.");
+	if (endpoint.crop)
+		throw new Error(
+			`${caseDefinition.id}: crop is supported only for image endpoints; use selector for URL endpoints.`,
+		);
 	const viewport = caseDefinition.viewport;
 	if (
 		!Number.isInteger(viewport?.width) ||
@@ -266,9 +352,6 @@ async function comparePair({
 					metrics: {
 						changedPixels,
 						changedPixelRatio: changedPixels / totalPixels,
-						matchRating: Number(
-							(100 * (1 - changedPixels / totalPixels)).toFixed(4),
-						),
 						meanAbsoluteChannelDelta: sumAbsoluteDelta / (totalPixels * 3),
 						maxChannelDelta,
 						threshold: thresholdValue,
@@ -287,23 +370,22 @@ async function comparePair({
 			},
 		);
 		const output = {
-			diff: path.join(outputRoot, "diff.png"),
+			source: sourcePath,
+			target: targetPath,
+		};
+		if (!comparison.comparable) return { ...comparison, output };
+		Object.assign(output, {
+			heatmap: path.join(outputRoot, "heatmap.png"),
 			overlay: path.join(outputRoot, "overlay.png"),
 			sideBySide: path.join(outputRoot, "side-by-side.png"),
-		};
-		if (!comparison.comparable)
-			return { verdict: "incomparable", ...comparison, output };
+		});
 		await page.setViewportSize(comparison.outputDimensions);
 		await Promise.all([
-			page.locator("#diff").screenshot({ path: output.diff }),
+			page.locator("#diff").screenshot({ path: output.heatmap }),
 			page.locator("#overlay").screenshot({ path: output.overlay }),
 			page.locator("#side").screenshot({ path: output.sideBySide }),
 		]);
-		return {
-			verdict: comparison.metrics.changedPixels === 0 ? "exact" : "residual",
-			...comparison,
-			output,
-		};
+		return { ...comparison, output };
 	} finally {
 		await context.close();
 	}
@@ -379,7 +461,8 @@ try {
 		results.push(packet);
 	}
 	const summary = {
-		schemaVersion: 1,
+		schemaVersion: 2,
+		measuredAt: new Date().toISOString(),
 		matrix: matrixPath,
 		playwrightModulePath: modulePath,
 		threshold,
@@ -390,18 +473,11 @@ try {
 		`${JSON.stringify(summary, null, 2)}\n`,
 	);
 	for (const result of results) {
-		const rating = result.metrics
-			? `${result.metrics.matchRating.toFixed(4)}%`
-			: "n/a";
-		process.stdout.write(
-			`${result.case}\t${result.verdict}\tmatch ${rating}\n`,
-		);
+		const measurement = result.metrics
+			? `changed ${result.metrics.changedPixels}/${result.metrics.totalPixels}\tmean-delta ${result.metrics.meanAbsoluteChannelDelta.toFixed(6)}`
+			: `not-comparable\t${result.reason}`;
+		process.stdout.write(`${result.case}\t${measurement}\n`);
 	}
-	if (
-		options.requireExact &&
-		results.some((result) => result.verdict !== "exact")
-	)
-		process.exitCode = 1;
 } finally {
 	await browser.close();
 }

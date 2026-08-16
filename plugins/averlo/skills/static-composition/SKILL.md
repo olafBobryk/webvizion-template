@@ -5,33 +5,73 @@ description: Build or port a static section, page, shell, or site composition in
 
 # Averlo · Static Composition
 
-Build the static endpoint first. It is the source of truth for every later
-motion endpoint, not a disposable fidelity scaffold.
+Build the native static endpoint and keep working toward the source-backed
+terminal condition. This skill owns the goal, focus order, correction loop, and
+completion decision. Visual Parity owns case-level interpretation; the
+comparator owns only captures, pixel measurements, and artifacts.
 
-## Establish the packet
+## Establish one goal and packet
 
 1. Require a schema-v2 `.template-profile.json` receipt and read
    [`visual-parity`'s focus packet](../visual-parity/references/focus-packet.md).
-2. Invoke `$averlo:visual-parity` in its `frame` phase. Use its reference slice
-   when authority exists; otherwise use its declared system-fit baseline.
-3. When a persistent external source informs the product, add or update a
+2. Call `get_goal`. If no compatible goal exists, call `create_goal` once with:
+
+   ```text
+   Invoke $averlo:static-composition to complete <focus> at <target> against <source> using the skill-defined terminal condition.
+   ```
+
+   Substitute the concrete focus, target, and source. Omit `token_budget` unless
+   the caller explicitly supplied one. Reuse a compatible active goal; do not
+   replace an unrelated unfinished goal. The one top-level goal owns the whole
+   requested section, page, shell, or site. Never create child goals, a
+   conversion state machine, or a goal ledger. The ordered matrix, receipt, and
+   goal-turn history are sufficient evidence and working context.
+3. Invoke `$averlo:visual-parity` in its `frame` phase. Default every
+   source-backed case to literal zero changed RGB pixels unless the caller
+   explicitly declared another terminal condition. A zero-diff objective
+   cannot use an intentional nonzero exception.
+4. When a persistent external source informs the product, add or update a
    `## Product sources` table in `PRODUCT.md` with its canonical source,
    authority, scope, and supplied material. Record provenance, never conversion
    progress, implementation status, or a second component catalogue.
-4. Inspect the complete declared source focus and the target's current tokens,
-   documented owners, variants, and consumers before implementing individual
-   sections. Use the resulting role census as working analysis, not a permanent
-   registry or lifecycle state machine.
-5. Preflight every required font and constituent asset. A Figma image or SVG
+5. Inspect the complete declared source focus and the target's current tokens,
+   documented owners, variants, and consumers before implementing an individual
+   scope. Use the resulting role census as working analysis, not a permanent
+   registry.
+6. Preflight every required font and constituent asset. A Figma image or SVG
    asset is usable only when its exact bytes can be retained; a reference
    screenshot is not a constituent asset. When a required font file or other
    source asset is unavailable from Figma, the repository, or a user-supplied
-   lawful source, stop before implementation and request it. Do not silently
-   substitute a font, rasterize text, or weaken the reference requirement.
-6. Invoke `$averlo:repository-workflows` when implementation begins. Select the
+   lawful source, stop before implementation and request it. Leave the goal
+   active. The next goal continuation re-invokes this skill from its objective;
+   do not silently substitute a font, rasterize text, or weaken the reference.
+7. Invoke `$averlo:repository-workflows` when implementation begins. Select the
    applicable composition, interaction, route, marketing/shell, catalogue, and
    content concerns from the actual change unit. Do not bypass the router with
    a parallel component-selection workflow.
+
+## Frame ordered inner scopes
+
+For a page or site, build one ordered comparison matrix beneath the top-level
+goal:
+
+1. shared header and footer shell cases;
+2. content sections in source order;
+3. each original full-page source frame as the accumulated-layout gate;
+4. responsive system-fit cases, after source-backed parity is resolved.
+
+Use explicitly supplied shell or section Figma nodes when present. Otherwise
+inspect Figma metadata, derive nested nodes and exact bounds, and obtain the
+smallest source context that preserves the real page background. An image
+endpoint may crop those bounds from the original frame while Target uses a
+stable DOM selector. Section cases exclude header and footer pixels. The final
+full-page case includes them. Pause with the goal active only when the source
+decomposition is materially ambiguous; do not invent section boundaries.
+
+A single section focus needs only its scoped source-backed case and responsive
+system-fit evidence. A site repeats page sections and full-page gates in source
+order while comparing the shared shell once unless the source proves distinct
+shell variants.
 
 ## Build the one system
 
@@ -51,8 +91,9 @@ motion endpoint, not a disposable fidelity scaffold.
    evidence in the same change. Keep section geometry and choreography with the
    section rather than encoding them into typography variants.
 3. For every changed role, choose one disposition: reuse, extend, replace, new
-   owner, instance-local, or merge-retire. Generalize only source-neutral behavior;
-   retain product copy, assets, and true page choreography in the instance.
+   owner, instance-local, or merge-retire. Generalize only source-neutral
+   behavior; retain product copy, assets, and true page choreography in the
+   instance.
 4. Let the reference-backed focus replace the shared tokens and owners its
    evidence supports. Do not invent replacements for unevidenced roles, claim
    they were converted, add a parallel theme, or change the canonical Averlo
@@ -63,17 +104,52 @@ motion endpoint, not a disposable fidelity scaffold.
    may be Source evidence but must never render as Target product UI.
 6. Follow the repository workflow's media-delivery concern for every marketing
    image, mark, or icon. Do not ship expiring design-tool URLs.
-7. Capture the completed static endpoint with motion disabled, then invoke
-   `$averlo:visual-parity` in its `verify` phase. At the named reference
-   viewport, use its scoped verdict; at other widths, prove system fit rather
-   than pixel identity. One supplied source viewport creates one source-backed
-   parity case; responsive captures are separate evidence and cannot inherit
-   its verdict.
+
+## Continue the goal loop
+
+1. Work on one scoped source-backed case per correction turn. Follow matrix
+   order, and within that case address its highest-impact Target-owned mismatch.
+   Do not spread a correction pass across the whole page.
+2. Capture with motion disabled and run `$averlo:visual-parity` in `verify` for
+   that case. Treat `comparable: false` as a capture defect to repair or a
+   concrete blocker. For the default zero-diff objective, only
+   `changedPixels: 0` resolves the case. Threshold counts and channel deltas are
+   diagnostic signals, not completion thresholds.
+3. Advance only after the active scoped case resolves. After all shell and
+   section cases resolve, run the original full-page frame. A nonzero full-page
+   result reopens the smallest owning scope that explains the accumulated
+   mismatch, then returns to the full-page gate.
+4. Track stalls from the consecutive goal-turn history for the same active
+   case, not in a new repository file. A turn improves when either
+   `changedPixels` or `meanAbsoluteChannelDelta` decreases from the preceding
+   turn. Reset the count after either metric improves or the active case
+   changes. The default stall threshold is three consecutive non-improving goal
+   turns; a caller may explicitly raise, but not lower, it.
+5. After the stall threshold, or after the same external blocker has repeated
+   for the goal tool's required three turns, call `update_goal` with `blocked`.
+   Report acknowledged incompletion, the best current measurements and
+   artifacts, and the concrete incapability or external blocker. Never claim
+   completion, silently waive renderer noise, or keep an irrecoverable goal
+   active.
+6. Once every source-backed case has individually reached `changedPixels: 0`,
+   rerun the complete source-backed matrix against the current Target so one
+   `summary.json` proves every case at the same implementation identity. Reopen
+   any nonzero case. Only after that accumulated gate remains zero, verify
+   responsiveness separately at the named widths. Do not fabricate source
+   parity where Figma supplied no source frame. Run the repository checks
+   selected by the router and save human-review artifacts.
+
+Call `update_goal` with `complete` only when every source-backed case satisfies
+the declared terminal condition and the current `verify` receipt contains
+native implementation evidence, responsive findings, repository-check results,
+and reviewable artifacts for the current Target. If the goal has a token budget,
+report the final usage returned by the goal tool.
 
 ## Handoff to motion
 
-Record the product-source entry, resolved owners, consumer impact, native-render
-evidence, responsive findings, and verified visual-parity receipt. Mark the
-packet `pending` for human approval.
-`$averlo:compose` pauses here by default; a direct caller may explicitly mark
-the approval bypassed.
+Record product provenance, resolved owners, consumer impact, native-render
+evidence, responsive findings, repository checks, and the current visual-parity
+receipt. Mark human approval `pending`. `$averlo:compose` pauses here by default;
+a direct caller may explicitly mark the approval bypassed. Human approval is a
+motion handoff checkpoint, not permission to call a nonzero zero-diff case
+complete.

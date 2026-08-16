@@ -11,14 +11,21 @@ parity, static, or motion rules.
 1. Require a schema-v2 `.template-profile.json` receipt and create the shared
    focus packet with `section`, `page`, `shell`, or `site` as the focus hint.
    Record any automatic effective-scope expansion.
-2. Invoke `$averlo:static-composition`, which frames `$averlo:visual-parity`
-   evidence, verifies the completed static endpoint with that same packet, and
-   records the result.
-3. Pause for human approval after the static receipt by default. Continue only
+2. Invoke `$averlo:static-composition` once for the complete requested focus.
+   It owns the one persistent goal and the skill-defined terminal condition;
+   Compose must not create a competing goal, restate completion policy, or add
+   child goals. For page and site work, Static Composition processes the shared
+   shell, source-ordered sections, full-page gates, and responsive evidence as
+   focused inner passes under that goal. It frames and verifies
+   `$averlo:visual-parity` evidence with the same packet.
+3. Require the current Static Composition goal to be complete before treating
+   the static endpoint as ready. A blocked goal is acknowledged incompletion,
+   not a review checkpoint.
+4. Pause for human approval after the static receipt by default. Continue only
    after approval, or when the caller explicitly sets `reviewBeforeMotion` to
    `false` and records the bypass in the packet.
-4. Invoke `$averlo:motion-composition` with the same evidence and approval
+5. Invoke `$averlo:motion-composition` with the same evidence and approval
    receipt. It must not establish a competing static baseline.
-5. Report the focus/effective scope, static parity or system-fit claim, approval
+6. Report the focus/effective scope, static parity or system-fit claim, approval
    disposition, motion thesis, endpoint evidence, responsive findings, and any
    new Storybook candidate.
