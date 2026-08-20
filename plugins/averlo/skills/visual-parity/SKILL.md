@@ -50,19 +50,22 @@ goal is complete.
    The script fixes reduced motion, viewport, DPR, color scheme, selectors, and
    font readiness from the matrix. It writes `source.png`, `target.png`,
    `overlay.png`, `heatmap.png`, `side-by-side.png`, per-case metrics, and one
-   `summary.json`. It exits successfully whenever capture and measurement
-   succeed, including for nonzero differences. It never decides a verdict.
-3. Read `comparable`, dimensions, total and changed pixels, threshold-changed
-   pixels, ratios, channel deltas, and artifact paths. Threshold metrics and
-   mean delta help diagnose and prioritize work; they are not pass thresholds.
+   `summary.json`. Each capture reports a SHA-256 identity. The script exits
+   successfully whenever capture and measurement succeed, including for
+   nonzero differences. It never decides a verdict.
+3. Read `comparable`, capture SHA-256 identities, dimensions, total and changed
+   pixels, threshold-changed pixels, ratios, channel deltas, and artifact
+   paths. Threshold metrics and mean delta help diagnose and prioritize work;
+   they are not pass thresholds.
    `comparable: false` plus its technical reason means the capture must be
    repaired or the owning goal must eventually block. Never reinterpret it as
    completion or mask away Target-owned geometry.
 
 ## Preserve the evidence boundary
 
-- Report raw comparable state, dimensions, pixel counts, ratios, channel
-  deltas, artifact paths, capture conditions, and current native evidence.
+- Report raw comparable state, capture SHA-256 identities, dimensions, pixel
+  counts, ratios, channel deltas, artifact paths, capture conditions, and
+  current native evidence.
   Never translate those values into a composition row status.
 - Without Source, capture Target deterministically for responsive review and
   record the named viewport and findings. Do not invent a pixel parity score.

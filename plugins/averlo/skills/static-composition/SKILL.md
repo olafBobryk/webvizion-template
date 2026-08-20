@@ -65,10 +65,16 @@ capture, pixel measurement, and generated artifacts.
    documented owners, variants, and consumers. Write the complete source and
    progress tables before implementation. Use one stable scope ID for the
    composition row, progress row, and Visual Parity matrix case.
-7. Preflight every required font and constituent asset. A Figma image or SVG is
-   usable only when its exact bytes can be retained; a reference screenshot is
-   not a constituent asset. When a required source is unavailable, set the
-   record and applicable row to `waiting`, name it in Preflight and Next action
+7. Preflight every required font and constituent asset. Treat material as
+   supplied only when it comes from the Target repository, the authoritative
+   source connector, a path supplied in the current task, or an explicitly
+   configured shared asset library. Do not silently search or borrow from
+   sibling repositories, prior worktrees, previous regressions, or arbitrary
+   user directories. Record the approved provenance of licensed fonts and
+   required assets in Preflight. A Figma image or SVG is usable only when its
+   exact bytes can be retained; a reference screenshot is not a constituent
+   asset. When a required source is unavailable, set the record and applicable
+   row to `waiting`, name it in Preflight and Next action
    or blocker, update the record before ending the turn, and leave the goal
    active. Do not silently substitute a font, rasterize text, or weaken the
    reference.
@@ -88,7 +94,7 @@ For a page or site, write and process these Source decomposition rows in order:
 1. shared header and footer shell cases;
 2. content sections in source order;
 3. each original full-page source frame as an accumulated-layout gate;
-4. responsive system-fit cases after source-backed parity resolves.
+4. responsive system-fit cases.
 
 Use explicitly supplied shell or section Figma nodes when present. Otherwise
 inspect Figma metadata, derive nested nodes and exact bounds, and obtain the
@@ -102,6 +108,9 @@ goal active rather than inventing section boundaries.
 A single section needs its scoped source-backed row and responsive system-fit
 evidence. A site repeats page sections and full-page gates in source order while
 comparing the shared shell once unless the source proves distinct variants.
+For a page or site, when the caller supplies no responsive widths, create
+Target-only rows for 390, 768, 1024, and 1440 pixels during decomposition. These
+rows remain distinct from source-backed cases even when a width is shared.
 
 ## Build the one system
 
@@ -132,41 +141,56 @@ comparing the shared shell once unless the source proves distinct variants.
 6. Follow the repository workflow's media-delivery concern for every marketing
    image, mark, or icon. Do not ship expiring design-tool URLs.
 
-## Continue the record-backed goal loop
+## Baseline every scope, then run the correction loop
 
-1. Select the first unresolved row in matrix order, set it to `active`, and set
-   Active scope to its scope ID. Work on only that scoped source-backed case and
-   its highest-impact Target-owned mismatch during the correction turn.
-2. Before editing Target code, mark affected measured rows `stale`; every Target
+1. First establish current evidence for the complete focus. Select the next
+   `queued` constituent source-backed row in matrix order, set it to `active`,
+   and set Active scope to its scope ID. Work on only that scope during the
+   turn, but make and measure as many related Target changes as useful. Set a
+   comparable zero row to `exact`; set a comparable nonzero row to `mismatched`
+   and advance. After every constituent row has a baseline, measure the
+   full-page gate, then every responsive row. Set a passing responsive row to
+   `system-fit-verified` and a failing one to `mismatched`. Do not begin the
+   correction phase until every row has current baseline evidence.
+2. During correction, select one `mismatched` or `stale` row, set it to
+   `active`, and address its highest-impact Target-owned differences. A
+   correction pass may explore multiple changes and measurements inside that
+   scope; it is not restricted to one hypothesis or one edit.
+3. Before editing Target code, mark affected measured rows `stale`; every Target
    code change makes the full-page gate `stale`. Unaffected scoped evidence may
-   remain current only when its owners and rendered output are unchanged.
-3. Capture with motion disabled and run `$averlo:visual-parity` in `verify` for
+   remain current only when its owners and rendered output are unchanged. A
+   change affecting a blocked row reopens it as `stale` and resets its counter.
+4. Capture with motion disabled and run `$averlo:visual-parity` in `verify` for
    the active case. Read its raw comparable flag, dimensions, changed pixels,
    threshold diagnostics, channel deltas, native evidence, and artifact paths.
    Static Composition alone interprets those facts for the progress row.
-4. Treat `comparable: false` as a capture defect to repair or a concrete
+5. Treat `comparable: false` as a capture defect to repair or a concrete
    blocker. Set a source-backed row to `exact` only when it is comparable,
    natively implemented, current, and reports `changedPixels: 0`. A nonzero
-   result remains `active`; threshold counts and channel deltas diagnose work
-   but never satisfy the terminal condition.
-5. Replace current metrics and Target identity after each assessment. Reset
-   Non-improving turns when changed pixels or mean delta improves over the
-   preceding comparable assessment; otherwise increment it. Promote the best
-   `source.png`, `target.png`, and `diff.png` exactly as the record contract
-   defines. Update the record before ending every turn.
-6. Advance only after the active source-backed row is `exact`. After shell and
-   sections resolve, run the full-page gate. A nonzero full-page result reopens
-   the smallest owning scope that explains it, then returns to the full-page
-   row.
-7. At three consecutive non-improving turns for one scope, or three turns
-   repeating the same external blocker, set the row and Overall state to
-   `blocked`, update the record, and call `update_goal` with `blocked`. Report
-   acknowledged incompletion, best metrics and promoted evidence, and the
-   concrete incapability. Never claim completion or silently waive renderer
-   noise.
-8. Once every source-backed row is `exact`, rerun the complete source-backed
+   result becomes `mismatched`; threshold counts and channel deltas diagnose work
+	   but never satisfy the terminal condition.
+6. Replace current metrics and Target identity after each assessment, including
+   the mechanical Target-capture SHA-256. At the end of a correction pass,
+   reset Non-improving turns when changed pixels or mean delta improves over the
+   preceding comparable assessment; otherwise increment it once. A pure
+   recapture of the same Target capture without Target-owned work neither
+   increments nor resets the counter. The first baseline starts at zero. Promote
+   the best `source.png`, `target.png`, and `diff.png` exactly as the record
+   contract defines. Update the record before ending every turn.
+7. A nonzero full-page result reopens the smallest owning scope that explains
+   it, then returns to the full-page row after that owner changes.
+8. At three consecutive non-improving correction passes for one scope, set that
+   row to `blocked`, preserve its best evidence, and continue with any
+   independent queued, stale, or mismatched row. Likewise, a scoped waiting row
+   does not stop independent work. Set Overall state and the goal to `blocked`
+   only when no actionable rows remain and at least one blocked row prevents
+   completion. A globally required preflight blocker may still block the whole
+   focus after three repeated checks. Report acknowledged incompletion, best
+   metrics, promoted evidence, and the concrete incapability; never waive
+   renderer noise.
+9. Once every source-backed row is `exact`, rerun the complete source-backed
    matrix against the current Target identity. Reopen any nonzero or stale row.
-   Then verify responsive Target-only rows at the named widths, run repository
+   Then reverify responsive Target-only rows at the named widths, run repository
    checks, save human-review evidence, and update Completion evidence.
 
 Call `update_goal` with `complete` only after the record itself is `complete`,

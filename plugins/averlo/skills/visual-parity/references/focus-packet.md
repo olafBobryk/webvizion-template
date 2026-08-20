@@ -8,7 +8,7 @@ without changing Source or capture conditions.
 Phase: frame | verify
 Focus: section | page | shell | site
 Target: <route, selector, or Storybook story>
-Target identity: <current repository revision plus dirty-worktree identity>
+Target identity: <current repository revision plus Target-capture SHA-256 when measured>
 Effective scope / expansion: <owners inspected and why it changed>
 Composition record: <docs/composition/<focus-slug>.md>
 Active scope: <composition-record scope ID>
@@ -21,8 +21,8 @@ Matrix: <.codex/visual-parity/<task>/matrix.json>
 
 Mechanical assessment:
 - Assessment: <.codex/visual-parity/<task>/assessment/summary.json>
-- Captured Target identity: <revision and dirty-worktree identity at capture>
-- Measurements: <case id → comparable, dimensions, total/changed/threshold-changed pixels, ratios, channel deltas>
+- Captured Target identity: <revision and Target-capture SHA-256 at capture>
+- Measurements: <case id → comparable, source/Target capture SHA-256, dimensions, total/changed/threshold-changed pixels, ratios, channel deltas>
 - Artifacts: <case id → source, target, overlay, heatmap, side-by-side>
 
 Evidence:

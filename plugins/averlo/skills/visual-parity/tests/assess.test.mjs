@@ -129,7 +129,16 @@ test("reports mechanical pixel measurements, compatibility, and cropped evidence
 		summary.cases.map((item) => [item.case, item]),
 	);
 	assert.equal(byId.identical.comparable, true);
+	assert.match(byId.identical.sourceCapture.sha256, /^[a-f0-9]{64}$/u);
+	assert.equal(
+		byId.identical.sourceCapture.sha256,
+		byId.identical.targetCapture.sha256,
+	);
 	assert.equal(byId.identical.metrics.changedPixels, 0);
+	assert.notEqual(
+		byId["one-pixel"].sourceCapture.sha256,
+		byId["one-pixel"].targetCapture.sha256,
+	);
 	assert.equal(byId["one-pixel"].metrics.changedPixels, 1);
 	assert.equal(byId["one-pixel"].metrics.changedPixelRatio, 0.5);
 	assert.equal(byId["one-pixel"].metrics.thresholdChangedPixels, 1);

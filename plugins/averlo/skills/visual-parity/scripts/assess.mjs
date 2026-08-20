@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import { createRequire } from "node:module";
 import path from "node:path";
@@ -83,6 +84,12 @@ async function assertPng(filePath) {
 			throw new Error(`Not a PNG: ${filePath}`);
 	}
 	return buffer;
+}
+
+async function sha256(filePath) {
+	return createHash("sha256")
+		.update(await fs.readFile(filePath))
+		.digest("hex");
 }
 
 function dataUrl(buffer) {
@@ -448,10 +455,14 @@ try {
 			targetPath,
 			threshold,
 		});
+		const [sourceSha256, targetSha256] = await Promise.all([
+			sha256(sourcePath),
+			sha256(targetPath),
+		]);
 		const packet = {
 			case: caseDefinition.id,
-			sourceCapture,
-			targetCapture,
+			sourceCapture: { ...sourceCapture, sha256: sourceSha256 },
+			targetCapture: { ...targetCapture, sha256: targetSha256 },
 			...result,
 		};
 		await fs.writeFile(

@@ -72,6 +72,7 @@ test("composition record defines the complete current-state vocabulary", async (
 	for (const status of [
 		"queued",
 		"active",
+		"mismatched",
 		"waiting",
 		"stale",
 		"exact",
@@ -84,6 +85,7 @@ test("composition record defines the complete current-state vocabulary", async (
 		assert.match(contract, new RegExp(artifact.replace(".", "\\.")));
 	}
 	assert.match(contract, /Keep current state only; do not append an attempt/u);
+	assert.match(contract, /pure recapture with the same Target-capture/u);
 });
 
 test("Static Composition owns status and resumes from the record", async () => {
@@ -97,6 +99,16 @@ test("Static Composition owns status and resumes from the record", async () => {
 	);
 	assert.match(skill, /Static Composition alone interprets those facts/u);
 	assert.match(skill, /Update the record before ending every turn/u);
+	assert.match(skill, /390, 768, 1024, and 1440 pixels/u);
+	assert.match(
+		skill,
+		/Do not begin the\s+correction phase until every row has current baseline evidence/u,
+	);
+	assert.match(skill, /not restricted to one hypothesis or one edit/u);
+	assert.match(
+		skill,
+		/Do not silently search or borrow from\s+sibling repositories/u,
+	);
 	assert.doesNotMatch(
 		`${skill}\n${contract}`,
 		/(?:goal-ledger-prep|\$goal-ledger-prep|goal ledger)/iu,
