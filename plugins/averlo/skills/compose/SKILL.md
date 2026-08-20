@@ -12,7 +12,9 @@ parity, static, or motion rules.
    focus packet with `section`, `page`, `shell`, or `site` as the focus hint.
    Record any automatic effective-scope expansion and the stable
    `docs/composition/<focus-slug>.md` path.
-2. Invoke `$averlo:static-composition` once for the complete requested focus.
+2. Invoke `$averlo:static-composition` once for the complete requested focus in
+   `end-to-end` delivery. Compose must not stop at a staged realization handoff
+   because motion requires the integrated, exact static endpoint.
    It owns the composition record, one runtime goal, and the skill-defined
    terminal condition; Compose must not create a competing record or goal,
    interpret measurements, restate completion policy, or add child goals. For

@@ -26,6 +26,9 @@ tasks. The Codex goal resumes work from it but does not replace it.
 - Authoritative source: <original immutable URL or export>
 - Agent Space: <connector identity, cloned page ID, cloned focus-node ID, or not applicable>
 - Plugin version: <installed Averlo plugin version>
+- Delivery shape: <end-to-end | staged>
+- Current pass: <realization | system-integration | convergence | complete>
+- Realization handoff: <pending | ready | not-applicable>
 - Terminal condition: <zero changed RGB pixels for source-backed scopes>
 - Overall state: <queued | active | waiting | blocked | complete>
 - Active scope: <scope-id or none>
@@ -121,3 +124,25 @@ is `mismatched`; `queued` means it has no baseline yet.
     and `exact`, the full-page row is current and `exact`, responsive rows are
     `system-fit-verified`, and Completion evidence is current. Otherwise it is
     `active`, `waiting`, or `blocked` according to the unresolved row.
+
+## Staged delivery
+
+- `staged` is selected only by an explicit first-pass, realization-pass,
+  baseline-pass, or sequential-agent request. Ordinary Static Composition and
+  Compose calls remain `end-to-end`.
+- During `realization`, implement the complete native focus and establish one
+  current comparable baseline for every source-backed row plus current findings
+  for every responsive row. Preserve nonzero rows as `mismatched`.
+- Set Realization handoff to `ready` only when required fonts, constituent
+  assets, media delivery, provenance, stable selectors, native evidence,
+  complete baseline evidence, repository safety checks, preview, and human
+  review artifacts are current. Then set Current pass to
+  `system-integration`. This may complete the bounded realization goal but must
+  not set Overall state to `complete`.
+- Before `system-integration` edits, census every visible role across the
+  complete focus. Convert recorded scopes onto source-neutral documented owners
+  and update their consumers and Storybook evidence. Mark affected rows and the
+  full-page gate `stale` after each Target edit.
+- Set Current pass to `convergence` only when every visible role is owned by a
+  documented system owner or justified as instance-local. Set it to `complete`
+  only with the existing exact and system-fit completion requirements.

@@ -6,10 +6,28 @@ description: Build or port a static section, page, shell, or site composition in
 # Averlo · Static Composition
 
 Build the native static endpoint and keep working toward the source-backed
-terminal condition. This skill owns decomposition, the durable composition
-record, case interpretation, the correction loop, and the goal completion
-decision. Visual Parity owns reproducible evidence; the comparator owns only
-capture, pixel measurement, and generated artifacts.
+terminal condition. This skill owns source realization, design-system
+integration, decomposition, the durable composition record, case
+interpretation, the correction loop, and goal completion decisions. Visual
+Parity owns reproducible evidence; the comparator owns only capture, pixel
+measurement, and generated artifacts.
+
+## Choose the delivery shape
+
+- Default to `end-to-end`: one invocation realizes the complete source,
+  integrates it into the instance design system, and converges every
+  source-backed case to exact parity.
+- Use `staged` only when the caller explicitly requests a first pass,
+  realization pass, baseline pass, or sequential-agent handoff. The first task
+  completes `realization`; a later task resumes the same record for
+  `system-integration` and `convergence`.
+- A realization handoff is a bounded intermediate deliverable, not composition
+  completion or verified parity. Keep nonzero source-backed rows `mismatched`
+  and call them measured or baselined.
+- Delivery shape changes task coordination, not product standards. Fonts,
+  constituent assets, media delivery, source provenance, semantic native DOM,
+  complete decomposition, stable selectors, and repository safety checks are
+  first-pass requirements and must not be deferred to system integration.
 
 ## Establish the record and goal
 
@@ -21,16 +39,26 @@ capture, pixel measurement, and generated artifacts.
    link it from `docs/README.md` under `## Composition records`. Reuse this path
    across correction turns and later tasks. The record, not conversation
    history or an ignored artifact, owns current composition progress.
-3. Call `get_goal`. When the record is incomplete and no compatible active goal
-   exists, call `create_goal` once with:
+3. Call `get_goal`. When no compatible active goal exists, create the one goal
+   for this task's declared delivery stage. For a staged realization task use:
+
+   ```text
+   Invoke $averlo:static-composition to complete the realization pass in <record-path> using the skill-defined realization terminal condition.
+   ```
+
+   For an end-to-end task, or a task resuming `system-integration` or
+   `convergence`, use:
 
    ```text
    Invoke $averlo:static-composition to continue the composition in <record-path> using the skill-defined terminal condition.
    ```
 
 	Substitute the concrete record path. Omit `token_budget` unless the caller
-	explicitly supplied one. Reuse a compatible active goal and never replace an
-	unrelated unfinished goal. When a previous compatible goal ended blocked,
+	explicitly supplied one. Reuse a compatible active goal for the same delivery
+	stage and never replace an unrelated unfinished goal. A completed realization
+	goal does not satisfy the composition terminal condition; the durable record
+	must still advance through system integration and convergence. When a previous
+	compatible goal ended blocked,
 	re-run the blocked preflight and treat it as cleared only when the required
 	evidence now passes. Then create a new goal from the same incomplete record
 	before any Source call or Target edit on that resumed turn. If the replacement
@@ -115,38 +143,81 @@ For a page or site, when the caller supplies no responsive widths, create
 Target-only rows for 390, 768, 1024, and 1440 pixels during decomposition. These
 rows remain distinct from source-backed cases even when a width is shared.
 
+## Realize the complete source
+
+1. Build the full declared focus natively before promoting new shared visual
+   abstractions. Preserve shell and section ownership boundaries so the later
+   integration pass can convert one recorded scope at a time. A staged
+   realization may use section-local components, exact local font variables,
+   and section-local CSS; it must not encode product- or section-specific roles
+   into shared primitives merely to appear systemized.
+2. Use the exact supplied copy, fonts, constituent assets, source hierarchy,
+   and visual treatments. Keep text selectable, controls semantic, and layout
+   responsive. Never use a reference frame as product implementation.
+3. Frame and measure every constituent source-backed scope, then the full-page
+   gate, then every responsive Target-only scope. A first-pass baseline is
+   evidence for the next task, not a parity claim.
+4. A staged realization reaches its terminal condition only when the complete
+   source focus exists natively, all required fonts and assets are approved and
+   delivered through repository contracts, every decomposition row has current
+   comparable baseline evidence, responsive rows have current findings, stable
+   Target selectors exist, repository safety checks are recorded, and the
+   current preview and human-review artifacts are linked. Nonzero rows remain
+   `mismatched`.
+5. At that terminal condition, set Realization handoff to `ready`, advance
+   Current pass to `system-integration`, update the record, and complete only
+   the staged realization goal. Do not set Overall state or the composition
+   record to `complete`. In end-to-end delivery, do not pause: continue directly
+   into system integration with the same record and goal.
+
 ## Build the one system
 
-1. Keep one coherent design system in the Target instance. An authoritative
+1. Before changing a realized scope, census every visible role across the
+   complete source focus. Map typography, controls, links, marks, media,
+   repeated shells, and layout owners to the current implementation and every
+   existing documented owner and consumer. This complete-focus census prevents
+   a later section from creating a duplicate role or confusing a product
+   variation with an instance-wide system variant.
+2. Keep one coherent design system in the Target instance. An authoritative
    reference supersedes inherited template visuals for every evidenced role;
    existing visual tokens, variants, and owner treatments are inventory, not
    fidelity constraints. Preserve semantic HTML, accessibility, supported
    interaction, data, routing, and framework boundaries while replacing the
    visual implementation they carry.
-2. Make every genuine typography role an instance-wide `Text` variant on first
-   use. Before adding it, compare its family, weight, size, line height,
-   tracking, responsive behavior, and purpose against the complete documented
-   axis, source-focus census, and current consumers. Reuse an equivalent role
-   instead of adding a contextual alias. Use source-neutral system names, never
+3. Make every genuine typography role an instance-wide `Text` variant during
+   system integration. Before adding it, compare its family, weight, size, line
+   height, tracking, responsive behavior, and purpose against the complete
+   documented axis, source-focus census, and current consumers. Reuse an
+   equivalent role instead of adding a contextual alias. Use source-neutral
+   system names, never
    product, section, route, brand, or Figma-node names. Update the owner contract
    and exhaustive Storybook type-scale evidence in the same change. Keep
    section geometry and choreography with the section.
-3. For every changed role, choose one disposition: reuse, extend, replace, new
+4. For every changed role, choose one disposition: reuse, extend, replace, new
    owner, instance-local, or merge-retire. Generalize only source-neutral
    behavior; retain product copy, assets, and page choreography in the instance.
-4. Let reference-backed evidence replace the shared tokens and owners it
+5. Let reference-backed evidence replace the shared tokens and owners it
    supports. Do not invent replacements for unevidenced roles, claim they were
    converted, add a parallel theme, or change the canonical Averlo template.
-5. Implement visible product structure natively: text remains selectable,
+6. Keep visible product structure native: text remains selectable,
    controls retain semantics and behavior, sections own real responsive layout,
    and media uses constituent assets. A full-frame capture may be Source
    evidence but must never render as Target product UI.
-6. Follow the repository workflow's media-delivery concern for every marketing
+7. Follow the repository workflow's media-delivery concern for every marketing
    image, mark, or icon. Do not ship expiring design-tool URLs.
+8. Convert one recorded shell or section scope at a time. Before each Target
+   edit, mark affected rows and the full-page gate `stale`; after conversion,
+   remeasure that scope. Treat componentization as a render-preserving refactor,
+   then correct any difference it introduces.
+9. Advance Current pass to `convergence` only after every realized visible role
+   is owned by an existing or newly documented source-neutral system owner, or
+   is explicitly justified as instance-local, and the corresponding owner
+   contracts, consumers, and Storybook evidence are current. Do not start final
+   zero-diff convergence against temporary page-local approximations.
 
 ## Baseline every scope, then run the correction loop
 
-1. First establish current evidence for the complete focus. Select the next
+1. During realization, first establish current evidence for the complete focus. Select the next
    `queued` constituent source-backed row in matrix order, set it to `active`,
    and set Active scope to its scope ID. Work on only that scope during the
    turn, but make and measure as many related Target changes as useful. Set a
@@ -154,7 +225,10 @@ rows remain distinct from source-backed cases even when a width is shared.
    and advance. After every constituent row has a baseline, measure the
    full-page gate, then every responsive row. Set a passing responsive row to
    `system-fit-verified` and a failing one to `mismatched`. Do not begin the
-   correction phase until every row has current baseline evidence.
+   correction phase until every row has current baseline evidence. In staged
+   delivery, hand off after the realization terminal condition instead of
+   entering correction. In end-to-end delivery, complete system integration
+   before entering final correction.
 2. During correction, select one `mismatched` or `stale` row, set it to
    `active`, and address its highest-impact Target-owned differences. A
    correction pass may explore multiple changes and measurements inside that
@@ -198,11 +272,15 @@ rows remain distinct from source-backed cases even when a width is shared.
    Then reverify responsive Target-only rows at the named widths, run repository
    checks, save human-review evidence, and update Completion evidence.
 
-Call `update_goal` with `complete` only after the record itself is `complete`,
-every source-backed row is current and `exact`, the full-page gate is current
-and exact, responsive rows are `system-fit-verified`, and native evidence,
-repository checks, promoted artifacts, and human review are current. If the goal
-has a token budget, report the final usage returned by the goal tool.
+Call `update_goal` with `complete` for a staged realization goal only after its
+realization terminal condition is recorded and the record has advanced to
+`system-integration`. This completes the bounded first-pass task, not the
+composition. For an end-to-end, system-integration, or convergence goal, call
+`update_goal` with `complete` only after the record itself is `complete`, every
+source-backed row is current and `exact`, the full-page gate is current and
+exact, responsive rows are `system-fit-verified`, and native evidence,
+repository checks, promoted artifacts, and human review are current. If the
+goal has a token budget, report the final usage returned by the goal tool.
 
 ## Handoff to motion
 

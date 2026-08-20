@@ -124,6 +124,42 @@ test("Static Composition owns status and resumes from the record", async () => {
 	);
 });
 
+test("Static Composition supports a bounded realization handoff", async () => {
+	const [skill, contract] = await Promise.all([
+		read("SKILL.md"),
+		read("references/composition-record.md"),
+	]);
+	for (const field of ["Delivery shape", "Current pass", "Realization handoff"]) {
+		assert.match(contract, new RegExp(`- ${field}:`, "u"));
+	}
+	assert.match(
+		skill,
+		/Invoke \$averlo:static-composition to complete the realization pass in <record-path> using the skill-defined realization terminal condition\./u,
+	);
+	assert.match(skill, /first-pass baseline is\s+evidence for the next task, not a parity claim/u);
+	assert.match(skill, /set Realization handoff to `ready`/u);
+	assert.match(skill, /complete only\s+the staged realization goal/u);
+	assert.match(skill, /Do not set Overall state or the composition\s+record to `complete`/u);
+	assert.match(contract, /must\s+not set Overall state to `complete`/u);
+});
+
+test("system integration follows complete-focus realization", async () => {
+	const [skill, compose] = await Promise.all([
+		read("SKILL.md"),
+		fs.readFile(path.resolve(skillRoot, "../compose/SKILL.md"), "utf8"),
+	]);
+	assert.match(skill, /census every visible role across the\s+complete source focus/u);
+	assert.match(skill, /Convert one recorded shell or section scope at a time/u);
+	assert.match(skill, /componentization as a render-preserving refactor/u);
+	assert.match(skill, /Do not start final\s+zero-diff convergence against temporary page-local approximations/u);
+	assert.match(
+		skill,
+		/Fonts,\s+constituent assets, media delivery, source provenance, semantic native DOM,\s+complete decomposition, stable selectors, and repository safety checks are\s+first-pass requirements/u,
+	);
+	assert.match(compose, /in\s+`end-to-end` delivery/u);
+	assert.match(compose, /must not stop at a staged realization handoff/u);
+});
+
 test("only Static Composition is implicit for goal-backed continuation", async () => {
 	const repositoryRoot = path.resolve(skillRoot, "../../../..");
 	const [canonicalAgents, assembler] = await Promise.all([
