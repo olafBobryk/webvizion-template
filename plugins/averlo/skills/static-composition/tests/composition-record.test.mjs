@@ -107,6 +107,15 @@ test("Static Composition owns status and resumes from the record", async () => {
 	assert.match(skill, /not restricted to one hypothesis or one edit/u);
 	assert.match(
 		skill,
+		/create a new goal from the same incomplete record\s+before any Source call or Target edit/u,
+	);
+	assert.match(skill, /If the replacement\s+goal cannot be created/u);
+	assert.match(
+		skill,
+		/comparable nonzero scope measured or baselined, never verified/u,
+	);
+	assert.match(
+		skill,
 		/Do not silently search or borrow from\s+sibling repositories/u,
 	);
 	assert.doesNotMatch(

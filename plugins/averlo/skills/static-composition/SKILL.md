@@ -28,12 +28,15 @@ capture, pixel measurement, and generated artifacts.
    Invoke $averlo:static-composition to continue the composition in <record-path> using the skill-defined terminal condition.
    ```
 
-   Substitute the concrete record path. Omit `token_budget` unless the caller
-   explicitly supplied one. Reuse a compatible active goal and never replace an
-   unrelated unfinished goal. When a previous compatible goal ended blocked and
-   its recorded blocker has been cleared, create a new goal from the same
-   incomplete record. Never create child goals or duplicate the record's source,
-   decomposition, or completion rules in the goal objective.
+	Substitute the concrete record path. Omit `token_budget` unless the caller
+	explicitly supplied one. Reuse a compatible active goal and never replace an
+	unrelated unfinished goal. When a previous compatible goal ended blocked,
+	re-run the blocked preflight and treat it as cleared only when the required
+	evidence now passes. Then create a new goal from the same incomplete record
+	before any Source call or Target edit on that resumed turn. If the replacement
+	goal cannot be created, keep the record waiting or blocked and do not resume
+	implementation. Never create child goals or duplicate the record's source,
+	decomposition, or completion rules in the goal objective.
 4. When Source is a Figma design, resolve the execution identity and isolate the
    designer's page before calling `get_design_context`, downloading assets, or
    framing parity:
@@ -165,10 +168,12 @@ rows remain distinct from source-backed cases even when a width is shared.
    threshold diagnostics, channel deltas, native evidence, and artifact paths.
    Static Composition alone interprets those facts for the progress row.
 5. Treat `comparable: false` as a capture defect to repair or a concrete
-   blocker. Set a source-backed row to `exact` only when it is comparable,
-   natively implemented, current, and reports `changedPixels: 0`. A nonzero
-   result becomes `mismatched`; threshold counts and channel deltas diagnose work
-	   but never satisfy the terminal condition.
+	blocker. Set a source-backed row to `exact` only when it is comparable,
+	natively implemented, current, and reports `changedPixels: 0`. A nonzero
+	result becomes `mismatched`; threshold counts and channel deltas diagnose work
+	   but never satisfy the terminal condition. In commentary and handoff, call a
+	comparable nonzero scope measured or baselined, never verified. Reserve
+	verified source-backed parity for a current `exact` row.
 6. Replace current metrics and Target identity after each assessment, including
    the mechanical Target-capture SHA-256. At the end of a correction pass,
    reset Non-improving turns when changed pixels or mean delta improves over the
