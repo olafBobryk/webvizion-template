@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { templateCapabilities } from "@/config/capabilities";
 import { fallbackSiteLayout } from "@/lib/marketing-content/fallback";
 import {
 	normalizePayloadSiteLayout,
@@ -85,9 +86,12 @@ assert.deepStrictEqual(
 const templateMenuGroup = fallbackSiteLayout.header.menuGroups.find(
 	(group) => group.label === "Template",
 );
-assert.deepStrictEqual(templateMenuGroup?.links, [
-	{ href: "/repository-footprint", label: "Repository Footprint" },
-]);
+assert.deepStrictEqual(
+	templateMenuGroup?.links,
+	templateCapabilities.repositoryFootprint
+		? [{ href: "/repository-footprint", label: "Repository Footprint" }]
+		: undefined,
+);
 for (const link of [
 	...fallbackSiteLayout.header.navLinks,
 	...fallbackSiteLayout.header.topNavLinks,
