@@ -3,4 +3,4 @@ interface:
   short_description: "Build a scoped static composition in an Averlo instance"
   default_prompt: "Use $averlo:static-composition to build this focused static surface against its supplied authoritative source."
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

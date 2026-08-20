@@ -3,4 +3,4 @@ interface:
   short_description: "Build and animate a reviewed scoped composition"
   default_prompt: "Use $averlo:compose to build and animate this focused surface in a generated Averlo instance."
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

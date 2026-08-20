@@ -11,17 +11,6 @@ record, case interpretation, the correction loop, and the goal completion
 decision. Visual Parity owns reproducible evidence; the comparator owns only
 capture, pixel measurement, and generated artifacts.
 
-## Resolve workflow authority
-
-Before creating the record, calling a Source tool, or editing the Target,
-confirm that this skill's resolved path exists and, when installed-plugin
-metadata is available, that its version matches the enabled Averlo plugin. If
-an explicit invocation resolved no Static Composition skill, a missing path, or
-a stale plugin version, stop and report a workflow resolution failure. Do not
-substitute Repository Workflows, a generic Figma skill, or an inferred static
-implementation. Figma skills are subordinate source adapters after this
-workflow selects the connector and permits source preflight.
-
 ## Establish the record and goal
 
 1. Require a schema-v2 `.template-profile.json` receipt. Read

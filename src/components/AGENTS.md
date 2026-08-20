@@ -3,9 +3,10 @@
 
 - This tree owns reusable components and shared UI. Keep route-specific pieces
   with their route until they acquire an independent shared owner.
-- Route component work through `$averlo:repository-workflows`. The selected
-  concern contracts own implementation workflow; Storybook owns supported public
-  APIs and observable behavior; the nearest `AGENTS.md` owns local topology.
+- Storybook owns supported public APIs and observable behavior; the nearest
+  `AGENTS.md` owns local topology. When `$averlo:repository-workflows` is
+  explicitly invoked, its selected concern contracts additionally own the
+  implementation workflow; its absence does not block ordinary component work.
 - Compose existing owners before adding a reusable component. Do not create a
   parallel control, overlay, feedback, layout, or component-family owner.
 - Preserve public names during behavior-neutral moves. Treat a public rename as

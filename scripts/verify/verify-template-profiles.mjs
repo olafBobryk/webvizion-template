@@ -418,8 +418,8 @@ async function assertGeneratedDocumentation(outputRoot, profileCase) {
 		}
 	}
 	for (const requiredPolicy of [
-		"resolve and read that exact skill before any implementation",
-		"stop and report a workflow resolution failure",
+		"optional repository workflow layer",
+		"Its absence from the current skill catalogue does not block ordinary implementation",
 		"A source-backed composition must not call Figma or edit product code",
 	]) {
 		if (!agentInstructions.replace(/\s+/gu, " ").includes(requiredPolicy)) {
@@ -490,8 +490,8 @@ async function assertCanonicalAgentContract(templateRoot) {
 		}
 	}
 	for (const requiredPolicy of [
-		"resolve and read that exact skill before any implementation",
-		"stop and report a workflow resolution failure",
+		"optional repository workflow layer",
+		"Its absence from the current skill catalogue does not block ordinary implementation",
 		"A source-backed composition must not call Figma or edit product code",
 	]) {
 		if (!agentInstructions.replace(/\s+/gu, " ").includes(requiredPolicy)) {

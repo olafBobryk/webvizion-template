@@ -10,15 +10,12 @@
 
 ## Averlo Plugin Pack
 
-- When a task explicitly names an Averlo skill, resolve and read that exact
-  skill before any implementation. If it is absent from the current task's
-  skill catalogue, its resolved path is missing, or its resolved plugin version
-  differs from the enabled installed Averlo version, stop and report a workflow
-  resolution failure. Do not substitute another Averlo or generic skill.
-- Treat the Averlo plugin pack as the repository workflow layer. For
-  implementation or implementation review, invoke
-  `$averlo:repository-workflows` and follow only the workflows and concerns it
-  selects.
+- Treat the Averlo plugin pack as an optional repository workflow layer. Use
+  `$averlo:repository-workflows` when the user explicitly invokes it or an
+  already-selected operational Averlo workflow requires it. Its absence from
+  the current skill catalogue does not block ordinary implementation or
+  implementation review; proceed from `AGENTS.md`, owner evidence, and existing
+  repository verifiers.
 - After the router is selected, do not separately invoke overlapping Averlo
   design-system, skeleton, entity, or surface skills for the same change unit.
   `$averlo:compose`, `$averlo:static-composition`,
@@ -49,6 +46,7 @@
 
 ## Design System
 
-- Route UI work through `$averlo:repository-workflows`. Follow the owner evidence
-  and concern contracts it selects rather than treating this file as a
-  component catalogue or API reference.
+- For UI work, follow the nearest `AGENTS.md`, Storybook owner evidence, and
+  existing repository verifiers rather than treating this file as a component
+  catalogue or API reference. When `$averlo:repository-workflows` is explicitly
+  invoked, also follow the concern contracts it selects.

@@ -3,4 +3,4 @@ interface:
   short_description: "Compare a source and target with a capture matrix"
   default_prompt: "Use $averlo:visual-parity to compare this generated Averlo surface against its authoritative source with a reproducible capture matrix."
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

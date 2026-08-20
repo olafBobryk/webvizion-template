@@ -115,10 +115,9 @@ test("Static Composition owns status and resumes from the record", async () => {
 	);
 });
 
-test("Static Composition is discoverable and source work fails closed", async () => {
+test("composition workflows stay explicit and do not govern ordinary tasks", async () => {
 	const repositoryRoot = path.resolve(skillRoot, "../../../..");
-	const [skill, canonicalAgents, assembler] = await Promise.all([
-		read("SKILL.md"),
+	const [canonicalAgents, assembler] = await Promise.all([
 		fs.readFile(path.join(repositoryRoot, "AGENTS.md"), "utf8"),
 		fs.readFile(
 			path.join(repositoryRoot, "template-assembly/assembler.mjs"),
@@ -142,18 +141,13 @@ test("Static Composition is discoverable and source work fails closed", async ()
 		);
 		assert.match(
 			agentMetadata,
-			/allow_implicit_invocation: true/u,
-			`${workflow} must be discoverable in delegated tasks`,
+			/allow_implicit_invocation: false/u,
+			`${workflow} must remain explicit-only`,
 		);
 	}
-	assert.match(skill, /stop and report a workflow resolution failure/u);
-	assert.match(skill, /Do not\s+substitute Repository Workflows/u);
 	for (const policy of [canonicalAgents, assembler]) {
-		assert.match(
-			policy,
-			/resolve and read that exact\s+skill before any implementation/u,
-		);
-		assert.match(policy, /stop and report a workflow\s+resolution failure/u);
+		assert.doesNotMatch(policy, /stop and report a workflow\s+resolution failure/u);
+		assert.match(policy, /optional repository workflow layer/u);
 		assert.match(
 			policy,
 			/A source-backed composition must not\s+call Figma or edit product code/u,
