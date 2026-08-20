@@ -115,7 +115,7 @@ test("Static Composition owns status and resumes from the record", async () => {
 	);
 });
 
-test("composition workflows stay explicit and do not govern ordinary tasks", async () => {
+test("only Static Composition is implicit for goal-backed continuation", async () => {
 	const repositoryRoot = path.resolve(skillRoot, "../../../..");
 	const [canonicalAgents, assembler] = await Promise.all([
 		fs.readFile(path.join(repositoryRoot, "AGENTS.md"), "utf8"),
@@ -125,13 +125,13 @@ test("composition workflows stay explicit and do not govern ordinary tasks", asy
 		),
 	]);
 
-	for (const workflow of [
-		"compose",
-		"motion-composition",
-		"repository-workflows",
-		"static-composition",
-		"visual-parity",
-	]) {
+	for (const [workflow, implicit] of Object.entries({
+		compose: false,
+		"motion-composition": false,
+		"repository-workflows": false,
+		"static-composition": true,
+		"visual-parity": false,
+	})) {
 		const agentMetadata = await fs.readFile(
 			path.join(
 				repositoryRoot,
@@ -141,8 +141,8 @@ test("composition workflows stay explicit and do not govern ordinary tasks", asy
 		);
 		assert.match(
 			agentMetadata,
-			/allow_implicit_invocation: false/u,
-			`${workflow} must remain explicit-only`,
+			new RegExp(`allow_implicit_invocation: ${implicit}`, "u"),
+			`${workflow} implicit-invocation policy is incorrect`,
 		);
 	}
 	for (const policy of [canonicalAgents, assembler]) {
