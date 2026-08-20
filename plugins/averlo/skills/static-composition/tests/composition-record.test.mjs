@@ -115,6 +115,52 @@ test("Static Composition owns status and resumes from the record", async () => {
 	);
 });
 
+test("Static Composition is discoverable and source work fails closed", async () => {
+	const repositoryRoot = path.resolve(skillRoot, "../../../..");
+	const [skill, canonicalAgents, assembler] = await Promise.all([
+		read("SKILL.md"),
+		fs.readFile(path.join(repositoryRoot, "AGENTS.md"), "utf8"),
+		fs.readFile(
+			path.join(repositoryRoot, "template-assembly/assembler.mjs"),
+			"utf8",
+		),
+	]);
+
+	for (const workflow of [
+		"compose",
+		"motion-composition",
+		"repository-workflows",
+		"static-composition",
+		"visual-parity",
+	]) {
+		const agentMetadata = await fs.readFile(
+			path.join(
+				repositoryRoot,
+				`plugins/averlo/skills/${workflow}/agents/openai.yaml`,
+			),
+			"utf8",
+		);
+		assert.match(
+			agentMetadata,
+			/allow_implicit_invocation: true/u,
+			`${workflow} must be discoverable in delegated tasks`,
+		);
+	}
+	assert.match(skill, /stop and report a workflow resolution failure/u);
+	assert.match(skill, /Do not\s+substitute Repository Workflows/u);
+	for (const policy of [canonicalAgents, assembler]) {
+		assert.match(
+			policy,
+			/resolve and read that exact\s+skill before any implementation/u,
+		);
+		assert.match(policy, /stop and report a workflow\s+resolution failure/u);
+		assert.match(
+			policy,
+			/A source-backed composition must not\s+call Figma or edit product code/u,
+		);
+	}
+});
+
 test("Visual Parity and Compose do not duplicate composition status", async () => {
 	const [visualParity, compose] = await Promise.all([
 		fs.readFile(path.resolve(skillRoot, "../visual-parity/SKILL.md"), "utf8"),

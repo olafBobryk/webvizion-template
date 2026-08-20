@@ -417,6 +417,17 @@ async function assertGeneratedDocumentation(outputRoot, profileCase) {
 			);
 		}
 	}
+	for (const requiredPolicy of [
+		"resolve and read that exact skill before any implementation",
+		"stop and report a workflow resolution failure",
+		"A source-backed composition must not call Figma or edit product code",
+	]) {
+		if (!agentInstructions.replace(/\s+/gu, " ").includes(requiredPolicy)) {
+			throw new Error(
+				`${profileCase.profileId}/${profileCase.content} generated AGENTS.md is missing workflow-delivery policy: ${requiredPolicy}.`,
+			);
+		}
+	}
 
 	const product = await fs.readFile(
 		path.join(outputRoot, "PRODUCT.md"),
@@ -475,6 +486,17 @@ async function assertCanonicalAgentContract(templateRoot) {
 		if (agentInstructions.includes(forbiddenText)) {
 			throw new Error(
 				`Canonical AGENTS.md contains retired recipe text: ${forbiddenText}.`,
+			);
+		}
+	}
+	for (const requiredPolicy of [
+		"resolve and read that exact skill before any implementation",
+		"stop and report a workflow resolution failure",
+		"A source-backed composition must not call Figma or edit product code",
+	]) {
+		if (!agentInstructions.replace(/\s+/gu, " ").includes(requiredPolicy)) {
+			throw new Error(
+				`Canonical AGENTS.md is missing workflow-delivery policy: ${requiredPolicy}.`,
 			);
 		}
 	}

@@ -10,14 +10,23 @@
 
 ## Averlo Plugin Pack
 
+- When a task explicitly names an Averlo skill, resolve and read that exact
+  skill before any implementation. If it is absent from the current task's
+  skill catalogue, its resolved path is missing, or its resolved plugin version
+  differs from the enabled installed Averlo version, stop and report a workflow
+  resolution failure. Do not substitute another Averlo or generic skill.
 - Treat the Averlo plugin pack as the repository workflow layer. For
   implementation or implementation review, invoke
   `$averlo:repository-workflows` and follow only the workflows and concerns it
   selects.
 - After the router is selected, do not separately invoke overlapping Averlo
   design-system, skeleton, entity, or surface skills for the same change unit.
-  Use a dedicated operational skill when project lifecycle or transfer work is
-  actually requested.
+  `$averlo:compose`, `$averlo:static-composition`,
+  `$averlo:motion-composition`, and `$averlo:visual-parity` are operational
+  owners, not overlapping substitutes; they may invoke the repository router
+  and Figma skills as subordinate steps. A source-backed composition must not
+  call Figma or edit product code until its named composition owner is loaded
+  and its preflight permits work.
 - Root and nearest `AGENTS.md` files own structural policy. Existing verifier
   commands own deterministic policy.
 

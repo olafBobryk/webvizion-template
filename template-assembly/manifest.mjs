@@ -35,6 +35,7 @@ export const assemblyTemplateOnlyPaths = new Set([
 
 export const assemblyTemplateOnlyRoots = [
 	".agents",
+	"docs/skills",
 	"plugins",
 	"packages",
 	"template-assembly",
@@ -72,6 +73,7 @@ export const assemblyTemplateOnlyScripts = new Set([
 	"verify:profiles",
 	"verify:create-averlo",
 	"verify:composition-record",
+	"verify:visual-parity",
 ]);
 
 export const assemblyTemplateOnlyDevDependencies = new Set(["js-tiktoken"]);

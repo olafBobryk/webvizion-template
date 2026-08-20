@@ -1,6 +1,6 @@
 ---
 name: repository-workflows
-description: Explicit-only router for Averlo repository implementation work across UI ownership and catalogue contracts, loading, forms, mutations, composition, interaction and measured scroll performance, entities, route surfaces, marketing, auth and organizations, API transport, CMS content sources, and contact delivery. Use when the user explicitly invokes $averlo:repository-workflows or the governing repository AGENTS.md requires it; select every implementation intent actually changed or reviewed and load only their reusable concern contracts.
+description: Router for Averlo repository implementation work across UI ownership and catalogue contracts, loading, forms, mutations, composition, interaction and measured scroll performance, entities, route surfaces, marketing, auth and organizations, API transport, CMS content sources, and contact delivery. Use in an Averlo repository when the user explicitly invokes $averlo:repository-workflows, a governing AGENTS.md requires it, or an Averlo operational workflow begins implementation; select every implementation intent actually changed or reviewed and load only their reusable concern contracts.
 ---
 
 # Averlo · Repository Workflows
