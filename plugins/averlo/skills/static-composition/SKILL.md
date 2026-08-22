@@ -95,7 +95,10 @@ measurement, and generated artifacts.
 6. Inspect the complete declared source focus and the Target's current tokens,
    documented owners, variants, and consumers. Write the complete source and
    progress tables before implementation. Use one stable scope ID for the
-   composition row, progress row, and Visual Parity matrix case.
+   composition row, progress row, and Visual Parity matrix case. Before the
+   first system-integration edit, also write the composition record's complete
+   owner-migration table at the exact owner-axis or role granularity supported
+   by Source evidence.
 7. Preflight every required font and constituent asset. Treat material as
    supplied only when it comes from the Target repository, the authoritative
    source connector, a path supplied in the current task, or an explicitly
@@ -177,14 +180,33 @@ rows remain distinct from source-backed cases even when a width is shared.
    repeated shells, and layout owners to the current implementation and every
    existing documented owner and consumer. This complete-focus census prevents
    a later section from creating a duplicate role or confusing a product
-   variation with an instance-wide system variant.
+   variation with an instance-wide system variant. Write one stable
+   owner-migration row for every evidenced role or axis and every adjacent
+   inherited axis that must be distinguished as unevidenced before the first
+   Target edit.
 2. Keep one coherent design system in the Target instance. An authoritative
    reference supersedes inherited template visuals for every evidenced role;
    existing visual tokens, variants, and owner treatments are inventory, not
    fidelity constraints. Preserve semantic HTML, accessibility, supported
    interaction, data, routing, and framework boundaries while replacing the
    visual implementation they carry.
-3. Make every genuine typography role an instance-wide `Text` variant during
+3. Apply owner precedence before deciding implementation locality. A
+   source-backed role that falls within an existing documented owner's domain
+   must migrate through that owner even when the realization currently uses a
+   page-local component. When no owner exists, a visual role repeated across
+   consumers or independent scopes must gain a source-neutral owner. Owner
+   overlap or repetition can never be justified as `instance-local`; only the
+   role's product content, constituent asset, unique geometry, or choreography
+   may remain local.
+4. Scope authority to the exact evidenced axis or role. Treat an axis as shared
+   only when a Source component, variable, style, or consistent recurrence
+   across independent roles or scopes supports that conclusion. One observed
+   value does not authorize changes to adjacent axes. For example, repeated
+   horizontal gutters may replace a shared Section `px` axis, while
+   section-specific `py` remains local and an unevidenced `maxWidth` contract
+   remains preserved and explicitly unconverted. Preserve behavioral,
+   responsive, and structural axes that the Source does not evidence.
+5. Make every genuine typography role an instance-wide `Text` variant during
    system integration. Before adding it, compare its family, weight, size, line
    height, tracking, responsive behavior, and purpose against the complete
    documented axis, source-focus census, and current consumers. Reuse an
@@ -193,27 +215,42 @@ rows remain distinct from source-backed cases even when a width is shared.
    product, section, route, brand, or Figma-node names. Update the owner contract
    and exhaustive Storybook type-scale evidence in the same change. Keep
    section geometry and choreography with the section.
-4. For every changed role, choose one disposition: reuse, extend, replace, new
-   owner, instance-local, or merge-retire. Generalize only source-neutral
-   behavior; retain product copy, assets, and page choreography in the instance.
-5. Let reference-backed evidence replace the shared tokens and owners it
-   supports. Do not invent replacements for unevidenced roles, claim they were
-   converted, add a parallel theme, or change the canonical Averlo template.
-6. Keep visible product structure native: text remains selectable,
+6. Assign every owner-migration row exactly one disposition:
+   `replace`, `merge-retire`, `source-supported-retain`,
+   `unevidenced-preserve`, or `instance-local`. `source-supported-retain`
+   requires evidence that the inherited recipe already matches the Source.
+   `unevidenced-preserve` keeps an adjacent axis or role because the Source
+   supplies no authority for it and must never be reported as converted.
+   `instance-local` is valid only for product content, exact constituent
+   assets, unique geometry, or choreography that does not overlap an owner or
+   repeat as a visual role.
+7. Make migration subtractive for every evidenced role. Replace its inherited
+   visual recipe, or merge and retire the superseded recipe; update all current
+   consumers and remove duplicated page-local visual recipes after owner
+   adoption. A new source-neutral owner replaces the repeated local recipe when
+   no owner existed. Do not retain an unchanged template treatment for a
+   source-backed role, invent replacements for unevidenced axes, claim
+   preserved axes were converted, add a parallel theme, or change the canonical
+   Averlo template.
+8. Keep visible product structure native: text remains selectable,
    controls retain semantics and behavior, sections own real responsive layout,
    and media uses constituent assets. A full-frame capture may be Source
    evidence but must never render as Target product UI.
-7. Follow the repository workflow's media-delivery concern for every marketing
+9. Follow the repository workflow's media-delivery concern for every marketing
    image, mark, or icon. Do not ship expiring design-tool URLs.
-8. Convert one recorded shell or section scope at a time. Before each Target
+10. Convert one recorded shell or section scope at a time. Before each Target
    edit, mark affected rows and the full-page gate `stale`; after conversion,
-   remeasure that scope. Treat componentization as a render-preserving refactor,
-   then correct any difference it introduces.
-9. Advance Current pass to `convergence` only after every realized visible role
-   is owned by an existing or newly documented source-neutral system owner, or
-   is explicitly justified as instance-local, and the corresponding owner
-   contracts, consumers, and Storybook evidence are current. Do not start final
-   zero-diff convergence against temporary page-local approximations.
+   remeasure that scope and update every affected owner-migration row. Treat
+   componentization as a render-preserving refactor, then correct any difference
+   it introduces.
+11. Advance Current pass to `convergence` only after every Source-evidenced
+   owner-migration row is current, every affected consumer uses the resulting
+   owner, superseded local and inherited visual recipes are removed, and the
+   corresponding owner contracts, exhaustive Storybook/catalogue evidence, and
+   `unevidenced-preserve` exclusions are current. Do not start final zero-diff
+   convergence against temporary page-local approximations. An
+   `instance-local` claim that overlaps an owner or repeated role leaves system
+   integration incomplete.
 
 ## Baseline every scope, then run the correction loop
 

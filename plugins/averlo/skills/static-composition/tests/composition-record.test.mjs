@@ -34,6 +34,7 @@ function tableAfter(source, heading) {
 test("composition record defines related source and progress tables", async () => {
 	const contract = await read("references/composition-record.md");
 	const sourceRows = tableAfter(contract, "## Source decomposition");
+	const ownerRows = tableAfter(contract, "## Owner migration");
 	const progressRows = tableAfter(contract, "## Progress");
 
 	assert.deepEqual(sourceRows[0], [
@@ -59,12 +60,60 @@ test("composition record defines related source and progress tables", async () =
 		"Evidence",
 		"Next action or blocker",
 	]);
+	assert.deepEqual(ownerRows[0], [
+		"Owner axis ID",
+		"Owner",
+		"Axis or role",
+		"Source evidence and affected scopes",
+		"Inherited recipe and consumers",
+		"Disposition",
+		"Resulting owner and consumers",
+		"Storybook and catalogue evidence",
+	]);
 
 	const sourceIds = new Set(sourceRows.slice(2).map((row) => row[0]));
 	const progressIds = new Set(progressRows.slice(2).map((row) => row[0]));
 	assert.equal(sourceIds.size, sourceRows.length - 2);
 	assert.equal(progressIds.size, progressRows.length - 2);
 	assert.deepEqual(progressIds, sourceIds);
+});
+
+test("owner migration is evidence-scoped and subtractive", async () => {
+	const [skill, contract] = await Promise.all([
+		read("SKILL.md"),
+		read("references/composition-record.md"),
+	]);
+	for (const disposition of [
+		"replace",
+		"merge-retire",
+		"source-supported-retain",
+		"unevidenced-preserve",
+		"instance-local",
+	]) {
+		assert.match(
+			contract,
+			new RegExp(`- ${"`"}${disposition}${"`"}:`, "u"),
+		);
+	}
+	assert.match(skill, /exact owner-axis or role granularity/u);
+	assert.match(
+		skill,
+		/Owner\s+overlap or repetition can never be justified as `instance-local`/u,
+	);
+	assert.match(skill, /One observed\s+value does not authorize changes to adjacent axes/u);
+	assert.match(skill, /repeated\s+horizontal gutters may replace a shared Section `px` axis/u);
+	assert.match(skill, /`unevidenced-preserve` keeps an adjacent axis or role/u);
+	assert.match(skill, /must never be reported as converted/u);
+	assert.match(skill, /Make migration subtractive for every evidenced role/u);
+	assert.match(skill, /remove duplicated page-local visual recipes/u);
+	assert.match(
+		skill,
+		/Do not start final\s+zero-diff\s+convergence against temporary page-local approximations/u,
+	);
+	assert.match(
+		contract,
+		/System integration remains\s+incomplete while any evidenced row lacks current owner, consumer, contract, and\s+Storybook\/catalogue evidence/u,
+	);
 });
 
 test("composition record defines the complete current-state vocabulary", async () => {
@@ -151,7 +200,10 @@ test("system integration follows complete-focus realization", async () => {
 	assert.match(skill, /census every visible role across the\s+complete source focus/u);
 	assert.match(skill, /Convert one recorded shell or section scope at a time/u);
 	assert.match(skill, /componentization as a render-preserving refactor/u);
-	assert.match(skill, /Do not start final\s+zero-diff convergence against temporary page-local approximations/u);
+	assert.match(
+		skill,
+		/Do not start final\s+zero-diff\s+convergence against temporary page-local approximations/u,
+	);
 	assert.match(
 		skill,
 		/Fonts,\s+constituent assets, media delivery, source provenance, semantic native DOM,\s+complete decomposition, stable selectors, and repository safety checks are\s+first-pass requirements/u,

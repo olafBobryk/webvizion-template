@@ -42,6 +42,12 @@ tasks. The Codex goal resumes work from it but does not replace it.
 | --- | ---: | --- | --- | --- | --- | --- | --- |
 | <scope-id> | 1 | shell-header | <node or bounds> | <node or crop> | <route and selector> | includes header only | changedPixels: 0 |
 
+## Owner migration
+
+| Owner axis ID | Owner | Axis or role | Source evidence and affected scopes | Inherited recipe and consumers | Disposition | Resulting owner and consumers | Storybook and catalogue evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| <owner-axis-id> | <documented owner or none> | <exact visual axis or role> | <source fact plus scope IDs> | <current recipe plus consumers> | <allowed disposition> | <final source-neutral owner plus migrated consumers> | <current story, contract, or explicit exclusion> |
+
 ## Progress
 
 | Scope ID | Status | Current changed pixels | Best changed pixels | Current mean delta | Best mean delta | Current Target identity | Best Target identity | Non-improving turns | Evidence | Next action or blocker |
@@ -61,6 +67,42 @@ The Source decomposition and Progress tables are related by `Scope ID`. Every
 scope ID must be unique in each table and appear exactly once in both. Matrix
 case IDs use the same value. Use stable, source-neutral IDs that survive agent
 and task changes.
+
+Owner migration is related to decomposition through the affected scope IDs in
+each row. `Owner axis ID` is unique and stable for the durable focus. Write the
+complete owner-migration table before the first system-integration Target edit;
+a staged realization may leave it empty until its later system-integration
+task performs the complete-focus census.
+
+## Owner-migration disposition
+
+- `replace`: Source evidence replaces an inherited visual recipe, or a new
+  source-neutral owner replaces a repeated local recipe when no owner existed.
+- `merge-retire`: an evidenced role merges into an equivalent owner role and
+  the superseded inherited or local recipe is removed.
+- `source-supported-retain`: the inherited recipe remains only because current
+  Source evidence proves that it already matches the evidenced role or axis.
+- `unevidenced-preserve`: the Source does not establish authority for this
+  adjacent behavioral, responsive, structural, or visual axis. Preserve it,
+  but never report it as converted or use it as evidence that system
+  integration covered the axis.
+- `instance-local`: preserve product content, exact constituent assets, unique
+  geometry, or choreography locally only when it neither overlaps a documented
+  owner nor repeats as a visual role.
+
+Apply evidence at owner-axis or role granularity. A Source component, variable,
+style, or consistent recurrence across independent roles or scopes can support
+a shared axis. One observed value does not authorize adjacent axes: repeated
+horizontal gutters may evidence Section `px`, while section-owned `py` and an
+unevidenced `maxWidth` remain local or `unevidenced-preserve`. Owner overlap or
+repetition cannot resolve as `instance-local`.
+
+Migration is subtractive for evidenced roles. Update every current consumer and
+remove the superseded inherited or page-local visual recipe. Preserve
+unevidenced axes without inventing a replacement. System integration remains
+incomplete while any evidenced row lacks current owner, consumer, contract, and
+Storybook/catalogue evidence, or while a source-backed local approximation
+remains.
 
 ## Row status
 
@@ -140,9 +182,12 @@ is `mismatched`; `queued` means it has no baseline yet.
   `system-integration`. This may complete the bounded realization goal but must
   not set Overall state to `complete`.
 - Before `system-integration` edits, census every visible role across the
-  complete focus. Convert recorded scopes onto source-neutral documented owners
-  and update their consumers and Storybook evidence. Mark affected rows and the
-  full-page gate `stale` after each Target edit.
-- Set Current pass to `convergence` only when every visible role is owned by a
-  documented system owner or justified as instance-local. Set it to `complete`
-  only with the existing exact and system-fit completion requirements.
+  complete focus and write the complete owner-migration table. Convert recorded
+  scopes onto source-neutral documented owners, retire superseded visual
+  recipes, and update their consumers and Storybook evidence. Mark affected
+  rows and the full-page gate `stale` after each Target edit.
+- Set Current pass to `convergence` only when every evidenced owner-migration
+  row is current, every repeated or owner-overlapping role uses its documented
+  owner, and preserved unevidenced axes are explicitly excluded from conversion
+  claims. Set it to `complete` only with the existing exact and system-fit
+  completion requirements.
