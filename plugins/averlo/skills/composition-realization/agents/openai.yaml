@@ -1,0 +1,6 @@
+interface:
+  display_name: "Averlo · Composition Realization"
+  short_description: "Realize a complete native source-backed surface"
+  default_prompt: "Use $averlo:composition-realization to create a complete native baseline for this source-backed surface."
+policy:
+  allow_implicit_invocation: false

@@ -13,6 +13,8 @@ Effective scope / expansion: <owners inspected and why it changed>
 Composition record: <docs/composition/<focus-slug>.md>
 Active scope: <composition-record scope ID>
 Source authority: <immutable Figma/export, pinned renderer, or none>
+Comparison purpose: <source-parity | integration-parity | responsive-system-fit>
+Integration baseline: <frozen realized Target capture and SHA-256, or not applicable>
 Figma execution identity: <connector plus whoami result, or not applicable>
 Isolated source working copy: <Agent Space page ID and cloned focus-node ID, or not applicable>
 Product sources: <PRODUCT.md#product-sources or not applicable>
@@ -45,5 +47,5 @@ A receipt used to update the composition record must use `Phase: verify`, match
 its Target identity and assessment to the current implementation, and include
 current native evidence. Treat a stale `frame` receipt, an absent required
 block, or mismatched Target identity as unusable even when an older assessment
-measured zero changed pixels. Static Composition owns the durable status and
-completion interpretation.
+measured zero changed pixels. The active composition peer owns durable status
+and interpretation; Compose owns lifecycle completion.

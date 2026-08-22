@@ -5,28 +5,33 @@ description: Run fast, reproducible source-versus-target static visual assessmen
 
 # Averlo · Visual Parity
 
-Use one matrix to capture Source (the authority) and Target (the implementation).
-This skill owns reproducible capture and measurement evidence. It does not edit
-the product, assign composition status, or decide when the Static Composition
-goal is complete.
+Use one matrix to capture a pinned reference and current Target. For source
+parity, the reference is the authoritative Source. For render-preserving system
+integration, it is the frozen realized Target and must be labeled an integration
+baseline rather than product authority. This skill owns reproducible capture
+and measurement evidence. It does not edit the product, assign composition
+status, or decide when a composition goal is complete.
 
 ## Frame the evidence
 
 1. Require a schema-v2 `.template-profile.json` receipt. Stop for the canonical
    template; its legacy design-system parity port remains an explicit archive
    import.
-2. Decide which side is authoritative. `source` is an immutable Figma/export
-   image, pinned rendered surface, or `none`; `target` is the generated instance.
-   Do not reverse those labels or compare two moving working trees.
-3. Copy [the matrix example](references/matrix.example.json) into the task's
+2. Decide which side is pinned. `source` is an immutable Figma/export image, a
+   frozen realized Target used only for integration parity, or `none`; `target`
+   is the current generated instance. Never compare two moving working trees.
+3. Record whether the case is `source-parity`, `integration-parity`, or
+   `responsive-system-fit` in the focus packet. An integration baseline never
+   becomes a product-authority claim.
+4. Copy [the matrix example](references/matrix.example.json) into the task's
    ignored `.codex/visual-parity/<task>/matrix.json`. Add one case per named
    route, section, state, and source-backed viewport in the order supplied by
-   Static Composition. Use the composition record's stable scope ID as the case
+   the owning composition peer. Use the composition record's stable scope ID as the case
    ID. Each side is either an existing PNG (`image`) or a live URL with an
    optional crop `selector`. An image endpoint may specify
    `crop: { x, y, width, height }` to retain the original page background around
    a nested Figma scope.
-4. Record the current Target route, selector, capture conditions, and repository
+5. Record the current Target route, selector, capture conditions, and repository
    revision or dirty-worktree identity in the focus packet. A later Target edit
    makes the preceding assessment stale until that case is recaptured.
 
@@ -73,8 +78,8 @@ goal is complete.
   selector, state, viewport, DPR, fonts, and motion-off capture. Other widths
   remain Target-only responsive evidence.
 - A pixel comparator cannot prove implementation independence. Preserve current
-  source and DOM evidence and the flattened-reference check so Static
-  Composition can interpret the measurement.
+  source and DOM evidence and the flattened-reference check so the owning
+  composition peer can interpret the measurement.
 - `comparable: false` and a native-invalid Target are evidence defects, not
   alternate verdicts. Preserve the technical reason for the owning workflow.
 
@@ -87,7 +92,9 @@ capture and write measurements and evidence to
 assessment from a prior Target revision, or a receipt missing native evidence
 cannot support a current composition-record update.
 
-Static Composition owns decomposition, case ordering, measurement
-interpretation, durable status, correction turns, the goal terminal condition,
-and the approval pause. Motion Composition reuses a current verified packet only
-for motion-off and settled static endpoints, never intermediate frames.
+Composition Realization owns source framing and baselines; Composition System
+Integration owns integration-parity interpretation; Composition Convergence
+owns source-parity interpretation, correction turns, and exact status. Compose
+owns plane order, the shared goal, and the approval pause. Motion Composition
+reuses a current verified packet only for motion-off and settled static
+endpoints, never intermediate frames.

@@ -1,6 +1,6 @@
 {
 	"name": "averlo",
-	"version": "0.1.0+codex.20260822164116",
+	"version": "0.1.0+codex.20260822183719",
 	"description": "Repository workflows for building, reviewing, and backporting reusable Averlo Next application patterns.",
 	"author": {
 		"name": "Olaf Bobryk",
@@ -27,7 +27,7 @@
 	"interface": {
 		"displayName": "Averlo",
 		"shortDescription": "Build with Averlo contracts",
-		"longDescription": "Averlo packages repository workflows for entity UI, application surface registries, component-owned loading states, Storybook-backed public UI enforcement, deterministic Figma exports, and reviewed story backports from product instances into the canonical template.",
+		"longDescription": "Averlo packages repository workflows for source-backed realization, render-preserving design-system integration, exact visual convergence, motion composition, entity UI, application surface registries, Storybook evidence, deterministic Figma exports, and reviewed backports.",
 		"developerName": "Olaf Bobryk",
 		"category": "Developer Tools",
 		"capabilities": ["Write"],
@@ -36,7 +36,7 @@
 			"Audit this entity UI against Averlo",
 			"Review this route surface registry",
 			"Backport approved Storybook stories into the Averlo template",
-			"Compose and animate this focused surface in a generated Averlo instance"
+			"Compose this source-backed surface through exact static parity and optional motion"
 		]
 	}
 }

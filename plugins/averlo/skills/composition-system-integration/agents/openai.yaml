@@ -1,0 +1,6 @@
+interface:
+  display_name: "Averlo · Composition System Integration"
+  short_description: "Migrate realized visuals into shared owners"
+  default_prompt: "Use $averlo:composition-system-integration to migrate this realized surface into its instance design system without changing its pixels."
+policy:
+  allow_implicit_invocation: false

@@ -11,9 +11,11 @@ indexability, canonical identity, and provider-backed page metadata routing.
 After it selects the applicable workflows and concern contracts, do not invoke
 the overlapping design-system, skeleton, entity, or surface skills again for
 the same change unit. Those skills remain unchanged compatibility entry points
-for projects that invoke them directly. Compose, Static Composition, Motion
-Composition, and Visual Parity remain operational owners and may invoke this
-router and Figma skills as subordinate steps.
+for projects that invoke them directly. Compose orchestrates the peer
+Composition Realization, Composition System Integration, Composition
+Convergence, and optional Motion Composition workflows. Those peers and Visual
+Parity remain operational owners and may invoke this router and Figma skills as
+subordinate steps.
 
 ## Authored source
 

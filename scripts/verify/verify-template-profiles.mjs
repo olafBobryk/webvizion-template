@@ -421,6 +421,9 @@ async function assertGeneratedDocumentation(outputRoot, profileCase) {
 		"optional repository workflow layer",
 		"Its absence from the current skill catalogue does not block ordinary implementation",
 		"A source-backed composition must not call Figma or edit product code",
+		"$averlo:composition-realization",
+		"$averlo:composition-system-integration",
+		"$averlo:composition-convergence",
 	]) {
 		if (!agentInstructions.replace(/\s+/gu, " ").includes(requiredPolicy)) {
 			throw new Error(
@@ -493,6 +496,9 @@ async function assertCanonicalAgentContract(templateRoot) {
 		"optional repository workflow layer",
 		"Its absence from the current skill catalogue does not block ordinary implementation",
 		"A source-backed composition must not call Figma or edit product code",
+		"$averlo:composition-realization",
+		"$averlo:composition-system-integration",
+		"$averlo:composition-convergence",
 	]) {
 		if (!agentInstructions.replace(/\s+/gu, " ").includes(requiredPolicy)) {
 			throw new Error(

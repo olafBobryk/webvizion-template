@@ -76,7 +76,7 @@
 		"verify:component-sweep": "tsx scripts/verify/verify-component-sweep.ts",
 		"verify:design-system-evidence": "node scripts/verify/verify-design-system-evidence.mjs",
 		"verify:storybook-backport": "node --test plugins/averlo/skills/storybook-backport/tests/scan-story-backports.test.mjs",
-		"verify:composition-record": "node --test plugins/averlo/skills/static-composition/tests/composition-record.test.mjs",
+		"verify:composition-record": "node --test plugins/averlo/skills/compose/tests/composition-workflow.test.mjs",
 		"verify:visual-parity": "node --test plugins/averlo/skills/visual-parity/tests/assess.test.mjs",
 		"verify:design-system-agent-benchmark": "node scripts/verify/verify-design-system-agent-benchmark.mjs",
 		"generate:design-system-agent-benchmark-report": "node scripts/verify/verify-design-system-agent-benchmark.mjs --write"

@@ -12,9 +12,10 @@ wrappers. Preserve the approved static endpoint exactly.
 
 1. Require a schema-v2 `.template-profile.json` receipt and read
    [`visual-parity`'s focus packet](../visual-parity/references/focus-packet.md).
-2. Require a complete committed Static Composition record, a current verified
-   Visual Parity packet, and the approved static checkpoint unless the caller
-   explicitly bypassed review. Use `$averlo:visual-parity`'s Verify phase with
+2. Require a complete committed composition record with Convergence handoff
+   `exact`, a current verified Visual Parity packet, and the approved static
+   checkpoint unless the caller explicitly bypassed review. Use
+   `$averlo:visual-parity`'s Verify phase with
    the same packet to review motion-off and settled motion-on endpoints; it
    proves static endpoints, not intermediate animation frames.
 3. Invoke `$averlo:repository-workflows` before implementation. Select

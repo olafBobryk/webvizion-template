@@ -1,0 +1,6 @@
+interface:
+  display_name: "Averlo · Composition Convergence"
+  short_description: "Converge an integrated surface to exact parity"
+  default_prompt: "Use $averlo:composition-convergence to continue this integrated surface to exact source parity."
+policy:
+  allow_implicit_invocation: false
