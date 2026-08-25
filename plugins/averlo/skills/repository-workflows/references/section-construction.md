@@ -2,13 +2,18 @@
 
 ## Contract
 
-Build registered marketing sections through the repository's document and
-renderer architecture even when their source-backed visual treatment remains
-local. This concern owns mandatory section structure; it does not require a
-new visual recipe to become a shared design-system owner.
+Build source-backed public marketing pages and registered marketing sections
+through the repository's route-family, document, and renderer architecture even
+when their visual treatment remains local. Select this concern from the
+requested marketing-page work before choosing an implementation shape. It owns
+mandatory section structure; it does not require a new visual recipe to become
+a shared design-system owner.
 
-Keep the route responsible for resolving a `MarketingPageDocument` and
-delegating its ordered blocks to the registered renderer boundary. Give each
+Place a new public marketing destination in the installed marketing route
+family and register its canonical route-surface identity. Keep a source-backed
+multi-section route responsible only for resolving a `MarketingPageDocument`
+and delegating its ordered blocks to the registered renderer boundary; a
+route-local JSX page is not an alternative architecture. Give each
 source-neutral `blockType` exactly one registered renderer at
 `sections/**/<blockType>/<PascalBlockType>Section.tsx`. Colocate supporting
 components with that renderer and reserve the `Section` suffix for the
@@ -44,6 +49,8 @@ renderer or shared `Section` structure.
 
 ## Hard boundaries
 
+- Do not place a public marketing page outside the installed marketing route
+  family or leave its destination outside the marketing surface registry.
 - Do not implement a registered page as one route-local JSX tree or global
   stylesheet.
 - Do not make one registered renderer emit multiple independent semantic
@@ -64,6 +71,8 @@ Read only the paths that exist and apply:
 
 - `src/lib/marketing-content/AGENTS.md`, its document types, fallback document,
   resolver, registry, and `renderMarketingSections` boundary.
+- The marketing route-family registry and the requested destination's page
+  path.
 - The selected block type and registered renderer leaf.
 - The shared `Section` Storybook owner and its current contract.
 - The route and nearest marketing AGENTS.md only to verify delegation and
@@ -72,8 +81,13 @@ Read only the paths that exist and apply:
 
 ## Verification
 
-- Run `npm run verify:marketing-sections` after creating, moving,
-  restructuring, registering, or removing a section.
+- Run `npm run verify:route-surfaces` and `npm run verify:marketing-sections`
+  after creating or moving a public marketing page. Run
+  `npm run verify:marketing-sections` after restructuring, registering, or
+  removing a section.
+- Verify the destination is registered and its page lives under the marketing
+  route family; a successful preview at an unowned App Router path is a
+  structural failure.
 - Verify that the route resolves a `MarketingPageDocument`, delegates through
   `renderMarketingSections`, and has one source-neutral renderer per block
   type.

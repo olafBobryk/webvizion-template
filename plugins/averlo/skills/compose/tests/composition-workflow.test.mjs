@@ -140,9 +140,13 @@ test("section construction is conditionally routed and remains repository-owned"
 	assert.match(router, /add \[section construction\]/u);
 	assert.match(
 		router,
-		/when creating or restructuring registered marketing sections/u,
+		/whenever the requested change creates or restructures a public marketing page/u,
 	);
-	assert.match(router, /A shell-only change, copy-only content edit/u);
+	assert.match(
+		router,
+		/cannot avoid the concern by choosing a\s+route-local page/u,
+	);
+	assert.match(router, /a shell-only change,\s+copy-only content edit/iu);
 	for (const required of [
 		"MarketingPageDocument",
 		"renderMarketingSections",
@@ -157,8 +161,33 @@ test("section construction is conditionally routed and remains repository-owned"
 	]) {
 		assert.ok(concern.includes(required), `missing section rule: ${required}`);
 	}
-	assert.match(compose, /section-construction concern is mandatory/u);
+	assert.match(compose, /section-construction concern is\s+mandatory/u);
 	assert.doesNotMatch(compose, /Section\.Background|renderMarketingSections/u);
+});
+
+test("route and marketing verifiers reject implementation-shape bypasses", async () => {
+	const [routes, sections] = await Promise.all([
+		fs.readFile(
+			path.resolve(process.cwd(), "scripts/verify/verify-route-surfaces.ts"),
+			"utf8",
+		),
+		fs.readFile(
+			path.resolve(
+				process.cwd(),
+				"scripts/verify/verify-marketing-section-policy.ts",
+			),
+			"utf8",
+		),
+	]);
+
+	assert.match(routes, /for \(const pagePath of collectPages\(appRoot\)\)/u);
+	assert.match(routes, /Page bypasses route-family ownership/u);
+	assert.match(sections, /documentArchitectureExemptions/u);
+	assert.match(sections, /must resolve a MarketingPageDocument/u);
+	assert.match(
+		sections,
+		/cannot use route-local JSX as an alternate architecture/u,
+	);
 });
 
 test("Compose calibrates font faces and requires exact exported vector identity", async () => {

@@ -146,6 +146,13 @@ async function main() {
 		"(site)/dashboard/organization/members/page.tsx",
 		"(site)/dashboard/overview/page.tsx",
 	]);
+	const nonSurfacePagePrefixes = [
+		"(component-export)/internal/",
+		"(payload)/admin/",
+		"(site)/(dev)/internal/",
+		"(site)/(marketing)/internal/",
+	];
+	const nonSurfacePageExemptions = new Set(["(site)/(app-home)/page.tsx"]);
 
 	for (const familyRoot of Object.values(familyRoots)) {
 		for (const pagePath of collectPages(familyRoot)) {
@@ -157,6 +164,19 @@ async function main() {
 				`Page requires one route-surface owner or explicit exemption: ${relativePath}`,
 			);
 		}
+	}
+
+	for (const pagePath of collectPages(appRoot)) {
+		const relativePath = normalize(relative(appRoot, pagePath));
+		assert.ok(
+			registeredPages.has(relativePath) ||
+				explicitPageExemptions.has(relativePath) ||
+				nonSurfacePageExemptions.has(relativePath) ||
+				nonSurfacePagePrefixes.some((prefix) =>
+					relativePath.startsWith(prefix),
+				),
+			`Page bypasses route-family ownership: ${relativePath}. Register the destination and place it in its installed marketing, auth, or dashboard route family, or add a reviewed internal/provider exemption.`,
+		);
 	}
 
 	for (const exemption of explicitPageExemptions) {

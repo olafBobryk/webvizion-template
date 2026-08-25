@@ -10,6 +10,14 @@ const registryPath = resolve(sectionsRoot, "registry.tsx");
 const rendererPath = resolve(sectionsRoot, "renderMarketingSections.tsx");
 const typesPath = resolve(root, "src/lib/marketing-content/types.ts");
 const packagePath = resolve(root, "package.json");
+const documentArchitectureExemptions = new Set([
+	"src/app/(site)/(marketing)/[...catchAll]/page.tsx",
+	"src/app/(site)/(marketing)/contact/page.tsx",
+	"src/app/(site)/(marketing)/document/page.tsx",
+	"src/app/(site)/(marketing)/internal/testing/page.tsx",
+	"src/app/(site)/(marketing)/repository-footprint/page.tsx",
+	"src/app/(site)/(marketing)/settings/page.tsx",
+]);
 
 if (!existsSync(marketingRoot)) {
 	console.log(
@@ -278,10 +286,14 @@ for (const pagePath of collectMarketingPageFiles(marketingRoot)) {
 		/<style\b/iu,
 		`${pageLabel} cannot hide or restyle shared shell regions through route-local CSS.`,
 	);
+	if (documentArchitectureExemptions.has(pageLabel)) continue;
 	const resolvedSlug = pageSource.match(
 		/getMarketingPage\(\s*["']([^"']+)["']\s*\)/u,
 	)?.[1];
-	if (!resolvedSlug || resolvedSlug === "document") continue;
+	assert.ok(
+		resolvedSlug,
+		`${pageLabel} must resolve a MarketingPageDocument; new multi-section marketing pages cannot use route-local JSX as an alternate architecture.`,
+	);
 	assert.match(
 		pageSource,
 		/renderMarketingSections\(\s*page\.layout\s*\)/u,

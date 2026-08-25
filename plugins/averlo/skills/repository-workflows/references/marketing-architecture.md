@@ -2,10 +2,13 @@
 
 ## Contract
 
-Keep marketing components source-neutral. Route pages resolve a
-MarketingPageDocument and delegate its layout to the registered section
-renderer. They do not import or compose registered section implementations
-directly.
+Keep marketing components source-neutral. New source-backed multi-section
+pages live in the installed marketing route family, own a registered marketing
+surface identity, resolve a `MarketingPageDocument`, and delegate its layout to
+the registered section renderer. They do not import or compose registered
+section implementations directly. Existing explicit utility or document
+routes may retain their narrower owners; they are not precedent for bypassing
+the document architecture in a new composed page.
 
 Give every blockType one named renderer. Allow any number of organizational
 folders, but end the path with
@@ -40,6 +43,8 @@ direct link boundary.
 
 - Do not use product or brand names in section leaf folders, registered renderer
   names, or generic canonical owners.
+- Do not create a public marketing page at an unowned App Router path or use a
+  route-local page to evade document and renderer registration.
 - Do not flatten all sections into one route file or one global stylesheet.
 - Do not make the frontend section model a generic page builder.
 - Do not import Payload document shapes or source-specific metadata into
@@ -64,8 +69,10 @@ Read only the marketing boundary being changed:
 
 ## Verification
 
-- Run npm run verify:marketing-sections after adding, moving, renaming, or
-  removing a registered section.
+- Run npm run verify:route-surfaces and npm run verify:marketing-sections after
+  adding or moving a public marketing page. Run npm run
+  verify:marketing-sections after adding, moving, renaming, or removing a
+  registered section.
 - Run npm run verify:site-layout for shared shell or public navigation changes.
 - Verify route pages delegate layout, names remain product-neutral, intermediate
   folders preserve the leaf convention, and section styling remains Tailwind

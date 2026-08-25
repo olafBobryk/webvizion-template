@@ -19,7 +19,7 @@
 		"start": "next start",
 		"lint": "biome check",
 		"typecheck": "tsc --noEmit --pretty false",
-		"verify:static": "npm run lint && npm run verify:route-metadata && npm run verify:modals && npm run verify:surface-contracts && npm run verify:retired-semantic-service && npm run verify:retired-template-intelligence && npm run verify:skill-references && npm run typecheck",
+		"verify:static": "npm run lint && npm run verify:route-surfaces && npm run verify:route-metadata && npm run verify:modals && npm run verify:surface-contracts && npm run verify:retired-semantic-service && npm run verify:retired-template-intelligence && npm run verify:skill-references && npm run typecheck",
 		"verify:build": "npm run build",
 		"verify:smoke": "node scripts/verify/verify-smoke.mjs",
 		"verify:auth": "tsx scripts/verify/verify-auth-organization.ts",

@@ -18,8 +18,9 @@ owners. `$averlo:systemize-composition` owns that later decision boundary.
 2. Invoke `$averlo:repository-workflows` once for each genuine change unit.
    Select every applicable route, marketing/shell, composition, media, content,
    loading, and interaction workflow, then load the union of concerns once.
-   When registered marketing sections are created or restructured, the router's
-   conditional section-construction concern is mandatory.
+   When the requested focus creates or restructures a public marketing page or
+   source section, the router's conditional section-construction concern is
+   mandatory before choosing route-local or registered implementation shapes.
 3. Inspect the complete source focus and the current Target before editing.
    Classify source authority by region before defining cases. A page frame does
    not by itself authorize replacement of an existing approved header: preserve
