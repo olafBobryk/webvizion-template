@@ -141,6 +141,7 @@ async function main() {
 
 	const explicitPageExemptions = new Set([
 		"(site)/(marketing)/[...catchAll]/page.tsx",
+		"(site)/(marketing)/document/page.tsx",
 		"(site)/dashboard/[...catchAll]/page.tsx",
 		"(site)/dashboard/organization/members/page.tsx",
 		"(site)/dashboard/overview/page.tsx",

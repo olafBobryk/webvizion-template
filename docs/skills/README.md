@@ -3,10 +3,9 @@
 `plugins/averlo/skills/` is the published Averlo plugin surface. Keep it small:
 only active, default workflows belong there.
 
-Its active surface is `compose`, `composition-realization`,
-`composition-system-integration`, `composition-convergence`, `visual-parity`,
-`motion-composition`, `repository-workflows`, `storybook-backport`,
-`create-project`, `publish-project`, `contact-form`, and `figma-storybook-export`.
+Its active surface is `compose`, `systemize-composition`, `animate`,
+`visual-parity`, `repository-workflows`, `storybook-backport`, `create-project`,
+`publish-project`, `contact-form`, and `figma-storybook-export`.
 
 ## Legacy imports
 
@@ -18,7 +17,7 @@ new work.
 | Legacy skill | Active replacement | Import only when |
 | --- | --- | --- |
 | `design-system` | `$averlo:repository-workflows` | A project instruction or established process explicitly requires its owner-evidence command. |
-| `design-system-parity-port` | `$averlo:compose` + `$averlo:visual-parity` | A project explicitly needs its legacy frozen-renderer, bridge-gate port procedure. |
+| `design-system-parity-port` | `$averlo:compose` + `$averlo:systemize-composition` + `$averlo:visual-parity` | A project explicitly needs its legacy frozen-renderer, bridge-gate port procedure. |
 | `entities` | `$averlo:repository-workflows` → Entities | A project still uses its broader legacy entity-contract process. |
 | `skeletons` | `$averlo:repository-workflows` → Loading | The project explicitly relies on its loading-state migration guidance. |
 | `surfaces` | `$averlo:repository-workflows` → Route surfaces | The project explicitly relies on its legacy route-registry procedure. |

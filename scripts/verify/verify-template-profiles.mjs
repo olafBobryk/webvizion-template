@@ -421,9 +421,10 @@ async function assertGeneratedDocumentation(outputRoot, profileCase) {
 		"optional repository workflow layer",
 		"Its absence from the current skill catalogue does not block ordinary implementation",
 		"A source-backed composition must not call Figma or edit product code",
-		"$averlo:composition-realization",
-		"$averlo:composition-system-integration",
-		"$averlo:composition-convergence",
+		"$averlo:compose",
+		"$averlo:systemize-composition",
+		"$averlo:animate",
+		"$averlo:visual-parity",
 	]) {
 		if (!agentInstructions.replace(/\s+/gu, " ").includes(requiredPolicy)) {
 			throw new Error(
@@ -452,11 +453,11 @@ async function assertGeneratedDocumentation(outputRoot, profileCase) {
 	);
 	if (
 		!documentation.includes(
-			"`composition/` contains committed composition records and promoted visual evidence",
+			"`design-system/decisions/` contains human-approved, rejected, or deferred composition ownership decisions",
 		)
 	) {
 		throw new Error(
-			`${profileCase.profileId}/${profileCase.content} generated docs/README.md does not describe durable composition records.`,
+			`${profileCase.profileId}/${profileCase.content} generated docs/README.md does not describe durable human design-system decisions.`,
 		);
 	}
 }
@@ -496,9 +497,10 @@ async function assertCanonicalAgentContract(templateRoot) {
 		"optional repository workflow layer",
 		"Its absence from the current skill catalogue does not block ordinary implementation",
 		"A source-backed composition must not call Figma or edit product code",
-		"$averlo:composition-realization",
-		"$averlo:composition-system-integration",
-		"$averlo:composition-convergence",
+		"$averlo:compose",
+		"$averlo:systemize-composition",
+		"$averlo:animate",
+		"$averlo:visual-parity",
 	]) {
 		if (!agentInstructions.replace(/\s+/gu, " ").includes(requiredPolicy)) {
 			throw new Error(
@@ -783,7 +785,7 @@ async function assertComponentExport(outputRoot, profileCase) {
 			`${profileCase.profileId}/${profileCase.content} is missing Component Export scripts.`,
 		);
 	}
-	const expectedOwnerCount = selectedSurfaces.has("dashboard") ? 89 : 77;
+	const expectedOwnerCount = selectedSurfaces.has("dashboard") ? 91 : 79;
 	if (catalogFiles.length !== expectedOwnerCount) {
 		throw new Error(
 			`${profileCase.profileId}/${profileCase.content} expected ${expectedOwnerCount} installed catalogue owners, found ${catalogFiles.length}.`,

@@ -10,12 +10,12 @@ indexability, canonical identity, and provider-backed page metadata routing.
 
 After it selects the applicable workflows and concern contracts, do not invoke
 the overlapping design-system, skeleton, entity, or surface skills again for
-the same change unit. Those skills remain unchanged compatibility entry points
-for projects that invoke them directly. Compose orchestrates the peer
-Composition Realization, Composition System Integration, Composition
-Convergence, and optional Motion Composition workflows. Those peers and Visual
-Parity remain operational owners and may invoke this router and Figma skills as
-subordinate steps.
+the same change unit. `$averlo:compose` owns native source-backed realization
+and measured human review passes. `$averlo:systemize-composition` explicitly
+owns confidence-routed shared design-system decisions, `$averlo:animate`
+explicitly owns motion, and `$averlo:visual-parity` supplies reproducible
+evidence to all three. These operational workflows may invoke the router and
+Figma skills as subordinate steps.
 
 ## Authored source
 

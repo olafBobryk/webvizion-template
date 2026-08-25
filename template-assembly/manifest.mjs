@@ -72,7 +72,7 @@ export const assemblyTemplateOnlyScripts = new Set([
 	"verify:storybook-backport",
 	"verify:profiles",
 	"verify:create-averlo",
-	"verify:composition-record",
+	"verify:composition-workflows",
 	"verify:visual-parity",
 ]);
 

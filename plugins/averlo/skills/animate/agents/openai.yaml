@@ -1,0 +1,6 @@
+interface:
+  display_name: "Averlo · Animate"
+  short_description: "Add motion to an accepted static target"
+  default_prompt: "Use $averlo:animate to direct motion for this accepted static surface while preserving its motion-off endpoint."
+policy:
+  allow_implicit_invocation: false

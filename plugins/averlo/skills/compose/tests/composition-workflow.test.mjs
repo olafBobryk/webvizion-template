@@ -4,69 +4,22 @@ import path from "node:path";
 import test from "node:test";
 
 const skillsRoot = path.resolve(process.cwd(), "plugins/averlo/skills");
-const composeRoot = path.join(skillsRoot, "compose");
-
-async function read(relativePath) {
-	return fs.readFile(path.join(composeRoot, relativePath), "utf8");
-}
 
 async function readSkill(name, relativePath = "SKILL.md") {
 	return fs.readFile(path.join(skillsRoot, name, relativePath), "utf8");
 }
 
-function tableAfter(source, heading) {
-	const start = source.indexOf(`${heading}\n`);
-	assert.notEqual(start, -1, `missing ${heading}`);
-	const lines = source.slice(start + heading.length + 1).split(/\r?\n/u);
-	const first = lines.findIndex((line) => line.startsWith("|"));
-	assert.notEqual(first, -1, `missing table after ${heading}`);
-	const table = [];
-	for (const line of lines.slice(first)) {
-		if (!line.startsWith("|")) break;
-		table.push(
-			line
-				.slice(1, -1)
-				.split("|")
-				.map((cell) => cell.trim()),
-		);
-	}
-	return table;
+async function assertMissingSkill(name) {
+	await assert.rejects(fs.access(path.join(skillsRoot, name, "SKILL.md")), {
+		code: "ENOENT",
+	});
 }
-
-test("Compose routes the three static peers in order and motion only explicitly", async () => {
-	const compose = await read("SKILL.md");
-	const realization = compose.indexOf("$averlo:composition-realization");
-	const integration = compose.indexOf("$averlo:composition-system-integration");
-	const convergence = compose.indexOf("$averlo:composition-convergence");
-
-	assert.ok(realization > -1);
-	assert.ok(integration > realization);
-	assert.ok(convergence > integration);
-	assert.match(
-		compose,
-		/Default the Terminal plane to `composition-convergence`/u,
-	);
-	assert.match(
-		compose,
-		/Select\s+`motion-composition` only when the caller explicitly requests motion/u,
-	);
-	assert.match(
-		compose,
-		/Invoke exactly one peer composition skill per continuation/u,
-	);
-	assert.match(
-		compose,
-		/never calls Figma, edits product code, interprets comparison\s+metrics/u,
-	);
-});
 
 test("Compose is the only implicit composition workflow", async () => {
 	const expected = {
 		compose: true,
-		"composition-realization": false,
-		"composition-system-integration": false,
-		"composition-convergence": false,
-		"motion-composition": false,
+		"systemize-composition": false,
+		animate: false,
 		"visual-parity": false,
 	};
 
@@ -79,151 +32,148 @@ test("Compose is the only implicit composition workflow", async () => {
 		);
 	}
 
-	await assert.rejects(
-		fs.access(path.join(skillsRoot, "static-composition", "SKILL.md")),
-		{ code: "ENOENT" },
-	);
-});
-
-test("the one record relates plane handoffs and scope evidence", async () => {
-	const contract = await read("references/composition-record.md");
-	const handoffs = tableAfter(contract, "## Plane handoffs");
-	const source = tableAfter(contract, "## Source decomposition");
-	const integration = tableAfter(contract, "## Integration parity");
-	const progress = tableAfter(contract, "## Source progress");
-
-	assert.deepEqual(handoffs[0], [
-		"Plane",
-		"Status",
-		"Terminal evidence",
-		"Next action or blocker",
-	]);
-	assert.deepEqual(source[0], [
-		"Scope ID",
-		"Order",
-		"Kind",
-		"Original source node/bounds",
-		"Agent Space node/crop",
-		"Target route/selector",
-		"Shell boundary",
-		"Terminal condition",
-	]);
-	assert.equal(integration[0][0], "Scope ID");
-	assert.equal(progress[0][0], "Scope ID");
-	assert.match(
-		contract,
-		/Compose alone updates lifecycle metadata and Plane handoffs/u,
-	);
-	assert.match(
-		contract,
-		/Rename Progress to Source progress without changing scope IDs/u,
-	);
-	assert.match(
-		contract,
-		/Never infer a ready handoff from the\s+old label alone/u,
-	);
-});
-
-test("Realization establishes a complete baseline without claiming parity", async () => {
-	const realization = await readSkill("composition-realization");
-	assert.match(realization, /Inspect the complete source before section work/u);
-	assert.match(realization, /390, 768, 1024,\s+and 1440 pixels/u);
-	assert.match(
-		realization,
-		/Section-local components, exact local variables, and\s+local CSS are allowed/u,
-	);
-	assert.match(
-		realization,
-		/Call every comparable nonzero source case `baselined`\s+or `measured`, never `verified` or complete/u,
-	);
-	assert.match(
-		realization,
-		/do not set Overall state\s+or the composition complete/u,
-	);
-});
-
-test("System Integration is subtractive and target-to-target exact", async () => {
-	const integration = await readSkill("composition-system-integration");
-	for (const disposition of [
-		"replace",
-		"merge-retire",
-		"source-supported-retain",
-		"unevidenced-preserve",
-		"instance-local",
+	for (const retired of [
+		"static-composition",
+		"composition-realization",
+		"composition-system-integration",
+		"composition-convergence",
+		"motion-composition",
 	]) {
-		assert.match(integration, new RegExp(`\`${disposition}\``, "u"));
+		await assertMissingSkill(retired);
 	}
-	assert.match(
-		integration,
-		/Repetition or owner overlap can never be escaped as `instance-local`/u,
-	);
-	assert.match(integration, /Make migration subtractive/u);
-	assert.match(
-		integration,
-		/A semantic wrapper that still receives the complete visual\s+recipe from route-local classes is not a migrated visual owner/u,
-	);
-	assert.match(integration, /target-to-target difference/u);
-	assert.match(integration, /integration-exact only at `changedPixels: 0`/u);
-	assert.match(
-		integration,
-		/An\s+improvement against Figma cannot compensate for a target-to-target difference/u,
-	);
 });
 
-test("Convergence continues improving nonzero work and blocks only after three stalls", async () => {
-	const convergence = await readSkill("composition-convergence");
-	assert.match(convergence, /not restricted to one hypothesis or one edit/u);
-	assert.match(convergence, /Any improving nonzero result\s+is actionable/u);
-	assert.match(convergence, /leave the goal active, and continue/u);
+test("Compose owns one native measured review pass without shared-owner mutation", async () => {
+	const compose = await readSkill("compose");
+
+	assert.match(compose, /Invoke `\$averlo:repository-workflows` once/u);
+	assert.match(compose, /Invoke `\$averlo:visual-parity` in `frame`/u);
+	assert.match(compose, /one complete review pass/u);
+	assert.match(compose, /one correction sweep in source order/u);
+	assert.match(compose, /Stop at a human review checkpoint/u);
+	assert.match(compose, /A later request to continue runs another complete/u);
 	assert.match(
-		convergence,
-		/Never end the workflow merely because the result is close/u,
+		compose,
+		/does not decide or mutate shared design-system\s+owners/u,
 	);
 	assert.match(
-		convergence,
-		/three consecutive non-improving correction turns/u,
+		compose,
+		/Do not add, extend, rename, merge, retire, retheme, or change defaults/u,
 	);
-	assert.match(convergence, /pure recapture with the same Target SHA-256/u);
-	assert.match(convergence, /set Integration handoff\s+to `pending`/u);
-	assert.match(convergence, /reports `changedPixels: 0`/u);
-});
-
-test("goal and evidence ownership do not create a second ledger", async () => {
-	const [
-		compose,
-		realization,
-		integration,
-		convergence,
-		visualParity,
-		contract,
-	] = await Promise.all([
-		read("SKILL.md"),
-		readSkill("composition-realization"),
-		readSkill("composition-system-integration"),
-		readSkill("composition-convergence"),
-		readSkill("visual-parity"),
-		read("references/composition-record.md"),
-	]);
-	const combined = [
-		compose,
-		realization,
-		integration,
-		convergence,
-		contract,
-	].join("\n");
-
-	assert.match(compose, /goal is runtime\s+continuation only/u);
-	assert.match(compose, /Never create\s+child goals/u);
-	assert.match(realization, /peer running under Compose reuses its goal/u);
-	assert.match(integration, /Reuse Compose's active goal/u);
-	assert.match(convergence, /Reuse Compose's active goal/u);
+	assert.match(compose, /`native-invalid` regardless of\s+its pixel score/u);
 	assert.doesNotMatch(
-		combined,
-		/(?:goal-ledger-prep|\$goal-ledger-prep|goal ledger)/iu,
+		compose,
+		/create_goal|update_goal|active plane|stall counter/iu,
 	);
+});
+
+test("Systemize Composition routes confidence and accepts automatic work only at zero", async () => {
+	const [systemize, confidence] = await Promise.all([
+		readSkill("systemize-composition"),
+		readSkill("systemize-composition", "references/confidence.md"),
+	]);
+
+	assert.match(systemize, /`integration-parity` cases/u);
+	assert.match(systemize, /target-before capture and SHA-256/u);
 	assert.match(
-		visualParity,
-		/does not edit the product, assign composition\s+status/u,
+		systemize,
+		/Classify the proposal as `high`, `medium`, or `low`/u,
 	);
-	assert.doesNotMatch(visualParity, /accepted-intentional/u);
+	assert.match(systemize, /\*\*High confidence:\*\* automatically attempt/u);
+	assert.match(systemize, /`changedPixels: 0`/u);
+	assert.match(systemize, /\*\*Medium confidence:\*\* do not edit/u);
+	assert.match(systemize, /\*\*Low confidence:\*\* preserve/u);
+	assert.match(systemize, /restore only\s+that attempt/u);
+	for (const action of [
+		"reuse",
+		"extension",
+		"new owner",
+		"merge-retire",
+		"token/default",
+	]) {
+		assert.match(confidence, new RegExp(action, "iu"));
+	}
+	assert.match(confidence, /lowest supported dimension/u);
+	assert.match(confidence, /target-before\/target-after case is nonzero/u);
+});
+
+test("durable design-system documents contain human decisions, not lifecycle state", async () => {
+	const systemize = await readSkill("systemize-composition");
+
+	assert.match(systemize, /docs\/design-system\/decisions\/<focus-slug>\.md/u);
+	assert.match(
+		systemize,
+		/only after the\s+human approves, rejects, or defers/u,
+	);
+	assert.match(systemize, /Do not write\s+proposed-but-undecided rows/u);
+	assert.match(systemize, /workflow status, implementation status/u);
+	assert.match(systemize, /Code, consumers, and Storybook remain\s+the truth/u);
+});
+
+test("Animate requires an accepted static target and keeps its endpoint exact", async () => {
+	const animate = await readSkill("animate");
+
+	assert.match(animate, /explicit user\s+request for animation/u);
+	assert.match(animate, /current native static Target/u);
+	assert.match(animate, /Preserve the accepted motion-off endpoint exactly/u);
+	assert.match(animate, /`\$averlo:visual-parity`/u);
+	assert.match(animate, /`\$averlo:repository-workflows` once/u);
+	assert.doesNotMatch(animate, /active plane|handoff state/iu);
+});
+
+test("section construction is conditionally routed and remains repository-owned", async () => {
+	const [router, concern, compose] = await Promise.all([
+		readSkill("repository-workflows"),
+		readSkill("repository-workflows", "references/section-construction.md"),
+		readSkill("compose"),
+	]);
+
+	assert.match(router, /add \[section construction\]/u);
+	assert.match(
+		router,
+		/when creating or restructuring registered marketing sections/u,
+	);
+	assert.match(router, /A shell-only change, copy-only content edit/u);
+	for (const required of [
+		"MarketingPageDocument",
+		"renderMarketingSections",
+		"Section.Background",
+		"Storybook contract",
+		"one registered renderer",
+		"Tailwind-first",
+		"repository media concern",
+	]) {
+		assert.ok(concern.includes(required), `missing section rule: ${required}`);
+	}
+	assert.match(compose, /section-construction concern is mandatory/u);
+	assert.doesNotMatch(compose, /Section\.Background|renderMarketingSections/u);
+});
+
+test("Visual Parity stays mechanical across both composition workflows", async () => {
+	const visualParity = await readSkill("visual-parity");
+
+	for (const purpose of [
+		"source-parity",
+		"integration-parity",
+		"responsive-system-fit",
+		"static-endpoint",
+	]) {
+		assert.match(visualParity, new RegExp(`\`${purpose}\``, "u"));
+	}
+	assert.match(visualParity, /never edits product code/u);
+	assert.match(visualParity, /never decides a verdict/u);
+	assert.match(visualParity, /`native-invalid`/u);
+	assert.doesNotMatch(visualParity, /active plane|peer skill|goal lifecycle/iu);
+});
+
+test("active composition workflows do not depend on a goal ledger", async () => {
+	const sources = await Promise.all(
+		["compose", "systemize-composition", "animate", "visual-parity"].map(
+			(name) => readSkill(name),
+		),
+	);
+	assert.doesNotMatch(
+		sources.join("\n"),
+		/goal-ledger-prep|goal ledger|workflow ledger|composition record|active plane|peer skill/iu,
+	);
 });

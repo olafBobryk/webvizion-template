@@ -1,51 +1,46 @@
-# Visual-parity handoff
+# Visual-parity focus packet
 
-Keep one short receipt beside the ordered matrix. `frame` records authority and
-scope; `verify` replaces the measurement block after the current Target capture
-without changing Source or capture conditions.
+Keep one short ignored receipt beside the ordered matrix. `frame` records the
+pinned authority and capture scope; `verify` replaces only the current
+measurement block after the Target capture.
 
 ```markdown
 Phase: frame | verify
-Focus: section | page | shell | site
+Workflow owner: compose | systemize-composition | animate | direct-review
+Focus: section | page | shell | site | component
 Target: <route, selector, or Storybook story>
-Target identity: <current repository revision plus Target-capture SHA-256 when measured>
-Effective scope / expansion: <owners inspected and why it changed>
-Composition record: <docs/composition/<focus-slug>.md>
-Active scope: <composition-record scope ID>
-Source authority: <immutable Figma/export, pinned renderer, or none>
-Comparison purpose: <source-parity | integration-parity | responsive-system-fit>
-Integration baseline: <frozen realized Target capture and SHA-256, or not applicable>
-Figma execution identity: <connector plus whoami result, or not applicable>
-Isolated source working copy: <Agent Space page ID and cloned focus-node ID, or not applicable>
+Target identity: <repository revision or dirty identity plus capture SHA-256>
+Source authority: <immutable Figma/export, frozen accepted Target, or none>
+Comparison purpose: <source-parity | integration-parity | responsive-system-fit | static-endpoint>
+Integration/static baseline: <pinned capture plus SHA-256, or not applicable>
+Figma execution identity: <connector plus whoami, or not applicable>
+Isolated source working copy: <Agent Space page and focus node, or not applicable>
 Product sources: <PRODUCT.md#product-sources or not applicable>
-Declared terminal condition: <zero changed RGB pixels or explicit alternative>
+Review checkpoint: <initial pass | continuation pass | systemization | animation | direct review>
+Cases in order: <case IDs and scope labels>
 Matrix: <.codex/visual-parity/<task>/matrix.json>
 
 Mechanical assessment:
 - Assessment: <.codex/visual-parity/<task>/assessment/summary.json>
-- Captured Target identity: <revision and Target-capture SHA-256 at capture>
-- Measurements: <case id → comparable, source/Target capture SHA-256, dimensions, total/changed/threshold-changed pixels, ratios, channel deltas>
-- Artifacts: <case id → source, target, overlay, heatmap, side-by-side>
+- Captured Target identity: <revision and capture SHA-256>
+- Measurements: <case → comparable, source/Target SHA-256, dimensions, changed pixels, ratios, channel deltas>
+- Artifacts: <case → source, target, overlay, heatmap, side-by-side>
 
 Evidence:
-- Native implementation: <source/DOM evidence and flattened-reference check>
-- Responsive evidence: <width → Target-only finding and artifact; never borrowed parity>
+- Native implementation: <route source, rendered DOM, constituent media, and flattened-reference check>
+- Responsive evidence: <width → Target-only finding and artifact>
 - Repository checks: <command → result>
-- Human-review artifacts: <current captures and direct review location>
-- Incompletion: <none | acknowledged blocker and best current evidence>
+- Human-review artifacts: <current captures and direct review URL>
+- Incompletion: <none | external/capture blocker and best current evidence>
 
-Approval: pending | approved | bypassed
+Human review: pending | accepted | continue-requested
 ```
 
-Use a native route plus a section selector for section evidence. A Storybook
-fixture proves only the fixture. A changed viewport, selector, state, DPR, font,
-or motion setting is a new case, not an update to an existing result. A Target
-code change invalidates only the affected prior measurements but always
-invalidates the final full-page measurement.
+Use a native route plus a stable selector for section evidence. A Storybook
+fixture proves only that fixture. A changed viewport, selector, state, DPR,
+font, or motion setting is a new case. Any Target code change invalidates the
+full-page measurement and every affected scoped measurement.
 
-A receipt used to update the composition record must use `Phase: verify`, match
-its Target identity and assessment to the current implementation, and include
-current native evidence. Treat a stale `frame` receipt, an absent required
-block, or mismatched Target identity as unusable even when an older assessment
-measured zero changed pixels. The active composition peer owns durable status
-and interpretation; Compose owns lifecycle completion.
+A current receipt must use `Phase: verify`, match its Target identity and
+assessment to the current implementation, and include native evidence. The
+owning workflow interprets these facts and decides its next human checkpoint.

@@ -18,15 +18,12 @@
   repository verifiers.
 - After the router is selected, do not separately invoke overlapping Averlo
   design-system, skeleton, entity, or surface skills for the same change unit.
-  `$averlo:compose`, its three peer static planes
-  (`$averlo:composition-realization`,
-  `$averlo:composition-system-integration`, and
-  `$averlo:composition-convergence`), `$averlo:motion-composition`, and
-  `$averlo:visual-parity` are operational owners, not overlapping substitutes;
-  they may invoke the repository router and Figma skills as subordinate steps.
-  A source-backed composition must not call Figma or edit product code until
-  Compose or the explicitly named peer plane is loaded and its preflight
-  permits work.
+  `$averlo:compose` owns native source-backed composition and measured human
+  review passes. `$averlo:systemize-composition` explicitly owns later shared
+  design-system decisions, `$averlo:animate` explicitly owns motion, and
+  `$averlo:visual-parity` supplies subordinate evidence. A source-backed
+  composition must not call Figma or edit product code until Compose is loaded;
+  systemization and animation must not begin without their explicit workflows.
 - Root and nearest `AGENTS.md` files own structural policy. Existing verifier
   commands own deterministic policy.
 
