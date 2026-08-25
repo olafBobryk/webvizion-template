@@ -73,7 +73,7 @@ async function createFixture() {
 			'    if (process.env.HEALTHY_INDEX === "false") { response.writeHead(500); response.end("index failed"); return; }',
 			'    response.writeHead(200, { "content-type": "application/json" }); response.end(JSON.stringify({ entries: {} })); return;',
 			"  }",
-		'  response.end("storybook");',
+			'  response.end("storybook");',
 			'}).listen(port, "127.0.0.1");',
 		].join("\n"),
 	);
@@ -191,6 +191,38 @@ await withFixture(async ({ root, serverPath }) => {
 		assert.equal(reused.pid, child.pid);
 		await expectReject(() => stopManagedStorybookPreview({ root }), /adopted/);
 	} finally {
+		await stopChild(child);
+	}
+});
+
+await withFixture(async ({ root, serverPath }) => {
+	const port = await availablePort();
+	const child = await startFakeStorybook({ port, root, serverPath });
+	let replacementNext;
+	try {
+		const adopted = await ensureStorybookPreview({ root });
+		replacementNext = await listen((_request, response) =>
+			response.end("replacement next"),
+		);
+		await writeJson(path.join(root, ".codex", "preview.json"), {
+			automationUrl: `${replacementNext.url}?motion=off&reveal=off`,
+			localUrl: replacementNext.url,
+			pid: process.pid,
+			root,
+		});
+
+		const reused = await ensureStorybookPreview({ root });
+		assert.equal(reused.pid, adopted.pid);
+		assert.equal(reused.preview.localUrl, replacementNext.url);
+		const persisted = JSON.parse(
+			await fs.readFile(
+				path.join(root, ".codex", "storybook-preview.json"),
+				"utf8",
+			),
+		);
+		assert.equal(persisted.preview.localUrl, replacementNext.url);
+	} finally {
+		if (replacementNext) await replacementNext.close();
 		await stopChild(child);
 	}
 });

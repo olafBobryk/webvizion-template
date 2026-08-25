@@ -81,6 +81,8 @@ export const assemblyTemplateOnlyDevDependencies = new Set(["js-tiktoken"]);
 export const assemblyCoreScripts = new Set([
 	"dev",
 	"dev:local",
+	"preview:tunnel",
+	"preview:capture",
 	"predev",
 	"predev:local",
 	"prebuild",
@@ -114,6 +116,8 @@ export const assemblyCoreScripts = new Set([
 	"verify:design-system-evidence",
 	"verify:storybook-catalog",
 	"verify:storybook-preview",
+	"verify:preview-capture",
+	"verify:dev-server-shutdown",
 	"format",
 	"postinstall",
 	"postbuild",

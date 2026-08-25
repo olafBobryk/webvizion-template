@@ -126,7 +126,10 @@ async function validateNextPreview({ root, previewPath }) {
 async function validateStorybookState({ root, state }) {
 	if (!state || state.root !== root) return false;
 	if (!isProcessAlive(state.pid)) return false;
-	return (await isUrlHealthy(state.localUrl)) && isStorybookIndexHealthy(state.localUrl);
+	return (
+		(await isUrlHealthy(state.localUrl)) &&
+		isStorybookIndexHealthy(state.localUrl)
+	);
 }
 
 async function getProcessCwd(pid) {
@@ -314,7 +317,12 @@ export async function ensureStorybookPreview({
 					`Additional Storybook instances belong to this checkout: ${extraInstances.map(({ pid, port }) => `${pid}:${port}`).join(", ")}. Refusing to use more than one persistent Storybook process.`,
 				);
 			}
-			return { ...inspected.state, reused: true };
+			const refreshed = {
+				...inspected.state,
+				preview: inspected.preview,
+			};
+			await writeJsonAtomically(statePath, refreshed);
+			return { ...refreshed, reused: true };
 		}
 		if (discovered.length > 1) {
 			throw new Error(

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 import { execFileSync, spawn } from "node:child_process";
-import { mkdir, readFile, unlink, writeFile } from "node:fs/promises";
+import { readFileSync, unlinkSync } from "node:fs";
+import { mkdir, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import net from "node:net";
 import path from "node:path";
@@ -113,6 +114,21 @@ const getPayloadAdminUrl = (url) => {
 
 const getAutomationUrl = (url) => `${url}?motion=off&reveal=off`;
 
+const getAllowedDevOrigins = (target) => {
+	const origins = new Set(
+		(process.env.NEXT_ALLOWED_DEV_ORIGINS ?? "")
+			.split(",")
+			.map((origin) => origin.trim())
+			.filter(Boolean),
+	);
+
+	if (target.label === "preview") {
+		origins.add("*.trycloudflare.com");
+	}
+
+	return [...origins];
+};
+
 const shellQuote = (value) => `'${value.replaceAll("'", "'\\''")}'`;
 
 const getGitBranch = () => {
@@ -138,6 +154,7 @@ const getGitBranch = () => {
 };
 
 const writePreviewMetadata = async ({ child, target, url }) => {
+	const allowedDevOrigins = getAllowedDevOrigins(target);
 	const metadata = {
 		schemaVersion: 1,
 		root: checkoutRoot,
@@ -146,6 +163,7 @@ const writePreviewMetadata = async ({ child, target, url }) => {
 		pid: child.pid ?? null,
 		localUrl: url,
 		automationUrl: getAutomationUrl(url),
+		allowedDevOrigins,
 		startedAt: new Date().toISOString(),
 	};
 
@@ -156,12 +174,12 @@ const writePreviewMetadata = async ({ child, target, url }) => {
 	);
 };
 
-const clearPreviewMetadata = async (pid) => {
+const clearPreviewMetadata = (pid) => {
 	try {
-		const metadata = JSON.parse(await readFile(previewMetadataPath, "utf8"));
+		const metadata = JSON.parse(readFileSync(previewMetadataPath, "utf8"));
 
 		if (metadata.pid === pid) {
-			await unlink(previewMetadataPath);
+			unlinkSync(previewMetadataPath);
 		}
 	} catch (error) {
 		if (error?.code !== "ENOENT") {
@@ -256,6 +274,7 @@ const getServerTarget = async () => {
 const start = async () => {
 	const target = await getServerTarget();
 	const url = `http://localhost:${target.port}`;
+	const allowedDevOrigins = getAllowedDevOrigins(target);
 
 	console.log(`Mode: ${target.label}`);
 	console.log(`URL: ${url}`);
@@ -304,6 +323,7 @@ const start = async () => {
 				NEXT_DEV_DIST_DIR: target.distDir,
 				NEXT_DEV_SERVER_MODE: target.label,
 				NEXT_DEV_TSCONFIG_PATH: target.tsconfigPath,
+				NEXT_ALLOWED_DEV_ORIGINS: allowedDevOrigins.join(","),
 				PORT: String(target.port),
 			},
 			stdio: "inherit",
@@ -316,15 +336,44 @@ const start = async () => {
 		void prewarmHomepage(url);
 	}
 
-	child.on("exit", (code, signal) => {
-		void clearPreviewMetadata(child.pid).finally(() => {
-			if (signal) {
-				process.kill(process.pid, signal);
-				return;
-			}
+	let requestedSignal = null;
+	const signalExitCodes = { SIGINT: 130, SIGTERM: 143 };
+	const shutdown = (signal) => {
+		clearPreviewMetadata(child.pid);
 
-			process.exit(code ?? 0);
+		if (requestedSignal) {
+			process.exit(signalExitCodes[requestedSignal]);
+		}
+		requestedSignal = signal;
+
+		if (child.exitCode === null && child.signalCode === null) {
+			child.kill(signal);
+			return;
+		}
+
+		process.exit(signalExitCodes[signal]);
+	};
+
+	for (const signal of ["SIGINT", "SIGTERM"]) {
+		process.on(signal, () => {
+			shutdown(signal);
 		});
+	}
+
+	child.on("exit", (code, signal) => {
+		clearPreviewMetadata(child.pid);
+
+		if (requestedSignal) {
+			process.exit(signalExitCodes[requestedSignal]);
+		}
+
+		if (signal) {
+			process.removeAllListeners(signal);
+			process.kill(process.pid, signal);
+			return;
+		}
+
+		process.exit(code ?? 0);
 	});
 };
 

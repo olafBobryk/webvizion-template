@@ -53,6 +53,8 @@ export const thinStartProfile = {
 			"design-system:evidence",
 			"dev",
 			"dev:local",
+			"preview:tunnel",
+			"preview:capture",
 			"format",
 			"lint",
 			"postbuild",
@@ -79,6 +81,8 @@ export const thinStartProfile = {
 			"verify:route-metadata",
 			"verify:design-system-evidence",
 			"verify:storybook-preview",
+			"verify:preview-capture",
+			"verify:dev-server-shutdown",
 		],
 		coreDependencies: [
 			"@phosphor-icons/react",
