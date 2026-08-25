@@ -60,6 +60,8 @@ const parsed = parseArgs([
 	"Accessibility",
 	"--expect",
 	"Terminal landmark",
+	"--review",
+	"composition",
 ]);
 assert.deepEqual(parsed.expects, [
 	"Settings",
@@ -68,11 +70,13 @@ assert.deepEqual(parsed.expects, [
 ]);
 assert.equal(parsed.width, 1440);
 assert.equal(parsed.height, 900);
+assert.equal(parsed.review, "composition");
 
 const built = buildCaptureUrls({
 	automationUrl: "http://localhost:3000?motion=off&reveal=off",
 	baseUrl: "http://192.168.1.20:3000",
 	localUrl: "http://localhost:3000",
+	review: "composition",
 	route: "/settings?tab=display#accessibility",
 });
 assert.equal(
@@ -81,7 +85,7 @@ assert.equal(
 );
 assert.equal(
 	built.captureUrl,
-	"http://192.168.1.20:3000/settings?tab=display&motion=off&reveal=off&loading=off#accessibility",
+	"http://192.168.1.20:3000/settings?tab=display&motion=off&reveal=off&loading=off&review=composition#accessibility",
 );
 
 const fixtureRoot = await fs.mkdtemp(

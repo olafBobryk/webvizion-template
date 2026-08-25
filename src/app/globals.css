@@ -20,6 +20,10 @@
 		outline-color: rgb(var(--color-primary-rgb) / 0.36);
 	}
 
+	html[data-composition-review="active"] [data-site-header-frame] {
+		display: none;
+	}
+
 	@media (prefers-reduced-motion: reduce) {
 		.marketing-section-review-frame {
 			transition: none;

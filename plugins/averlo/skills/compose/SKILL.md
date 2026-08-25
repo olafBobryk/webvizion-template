@@ -21,10 +21,15 @@ owners. `$averlo:systemize-composition` owns that later decision boundary.
    When registered marketing sections are created or restructured, the router's
    conditional section-construction concern is mandatory.
 3. Inspect the complete source focus and the current Target before editing.
-   Define stable local case IDs for the shell boundaries, content sections in
-   source order, the accumulated full-page gate, and Target-only responsive
-   widths. Keep this matrix and its working receipt under ignored
-   `.codex/visual-parity/`.
+   Classify source authority by region before defining cases. A page frame does
+   not by itself authorize replacement of an existing approved header: preserve
+   the Target header and exclude its source pixels unless the caller explicitly
+   requests header or site-shell composition. Keep source-backed footer work in
+   scope. Define stable local case IDs for each content section in source order,
+   the footer when evidenced, the accumulated in-scope gate, and Target-only
+   responsive widths. Record excluded regions and their retained authority in
+   the ignored focus packet; never present the accumulated gate as whole-frame
+   parity when source pixels were excluded.
 4. Invoke `$averlo:visual-parity` in `frame` before implementation. Preserve the
    source authority, capture conditions, case order, Target route/selectors, and
    native-evidence requirement in its focus packet.
@@ -35,6 +40,12 @@ owners. `$averlo:systemize-composition` owns that later decision boundary.
    accessibility, routing, and responsive rendering. For registered marketing
    sections, follow the repository's section-construction concern rather than
    flattening the page into a route component or global stylesheet.
+   Decompose the source before choosing block types: each independently bounded
+   semantic source section maps to one registered block, one renderer, and one
+   stable section selector. The accumulated page is a comparison gate, never a
+   registered section of its own. Preserve an excluded header through the shared
+   shell and implement an evidenced footer only through that shell boundary;
+   never reproduce either inside a content renderer.
 2. Reuse an existing visual owner only when its current Storybook contract
    already matches the source role's purpose and complete observable signature.
    Do not add, extend, rename, merge, retire, retheme, or change defaults for a
@@ -44,7 +55,8 @@ owners. `$averlo:systemize-composition` owns that later decision boundary.
    bounded source-realization exception, not a new public API or a claim that
    the local recipe belongs in the design system.
 4. Build real selectable text, semantic controls, responsive layout, exact copy,
-   supplied fonts, and constituent assets. A reference capture is evidence only.
+   calibrated supplied fonts, and constituent assets. A reference capture is
+   evidence only.
    Rendering a source screenshot, full-section export, reconstructed frame, or
    other flattened reference as product UI is `native-invalid` regardless of
    its pixel score.
@@ -58,16 +70,20 @@ Each invocation owns one complete review pass:
 
 1. Implement or inspect the whole requested focus before optimizing a section.
 2. Use `$averlo:visual-parity` in `verify` to establish a current baseline for
-   every source-backed shell/section case, then the full-page gate, then
-   Target-only responsive findings. Comparable nonzero results are measured,
-   never verified or complete.
+   every source-backed section and included shell-region case, then the
+   accumulated in-scope gate, then Target-only responsive findings. Use the
+   repository-owned Preview `--review composition` mode for
+   content-plus-footer cases while keeping the human Preview URL on the real
+   production shell. Comparable nonzero results are measured, never verified or
+   complete.
 3. Run one correction sweep in source order. For each nonzero case, address its
    highest-impact Target-owned differences and make as many related edits and
    measurements as useful before advancing. Do not restrict the scope to one
    hypothesis or one edit.
-4. Remeasure the full-page gate after the sweep and recheck responsive behavior
-   at the widths declared in the packet. A source-backed score applies only to
-   its supplied viewport; responsive findings remain separately labeled.
+4. Remeasure the accumulated in-scope gate after the sweep and recheck
+   responsive behavior at the widths declared in the packet. A source-backed
+   score applies only to its supplied viewport and declared authority regions;
+   responsive findings remain separately labeled.
 5. Stop at a human review checkpoint. Report current and best measurements,
    native evidence, responsive findings, repository checks, artifacts, and the
    verified Preview URL. Zero changed pixels may be reported as exact, but it

@@ -1,10 +1,34 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { templateCapabilities } from "@/config/capabilities";
 import { fallbackSiteLayout } from "@/lib/marketing-content/fallback";
 import {
 	normalizePayloadSiteLayout,
 	serializeSiteLayoutForPayload,
 } from "@/lib/marketing-content/payloadSiteLayout";
+
+const siteChromeSource = readFileSync(
+	resolve(process.cwd(), "src/app/(site)/_components/layout/SiteChrome.tsx"),
+	"utf8",
+);
+for (const boundary of [
+	"data-site-header-frame",
+	"data-site-composition-frame",
+	"data-site-content",
+	"data-site-footer",
+]) {
+	assert.match(
+		siteChromeSource,
+		new RegExp(boundary, "u"),
+		`SiteChrome must retain the ${boundary} review boundary.`,
+	);
+}
+assert.match(
+	siteChromeSource,
+	/<CompositionReviewState\s*\/>/u,
+	"SiteChrome must own the automation-only composition review state.",
+);
 
 const serialized = serializeSiteLayoutForPayload(fallbackSiteLayout);
 assert.deepStrictEqual(

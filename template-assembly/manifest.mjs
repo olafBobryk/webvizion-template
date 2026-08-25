@@ -144,6 +144,7 @@ export const assemblyCoreDependencies = new Set([
 	"react-phone-number-input",
 	"remark-gfm",
 	"sonner",
+	"streamdown",
 ]);
 
 export const assemblyCoreDevDependencies = new Set([

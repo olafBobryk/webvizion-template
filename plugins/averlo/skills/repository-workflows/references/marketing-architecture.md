@@ -24,6 +24,13 @@ resolved site-layout content while shared layout owners retain header, menu,
 footer, shell order, responsive behavior, and scroll lifecycle. Source desktop
 and compact navigation/search from the same layout data.
 
+Keep stable shared boundaries around the header, content, footer, and the
+content-plus-footer composition frame. A composition review may exclude an
+existing approved header without removing it from the production page; the
+review state and capture boundary belong to SiteShell/Preview infrastructure,
+never route CSS. Continue to implement an evidenced footer through the shared
+footer owner instead of reproducing it inside page content.
+
 Use the exclusive surfaceId-or-href contract for navigation and calls to
 action. Registered destinations use installed marketing or auth surface IDs;
 external URLs, fragments, and generated internal links use the appropriate
@@ -39,6 +46,8 @@ direct link boundary.
   marketing renderers.
 - Do not create route-specific copies of shared shell, header, menu, footer, or
   scroll behavior.
+- Do not hide shared shell regions with route-local styles or use a source frame
+  as implicit authorization to replace an approved header.
 - Do not add localization, language switching, or brand-specific CTA contracts
   to the shared shell without an explicit optional slot.
 

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import ScrollController from "@/components/mount/ScrollController";
+import { CompositionReviewState } from "./CompositionReviewState";
 
 type SiteChromeProps = {
 	children: ReactNode;
@@ -11,9 +12,12 @@ type SiteChromeProps = {
 export function SiteChrome({ children, footer, header }: SiteChromeProps) {
 	return (
 		<>
-			{header}
-			{children}
-			{footer}
+			<CompositionReviewState />
+			<div data-site-header-frame>{header}</div>
+			<div data-site-composition-frame>
+				<div data-site-content>{children}</div>
+				<div data-site-footer>{footer}</div>
+			</div>
 			<ScrollController />
 		</>
 	);

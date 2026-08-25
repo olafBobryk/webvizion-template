@@ -11,6 +11,7 @@ Focus: section | page | shell | site | component
 Target: <route, selector, or Storybook story>
 Target identity: <repository revision or dirty identity plus capture SHA-256>
 Source authority: <immutable Figma/export, frozen accepted Target, or none>
+Authority boundaries: <included regions and excluded region → retained authority>
 Comparison purpose: <source-parity | integration-parity | responsive-system-fit | static-endpoint>
 Integration/static baseline: <pinned capture plus SHA-256, or not applicable>
 Figma execution identity: <connector plus whoami, or not applicable>
@@ -40,6 +41,11 @@ Use a native route plus a stable selector for section evidence. A Storybook
 fixture proves only that fixture. A changed viewport, selector, state, DPR,
 font, or motion setting is a new case. Any Target code change invalidates the
 full-page measurement and every affected scoped measurement.
+
+When an owning workflow deliberately excludes a source region, crop or select
+both sides to the same included authority boundary. Report the result as parity
+for that declared boundary, never for the untouched whole frame. Preserve the
+normal human-review URL separately from any automation-only review state.
 
 A current receipt must use `Phase: verify`, match its Target identity and
 assessment to the current implementation, and include native evidence. The

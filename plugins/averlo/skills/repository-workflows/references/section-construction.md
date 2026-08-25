@@ -14,6 +14,15 @@ source-neutral `blockType` exactly one registered renderer at
 components with that renderer and reserve the `Section` suffix for the
 registered entry point.
 
+Make one block represent one independently reviewable semantic/source section,
+not a whole page or an arbitrary collection of sibling bands. A distinct
+full-bleed background, vertical rhythm, heading context, or comparison boundary
+starts a new block when it identifies an independent source section. Give every
+block meaningful source-neutral content or media fields beyond its base ID and
+type, and render visible page copy and media from those fields rather than
+hard-coding a page inside the renderer. The accumulated page remains a
+comparison concern and is never registered as a section.
+
 Use the shared `Section` owner for the semantic root, full-bleed background,
 and foreground frame. Obtain its exact imports, props, variants, compounds,
 and guarantees from its current Storybook contract. Use `Section.Background`
@@ -37,6 +46,8 @@ renderer or shared `Section` structure.
 
 - Do not implement a registered page as one route-local JSX tree or global
   stylesheet.
+- Do not make one registered renderer emit multiple independent semantic
+  sections, a header, or a footer. Header and footer remain shared shell owners.
 - Do not import section implementations directly from a route; delegate through
   `renderMarketingSections` and the registry.
 - Do not create product-, campaign-, or Figma-node-specific block types,
@@ -66,6 +77,9 @@ Read only the paths that exist and apply:
 - Verify that the route resolves a `MarketingPageDocument`, delegates through
   `renderMarketingSections`, and has one source-neutral renderer per block
   type.
+- Verify that each block declares meaningful render data, each renderer owns one
+  logical source section, and no content renderer contains local header/footer
+  or page-level sibling-section structure.
 - Verify the shared `Section` root/background/frame structure against its
   Storybook contract and confirm stable comparison selectors.
 - Inspect Tailwind-first presentation, any justified CSS module, and media

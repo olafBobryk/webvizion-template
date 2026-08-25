@@ -24,6 +24,7 @@ Capture and verify a complete route through the repository-owned preview.
 Options:
   --route <path>       Route, query, and optional anchor to capture (required)
   --base-url <url>     Override the human-facing preview base, for example a LAN URL
+  --review <mode>      Automation-only review state (supported: composition)
   --expect <text>      Visible landmark to require; repeat for multiple landmarks
   --output <path>      PNG output path (default: .codex/preview-artifacts/<route>-1440.png)
   --width <pixels>     CSS viewport width (default: 1440)
@@ -56,6 +57,7 @@ export function parseArgs(argv) {
 		height: DEFAULT_HEIGHT,
 		help: false,
 		output: null,
+		review: null,
 		route: null,
 		settleMs: DEFAULT_SETTLE_MS,
 		timeoutMs: DEFAULT_TIMEOUT_MS,
@@ -74,6 +76,7 @@ export function parseArgs(argv) {
 			flag === "--base-url" ||
 			flag === "--expect" ||
 			flag === "--output" ||
+			flag === "--review" ||
 			flag === "--width" ||
 			flag === "--height" ||
 			flag === "--timeout" ||
@@ -85,7 +88,12 @@ export function parseArgs(argv) {
 			else if (flag === "--base-url") options.baseUrl = value;
 			else if (flag === "--expect") options.expects.push(value);
 			else if (flag === "--output") options.output = value;
-			else if (flag === "--width") {
+			else if (flag === "--review") {
+				if (value !== "composition") {
+					throw new Error("--review supports only composition.");
+				}
+				options.review = value;
+			} else if (flag === "--width") {
 				options.width = readPositiveInteger(value, flag);
 			} else if (flag === "--height") {
 				options.height = readPositiveInteger(value, flag);
@@ -135,7 +143,13 @@ function assertTrackedRoute(route) {
 	}
 }
 
-export function buildCaptureUrls({ automationUrl, baseUrl, localUrl, route }) {
+export function buildCaptureUrls({
+	automationUrl,
+	baseUrl,
+	localUrl,
+	review,
+	route,
+}) {
 	assertTrackedRoute(route);
 	const localBase = normalizeBaseUrl(localUrl, "Preview metadata localUrl");
 	const selectedBase = baseUrl
@@ -153,6 +167,9 @@ export function buildCaptureUrls({ automationUrl, baseUrl, localUrl, route }) {
 	}
 	if (!captureUrl.searchParams.has("loading")) {
 		captureUrl.searchParams.set("loading", "off");
+	}
+	if (review) {
+		captureUrl.searchParams.set("review", review);
 	}
 
 	return {
@@ -367,6 +384,7 @@ export async function captureRoute(options, { root = process.cwd() } = {}) {
 		automationUrl: metadata.automationUrl,
 		baseUrl: options.baseUrl,
 		localUrl: metadata.localUrl,
+		review: options.review,
 		route: options.route,
 	});
 	const outputPath = path.resolve(

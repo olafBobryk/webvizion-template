@@ -61,6 +61,15 @@ test("Compose owns one native measured review pass without shared-owner mutation
 		/Do not add, extend, rename, merge, retire, retheme, or change defaults/u,
 	);
 	assert.match(compose, /`native-invalid` regardless of\s+its pixel score/u);
+	assert.match(compose, /does\s+not by itself authorize replacement/u);
+	assert.match(compose, /exclude its source pixels/u);
+	assert.match(compose, /source-backed footer work in\s+scope/u);
+	assert.match(compose, /accumulated in-scope gate/u);
+	assert.match(compose, /one registered block, one renderer/u);
+	assert.match(
+		compose,
+		/repository-owned Preview `--review composition` mode/u,
+	);
 	assert.doesNotMatch(
 		compose,
 		/create_goal|update_goal|active plane|stall counter/iu,
@@ -142,11 +151,54 @@ test("section construction is conditionally routed and remains repository-owned"
 		"one registered renderer",
 		"Tailwind-first",
 		"repository media concern",
+		"one independently reviewable semantic/source section",
+		"meaningful source-neutral content or media fields",
+		"a header, or a footer",
 	]) {
 		assert.ok(concern.includes(required), `missing section rule: ${required}`);
 	}
 	assert.match(compose, /section-construction concern is mandatory/u);
 	assert.doesNotMatch(compose, /Section\.Background|renderMarketingSections/u);
+});
+
+test("Compose calibrates font faces and requires exact exported vector identity", async () => {
+	const [intake, media] = await Promise.all([
+		readSkill("compose", "references/source-intake.md"),
+		readSkill("repository-workflows", "references/media-delivery.md"),
+	]);
+
+	assert.match(intake, /Figma weight labels/u);
+	assert.match(intake, /separate evidence/u);
+	assert.match(intake, /glyph shape, measured width, line\s+breaks/u);
+	assert.match(
+		intake,
+		/Do not map one physical face to a broad\s+weight range/u,
+	);
+	assert.match(intake, /Disable font synthesis/u);
+	assert.match(intake, /export that exact logo or mark as SVG/u);
+	assert.match(intake, /never redraw it, replace it with text or a glyph/u);
+	assert.match(media, /Commit exact SVG marks and icons/u);
+});
+
+test("composition review excludes only the deferred header and retains honest authority", async () => {
+	const [compose, focusPacket, marketing] = await Promise.all([
+		readSkill("compose"),
+		readSkill("visual-parity", "references/focus-packet.md"),
+		readSkill("repository-workflows", "references/marketing-architecture.md"),
+	]);
+
+	assert.match(
+		compose,
+		/Preserve an excluded header through the shared\s+shell/u,
+	);
+	assert.match(
+		compose,
+		/implement an evidenced footer only through that shell/u,
+	);
+	assert.match(focusPacket, /Authority boundaries:/u);
+	assert.match(focusPacket, /never for the untouched whole frame/u);
+	assert.match(marketing, /content-plus-footer composition frame/u);
+	assert.match(marketing, /never route CSS/u);
 });
 
 test("Visual Parity stays mechanical across both composition workflows", async () => {

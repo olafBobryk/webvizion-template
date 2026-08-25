@@ -621,17 +621,25 @@ async function assertNoAssistantCapability(outputRoot) {
 		}
 	}
 	const pkg = await readJson(path.join(outputRoot, "package.json"));
-	for (const dependency of [
-		"@ai-sdk/openai",
-		"@ai-sdk/react",
-		"ai",
-		"streamdown",
-	]) {
+	for (const dependency of ["@ai-sdk/openai", "@ai-sdk/react", "ai"]) {
 		if (pkg.dependencies?.[dependency] !== undefined) {
 			throw new Error(
 				`Default project unexpectedly contains Assistant dependency: ${dependency}`,
 			);
 		}
+	}
+	if (
+		(await pathExists(
+			path.join(
+				outputRoot,
+				"src/components/composites/markdown/MarkdownRenderer.tsx",
+			),
+		)) &&
+		!pkg.dependencies?.streamdown
+	) {
+		throw new Error(
+			"Generated projects must retain streamdown for the shared Markdown renderer.",
+		);
 	}
 }
 

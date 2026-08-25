@@ -28,9 +28,23 @@ constituent assets, or durable source provenance.
 2. Wait for missing licensed fonts or unavailable exact assets. Do not silently
    substitute a font, borrow from another project or regression, rasterize text,
    or use the reference frame as product UI.
-3. Retain exact constituent asset bytes and follow the repository workflow's
-   media-delivery concern. Download expiring design-tool URLs during
-   implementation; the URL is provenance, not a production source.
-4. Add durable external-source provenance to `PRODUCT.md` under
+3. Treat supplied font bytes, Figma weight labels, font-internal metadata, and
+   CSS weights as separate evidence. Before layout correction, load each supplied
+   face under one distinct evidenced CSS weight, wait for `document.fonts`, and
+   calibrate representative source text by glyph shape, measured width, line
+   breaks, line height, and tracking. Do not map one physical face to a broad
+   weight range, permit synthetic bold, or call typography verified merely
+   because the expected bytes are present. Disable font synthesis for the
+   calibrated scope and pause when no supplied face can reproduce an
+   authoritative role.
+4. Retain exact constituent asset bytes and follow the repository workflow's
+   media-delivery concern. When the authority contains existing vector identity
+   artwork, export that exact logo or mark as SVG and commit it as a constituent
+   asset, or reuse an identical existing asset. Preserve its geometry and
+   `viewBox`; never redraw it, replace it with text or a glyph, or accept a
+   surrogate because the original export needs implementation-safe cleanup.
+   Download expiring design-tool URLs during implementation; the URL is
+   provenance, not a production source.
+5. Add durable external-source provenance to `PRODUCT.md` under
    `## Product sources`, recording source, authority, focus, and supplied
    material. Do not record workflow progress or conversion status there.

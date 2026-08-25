@@ -202,6 +202,16 @@ for (const { blockType, rendererName } of registryEntries) {
 		),
 		`${normalize(relative(root, sourcePath))} must named-export ${expectedRendererName}.`,
 	);
+	assert.match(
+		source,
+		/<Section\b/u,
+		`${normalize(relative(root, sourcePath))} must render through the shared Section owner.`,
+	);
+	assert.doesNotMatch(
+		source,
+		/<(?:header|footer|section)\b/u,
+		`${normalize(relative(root, sourcePath))} may own one shared Section root, but cannot reproduce shell regions or independent raw section siblings.`,
+	);
 	registeredRendererPaths.add(normalize(sourcePath));
 }
 
@@ -218,6 +228,25 @@ assert.deepEqual(
 	"Marketing section registry keys must exactly match discriminated MarketingSection block types.",
 );
 
+const typesSource = readFileSync(typesPath, "utf8");
+for (const { blockType } of registryEntries) {
+	const declaration = typesSource.match(
+		new RegExp(
+			`MarketingSectionBase<["']${blockType}["']>\\s*&\\s*\\{([\\s\\S]*?)\\}`,
+			"u",
+		),
+	);
+	assert.ok(
+		declaration,
+		`${blockType} must declare a structured block payload beyond MarketingSectionBase instead of representing an entire page through an empty block.`,
+	);
+	assert.match(
+		declaration?.[1] ?? "",
+		/[A-Za-z_$][A-Za-z0-9_$]*\??\s*:/u,
+		`${blockType} must declare at least one meaningful content or media field.`,
+	);
+}
+
 function collectSectionRendererFiles(directory: string): string[] {
 	return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
 		const entryPath = resolve(directory, entry.name);
@@ -230,6 +259,33 @@ for (const rendererPath of collectSectionRendererFiles(sectionsRoot)) {
 	assert.ok(
 		registeredRendererPaths.has(normalize(rendererPath)),
 		`${normalize(relative(root, rendererPath))} is an orphan section renderer; register it or make it a helper without the *Section name.`,
+	);
+}
+
+function collectMarketingPageFiles(directory: string): string[] {
+	return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+		const entryPath = resolve(directory, entry.name);
+		if (entry.isDirectory()) return collectMarketingPageFiles(entryPath);
+		return entry.name === "page.tsx" ? [entryPath] : [];
+	});
+}
+
+for (const pagePath of collectMarketingPageFiles(marketingRoot)) {
+	const pageSource = readFileSync(pagePath, "utf8");
+	const pageLabel = normalize(relative(root, pagePath));
+	assert.doesNotMatch(
+		pageSource,
+		/<style\b/iu,
+		`${pageLabel} cannot hide or restyle shared shell regions through route-local CSS.`,
+	);
+	const resolvedSlug = pageSource.match(
+		/getMarketingPage\(\s*["']([^"']+)["']\s*\)/u,
+	)?.[1];
+	if (!resolvedSlug || resolvedSlug === "document") continue;
+	assert.match(
+		pageSource,
+		/renderMarketingSections\(\s*page\.layout\s*\)/u,
+		`${pageLabel} must delegate its ordered section document through renderMarketingSections(page.layout).`,
 	);
 }
 
