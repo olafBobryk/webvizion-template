@@ -1,6 +1,6 @@
 ---
 name: systemize-composition
-description: Analyze an accepted local composition and migrate well-supported visual roles into the generated Averlo instance's shared design-system owners without changing its rendered target. Use explicitly after visual review when local fidelity recipes should be reused, extended, promoted, merged, retired, or deliberately kept local; do not build the source composition itself.
+description: Analyze an accepted local composition, review its local renderer boundaries, and migrate well-supported visual roles into the generated Averlo instance's shared design-system owners without changing its rendered target. Use explicitly after visual review when local boundaries or fidelity recipes should be split, reused, extended, promoted, merged, retired, or deliberately kept local; do not build the source composition itself.
 ---
 
 # Averlo · Systemize Composition
@@ -28,8 +28,12 @@ does not authorize unresolved medium- or low-confidence shared changes.
 
 1. Inventory local typography, controls, links, marks, media treatments, shell
    presentation, repeated layout roles, tokens, defaults, and temporary visual
-   wrappers. Compare each with governing policy, documented Storybook owners,
-   complete public signatures, current consumers, and prior human decisions in
+   wrappers. Also inspect whether an accepted registered renderer groups
+   multiple coherent semantic or interaction roles that could be split or
+   merged without changing its render. Such grouping is not retroactively a
+   Compose failure when it formed one honest source/parity case. Compare each
+   candidate with governing policy, documented Storybook owners, complete
+   public signatures, current consumers, and prior human decisions in
    `docs/design-system/decisions/` when they exist.
 2. For each candidate, state the source evidence, current local recipe,
    plausible owners reviewed, proposed action, affected consumers, public API
@@ -38,6 +42,12 @@ does not authorize unresolved medium- or low-confidence shared changes.
    router. Action names never determine confidence by themselves: reuse,
    extension, new ownership, merge-retire, and token/default changes all require
    evidence proportional to their architectural reach.
+4. Classify a renderer or section-boundary split/merge as `medium` by default.
+   Present its semantic and maintenance benefit for human direction instead of
+   automatically rewriting accepted local topology. After approval, apply the
+   boundary change through the routed repository concerns and require
+   `changedPixels: 0` for every affected target-before/target-after case plus
+   focused route and marketing-section checks.
 
 ## Apply or request a decision
 
@@ -66,6 +76,11 @@ human decision, chosen owner or local boundary, and rationale. Do not write
 proposed-but-undecided rows, workflow status, implementation status, confidence
 scores, or a second component catalogue. Code, consumers, and Storybook remain
 the truth for implemented owners.
+
+Do not place a purely local renderer-boundary decision in the design-system
+decision document unless it also decides a shared design-system owner. The
+implemented document types, registry, renderers, and repository checks remain
+the truth for local architecture.
 
 Respect an applicable deferred or rejected decision until source or owner
 evidence materially changes. After approved work, report integration-parity

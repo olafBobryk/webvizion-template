@@ -264,14 +264,35 @@ test("composition review preserves the excluded header and types every authority
 });
 
 test("Compose uses one identity-verified capability-complete Figma connector", async () => {
-	const intake = await readSkill("compose", "references/source-intake.md");
+	const [intake, focusPacket] = await Promise.all([
+		readSkill("compose", "references/source-intake.md"),
+		readSkill("visual-parity", "references/focus-packet.md"),
+	]);
 
-	assert.match(intake, /one configured primary Figma connector/u);
-	assert.match(intake, /`whoami` plus the\s+context, screenshot, Agent Space cloning, and export operations/u);
+	assert.match(intake, /configured primary official Figma connector/u);
 	assert.match(intake, /require\s+`webvizionagency@gmail\.com`/u);
-	assert.match(intake, /Do not combine identity proof from one connector/u);
-	assert.match(intake, /Pause when no single authenticated\s+connector/u);
+	assert.match(intake, /Do not combine identity proof\s+from one connector/u);
+	assert.match(intake, /read-only operations never require an\s+Agent Space/u);
+	assert.match(intake, /one reusable generic Figma scratch location/u);
+	assert.match(intake, /Never create a target-, route-, task-, or source-page-/u);
+	assert.match(intake, /absence of a clone\s+or dedicated cloning operation must not block/u);
+	assert.match(focusPacket, /Agent Space: <reused generic file\/page/u);
 	assert.doesNotMatch(intake, /installed Figma app connector by default/u);
+});
+
+test("Systemize reviews accepted local renderer boundaries without redefining Compose success", async () => {
+	const [compose, sections, systemize] = await Promise.all([
+		readSkill("compose"),
+		readSkill("repository-workflows", "references/section-construction.md"),
+		readSkill("systemize-composition"),
+	]);
+
+	assert.match(compose, /one honest comparison\s+case containing multiple coherent landmarks/u);
+	assert.match(sections, /human-reviewed Systemize Composition question/u);
+	assert.match(systemize, /renderer or section-boundary split\/merge as `medium` by default/u);
+	assert.match(systemize, /focused route and marketing-section checks/u);
+	assert.match(systemize, /purely local renderer-boundary decision/u);
+	assert.match(systemize, /unless it also decides a shared design-system owner/u);
 });
 
 test("Compose maintains runtime checkpoints without a second workflow record", async () => {

@@ -52,7 +52,10 @@ owners. `$averlo:systemize-composition` owns that later decision boundary.
    comparison gate, never a registered section of its own. Preserve the header
    unchanged through the shared shell and implement an evidenced footer only
    through that shell boundary; never reproduce either inside a content
-   renderer.
+   renderer. When source and semantic evidence support one honest comparison
+   case containing multiple coherent landmarks, Compose may keep that case in
+   one renderer. A possible render-preserving split is later human-reviewed
+   Systemize Composition work, not a failed composition pass.
 2. Reuse an existing visual owner only when its current Storybook contract
    already matches the source role's purpose and complete observable signature.
    Do not add, extend, rename, merge, retire, retheme, or change defaults for a

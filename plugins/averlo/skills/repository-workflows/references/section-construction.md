@@ -31,7 +31,11 @@ header out of both inventories, and keep accumulated gates comparison-only. If
 two content landmarks have separate source or parity cases, they must remain
 separate blocks and renderers even when they share a background, theme, or
 continuous visual treatment. Pause when the source does not support an
-unambiguous split.
+unambiguous split. Coherent landmarks may share one case and renderer when the
+source hierarchy, semantic heading context, interaction, and intended review
+boundary support that grouping. Treat a possible later maintainability split as
+a human-reviewed Systemize Composition question, not as a Compose failure or a
+reason to invent extra parity cases.
 
 Make one block represent one independently reviewable semantic/source section,
 not a whole page or an arbitrary collection of sibling bands. A renderer may

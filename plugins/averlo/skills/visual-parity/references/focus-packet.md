@@ -16,7 +16,7 @@ Authority locks: <preserved header, unchanged shared design-system owners, and a
 Comparison purpose: <source-parity | integration-parity | responsive-system-fit | static-endpoint>
 Integration/static baseline: <pinned capture plus SHA-256, or not applicable>
 Figma execution identity: <connector plus whoami, or not applicable>
-Isolated source working copy: <Agent Space page and focus node, or not applicable>
+Agent Space: <reused generic file/page and scratch node, or not used>
 Product sources: <PRODUCT.md#product-sources or not applicable>
 Review checkpoint: <owning workflow's current task-local checkpoint>
 Content cases: <case ID → source node/bounds → semantic landmark → block type → registered renderer → Target selector>
