@@ -165,7 +165,28 @@ Each invocation owns one complete review pass:
    While a comparable nonzero case still has Target-owned differences that can
    be corrected within the granted authority, continue the compare-correct-
    compare loop on that same case. Advance to the next case only at literal
-   `changedPixels: 0`. `comparable: false` is a repair state, not by itself a
+   `changedPixels: 0`. The current assessment's exact `changedPixels` value is
+   the sole advancement gate. Geometry that looks locked, a visually close
+   overlay, a low mean channel delta, a low threshold-changed ratio, exact font
+   or asset bytes, suspected antialiasing, and substantial time already spent
+   are diagnostic facts only; none can substitute another terminal condition.
+   The claim that zero would require flattened source imagery is an unproven
+   renderer-difference hypothesis, not a concrete blocker and never permission
+   to advance.
+
+   Before changing the active case or checkpoint, write `Scope decision
+   evidence` in the focus packet with the current assessment and capture
+   identity, the exact `changedPixels` value, the decision, and its reason. Only
+   `changedPixels: 0` permits `advance-at-zero`. A nonzero result must record
+   `remain-active` or `stop-unfinished`; prose such as “geometry is locked” or
+   “the remainder is antialiasing” cannot authorize a different decision.
+   Inspect the native-scale heatmap before proposing renderer noise. Broad
+   filled regions, asset, color, opacity, map, or image-treatment differences,
+   threshold pixels outside glyph edges, or large channel deltas remain owned
+   mismatch evidence. Even a well-supported renderer difference remains
+   nonexact under an exact objective.
+
+   `comparable: false` is a repair state, not by itself a
    blocker: identify whether the defect belongs to the source crop, Target
    selector/capture state, or Target-owned geometry; repair that boundary and
    recapture before interpreting pixels. A Target-owned width or height mismatch
@@ -189,7 +210,10 @@ Each invocation owns one complete review pass:
    unfinished case if any, and the verified Preview URL. Write `Human review:
    pending`; only the user's explicit response may change it to `accepted` or
    `continue-requested`. Zero changed pixels may be reported as exact, but it
-   does not bypass human review.
+   does not bypass human review. When stopping on a nonzero renderer-difference
+   hypothesis, keep checkpoint 6 and that case active, preserve the nonzero
+   scope decision evidence, and do not measure or describe later source cases,
+   the accumulated gate, responsive review, or repository closeout as complete.
 
 A later request to continue resumes the active unfinished case before any later
 case. It does not restart a breadth-first sweep. Name any blocker and preserve
