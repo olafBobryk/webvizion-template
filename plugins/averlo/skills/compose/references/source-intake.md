@@ -5,9 +5,13 @@ constituent assets, or durable source provenance.
 
 ## Figma authority and isolation
 
-1. Use the installed Figma app connector by default. Call `whoami` and require
+1. Select one configured primary Figma connector that exposes `whoami` plus the
+   context, screenshot, Agent Space cloning, and export operations required by
+   the requested focus. Call `whoami` through that connector and require
    `webvizionagency@gmail.com` unless the caller explicitly selects another
-   identity. Do not silently switch to a separately authenticated connector.
+   identity. Do not combine identity proof from one connector with source reads,
+   cloning, or exports from another. Pause when no single authenticated
+   connector provides the required capabilities.
 2. Load the Figma `figma-use` and `figma-design-to-code` skills. Locate the
    supplied focus and its containing page, preserve the focus ancestry-index
    path, and clone that page once as

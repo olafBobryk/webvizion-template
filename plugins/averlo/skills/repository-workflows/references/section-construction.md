@@ -21,12 +21,17 @@ registered entry point.
 
 Before product edits, enumerate the source hierarchy, bounds, top-level heading
 contexts, full-bleed backgrounds, vertical-rhythm changes, and intended
-comparison boundaries. Map every independently reviewable landmark to one
-stable case ID, one source-neutral block type, one registered renderer, and one
-Target selector. If two landmarks have separate source or parity cases, they
-must remain separate blocks and renderers even when they share a background,
-theme, or continuous visual treatment. Pause when the source does not support
-an unambiguous split.
+comparison boundaries. Classify them before assigning owners: content cases,
+shell cases, excluded regions, and accumulated comparison gates are distinct
+groups. Map every independently reviewable content landmark to one stable case
+ID, one source-neutral block type, one registered renderer, and one Target
+selector. Map an evidenced footer to a shell case and shell selector, never a
+block type, registered renderer, or shared `Section` root. Keep an excluded
+header out of both inventories, and keep accumulated gates comparison-only. If
+two content landmarks have separate source or parity cases, they must remain
+separate blocks and renderers even when they share a background, theme, or
+continuous visual treatment. Pause when the source does not support an
+unambiguous split.
 
 Make one block represent one independently reviewable semantic/source section,
 not a whole page or an arbitrary collection of sibling bands. A renderer may
@@ -64,6 +69,8 @@ renderer or shared `Section` structure.
   stylesheet.
 - Do not make one registered renderer emit multiple independent semantic
   sections, a header, or a footer. Header and footer remain shared shell owners.
+- Do not count or describe a shell case as a content block or registered
+  renderer, and do not give it a shared `Section`-root obligation.
 - Do not merge landmarks that the source framing or parity matrix treats as
   separate cases into one renderer.
 - Do not import section implementations directly from a route; delegate through
@@ -107,6 +114,9 @@ Read only the paths that exist and apply:
   or page-level sibling-section structure.
 - Verify each registered renderer has exactly one shared `Section` root and that
   its case ID, block type, and stable selector match one decomposition row.
+- Verify content cases, shell cases, excluded regions, and accumulated gates are
+  distinct, and that only content cases contribute to the registered-renderer
+  count.
 - Verify the shared `Section` root/background/frame structure against its
   Storybook contract and confirm stable comparison selectors.
 - Inspect Tailwind-first presentation, any justified CSS module, and media

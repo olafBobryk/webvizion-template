@@ -25,10 +25,12 @@ owners. `$averlo:systemize-composition` owns that later decision boundary.
    Classify source authority by region before defining cases. The existing
    Target header is immutable in Compose: preserve it and always exclude source
    header pixels, even when the caller supplies a page frame or asks for header
-   or site-shell composition. Defer header redesign as separately scoped,
-   non-Compose work. Keep source-backed footer work in scope. Define stable
-   local case IDs for each content section in source order, the footer when
-   evidenced, the accumulated in-scope gate, and Target-only responsive widths.
+   or site-shell composition. Treat that exclusion as terminal inside this
+   workflow: do not propose, plan, recommend, sequence, or describe a header
+   redesign as an optional phase, prerequisite, or follow-up. Keep source-backed
+   footer work in scope. Define stable local case IDs for each content section
+   in source order, the footer when evidenced, the accumulated in-scope gate,
+   and Target-only responsive widths.
    Record excluded regions and their retained authority in the ignored focus
    packet; never present the accumulated gate as whole-frame parity when source
    pixels were excluded.
@@ -92,6 +94,16 @@ The plan owns progress only for the current task. Keep source cases, authority
 locks, and the current checkpoint in the existing ignored Visual Parity focus
 packet; do not create a Compose checklist file or any separate durable
 coordination artifact.
+
+At checkpoint 2, classify the decomposition into four distinct groups in the
+runtime plan and focus packet: content cases, shell cases, excluded regions,
+and the accumulated gate. Content cases alone receive block types, registered
+renderers, and shared `Section` roots. Shell cases name their shell owner and
+selector without entering the content-renderer count. Exclusions name the
+retained Target authority without proposing implementation. The accumulated
+gate is comparison-only. Do not enter implementation while any row appears in
+the wrong group or while the planned change set contains a header or shared
+design-system owner.
 
 Refresh only the owning material before entering each checkpoint: source intake
 and Visual Parity framing for checkpoint 1; the routed section-construction,

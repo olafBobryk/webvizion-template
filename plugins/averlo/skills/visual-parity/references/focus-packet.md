@@ -19,7 +19,10 @@ Figma execution identity: <connector plus whoami, or not applicable>
 Isolated source working copy: <Agent Space page and focus node, or not applicable>
 Product sources: <PRODUCT.md#product-sources or not applicable>
 Review checkpoint: <owning workflow's current task-local checkpoint>
-Source decomposition: <case ID → source node/bounds → semantic landmark → block type or shell boundary → Target selector>
+Content cases: <case ID → source node/bounds → semantic landmark → block type → registered renderer → Target selector>
+Shell cases: <case ID → source node/bounds → shell owner → Target selector>
+Excluded regions: <source region → retained Target authority>
+Accumulated gate: <case ID → included content and shell cases → Target selector or crop>
 Cases in order: <case IDs and scope labels>
 Matrix: <.codex/visual-parity/<task>/matrix.json>
 

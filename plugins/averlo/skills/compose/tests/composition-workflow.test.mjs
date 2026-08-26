@@ -68,8 +68,11 @@ test("Compose owns one native measured review pass without shared-owner mutation
 	assert.match(compose, /Target header is immutable in Compose/u);
 	assert.match(compose, /always exclude source\s+header pixels/u);
 	assert.match(compose, /asks for header\s+or site-shell composition/u);
+	assert.match(compose, /do not propose, plan, recommend, sequence, or describe/u);
+	assert.match(compose, /optional phase, prerequisite, or follow-up/u);
+	assert.doesNotMatch(compose, /Defer header redesign/u);
 	assert.doesNotMatch(compose, /unless the caller explicitly/u);
-	assert.match(compose, /source-backed footer work in\s+scope/u);
+	assert.match(compose, /source-backed\s+footer work in\s+scope/u);
 	assert.match(compose, /accumulated in-scope gate/u);
 	assert.match(compose, /one registered block, one renderer/u);
 	assert.match(
@@ -166,13 +169,15 @@ test("section construction is conditionally routed and remains repository-owned"
 		"Tailwind-first",
 		"repository media concern",
 		"one independently reviewable semantic/source section",
-		"stable case ID",
 		"separate source or parity cases",
 		"a header, or a footer",
+		"shell case and shell selector",
+		"Do not count or describe a shell case as a content block",
 		"exactly one shared `Section` root",
 	]) {
 		assert.ok(concern.includes(required), `missing section rule: ${required}`);
 	}
+	assert.match(concern, /stable case\s+ID/u);
 	assert.match(concern, /meaningful source-neutral content or\s+media fields/u);
 	assert.match(compose, /section-construction concern is\s+mandatory/u);
 	assert.doesNotMatch(compose, /Section\.Background|renderMarketingSections/u);
@@ -224,7 +229,7 @@ test("Compose calibrates font faces and requires exact exported vector identity"
 	assert.match(media, /Commit exact SVG marks and icons/u);
 });
 
-test("composition review excludes only the deferred header and retains honest authority", async () => {
+test("composition review preserves the excluded header and types every authority region", async () => {
 	const [compose, focusPacket, marketing] = await Promise.all([
 		readSkill("compose"),
 		readSkill("visual-parity", "references/focus-packet.md"),
@@ -241,11 +246,32 @@ test("composition review excludes only the deferred header and retains honest au
 	);
 	assert.match(focusPacket, /Authority boundaries:/u);
 	assert.match(focusPacket, /Authority locks:/u);
-	assert.match(focusPacket, /Source decomposition:/u);
+	for (const field of [
+		"Content cases:",
+		"Shell cases:",
+		"Excluded regions:",
+		"Accumulated gate:",
+	]) {
+		assert.ok(focusPacket.includes(field), `missing typed focus field: ${field}`);
+	}
+	assert.match(compose, /Content cases alone receive block types/u);
+	assert.match(compose, /Shell cases name their shell owner and\s+selector/u);
+	assert.match(compose, /The accumulated\s+gate is comparison-only/u);
 	assert.match(focusPacket, /never for the untouched whole frame/u);
 	assert.match(marketing, /content-plus-footer composition frame/u);
 	assert.match(marketing, /approved header is immutable and always excluded/u);
 	assert.match(marketing, /never route CSS/u);
+});
+
+test("Compose uses one identity-verified capability-complete Figma connector", async () => {
+	const intake = await readSkill("compose", "references/source-intake.md");
+
+	assert.match(intake, /one configured primary Figma connector/u);
+	assert.match(intake, /`whoami` plus the\s+context, screenshot, Agent Space cloning, and export operations/u);
+	assert.match(intake, /require\s+`webvizionagency@gmail\.com`/u);
+	assert.match(intake, /Do not combine identity proof from one connector/u);
+	assert.match(intake, /Pause when no single authenticated\s+connector/u);
+	assert.doesNotMatch(intake, /installed Figma app connector by default/u);
 });
 
 test("Compose maintains runtime checkpoints without a second workflow record", async () => {
