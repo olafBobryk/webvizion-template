@@ -8,18 +8,26 @@ description: Apply or review coherent motion for a human-accepted static section
 Direct a reviewed static surface as a readable sequence, not a collection of
 entrance wrappers. Preserve the accepted motion-off endpoint exactly.
 
+Animate packages [Repository Workflows](../repository-workflows/SKILL.md) and
+[Visual Parity](../visual-parity/SKILL.md) as mandatory subordinate contracts.
+Read each linked `SKILL.md` completely when its workflow first applies, even
+when that explicit-only skill is omitted from the active skill catalogue.
+Catalogue omission alone is not a blocker and never authorizes a substitute
+workflow. Load their routed references progressively instead of duplicating
+their contracts here.
+
 ## Start from the accepted static target
 
 1. Require a schema-v2 `.template-profile.json` receipt, an explicit user
-   request for animation, and a current native static Target. Read
-   `$averlo:visual-parity`'s focus packet and freeze the accepted motion-off
+   request for animation, and a current native static Target. Read the linked
+   `$averlo:visual-parity` focus packet and freeze the accepted motion-off
    endpoint.
-2. Use `$averlo:visual-parity` to verify motion-off, reduced-motion, and settled
-   motion-on endpoints against the accepted static capture. These comparisons
-   prove endpoints, not intermediate frames.
-3. Invoke `$averlo:repository-workflows` once before implementation. Select
-   Interaction plus every actual composition, shell, catalogue, route, or
-   performance concern affected by the motion.
+2. Use the linked `$averlo:visual-parity` to verify motion-off, reduced-motion,
+   and settled motion-on endpoints against the accepted static capture. These
+   comparisons prove endpoints, not intermediate frames.
+3. Invoke the linked `$averlo:repository-workflows` once before implementation.
+   Select Interaction plus every actual composition, shell, catalogue, route,
+   or performance concern affected by the motion.
 
 ## Direct the movement
 

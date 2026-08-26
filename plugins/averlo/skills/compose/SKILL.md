@@ -10,12 +10,21 @@ measure it honestly, and return it for human review. Composition may organize
 local implementation, but it does not decide or mutate shared design-system
 owners. `$averlo:systemize-composition` owns that later decision boundary.
 
+Compose packages two mandatory subordinate contracts as sibling plugin
+resources: [Repository Workflows](../repository-workflows/SKILL.md) and
+[Visual Parity](../visual-parity/SKILL.md). Read each linked `SKILL.md`
+completely when its workflow first applies, even when that explicit-only skill
+is omitted from the active skill catalogue. Catalogue omission alone is not a
+blocker and never authorizes a substitute workflow. Load their routed
+references progressively; do not copy their contracts into Compose.
+
 ## Establish the source and repository boundary
 
 1. Require a schema-v2 `.template-profile.json` receipt. Read
    [source intake](references/source-intake.md) when the source is Figma or when
    fonts, constituent assets, or external provenance must be resolved.
-2. Invoke `$averlo:repository-workflows` once for each genuine change unit.
+2. Invoke the linked `$averlo:repository-workflows` once for each genuine
+   change unit.
    Select every applicable route, marketing/shell, composition, media, content,
    loading, and interaction workflow, then load the union of concerns once.
    When the requested focus creates or restructures a public marketing page or
@@ -34,9 +43,9 @@ owners. `$averlo:systemize-composition` owns that later decision boundary.
    Record excluded regions and their retained authority in the ignored focus
    packet; never present the accumulated gate as whole-frame parity when source
    pixels were excluded.
-4. Invoke `$averlo:visual-parity` in `frame` before implementation. Preserve the
-   source authority, capture conditions, case order, Target route/selectors, and
-   native-evidence requirement in its focus packet.
+4. Invoke the linked `$averlo:visual-parity` in `frame` before implementation.
+   Preserve the source authority, capture conditions, case order, Target
+   route/selectors, and native-evidence requirement in its focus packet.
 
 ## Realize the complete focus natively
 

@@ -43,11 +43,22 @@ test("Compose is the only implicit composition workflow", async () => {
 	}
 });
 
+test("owning workflows load explicit-only subordinate contracts from sibling resources", async () => {
+	for (const owner of ["compose", "systemize-composition", "animate"]) {
+		const source = await readSkill(owner);
+		assert.match(source, /\[Repository Workflows\]\(\.\.\/repository-workflows\/SKILL\.md\)/u);
+		assert.match(source, /\[Visual Parity\]\(\.\.\/visual-parity\/SKILL\.md\)/u);
+		assert.match(source, /explicit-only skill\s+is omitted from the active skill\s+catalogue/u);
+		assert.match(source, /Catalogue omission alone is not a\s+blocker/u);
+		assert.match(source, /never authorizes a\s+substitute\s+workflow/u);
+	}
+});
+
 test("Compose owns one native measured review pass without shared-owner mutation", async () => {
 	const compose = await readSkill("compose");
 
-	assert.match(compose, /Invoke `\$averlo:repository-workflows` once/u);
-	assert.match(compose, /Invoke `\$averlo:visual-parity` in `frame`/u);
+	assert.match(compose, /Invoke the linked `\$averlo:repository-workflows` once/u);
+	assert.match(compose, /Invoke the linked `\$averlo:visual-parity` in `frame`/u);
 	assert.match(compose, /one complete review pass/u);
 	assert.match(compose, /one correction sweep in source order/u);
 	assert.match(compose, /Stop at a human review checkpoint/u);
@@ -138,8 +149,8 @@ test("Animate requires an accepted static target and keeps its endpoint exact", 
 	assert.match(animate, /explicit user\s+request for animation/u);
 	assert.match(animate, /current native static Target/u);
 	assert.match(animate, /Preserve the accepted motion-off endpoint exactly/u);
-	assert.match(animate, /`\$averlo:visual-parity`/u);
-	assert.match(animate, /`\$averlo:repository-workflows` once/u);
+	assert.match(animate, /linked `\$averlo:visual-parity`/u);
+	assert.match(animate, /linked `\$averlo:repository-workflows` once/u);
 	assert.doesNotMatch(animate, /active plane|handoff state/iu);
 });
 

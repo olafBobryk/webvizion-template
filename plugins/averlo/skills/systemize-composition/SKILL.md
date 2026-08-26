@@ -10,17 +10,26 @@ system without treating the agent's ownership judgment as unquestionable.
 Explicit invocation authorizes analysis and high-confidence automatic work; it
 does not authorize unresolved medium- or low-confidence shared changes.
 
+Systemize Composition packages [Repository Workflows](../repository-workflows/SKILL.md)
+and [Visual Parity](../visual-parity/SKILL.md) as mandatory subordinate
+contracts. Read each linked `SKILL.md` completely when its workflow first
+applies, even when that explicit-only skill is omitted from the active skill
+catalogue. Catalogue omission alone is not a blocker and never authorizes a
+substitute workflow. Load their routed references progressively instead of
+duplicating their contracts here.
+
 ## Freeze the accepted target
 
 1. Require a schema-v2 `.template-profile.json` receipt and a current native
-   composition at the requested Target. Read `$averlo:visual-parity`'s focus
-   packet and [the confidence router](references/confidence.md).
-2. Invoke `$averlo:visual-parity` with `integration-parity` cases. Freeze a
-   target-before capture and SHA-256 for every affected shell or section scope.
-   This frozen Target is the visual authority for systemization; it never
-   replaces the product's original source provenance.
-3. Invoke `$averlo:repository-workflows` once for the complete change unit.
-   Select every applicable UI ownership, catalogue, composition,
+   composition at the requested Target. Read the linked
+   `$averlo:visual-parity` focus packet and
+   [the confidence router](references/confidence.md).
+2. Invoke the linked `$averlo:visual-parity` with `integration-parity` cases.
+   Freeze a target-before capture and SHA-256 for every affected shell or
+   section scope. This frozen Target is the visual authority for systemization;
+   it never replaces the product's original source provenance.
+3. Invoke the linked `$averlo:repository-workflows` once for the complete
+   change unit. Select every applicable UI ownership, catalogue, composition,
    marketing/shell, media, route, and interaction workflow and load their
    concern union once.
 
