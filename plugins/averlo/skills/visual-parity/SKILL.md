@@ -22,13 +22,17 @@ workflow status, or decides whether a human should accept a result.
      source score;
    - `static-endpoint`: accepted motion-off Target versus a motion endpoint.
 3. Copy [the matrix example](references/matrix.example.json) into ignored
-   `.codex/visual-parity/<task>/matrix.json`. Use stable task-local case IDs for
+   `.codex/visual-parity/<task>/matrix.json` and keep the packet at
+   `.codex/visual-parity/<task>/focus.md`. Use stable task-local case IDs for
    each named route, shell, section, state, source-backed viewport, full-page
    gate, or responsive case. The focus packet owns their order for the current
    review pass.
 4. Each matrix side is an existing PNG or a live URL with an optional selector.
    An image side may specify `crop: { x, y, width, height }` so a nested source
-   scope retains its real surrounding background.
+   scope retains its real surrounding background. For Figma composition,
+   materialize each authoritative section frame as a stable ignored reference
+   PNG before product implementation; measurement must not depend on repeatedly
+   fetching a changing or expiring design-tool image.
 5. Record source authority, comparison purpose, Target route/selectors, capture
    conditions, repository revision or dirty identity, and current review
    checkpoint in [the focus packet](references/focus-packet.md). A Target edit

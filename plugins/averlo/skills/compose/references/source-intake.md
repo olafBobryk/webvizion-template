@@ -13,21 +13,30 @@ constituent assets, or durable source provenance.
    from one connector with source reads or writes from another.
 2. Load the Figma `figma-use` and `figma-design-to-code` skills. Locate the
    supplied focus and its containing page, and keep the original URL and node as
-   immutable visual authority. Read context, metadata, screenshots, and exports
-   directly from that authority; these read-only operations never require an
-   Agent Space.
-3. Treat Agent Space as one reusable generic Figma scratch location, not a
+   immutable visual authority. Use page metadata only to decompose the focus.
+   Before implementing each case, call `get_design_context` on that case's exact
+   authoritative section frame. Page-level or containing-frame design context
+   cannot substitute for section-frame context. Read screenshots and exports
+   directly from the same authority; these read-only operations never require
+   an Agent Space.
+3. Before product edits, save every authoritative case as
+   `.codex/visual-parity/<task>/reference/<case-id>.png` and bind that stable
+   artifact to its Figma node ID and bounds in the Visual Parity packet and
+   matrix. Preserve the complete source frame separately for the accumulated
+   gate. If the section-frame export omits an owned surrounding background,
+   materialize the equivalent crop from the pinned complete source frame.
+4. Treat Agent Space as one reusable generic Figma scratch location, not a
    per-task copy, source authority, receipt, or implementation prerequisite.
    Reuse an existing generic Agent Space whenever a Figma-side scratch edit is
    genuinely required. Never create a target-, route-, task-, or source-page-
    specific Agent Space when a reusable one exists. If no Figma-side write is
    needed, record Agent Space as `not used` and continue. The absence of a clone
    or dedicated cloning operation must not block read-only Compose work.
-4. Never mutate the designer's original page. Pause only when a required
+5. Never mutate the designer's original page. Pause only when a required
    Figma-side write cannot be isolated safely in an existing generic Agent
    Space, or when the authenticated primary connector cannot perform an
    operation actually required by the requested focus.
-5. Record the connector identity, source URL, focus bounds, and the reused
+6. Record the connector identity, source URL, focus bounds, and the reused
    generic Agent Space file/page and scratch node when used—or `not used`—in the
    ignored Visual Parity focus packet.
 

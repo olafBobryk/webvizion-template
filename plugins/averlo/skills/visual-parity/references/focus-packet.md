@@ -2,11 +2,13 @@
 
 Keep one short ignored receipt beside the ordered matrix. `frame` records the
 pinned authority and capture scope; `verify` replaces only the current
-measurement block after the Target capture.
+measurement block after the Target capture. Store it at
+`.codex/visual-parity/<task>/focus.md`.
 
 ```markdown
 Phase: frame | verify
 Workflow owner: compose | systemize-composition | animate | direct-review
+Thread identity: <current Codex session/thread ID or not applicable>
 Focus: section | page | shell | site | component
 Target: <route, selector, or Storybook story>
 Target identity: <repository revision or dirty identity plus capture SHA-256>
@@ -20,12 +22,16 @@ Figma execution identity: <connector plus whoami, or not applicable>
 Agent Space: <reused generic file/page and scratch node, or not used>
 Product sources: <PRODUCT.md#product-sources or not applicable>
 Review checkpoint: <owning workflow's current task-local checkpoint>
-Content cases: <case ID → source node/bounds → semantic landmark → block type → registered renderer → Target selector>
-Shell cases: <case ID → source node/bounds → shell owner → Target selector>
+Active case: <case ID → exact source frame node/bounds → stable reference PNG → Target selector, or none>
+Content cases: <case ID → exact source frame node/bounds → stable reference PNG → semantic landmark → block type → registered renderer → Target selector>
+Shell cases: <case ID → exact source frame node/bounds → stable reference PNG → shell owner → Target selector>
 Excluded regions: <source region → retained Target authority>
 Accumulated gate: <case ID → included content and shell cases → Target selector or crop>
 Cases in order: <case IDs and scope labels>
 Matrix: <.codex/visual-parity/<task>/matrix.json>
+Section boundary: <none | closed case ID>
+Next case: <case ID | none>
+Continuation token: <unique token | none>
 
 Mechanical assessment:
 - Assessment: <.codex/visual-parity/<task>/assessment/summary.json>
@@ -47,6 +53,12 @@ The owning workflow writes `pending` when it creates or refreshes the current
 checkpoint. Use `accepted` or `continue-requested` only after the user explicitly
 provides that response; an agent must not infer either state from reaching or
 reporting a checkpoint.
+
+`Section boundary`, `Next case`, and `Continuation token` are optional Compose
+recovery fields. Populate them only after the active case has closed and another
+ordered case is ready. They authorize one automatic continuation for the same
+thread. Clear the consumed boundary by making the named next case active. They
+are not lifecycle status, a workflow ledger, or evidence that `/compact` ran.
 
 Use a native route plus a stable selector for section evidence. A Storybook
 fixture proves only that fixture. A changed viewport, selector, state, DPR,

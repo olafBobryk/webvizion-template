@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
+import { spawn } from "node:child_process";
 import fs from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 
@@ -12,6 +14,39 @@ async function readSkill(name, relativePath = "SKILL.md") {
 async function assertMissingSkill(name) {
 	await assert.rejects(fs.access(path.join(skillsRoot, name, "SKILL.md")), {
 		code: "ENOENT",
+	});
+}
+
+async function runComposeStopHook({ cwd, pluginData, sessionId }) {
+	const hookPath = path.join(
+		process.cwd(),
+		"plugins/averlo/hooks/compose-stop-hook.mjs",
+	);
+	return new Promise((resolve, reject) => {
+		const child = spawn(process.execPath, [hookPath], {
+			env: { ...process.env, PLUGIN_DATA: pluginData },
+			stdio: ["pipe", "pipe", "pipe"],
+		});
+		let stdout = "";
+		let stderr = "";
+		child.stdout.on("data", (chunk) => (stdout += chunk));
+		child.stderr.on("data", (chunk) => (stderr += chunk));
+		child.on("error", reject);
+		child.on("close", (code) => {
+			if (code !== 0) {
+				reject(new Error(`hook exited ${code}: ${stderr}`));
+				return;
+			}
+			resolve(JSON.parse(stdout || "{}"));
+		});
+		child.stdin.end(
+			JSON.stringify({
+				hook_event_name: "Stop",
+				session_id: sessionId,
+				cwd,
+				stop_hook_active: false,
+			}),
+		);
 	});
 }
 
@@ -43,6 +78,119 @@ test("Compose is the only implicit composition workflow", async () => {
 	}
 });
 
+test("Compose frames stable section sources and requests exact section context", async () => {
+	const [compose, intake, visualParity, focusPacket] = await Promise.all([
+		readSkill("compose"),
+		readSkill("compose", "references/source-intake.md"),
+		readSkill("visual-parity"),
+		readSkill("visual-parity", "references/focus-packet.md"),
+	]);
+
+	assert.match(compose, /Before any product edit,\s+materialize every authoritative source case/u);
+	assert.match(compose, /reference\/<case-id>\.png/u);
+	assert.match(compose, /Call `get_design_context` with the active section frame's exact/u);
+	assert.match(compose, /page frame, containing page, accumulated\s+frame, or a sibling is not design context/u);
+	assert.match(intake, /page metadata only to decompose/u);
+	assert.match(intake, /exact\s+authoritative section frame/u);
+	assert.match(visualParity, /stable ignored reference\s+PNG before product implementation/u);
+	assert.match(focusPacket, /exact source frame node\/bounds → stable reference PNG/u);
+});
+
+test("Compose Stop hook continues only a new matching section token", async () => {
+	const temporaryRoot = await fs.mkdtemp(path.join(os.tmpdir(), "averlo-compose-hook-"));
+	const pluginData = path.join(temporaryRoot, "plugin-data");
+	const taskRoot = path.join(temporaryRoot, ".codex", "visual-parity", "pearl");
+	await fs.mkdir(taskRoot, { recursive: true });
+	await fs.writeFile(
+		path.join(taskRoot, "focus.md"),
+		[
+			"Workflow owner: compose",
+			"Thread identity: thr-compose-test",
+			"Section boundary: hero",
+			"Next case: fund",
+			"Continuation token: hero-to-fund-1",
+			"- Incompletion: none",
+			"Human review: pending",
+			"",
+		].join("\n"),
+		"utf8",
+	);
+
+	const first = await runComposeStopHook({
+		cwd: temporaryRoot,
+		pluginData,
+		sessionId: "thr-compose-test",
+	});
+	assert.equal(first.decision, "block");
+	assert.match(first.reason, /Continue \$averlo:compose with case fund/u);
+
+	const duplicate = await runComposeStopHook({
+		cwd: temporaryRoot,
+		pluginData,
+		sessionId: "thr-compose-test",
+	});
+	assert.deepEqual(duplicate, {});
+
+	const unrelated = await runComposeStopHook({
+		cwd: temporaryRoot,
+		pluginData,
+		sessionId: "thr-unrelated",
+	});
+	assert.deepEqual(unrelated, {});
+
+	await fs.writeFile(
+		path.join(taskRoot, "focus.md"),
+		[
+			"Workflow owner: compose",
+			"Thread identity: thr-compose-test",
+			"Section boundary: fund",
+			"Next case: leases",
+			"Continuation token: fund-to-leases-1",
+			"- Incompletion: required source bounds unavailable",
+			"Human review: pending",
+			"",
+		].join("\n"),
+		"utf8",
+	);
+	const blocked = await runComposeStopHook({
+		cwd: temporaryRoot,
+		pluginData,
+		sessionId: "thr-compose-test",
+	});
+	assert.deepEqual(blocked, {});
+
+	await fs.writeFile(
+		path.join(taskRoot, "focus.md"),
+		[
+			"Workflow owner: systemize-composition",
+			"Thread identity: thr-compose-test",
+			"Section boundary: fund",
+			"Next case: leases",
+			"Continuation token: unrelated-token",
+			"- Incompletion: none",
+			"Human review: pending",
+			"",
+		].join("\n"),
+		"utf8",
+	);
+	const otherWorkflow = await runComposeStopHook({
+		cwd: temporaryRoot,
+		pluginData,
+		sessionId: "thr-compose-test",
+	});
+	assert.deepEqual(otherWorkflow, {});
+});
+
+test("plugin hook discovery is default-scoped without a manifest override", async () => {
+	const [hooks, manifest] = await Promise.all([
+		fs.readFile(path.join(process.cwd(), "plugins/averlo/hooks/hooks.json"), "utf8"),
+		fs.readFile(path.join(process.cwd(), "plugins/averlo/.codex-plugin/plugin.json"), "utf8"),
+	]);
+	assert.match(hooks, /"Stop"/u);
+	assert.match(hooks, /compose-stop-hook\.mjs/u);
+	assert.doesNotMatch(manifest, /"hooks"/u);
+});
+
 test("owning workflows load explicit-only subordinate contracts from sibling resources", async () => {
 	for (const owner of ["compose", "systemize-composition", "animate"]) {
 		const source = await readSkill(owner);
@@ -54,17 +202,17 @@ test("owning workflows load explicit-only subordinate contracts from sibling res
 	}
 });
 
-test("Compose owns one native depth-first review pass without shared-owner mutation", async () => {
+test("Compose owns section-scoped native review without shared-owner mutation", async () => {
 	const compose = await readSkill("compose");
 
 	assert.match(compose, /Invoke the linked `\$averlo:repository-workflows` once/u);
 	assert.match(compose, /Invoke the linked `\$averlo:visual-parity` in `frame`/u);
-	assert.match(compose, /one complete review pass/u);
-	assert.match(compose, /Process source-backed cases depth-first in matrix order/u);
-	assert.match(compose, /Advance to the next case only at literal/u);
-	assert.match(compose, /`changedPixels: 0`/u);
-	assert.match(compose, /Do not advance merely because a case improved/u);
-	assert.match(compose, /resumes the active unfinished case/u);
+	assert.match(compose, /one authoritative source section at a time/u);
+	assert.match(compose, /Do not create,\s+stub, style, or otherwise implement a later case/u);
+	assert.match(compose, /`changedPixels: 0` is the only `exact` result/u);
+	assert.match(compose, /Every comparable nonzero result\s+remains `measured`/u);
+	assert.match(compose, /Improvement alone/u);
+	assert.match(compose, /A later user request resumes the active unfinished/u);
 	assert.match(compose, /Stop at a human review checkpoint/u);
 	assert.match(
 		compose,
@@ -76,39 +224,23 @@ test("Compose owns one native depth-first review pass without shared-owner mutat
 	);
 	assert.match(
 		compose,
-		/This prohibition includes\s+`Logo`, Button, Text, Section/u,
+		/`Logo`, Button, Text, Section, or another shared design-system owner/u,
 	);
-	assert.match(compose, /`native-invalid` regardless of\s+its pixel score/u);
-	assert.match(compose, /Target header is immutable in Compose/u);
-	assert.match(compose, /always exclude source\s+header pixels/u);
-	assert.match(compose, /asks for header\s+or site-shell composition/u);
-	assert.match(compose, /do not propose, plan, recommend, sequence, or describe/u);
-	assert.match(compose, /optional phase, prerequisite, or follow-up/u);
+	assert.match(compose, /`native-invalid`\s+regardless of its pixel score/u);
+	assert.match(compose, /existing Target header is immutable/u);
+	assert.match(compose, /always exclude source-header pixels/u);
+	assert.match(compose, /Do not propose, plan,\s+recommend, sequence, or describe/u);
 	assert.doesNotMatch(compose, /Defer header redesign/u);
 	assert.doesNotMatch(compose, /unless the caller explicitly/u);
-	assert.match(compose, /source-backed\s+footer work in\s+scope/u);
+	assert.match(compose, /evidenced footer\s+work in scope/u);
 	assert.match(compose, /accumulated in-scope gate/u);
-	assert.match(compose, /one registered block, one renderer/u);
-	assert.match(
-		compose,
-		/separate comparison\s+cases, they must have separate blocks and renderers/u,
-	);
-	assert.match(
-		compose,
-		/repository-owned Preview `--review composition` mode/u,
-	);
-	assert.match(
-		compose,
-		/Put the automation review state in each such matrix Target/u,
-	);
-	assert.match(
-		compose,
-		/a selector does not exclude a fixed or overlapping header/u,
-	);
+	assert.match(compose, /one `MarketingPageDocument` block, one registered renderer/u);
+	assert.match(compose, /Use Preview `--review composition`/u);
 	assert.doesNotMatch(
 		compose,
 		/create_goal|update_goal|active plane|stall counter/iu,
 	);
+	assert.match(compose, /Do not add a goal, composition\s+record, checklist file, app-server controller/u);
 });
 
 test("Systemize Composition routes confidence and accepts automatic work only at zero", async () => {
@@ -201,7 +333,7 @@ test("section construction is conditionally routed and remains repository-owned"
 	}
 	assert.match(concern, /stable case\s+ID/u);
 	assert.match(concern, /meaningful source-neutral content or\s+media fields/u);
-	assert.match(compose, /section-construction concern is\s+mandatory/u);
+	assert.match(compose, /Section construction is mandatory/u);
 	assert.doesNotMatch(compose, /Section\.Background|renderMarketingSections/u);
 });
 
@@ -258,13 +390,10 @@ test("composition review preserves the excluded header and types every authority
 		readSkill("repository-workflows", "references/marketing-architecture.md"),
 	]);
 
+	assert.match(compose, /header remains unchanged in\s+the shared shell/u);
 	assert.match(
 		compose,
-		/Preserve the header\s+unchanged through the shared shell/u,
-	);
-	assert.match(
-		compose,
-		/implement an evidenced footer only\s+through that shell/u,
+		/an evidenced footer is implemented only through its shell/u,
 	);
 	assert.match(focusPacket, /Authority boundaries:/u);
 	assert.match(focusPacket, /Authority locks:/u);
@@ -276,9 +405,9 @@ test("composition review preserves the excluded header and types every authority
 	]) {
 		assert.ok(focusPacket.includes(field), `missing typed focus field: ${field}`);
 	}
-	assert.match(compose, /Content cases alone receive block types/u);
-	assert.match(compose, /Shell cases name their shell owner and\s+selector/u);
-	assert.match(compose, /The accumulated\s+gate is comparison-only/u);
+	assert.match(compose, /Each content\s+case must name one authoritative Figma section frame/u);
+	assert.match(compose, /evidenced footer shell cases/u);
+	assert.match(compose, /accumulated page is a\s+comparison gate/u);
 	assert.match(focusPacket, /never for the untouched whole frame/u);
 	assert.match(marketing, /content-plus-footer composition frame/u);
 	assert.match(marketing, /approved header is immutable and always excluded/u);
@@ -294,7 +423,7 @@ test("Compose uses one identity-verified capability-complete Figma connector", a
 	assert.match(intake, /configured primary official Figma connector/u);
 	assert.match(intake, /require\s+`webvizionagency@gmail\.com`/u);
 	assert.match(intake, /Do not combine identity proof\s+from one connector/u);
-	assert.match(intake, /read-only operations never require an\s+Agent Space/u);
+	assert.match(intake, /read-only operations never require\s+an Agent Space/u);
 	assert.match(intake, /one reusable generic Figma scratch location/u);
 	assert.match(intake, /Never create a target-, route-, task-, or source-page-/u);
 	assert.match(intake, /absence of a clone\s+or dedicated cloning operation must not block/u);
@@ -309,7 +438,7 @@ test("Systemize reviews accepted local renderer boundaries without redefining Co
 		readSkill("systemize-composition"),
 	]);
 
-	assert.match(compose, /one honest comparison\s+case containing multiple coherent landmarks/u);
+	assert.match(compose, /support one honest comparison case/u);
 	assert.match(sections, /human-reviewed Systemize Composition question/u);
 	assert.match(systemize, /renderer or section-boundary split\/merge as `medium` by default/u);
 	assert.match(systemize, /focused route and marketing-section checks/u);
@@ -317,38 +446,31 @@ test("Systemize reviews accepted local renderer boundaries without redefining Co
 	assert.match(systemize, /unless it also decides a shared design-system owner/u);
 });
 
-test("Compose maintains runtime checkpoints without a second workflow record", async () => {
+test("Compose maintains section recovery evidence without a second workflow record", async () => {
 	const [compose, focusPacket] = await Promise.all([
 		readSkill("compose"),
 		readSkill("visual-parity", "references/focus-packet.md"),
 	]);
 
-	for (const checkpoint of [
-		"Preview and source authority",
-		"Decomposition and authority locks",
-		"Font and asset preflight",
-		"Native implementation",
-		"Per-scope Visual Parity baseline",
-		"Depth-first strict correction",
-		"Accumulated gate, responsive review, repository checks, and human checkpoint",
+	for (const field of [
+		"Thread identity:",
+		"Active case:",
+		"Section boundary:",
+		"Next case:",
+		"Continuation token:",
 	]) {
 		assert.ok(
-			compose.includes(checkpoint),
-			`missing checkpoint: ${checkpoint}`,
+			focusPacket.includes(field),
+			`missing recovery field: ${field}`,
 		);
 	}
-	assert.match(
-		compose,
-		/runtime working plan with exactly one active checkpoint/u,
-	);
-	assert.match(compose, /Refresh only the owning material/u);
-	assert.match(compose, /After context compaction or a continuation/u);
-	assert.match(compose, /reload the focus packet, matrix/u);
-	assert.match(compose, /do not create a Compose checklist file/u);
+	assert.match(compose, /reload the focus packet, matrix row/u);
+	assert.match(compose, /Do not add a goal, composition\s+record, checklist file/u);
+	assert.match(compose, /never claim that `\/compact`\s+ran/u);
 	assert.match(focusPacket, /recovery evidence/u);
 	assert.match(
 		focusPacket,
-		/not lifecycle status or a durable workflow\s+record/u,
+		/not lifecycle status, a workflow ledger/u,
 	);
 	await assert.rejects(
 		fs.access(path.join(skillsRoot, "compose", "references", "checklist.md")),
@@ -362,16 +484,13 @@ test("Compose cannot self-accept review or leave a correctable nonzero case", as
 		readSkill("visual-parity", "references/focus-packet.md"),
 	]);
 
+	assert.match(compose, /run a compare-correct-\s*compare loop/u);
 	assert.match(
 		compose,
-		/continue the compare-correct-\s*compare loop on that same case/u,
-	);
-	assert.match(
-		compose,
-		/do not skip it or call the ordered\s+correction pass complete/u,
+		/If any concrete Target-owned mismatch remains, continue the same case/u,
 	);
 	assert.match(compose, /Write `Human review:\s+pending`/u);
-	assert.match(compose, /only the user's explicit response/u);
+	assert.match(compose, /only the user's explicit\s+response/u);
 	assert.match(focusPacket, /agent must not infer either state/u);
 	assert.match(
 		focusPacket,
@@ -385,10 +504,9 @@ test("Compose repairs comparability and proves symmetric authority before measur
 		readSkill("visual-parity", "references/focus-packet.md"),
 	]);
 
-	assert.match(compose, /`comparable: false` is a repair state, not by itself a\s+blocker/u);
-	assert.match(compose, /source crop, Target\s+selector\/capture state, or Target-owned geometry/u);
-	assert.match(compose, /Target-owned width or height mismatch\s+must enter the same local correction loop/u);
-	assert.match(compose, /prove that the source crop and Target selector contain the same/u);
+	assert.match(compose, /Reject a\s+capture containing excluded pixels or unequal authority regions/u);
+	assert.match(compose, /repair its crop, selector, review state, or Target-owned\s+dimensions/u);
+	assert.match(compose, /symmetrically included\s+source and Target regions/u);
 	assert.match(compose, /full source frame compared with a\s+header-hidden Target is invalid/u);
 	assert.match(focusPacket, /Authority equivalence:/u);
 	assert.match(focusPacket, /Verify region membership and order, not dimensions alone/u);
@@ -397,12 +515,13 @@ test("Compose repairs comparability and proves symmetric authority before measur
 test("Compose rejects nonzero rationalizations", async () => {
 	const compose = await readSkill("compose");
 
-	assert.match(compose, /exact `changedPixels` value is\s+the sole advancement gate/u);
-	assert.match(compose, /Geometry that looks locked/u);
+	assert.match(compose, /`changedPixels: 0` is the only `exact` result/u);
+	assert.match(compose, /Every comparable nonzero result\s+remains `measured`/u);
+	assert.match(compose, /layout geometry, spacing, alignment/u);
 	assert.match(compose, /suspected antialiasing/u);
-	assert.match(compose, /zero would require flattened source imagery is an unproven/u);
-	assert.match(compose, /Broad\s+filled regions, asset, color, opacity, map, or image-treatment differences/u);
-	assert.match(compose, /keep checkpoint 6 and that case active/u);
+	assert.match(compose, /generic renderer-noise claim cannot close a case/u);
+	assert.match(compose, /asset identity, crop, scale/u);
+	assert.match(compose, /If any concrete Target-owned mismatch remains, continue/u);
 });
 
 test("Visual Parity stays mechanical across both composition workflows", async () => {

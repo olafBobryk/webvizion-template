@@ -5,11 +5,11 @@ description: Build or correct a native source-backed section, page, shell, or si
 
 # Averlo · Compose
 
-Create the complete native visual realization, then converge its ordered
-source-backed cases depth-first before returning it for human review.
-Composition may organize local implementation, but it
-does not decide or mutate shared design-system
-owners. `$averlo:systemize-composition` owns that later decision boundary.
+Realize and review one authoritative source section at a time. Finish the
+active section's implementation and visual correction before loading or
+building the next section. Composition may organize local implementation, but
+it does not decide or mutate shared design-system owners.
+`$averlo:systemize-composition` owns that later decision boundary.
 
 Compose packages two mandatory subordinate contracts as sibling plugin
 resources: [Repository Workflows](../repository-workflows/SKILL.md) and
@@ -25,190 +25,156 @@ references progressively; do not copy their contracts into Compose.
    [source intake](references/source-intake.md) when the source is Figma or when
    fonts, constituent assets, or external provenance must be resolved.
 2. Invoke the linked `$averlo:repository-workflows` once for each genuine
-   change unit.
-   Select every applicable route, marketing/shell, composition, media, content,
-   loading, and interaction workflow, then load the union of concerns once.
-   When the requested focus creates or restructures a public marketing page or
-   source section, the router's conditional section-construction concern is
-   mandatory before choosing route-local or registered implementation shapes.
-3. Inspect the complete source focus and the current Target before editing.
-   Classify source authority by region before defining cases. The existing
-   Target header is immutable in Compose: preserve it and always exclude source
-   header pixels, even when the caller supplies a page frame or asks for header
-   or site-shell composition. Treat that exclusion as terminal inside this
-   workflow: do not propose, plan, recommend, sequence, or describe a header
-   redesign as an optional phase, prerequisite, or follow-up. Keep source-backed
-   footer work in scope. Define stable local case IDs for each content section
-   in source order, the footer when evidenced, the accumulated in-scope gate,
-   and Target-only responsive widths.
-   Record excluded regions and their retained authority in the ignored focus
-   packet; never present the accumulated gate as whole-frame parity when source
-   pixels were excluded.
-4. Invoke the linked `$averlo:visual-parity` in `frame` before implementation.
-   Preserve the source authority, capture conditions, case order, Target
-   route/selectors, and native-evidence requirement in its focus packet.
+   change unit. Select every applicable route, marketing/shell, composition,
+   media, content, loading, and interaction workflow, then load the union of
+   concerns once. Section construction is mandatory when creating or
+   restructuring a public marketing page or source section.
+3. Inspect the complete source focus and current Target before product edits.
+   Classify source authority by region. The existing Target header is immutable:
+   preserve it and always exclude source-header pixels. Do not propose, plan,
+   recommend, sequence, or describe a header redesign. Keep evidenced footer
+   work in scope.
+4. Decompose the complete focus before implementation. Define stable local case
+   IDs for content sections in source order, evidenced footer shell cases, the
+   accumulated in-scope gate, and Target-only responsive widths. Each content
+   case must name one authoritative Figma section frame, its node ID and bounds,
+   one source-neutral block type, one registered renderer, and one stable Target
+   selector. Pause rather than substitute a page frame when an authoritative
+   section frame or its bounds cannot be identified unambiguously.
+   Multiple coherent landmarks may share one case and renderer only when the
+   source hierarchy, semantic heading context, interaction, and intended review
+   boundary support one honest comparison case. A possible render-preserving
+   split remains later human-reviewed Systemize Composition work.
+5. Invoke the linked `$averlo:visual-parity` in `frame`. Before any product edit,
+   materialize every authoritative source case as a stable PNG at
+   `.codex/visual-parity/<task>/reference/<case-id>.png`. Preserve the full-page
+   evidence separately for the accumulated gate. A nested crop must retain the
+   real source background when the section-frame export does not.
+6. Preflight all required fonts and constituent assets once, before the first
+   section implementation. Do not begin section work with a known missing font,
+   logo, mark, photograph, map, or other authoritative asset.
 
-## Realize the complete focus natively
+## Preserve repository and ownership boundaries
 
-1. Preserve repository structure, data boundaries, behavior owners, semantics,
-   accessibility, routing, and responsive rendering. For registered marketing
-   sections, follow the repository's section-construction concern rather than
-   flattening the page into a route component or global stylesheet.
-   Decompose the source before choosing block types: each independently bounded
-   semantic source section maps to one registered block, one renderer, and one
-   stable section selector. If two source landmarks have separate comparison
-   cases, they must have separate blocks and renderers even when they share a
-   background or continuous visual treatment. The accumulated page is a
-   comparison gate, never a registered section of its own. Preserve the header
-   unchanged through the shared shell and implement an evidenced footer only
-   through that shell boundary; never reproduce either inside a content
-   renderer. When source and semantic evidence support one honest comparison
-   case containing multiple coherent landmarks, Compose may keep that case in
-   one renderer. A possible render-preserving split is later human-reviewed
-   Systemize Composition work, not a failed composition pass.
+1. Preserve repository structure, data boundaries, semantics, accessibility,
+   routing, and responsive rendering. Each independently bounded content case
+   maps to one `MarketingPageDocument` block, one registered renderer, one
+   shared `Section` root, and one stable selector. The accumulated page is a
+   comparison gate, never a registered section. The header remains unchanged in
+   the shared shell; an evidenced footer is implemented only through its shell
+   boundary.
 2. Reuse an existing visual owner only when its current Storybook contract
    already matches the source role's purpose and complete observable signature.
-   Do not add, extend, rename, merge, retire, retheme, or change defaults for a
-   shared design-system owner in this workflow. This prohibition includes
-   `Logo`, Button, Text, Section, and any other Storybook-backed owner. Before
-   editing, remove their implementation and Storybook files from the planned
-   change set. Exact source logos and marks remain constituent assets used by
-   the local section or footer presentation until Systemize Composition decides
-   whether to promote them. An evidenced footer may change through its shared
-   shell owner, but that does not authorize mutation of nested design-system
-   owners or of the header.
+   Do not add, extend, rename, merge, retire, retheme, or change defaults for
+   `Logo`, Button, Text, Section, or another shared design-system owner. Remove
+   those implementation and Storybook files from the planned change set.
 3. When no current visual owner fits, keep the fidelity recipe local to the
-   correct route, renderer, section, or shell presentation boundary. This is a
-   bounded source-realization exception, not a new public API or a claim that
-   the local recipe belongs in the design system.
-4. Build real selectable text, semantic controls, responsive layout, exact copy,
-   calibrated supplied fonts, and constituent assets. A reference capture is
-   evidence only.
-   Rendering a source screenshot, full-section export, reconstructed frame, or
-   other flattened reference as product UI is `native-invalid` regardless of
-   its pixel score.
-5. Keep stable selectors around each matrix case. Preserve shell and section
-   boundaries so comparison and later systemization can isolate the actual
-   owner instead of treating the whole page as one image.
+   route, renderer, section, or footer presentation boundary. Exact source
+   logos and marks remain constituent SVG assets used locally until Systemize
+   Composition decides whether to promote them.
+4. Build real selectable text, semantic controls, responsive layout, exact
+   copy, calibrated supplied fonts, and constituent assets. A reference capture
+   is evidence only. Rendering a source screenshot, section export, reconstructed
+   frame, or other flattened reference as product UI is `native-invalid`
+   regardless of its pixel score.
 
-## Maintain task-local checkpoint continuity
+## Run section-scoped work units
 
-Create and maintain a runtime working plan with exactly one active checkpoint:
+After decomposition and global preflight, process one content case at a time in
+source order, followed by each included footer shell case. Do not create,
+stub, style, or otherwise implement a later case during the active case's work
+unit. Shared route/document registry wiring may expose only the blocks already
+implemented; it must not become a whole-page implementation escape hatch.
 
-1. Preview and source authority.
-2. Decomposition and authority locks.
-3. Font and asset preflight.
-4. Native implementation.
-5. Per-scope Visual Parity baseline.
-6. Depth-first strict correction.
-7. Accumulated gate, responsive review, repository checks, and human checkpoint.
+For every active case:
 
-The plan owns progress only for the current task. Keep source cases, authority
-locks, and the current checkpoint in the existing ignored Visual Parity focus
-packet; do not create a Compose checklist file or any separate durable
-coordination artifact.
+1. Reload this skill, `.codex/visual-parity/<task>/focus.md`, the active matrix
+   row, and only the repository references routed for the case.
+2. Load the Figma `figma-use` and `figma-design-to-code` instructions when first
+   required. Call `get_design_context` with the active section frame's exact
+   file key and node ID. A call on the page frame, containing page, accumulated
+   frame, or a sibling is not design context for the section and cannot
+   authorize implementation. Inspect the stable local reference PNG beside the
+   returned structural context.
+3. Implement or correct only the active block/renderer or shell case and its
+   colocated support components. Keep one shared `Section` root for a content
+   case and preserve all authority locks.
+4. Use `$averlo:visual-parity` in `verify` to create current source, Target,
+   overlay, heatmap, side-by-side, and mechanical metrics for the active case.
+   Use Preview `--review composition` for every header-excluded case. Reject a
+   capture containing excluded pixels or unequal authority regions as
+   incomparable and repair its crop, selector, review state, or Target-owned
+   dimensions before interpreting pixels.
+5. Inspect the current artifacts at native scale and run a compare-correct-
+   compare loop. One cycle may contain multiple related hypotheses and edits,
+   but it remains owned by the same case.
 
-At checkpoint 2, classify the decomposition into four distinct groups in the
-runtime plan and focus packet: content cases, shell cases, excluded regions,
-and the accumulated gate. Content cases alone receive block types, registered
-renderers, and shared `Section` roots. Shell cases name their shell owner and
-selector without entering the content-renderer count. Exclusions name the
-retained Target authority without proposing implementation. The accumulated
-gate is comparison-only. Do not enter implementation while any row appears in
-the wrong group or while the planned change set contains a header or shared
-design-system owner.
+## Decide section closure honestly
 
-Refresh only the owning material before entering each checkpoint: source intake
-and Visual Parity framing for checkpoint 1; the routed section-construction,
-marketing architecture, route, and content-source concerns for checkpoint 2;
-source intake and media delivery for checkpoint 3; the current Section
-Storybook contract and applicable routed concerns for checkpoint 4; Visual
-Parity, its matrix, and its focus packet for checkpoints 5 and 6; and Preview
-plus focused repository verification for checkpoint 7. Invoke Repository
-Workflows once and Visual Parity only in its documented `frame` and `verify`
-modes; refreshing a reference is not another workflow invocation.
+`changedPixels: 0` is the only `exact` result. Every comparable nonzero result
+remains `measured`; never call it verified, exact, or complete.
 
-After context compaction or a continuation, reload the focus packet, matrix,
-active runtime checkpoint, and that checkpoint's owning references before
-editing. Rebuild the runtime plan from those facts when the active task no
-longer exposes it.
+A measured case may close for human-visible advancement only when native-scale
+inspection of its source, Target, overlay, and heatmap finds no identifiable
+Target-owned mismatch in:
 
-## Complete one depth-first measured review pass
+- layout geometry, spacing, alignment, size, or responsive behavior;
+- typography face, calibrated weight, width, line break, line height, or
+  tracking;
+- asset identity, crop, scale, position, or treatment;
+- color, fill, border, opacity, shadow, blend, map, or image treatment.
 
-Each invocation owns one complete review pass:
+Improvement alone, elapsed effort, a low mean delta, a low threshold ratio,
+suspected antialiasing, or a generic renderer-noise claim cannot close a case.
+Glyph-edge or renderer noise may explain a nonzero measurement only after the
+native-scale artifacts contain no concrete correctable pattern from the list
+above. The focus packet records the result as measured and retains the exact
+metrics; it does not record a justification narrative.
 
-1. Implement or inspect the whole requested focus before optimizing a section.
-2. Use `$averlo:visual-parity` in `verify` to establish a current baseline for
-   every source-backed section and included shell-region case, then the
-   accumulated in-scope gate, then Target-only responsive findings. Use the
-   repository-owned Preview `--review composition` mode for every
-   header-excluded source case, including individual sections and the
-   content-plus-footer gate, while keeping the human Preview URL on the real
-   production shell. Put the automation review state in each such matrix Target
-   URL; a selector does not exclude a fixed or overlapping header. Inspect the
-   captured Target and reject the case as incomparable when an excluded header
-   or other excluded region is still visible. Comparable nonzero results are
-   measured, never verified or complete. Before measuring an accumulated gate,
-   prove that the source crop and Target selector contain the same declared
-   authority regions in the same order. When a source header is excluded, crop
-   it from the accumulated source as well; a full source frame compared with a
-   header-hidden Target is invalid even when their pixel dimensions happen to
-   match. Record the paired source bounds and Target selector/bounds in the
-   focus packet and inspect both captures for excluded pixels.
-3. Process source-backed cases depth-first in matrix order. Lock one active case
-   in the runtime plan and identify it in the focus packet's review checkpoint.
-   Inspect its source, Target, overlay, heatmap, computed geometry, and current
-   metrics; correct its highest-impact Target-owned differences; then recapture
-   it. A correction cycle may contain multiple related hypotheses, edits, and
-   measurements.
-4. Do not advance merely because a case improved or received a useful edit.
-   While a comparable nonzero case still has Target-owned differences that can
-   be corrected within the granted authority, continue the compare-correct-
-   compare loop on that same case. Advance to the next case only at literal
-   `changedPixels: 0`. The current assessment's exact `changedPixels` value is
-   the sole advancement gate. Geometry that looks locked, a visually close
-   overlay, a low mean channel delta, a low threshold-changed ratio, exact font
-   or asset bytes, suspected antialiasing, and substantial time already spent
-   are diagnostic facts only; none can substitute another terminal condition.
-   The claim that zero would require flattened source imagery is an unproven
-   renderer-difference hypothesis, not a concrete blocker and never permission
-   to advance.
+If any concrete Target-owned mismatch remains, continue the same case. If an
+authoritative bound is unknowable, a required dependency is unavailable, or a
+repair would cross a protected authority boundary, end at an honestly
+unfinished human checkpoint with the active case and evidence intact. Do not
+advance to later cases.
 
-   Inspect the native-scale heatmap before proposing renderer noise. Broad
-   filled regions, asset, color, opacity, map, or image-treatment differences,
-   threshold pixels outside glyph edges, or large channel deltas remain owned
-   mismatch evidence. Even a well-supported renderer difference remains
-   nonexact under an exact objective.
+## Continue between section boundaries
 
-   `comparable: false` is a repair state, not by itself a
-   blocker: identify whether the defect belongs to the source crop, Target
-   selector/capture state, or Target-owned geometry; repair that boundary and
-   recapture before interpreting pixels. A Target-owned width or height mismatch
-   must enter the same local correction loop. Stop as incomparable only when the
-   authoritative included bounds cannot be determined, the repair crosses a
-   protected authority boundary, or a concrete external dependency prevents a
-   deterministic capture. Report that concrete reason; do not skip it or call the ordered
-   correction pass complete. Turn or context pressure alone is
-   not visual completion: preserve the active case and current evidence for
-   continuation.
-5. After every scoped case and included shell case is exact, measure the
-   accumulated in-scope gate. If it is nonzero, return to the target-owned scope
-   causing the accumulated drift and continue until the gate is exact or a
-   concrete blocker stops the pass. Then recheck responsive behavior at the
-   widths declared in the packet. A source-backed score applies only to its
-   supplied viewport and declared authority regions; responsive findings remain
-   separately labeled.
-6. Stop at a human review checkpoint only after exact completion or an honestly
-   unfinished stop described above. Report current measurements, native
-   evidence, responsive findings, repository checks, artifacts, the active
-   unfinished case if any, and the verified Preview URL. Write `Human review:
-   pending`; only the user's explicit response may change it to `accepted` or
-   `continue-requested`. Zero changed pixels may be reported as exact, but it
-   does not bypass human review. When stopping on a nonzero renderer-difference
-   hypothesis, keep checkpoint 6 and that case active, preserve the current
-   nonzero assessment, and do not measure or describe later source cases,
-   the accumulated gate, responsive review, or repository closeout as complete.
+When a case closes and another ordered case remains, update the ignored focus
+packet with the closed case, next case, and a unique continuation token, then
+end the current model response. The plugin's scoped Stop hook consumes that
+token once and supplies a new continuation prompt naming
+`$averlo:compose` and the next case. The hook is a convenience boundary, not a
+workflow owner and not composition state.
 
-A later request to continue resumes the active unfinished case before any later
-case. It does not restart a breadth-first sweep. Name any blocker and preserve
-the best current evidence without claiming completion.
+On the continuation, clear the consumed boundary by making the named next case
+active, then reload the focus packet, matrix row, this skill, and that case's
+owning references before editing. Do not rely on remembered page-level Figma
+context. This is a focused continuation boundary; never claim that `/compact`
+ran. Codex may compact natively when necessary. Do not add a goal, composition
+record, checklist file, app-server controller, or durable attempt ledger.
+
+The hook must remain inert when the packet does not match the current thread,
+the workflow owner is not Compose, the token was already consumed, a blocker is
+present, no next case exists, or the final human checkpoint has begun.
+
+## Close the accumulated review
+
+After every scoped content and included shell case has closed:
+
+1. Measure the accumulated content-plus-footer gate using symmetrically included
+   source and Target regions. A full source frame compared with a
+   header-hidden Target is invalid.
+2. Inspect the accumulated source, Target, overlay, and heatmap at native scale.
+   If a concrete drift belongs to an earlier case, make that case active again,
+   issue a new continuation token, and correct it before remeasuring the gate.
+3. After the accumulated gate closes, capture Target-only responsive findings
+   at the packet's declared widths and run focused repository checks. Do not
+   fabricate source parity for widths Figma did not supply.
+4. Stop at a human review checkpoint. Report every case's exact current metrics
+   and label it `exact` or `measured`, plus native evidence, responsive findings,
+   repository checks, artifacts, blockers, and verified normal and composition-
+   review Preview URLs. Write `Human review: pending`; only the user's explicit
+   response may change it to `accepted` or `continue-requested`.
+
+A later user request resumes the active unfinished or reopened case before any
+later work. Systemize Composition and Animate never start implicitly.
