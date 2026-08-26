@@ -12,6 +12,7 @@ Target: <route, selector, or Storybook story>
 Target identity: <repository revision or dirty identity plus capture SHA-256>
 Source authority: <immutable Figma/export, frozen accepted Target, or none>
 Authority boundaries: <included regions and excluded region → retained authority>
+Authority equivalence: <case ID → source included bounds/crop ↔ Target selector/bounds; excluded pixels absent from both>
 Authority locks: <preserved header, unchanged shared design-system owners, and allowed local/shell boundaries>
 Comparison purpose: <source-parity | integration-parity | responsive-system-fit | static-endpoint>
 Integration/static baseline: <pinned capture plus SHA-256, or not applicable>
@@ -56,6 +57,10 @@ When an owning workflow deliberately excludes a source region, crop or select
 both sides to the same included authority boundary. Report the result as parity
 for that declared boundary, never for the untouched whole frame. Preserve the
 normal human-review URL separately from any automation-only review state.
+For an accumulated gate, record the source crop and Target selector plus their
+rendered bounds. A full source frame is invalid when the Target automation state
+hides an excluded source region, even if the resulting images are mechanically
+equal-size. Verify region membership and order, not dimensions alone.
 When a fixed or overlapping excluded region can paint over a selected Target
 element, the matrix Target URL must activate the repository's automation-only
 review state. A DOM selector alone is not evidence that the excluded pixels are

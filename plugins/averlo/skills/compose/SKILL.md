@@ -148,7 +148,13 @@ Each invocation owns one complete review pass:
    URL; a selector does not exclude a fixed or overlapping header. Inspect the
    captured Target and reject the case as incomparable when an excluded header
    or other excluded region is still visible. Comparable nonzero results are
-   measured, never verified or complete.
+   measured, never verified or complete. Before measuring an accumulated gate,
+   prove that the source crop and Target selector contain the same declared
+   authority regions in the same order. When a source header is excluded, crop
+   it from the accumulated source as well; a full source frame compared with a
+   header-hidden Target is invalid even when their pixel dimensions happen to
+   match. Record the paired source bounds and Target selector/bounds in the
+   focus packet and inspect both captures for excluded pixels.
 3. Process source-backed cases depth-first in matrix order. Lock one active case
    in the runtime plan and identify it in the focus packet's review checkpoint.
    Inspect its source, Target, overlay, heatmap, computed geometry, and current
@@ -159,11 +165,17 @@ Each invocation owns one complete review pass:
    While a comparable nonzero case still has Target-owned differences that can
    be corrected within the granted authority, continue the compare-correct-
    compare loop on that same case. Advance to the next case only at literal
-   `changedPixels: 0`. If the case becomes incomparable, reaches a protected
-   authority boundary, or has a concrete external blocker, stop the invocation
-   on that case and report it as unfinished; do not skip it or call the ordered
-   correction pass complete. Turn or context pressure alone is not visual
-   completion: preserve the active case and current evidence for continuation.
+   `changedPixels: 0`. `comparable: false` is a repair state, not by itself a
+   blocker: identify whether the defect belongs to the source crop, Target
+   selector/capture state, or Target-owned geometry; repair that boundary and
+   recapture before interpreting pixels. A Target-owned width or height mismatch
+   must enter the same local correction loop. Stop as incomparable only when the
+   authoritative included bounds cannot be determined, the repair crosses a
+   protected authority boundary, or a concrete external dependency prevents a
+   deterministic capture. Report that concrete reason; do not skip it or call the ordered
+   correction pass complete. Turn or context pressure alone is
+   not visual completion: preserve the active case and current evidence for
+   continuation.
 5. After every scoped case and included shell case is exact, measure the
    accumulated in-scope gate. If it is nonzero, return to the target-owned scope
    causing the accumulated drift and continue until the gate is exact or a

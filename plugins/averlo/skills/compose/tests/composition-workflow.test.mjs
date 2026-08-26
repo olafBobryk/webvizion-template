@@ -379,6 +379,21 @@ test("Compose cannot self-accept review or leave a correctable nonzero case", as
 	);
 });
 
+test("Compose repairs comparability and proves symmetric authority before measuring", async () => {
+	const [compose, focusPacket] = await Promise.all([
+		readSkill("compose"),
+		readSkill("visual-parity", "references/focus-packet.md"),
+	]);
+
+	assert.match(compose, /`comparable: false` is a repair state, not by itself a\s+blocker/u);
+	assert.match(compose, /source crop, Target\s+selector\/capture state, or Target-owned geometry/u);
+	assert.match(compose, /Target-owned width or height mismatch\s+must enter the same local correction loop/u);
+	assert.match(compose, /prove that the source crop and Target selector contain the same/u);
+	assert.match(compose, /full source frame compared with a\s+header-hidden Target is invalid/u);
+	assert.match(focusPacket, /Authority equivalence:/u);
+	assert.match(focusPacket, /Verify region membership and order, not dimensions alone/u);
+});
+
 test("Visual Parity stays mechanical across both composition workflows", async () => {
 	const visualParity = await readSkill("visual-parity");
 
