@@ -5,9 +5,10 @@ description: Build or correct a native source-backed section, page, shell, or si
 
 # Averlo · Compose
 
-Create the strongest native visual realization the current pass can support,
-measure it honestly, and return it for human review. Composition may organize
-local implementation, but it does not decide or mutate shared design-system
+Create the complete native visual realization, then converge its ordered
+source-backed cases depth-first before returning it for human review.
+Composition may organize local implementation, but it
+does not decide or mutate shared design-system
 owners. `$averlo:systemize-composition` owns that later decision boundary.
 
 Compose packages two mandatory subordinate contracts as sibling plugin
@@ -99,7 +100,7 @@ Create and maintain a runtime working plan with exactly one active checkpoint:
 3. Font and asset preflight.
 4. Native implementation.
 5. Per-scope Visual Parity baseline.
-6. Complete correction sweep.
+6. Depth-first strict correction.
 7. Accumulated gate, responsive review, repository checks, and human checkpoint.
 
 The plan owns progress only for the current task. Keep source cases, authority
@@ -132,7 +133,7 @@ active runtime checkpoint, and that checkpoint's owning references before
 editing. Rebuild the runtime plan from those facts when the active task no
 longer exposes it.
 
-## Complete one measured review pass
+## Complete one depth-first measured review pass
 
 Each invocation owns one complete review pass:
 
@@ -140,24 +141,44 @@ Each invocation owns one complete review pass:
 2. Use `$averlo:visual-parity` in `verify` to establish a current baseline for
    every source-backed section and included shell-region case, then the
    accumulated in-scope gate, then Target-only responsive findings. Use the
-   repository-owned Preview `--review composition` mode for
-   content-plus-footer cases while keeping the human Preview URL on the real
-   production shell. Comparable nonzero results are measured, never verified or
-   complete.
-3. Run one correction sweep in source order. For each nonzero case, address its
-   highest-impact Target-owned differences and make as many related edits and
-   measurements as useful before advancing. Do not restrict the scope to one
-   hypothesis or one edit.
-4. Remeasure the accumulated in-scope gate after the sweep and recheck
-   responsive behavior at the widths declared in the packet. A source-backed
-   score applies only to its supplied viewport and declared authority regions;
-   responsive findings remain separately labeled.
-5. Stop at a human review checkpoint. Report current and best measurements,
-   native evidence, responsive findings, repository checks, artifacts, and the
-   verified Preview URL. Zero changed pixels may be reported as exact, but it
+   repository-owned Preview `--review composition` mode for every
+   header-excluded source case, including individual sections and the
+   content-plus-footer gate, while keeping the human Preview URL on the real
+   production shell. Put the automation review state in each such matrix Target
+   URL; a selector does not exclude a fixed or overlapping header. Inspect the
+   captured Target and reject the case as incomparable when an excluded header
+   or other excluded region is still visible. Comparable nonzero results are
+   measured, never verified or complete.
+3. Process source-backed cases depth-first in matrix order. Lock one active case
+   in the runtime plan and identify it in the focus packet's review checkpoint.
+   Inspect its source, Target, overlay, heatmap, computed geometry, and current
+   metrics; correct its highest-impact Target-owned differences; then recapture
+   it. A correction cycle may contain multiple related hypotheses, edits, and
+   measurements.
+4. Do not advance merely because a case improved or received a useful edit.
+   While a comparable nonzero case still has Target-owned differences that can
+   be corrected within the granted authority, continue the compare-correct-
+   compare loop on that same case. Advance to the next case only at literal
+   `changedPixels: 0`. If the case becomes incomparable, reaches a protected
+   authority boundary, or has a concrete external blocker, stop the invocation
+   on that case and report it as unfinished; do not skip it or call the ordered
+   correction pass complete. Turn or context pressure alone is not visual
+   completion: preserve the active case and current evidence for continuation.
+5. After every scoped case and included shell case is exact, measure the
+   accumulated in-scope gate. If it is nonzero, return to the target-owned scope
+   causing the accumulated drift and continue until the gate is exact or a
+   concrete blocker stops the pass. Then recheck responsive behavior at the
+   widths declared in the packet. A source-backed score applies only to its
+   supplied viewport and declared authority regions; responsive findings remain
+   separately labeled.
+6. Stop at a human review checkpoint only after exact completion or an honestly
+   unfinished stop described above. Report current measurements, native
+   evidence, responsive findings, repository checks, artifacts, the active
+   unfinished case if any, and the verified Preview URL. Write `Human review:
+   pending`; only the user's explicit response may change it to `accepted` or
+   `continue-requested`. Zero changed pixels may be reported as exact, but it
    does not bypass human review.
 
-A later request to continue runs another complete correction sweep against the
-current Target. Stop early only for a concrete external blocker or when the
-requested focus cannot be captured comparably; name the blocker and preserve
+A later request to continue resumes the active unfinished case before any later
+case. It does not restart a breadth-first sweep. Name any blocker and preserve
 the best current evidence without claiming completion.

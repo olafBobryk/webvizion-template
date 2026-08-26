@@ -54,15 +54,18 @@ test("owning workflows load explicit-only subordinate contracts from sibling res
 	}
 });
 
-test("Compose owns one native measured review pass without shared-owner mutation", async () => {
+test("Compose owns one native depth-first review pass without shared-owner mutation", async () => {
 	const compose = await readSkill("compose");
 
 	assert.match(compose, /Invoke the linked `\$averlo:repository-workflows` once/u);
 	assert.match(compose, /Invoke the linked `\$averlo:visual-parity` in `frame`/u);
 	assert.match(compose, /one complete review pass/u);
-	assert.match(compose, /one correction sweep in source order/u);
+	assert.match(compose, /Process source-backed cases depth-first in matrix order/u);
+	assert.match(compose, /Advance to the next case only at literal/u);
+	assert.match(compose, /`changedPixels: 0`/u);
+	assert.match(compose, /Do not advance merely because a case improved/u);
+	assert.match(compose, /resumes the active unfinished case/u);
 	assert.match(compose, /Stop at a human review checkpoint/u);
-	assert.match(compose, /A later request to continue runs another complete/u);
 	assert.match(
 		compose,
 		/does not decide or mutate shared design-system\s+owners/u,
@@ -93,6 +96,14 @@ test("Compose owns one native measured review pass without shared-owner mutation
 	assert.match(
 		compose,
 		/repository-owned Preview `--review composition` mode/u,
+	);
+	assert.match(
+		compose,
+		/Put the automation review state in each such matrix Target/u,
+	);
+	assert.match(
+		compose,
+		/a selector does not exclude a fixed or overlapping header/u,
 	);
 	assert.doesNotMatch(
 		compose,
@@ -318,7 +329,7 @@ test("Compose maintains runtime checkpoints without a second workflow record", a
 		"Font and asset preflight",
 		"Native implementation",
 		"Per-scope Visual Parity baseline",
-		"Complete correction sweep",
+		"Depth-first strict correction",
 		"Accumulated gate, responsive review, repository checks, and human checkpoint",
 	]) {
 		assert.ok(
@@ -342,6 +353,29 @@ test("Compose maintains runtime checkpoints without a second workflow record", a
 	await assert.rejects(
 		fs.access(path.join(skillsRoot, "compose", "references", "checklist.md")),
 		{ code: "ENOENT" },
+	);
+});
+
+test("Compose cannot self-accept review or leave a correctable nonzero case", async () => {
+	const [compose, focusPacket] = await Promise.all([
+		readSkill("compose"),
+		readSkill("visual-parity", "references/focus-packet.md"),
+	]);
+
+	assert.match(
+		compose,
+		/continue the compare-correct-\s*compare loop on that same case/u,
+	);
+	assert.match(
+		compose,
+		/do not skip it or call the ordered\s+correction pass complete/u,
+	);
+	assert.match(compose, /Write `Human review:\s+pending`/u);
+	assert.match(compose, /only the user's explicit response/u);
+	assert.match(focusPacket, /agent must not infer either state/u);
+	assert.match(
+		focusPacket,
+		/classify it as incomparable if they\s+remain visible/u,
 	);
 });
 

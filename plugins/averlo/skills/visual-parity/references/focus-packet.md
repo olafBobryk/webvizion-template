@@ -42,6 +42,11 @@ Evidence:
 Human review: pending | accepted | continue-requested
 ```
 
+The owning workflow writes `pending` when it creates or refreshes the current
+checkpoint. Use `accepted` or `continue-requested` only after the user explicitly
+provides that response; an agent must not infer either state from reaching or
+reporting a checkpoint.
+
 Use a native route plus a stable selector for section evidence. A Storybook
 fixture proves only that fixture. A changed viewport, selector, state, DPR,
 font, or motion setting is a new case. Any Target code change invalidates the
@@ -51,6 +56,11 @@ When an owning workflow deliberately excludes a source region, crop or select
 both sides to the same included authority boundary. Report the result as parity
 for that declared boundary, never for the untouched whole frame. Preserve the
 normal human-review URL separately from any automation-only review state.
+When a fixed or overlapping excluded region can paint over a selected Target
+element, the matrix Target URL must activate the repository's automation-only
+review state. A DOM selector alone is not evidence that the excluded pixels are
+absent; inspect the captured Target and classify it as incomparable if they
+remain visible.
 
 A current receipt must use `Phase: verify`, match its Target identity and
 assessment to the current implementation, and include native evidence. The
