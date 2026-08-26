@@ -32,7 +32,6 @@ Mechanical assessment:
 - Captured Target identity: <revision and capture SHA-256>
 - Measurements: <case → comparable, source/Target SHA-256, dimensions, changed pixels, ratios, channel deltas>
 - Artifacts: <case → source, target, overlay, heatmap, side-by-side>
-- Scope decision evidence: <case → assessment/capture identity → exact changedPixels → remain-active | advance-at-zero | stop-unfinished → reason>
 
 Evidence:
 - Native implementation: <route source, rendered DOM, constituent media, and flattened-reference check>
@@ -71,11 +70,6 @@ remain visible.
 A current receipt must use `Phase: verify`, match its Target identity and
 assessment to the current implementation, and include native evidence. The
 owning workflow interprets these facts and decides its next human checkpoint.
-Before the owning workflow changes the active case or checkpoint, it records
-the current case's exact `changedPixels` and decision under `Scope decision
-evidence`. Only `changedPixels: 0` can accompany `advance-at-zero`; a nonzero
-case remains active or stops unfinished. Diagnostic prose and alternate metrics
-cannot replace that mechanical fact.
 The checkpoint, decomposition, and authority locks are recovery evidence for
 the current ignored task packet, not lifecycle status or a durable workflow
 record.

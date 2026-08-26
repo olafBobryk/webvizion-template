@@ -174,12 +174,6 @@ Each invocation owns one complete review pass:
    renderer-difference hypothesis, not a concrete blocker and never permission
    to advance.
 
-   Before changing the active case or checkpoint, write `Scope decision
-   evidence` in the focus packet with the current assessment and capture
-   identity, the exact `changedPixels` value, the decision, and its reason. Only
-   `changedPixels: 0` permits `advance-at-zero`. A nonzero result must record
-   `remain-active` or `stop-unfinished`; prose such as “geometry is locked” or
-   “the remainder is antialiasing” cannot authorize a different decision.
    Inspect the native-scale heatmap before proposing renderer noise. Broad
    filled regions, asset, color, opacity, map, or image-treatment differences,
    threshold pixels outside glyph edges, or large channel deltas remain owned
@@ -211,8 +205,8 @@ Each invocation owns one complete review pass:
    pending`; only the user's explicit response may change it to `accepted` or
    `continue-requested`. Zero changed pixels may be reported as exact, but it
    does not bypass human review. When stopping on a nonzero renderer-difference
-   hypothesis, keep checkpoint 6 and that case active, preserve the nonzero
-   scope decision evidence, and do not measure or describe later source cases,
+   hypothesis, keep checkpoint 6 and that case active, preserve the current
+   nonzero assessment, and do not measure or describe later source cases,
    the accumulated gate, responsive review, or repository closeout as complete.
 
 A later request to continue resumes the active unfinished case before any later

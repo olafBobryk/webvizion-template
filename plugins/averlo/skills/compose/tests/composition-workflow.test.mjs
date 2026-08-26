@@ -394,22 +394,15 @@ test("Compose repairs comparability and proves symmetric authority before measur
 	assert.match(focusPacket, /Verify region membership and order, not dimensions alone/u);
 });
 
-test("Compose rejects nonzero rationalizations and records advancement evidence", async () => {
-	const [compose, focusPacket] = await Promise.all([
-		readSkill("compose"),
-		readSkill("visual-parity", "references/focus-packet.md"),
-	]);
+test("Compose rejects nonzero rationalizations", async () => {
+	const compose = await readSkill("compose");
 
 	assert.match(compose, /exact `changedPixels` value is\s+the sole advancement gate/u);
 	assert.match(compose, /Geometry that looks locked/u);
 	assert.match(compose, /suspected antialiasing/u);
 	assert.match(compose, /zero would require flattened source imagery is an unproven/u);
-	assert.match(compose, /Only\s+`changedPixels: 0` permits `advance-at-zero`/u);
-	assert.match(compose, /A nonzero result must record\s+`remain-active` or `stop-unfinished`/u);
 	assert.match(compose, /Broad\s+filled regions, asset, color, opacity, map, or image-treatment differences/u);
 	assert.match(compose, /keep checkpoint 6 and that case active/u);
-	assert.match(focusPacket, /Scope decision evidence:/u);
-	assert.match(focusPacket, /Only `changedPixels: 0` can accompany `advance-at-zero`/u);
 });
 
 test("Visual Parity stays mechanical across both composition workflows", async () => {
