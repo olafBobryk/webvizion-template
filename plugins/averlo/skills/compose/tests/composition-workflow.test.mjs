@@ -60,12 +60,22 @@ test("Compose owns one native measured review pass without shared-owner mutation
 		compose,
 		/Do not add, extend, rename, merge, retire, retheme, or change defaults/u,
 	);
+	assert.match(
+		compose,
+		/This prohibition includes\s+`Logo`, Button, Text, Section/u,
+	);
 	assert.match(compose, /`native-invalid` regardless of\s+its pixel score/u);
-	assert.match(compose, /does\s+not by itself authorize replacement/u);
-	assert.match(compose, /exclude its source pixels/u);
+	assert.match(compose, /Target header is immutable in Compose/u);
+	assert.match(compose, /always exclude source\s+header pixels/u);
+	assert.match(compose, /asks for header\s+or site-shell composition/u);
+	assert.doesNotMatch(compose, /unless the caller explicitly/u);
 	assert.match(compose, /source-backed footer work in\s+scope/u);
 	assert.match(compose, /accumulated in-scope gate/u);
 	assert.match(compose, /one registered block, one renderer/u);
+	assert.match(
+		compose,
+		/separate comparison\s+cases, they must have separate blocks and renderers/u,
+	);
 	assert.match(
 		compose,
 		/repository-owned Preview `--review composition` mode/u,
@@ -156,11 +166,14 @@ test("section construction is conditionally routed and remains repository-owned"
 		"Tailwind-first",
 		"repository media concern",
 		"one independently reviewable semantic/source section",
-		"meaningful source-neutral content or media fields",
+		"stable case ID",
+		"separate source or parity cases",
 		"a header, or a footer",
+		"exactly one shared `Section` root",
 	]) {
 		assert.ok(concern.includes(required), `missing section rule: ${required}`);
 	}
+	assert.match(concern, /meaningful source-neutral content or\s+media fields/u);
 	assert.match(compose, /section-construction concern is\s+mandatory/u);
 	assert.doesNotMatch(compose, /Section\.Background|renderMarketingSections/u);
 });
@@ -184,6 +197,8 @@ test("route and marketing verifiers reject implementation-shape bypasses", async
 	assert.match(routes, /Page bypasses route-family ownership/u);
 	assert.match(sections, /documentArchitectureExemptions/u);
 	assert.match(sections, /must resolve a MarketingPageDocument/u);
+	assert.match(sections, /sectionRootCounts/u);
+	assert.match(sections, /exactly one shared Section root/u);
 	assert.match(
 		sections,
 		/cannot use route-local JSX as an alternate architecture/u,
@@ -218,16 +233,58 @@ test("composition review excludes only the deferred header and retains honest au
 
 	assert.match(
 		compose,
-		/Preserve an excluded header through the shared\s+shell/u,
+		/Preserve the header\s+unchanged through the shared shell/u,
 	);
 	assert.match(
 		compose,
-		/implement an evidenced footer only through that shell/u,
+		/implement an evidenced footer only\s+through that shell/u,
 	);
 	assert.match(focusPacket, /Authority boundaries:/u);
+	assert.match(focusPacket, /Authority locks:/u);
+	assert.match(focusPacket, /Source decomposition:/u);
 	assert.match(focusPacket, /never for the untouched whole frame/u);
 	assert.match(marketing, /content-plus-footer composition frame/u);
+	assert.match(marketing, /approved header is immutable and always excluded/u);
 	assert.match(marketing, /never route CSS/u);
+});
+
+test("Compose maintains runtime checkpoints without a second workflow record", async () => {
+	const [compose, focusPacket] = await Promise.all([
+		readSkill("compose"),
+		readSkill("visual-parity", "references/focus-packet.md"),
+	]);
+
+	for (const checkpoint of [
+		"Preview and source authority",
+		"Decomposition and authority locks",
+		"Font and asset preflight",
+		"Native implementation",
+		"Per-scope Visual Parity baseline",
+		"Complete correction sweep",
+		"Accumulated gate, responsive review, repository checks, and human checkpoint",
+	]) {
+		assert.ok(
+			compose.includes(checkpoint),
+			`missing checkpoint: ${checkpoint}`,
+		);
+	}
+	assert.match(
+		compose,
+		/runtime working plan with exactly one active checkpoint/u,
+	);
+	assert.match(compose, /Refresh only the owning material/u);
+	assert.match(compose, /After context compaction or a continuation/u);
+	assert.match(compose, /reload the focus packet, matrix/u);
+	assert.match(compose, /do not create a Compose checklist file/u);
+	assert.match(focusPacket, /recovery evidence/u);
+	assert.match(
+		focusPacket,
+		/not lifecycle status or a durable workflow\s+record/u,
+	);
+	await assert.rejects(
+		fs.access(path.join(skillsRoot, "compose", "references", "checklist.md")),
+		{ code: "ENOENT" },
+	);
 });
 
 test("Visual Parity stays mechanical across both composition workflows", async () => {

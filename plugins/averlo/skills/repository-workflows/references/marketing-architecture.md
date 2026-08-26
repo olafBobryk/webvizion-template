@@ -28,11 +28,14 @@ footer, shell order, responsive behavior, and scroll lifecycle. Source desktop
 and compact navigation/search from the same layout data.
 
 Keep stable shared boundaries around the header, content, footer, and the
-content-plus-footer composition frame. A composition review may exclude an
-existing approved header without removing it from the production page; the
-review state and capture boundary belong to SiteShell/Preview infrastructure,
-never route CSS. Continue to implement an evidenced footer through the shared
-footer owner instead of reproducing it inside page content.
+content-plus-footer composition frame. When Compose owns the change, the
+existing approved header is immutable and always excluded from source parity
+without removing it from the production page. Header redesign requires
+separately scoped non-Compose work. The review state and capture boundary belong
+to SiteShell/Preview infrastructure, never route CSS. Continue to implement an
+evidenced footer through the shared footer owner instead of reproducing it
+inside page content; exact local identity assets do not authorize changes to a
+nested shared design-system owner.
 
 Use the exclusive surfaceId-or-href contract for navigation and calls to
 action. Registered destinations use installed marketing or auth surface IDs;
@@ -53,6 +56,8 @@ direct link boundary.
   scroll behavior.
 - Do not hide shared shell regions with route-local styles or use a source frame
   as implicit authorization to replace an approved header.
+- Under Compose, do not edit, retheme, or replace the approved header for any
+  source-backed page or shell request.
 - Do not add localization, language switching, or brand-specific CTA contracts
   to the shared shell without an explicit optional slot.
 

@@ -19,14 +19,23 @@ source-neutral `blockType` exactly one registered renderer at
 components with that renderer and reserve the `Section` suffix for the
 registered entry point.
 
+Before product edits, enumerate the source hierarchy, bounds, top-level heading
+contexts, full-bleed backgrounds, vertical-rhythm changes, and intended
+comparison boundaries. Map every independently reviewable landmark to one
+stable case ID, one source-neutral block type, one registered renderer, and one
+Target selector. If two landmarks have separate source or parity cases, they
+must remain separate blocks and renderers even when they share a background,
+theme, or continuous visual treatment. Pause when the source does not support
+an unambiguous split.
+
 Make one block represent one independently reviewable semantic/source section,
-not a whole page or an arbitrary collection of sibling bands. A distinct
-full-bleed background, vertical rhythm, heading context, or comparison boundary
-starts a new block when it identifies an independent source section. Give every
-block meaningful source-neutral content or media fields beyond its base ID and
-type, and render visible page copy and media from those fields rather than
-hard-coding a page inside the renderer. The accumulated page remains a
-comparison concern and is never registered as a section.
+not a whole page or an arbitrary collection of sibling bands. A renderer may
+contain supporting subregions only when they share one semantic heading context
+and comparison selector. Give every block meaningful source-neutral content or
+media fields beyond its base ID and type, and render visible page copy and media
+from those fields rather than hard-coding a page inside the renderer. The
+accumulated page remains a comparison concern and is never registered as a
+section.
 
 Use the shared `Section` owner for the semantic root, full-bleed background,
 and foreground frame. Obtain its exact imports, props, variants, compounds,
@@ -55,6 +64,8 @@ renderer or shared `Section` structure.
   stylesheet.
 - Do not make one registered renderer emit multiple independent semantic
   sections, a header, or a footer. Header and footer remain shared shell owners.
+- Do not merge landmarks that the source framing or parity matrix treats as
+  separate cases into one renderer.
 - Do not import section implementations directly from a route; delegate through
   `renderMarketingSections` and the registry.
 - Do not create product-, campaign-, or Figma-node-specific block types,
@@ -94,6 +105,8 @@ Read only the paths that exist and apply:
 - Verify that each block declares meaningful render data, each renderer owns one
   logical source section, and no content renderer contains local header/footer
   or page-level sibling-section structure.
+- Verify each registered renderer has exactly one shared `Section` root and that
+  its case ID, block type, and stable selector match one decomposition row.
 - Verify the shared `Section` root/background/frame structure against its
   Storybook contract and confirm stable comparison selectors.
 - Inspect Tailwind-first presentation, any justified CSS module, and media

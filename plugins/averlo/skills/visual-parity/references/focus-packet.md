@@ -12,12 +12,14 @@ Target: <route, selector, or Storybook story>
 Target identity: <repository revision or dirty identity plus capture SHA-256>
 Source authority: <immutable Figma/export, frozen accepted Target, or none>
 Authority boundaries: <included regions and excluded region → retained authority>
+Authority locks: <preserved header, unchanged shared design-system owners, and allowed local/shell boundaries>
 Comparison purpose: <source-parity | integration-parity | responsive-system-fit | static-endpoint>
 Integration/static baseline: <pinned capture plus SHA-256, or not applicable>
 Figma execution identity: <connector plus whoami, or not applicable>
 Isolated source working copy: <Agent Space page and focus node, or not applicable>
 Product sources: <PRODUCT.md#product-sources or not applicable>
-Review checkpoint: <initial pass | continuation pass | systemization | animation | direct review>
+Review checkpoint: <owning workflow's current task-local checkpoint>
+Source decomposition: <case ID → source node/bounds → semantic landmark → block type or shell boundary → Target selector>
 Cases in order: <case IDs and scope labels>
 Matrix: <.codex/visual-parity/<task>/matrix.json>
 
@@ -50,3 +52,6 @@ normal human-review URL separately from any automation-only review state.
 A current receipt must use `Phase: verify`, match its Target identity and
 assessment to the current implementation, and include native evidence. The
 owning workflow interprets these facts and decides its next human checkpoint.
+The checkpoint, decomposition, and authority locks are recovery evidence for
+the current ignored task packet, not lifecycle status or a durable workflow
+record.

@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { relative, resolve } from "node:path";
+import ts from "typescript";
 
 const root = process.cwd();
 const marketingRoot = resolve(root, "src/app/(site)/(marketing)");
@@ -86,6 +87,62 @@ function assertProductNeutral(value: string, context: string) {
 		0,
 		`${context} must be product-neutral; remove package-name word(s): ${[...new Set(prohibitedWords)].join(", ")}.`,
 	);
+}
+
+function getFunctionLabel(node: ts.FunctionLikeDeclarationBase) {
+	if (node.name) return node.name.getText();
+	if (
+		ts.isVariableDeclaration(node.parent) &&
+		ts.isIdentifier(node.parent.name)
+	) {
+		return node.parent.name.text;
+	}
+	return "anonymous renderer state";
+}
+
+function collectSectionRootCounts(sourcePath: string, source: string) {
+	const sourceFile = ts.createSourceFile(
+		sourcePath,
+		source,
+		ts.ScriptTarget.Latest,
+		true,
+		ts.ScriptKind.TSX,
+	);
+	const counts: Array<{ count: number; label: string }> = [];
+
+	function isFunctionLike(
+		node: ts.Node,
+	): node is ts.FunctionLikeDeclarationBase {
+		return (
+			ts.isFunctionDeclaration(node) ||
+			ts.isFunctionExpression(node) ||
+			ts.isArrowFunction(node) ||
+			ts.isMethodDeclaration(node)
+		);
+	}
+
+	function visit(node: ts.Node) {
+		if (isFunctionLike(node) && node.body) {
+			let count = 0;
+			function countRoots(child: ts.Node) {
+				if (child !== node && isFunctionLike(child)) return;
+				if (
+					(ts.isJsxOpeningElement(child) ||
+						ts.isJsxSelfClosingElement(child)) &&
+					child.tagName.getText(sourceFile) === "Section"
+				) {
+					count += 1;
+				}
+				ts.forEachChild(child, countRoots);
+			}
+			countRoots(node.body);
+			if (count > 0) counts.push({ count, label: getFunctionLabel(node) });
+		}
+		ts.forEachChild(node, visit);
+	}
+
+	visit(sourceFile);
+	return counts;
 }
 
 const homePageSource = readFileSync(homePagePath, "utf8");
@@ -215,6 +272,18 @@ for (const { blockType, rendererName } of registryEntries) {
 		/<Section\b/u,
 		`${normalize(relative(root, sourcePath))} must render through the shared Section owner.`,
 	);
+	const sectionRootCounts = collectSectionRootCounts(sourcePath, source);
+	assert.ok(
+		sectionRootCounts.length > 0,
+		`${normalize(relative(root, sourcePath))} must contain a rendered shared Section root.`,
+	);
+	for (const { count, label } of sectionRootCounts) {
+		assert.equal(
+			count,
+			1,
+			`${normalize(relative(root, sourcePath))} ${label} must contain exactly one shared Section root.`,
+		);
+	}
 	assert.doesNotMatch(
 		source,
 		/<(?:header|footer|section)\b/u,

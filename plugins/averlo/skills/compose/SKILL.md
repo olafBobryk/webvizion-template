@@ -22,15 +22,16 @@ owners. `$averlo:systemize-composition` owns that later decision boundary.
    source section, the router's conditional section-construction concern is
    mandatory before choosing route-local or registered implementation shapes.
 3. Inspect the complete source focus and the current Target before editing.
-   Classify source authority by region before defining cases. A page frame does
-   not by itself authorize replacement of an existing approved header: preserve
-   the Target header and exclude its source pixels unless the caller explicitly
-   requests header or site-shell composition. Keep source-backed footer work in
-   scope. Define stable local case IDs for each content section in source order,
-   the footer when evidenced, the accumulated in-scope gate, and Target-only
-   responsive widths. Record excluded regions and their retained authority in
-   the ignored focus packet; never present the accumulated gate as whole-frame
-   parity when source pixels were excluded.
+   Classify source authority by region before defining cases. The existing
+   Target header is immutable in Compose: preserve it and always exclude source
+   header pixels, even when the caller supplies a page frame or asks for header
+   or site-shell composition. Defer header redesign as separately scoped,
+   non-Compose work. Keep source-backed footer work in scope. Define stable
+   local case IDs for each content section in source order, the footer when
+   evidenced, the accumulated in-scope gate, and Target-only responsive widths.
+   Record excluded regions and their retained authority in the ignored focus
+   packet; never present the accumulated gate as whole-frame parity when source
+   pixels were excluded.
 4. Invoke `$averlo:visual-parity` in `frame` before implementation. Preserve the
    source authority, capture conditions, case order, Target route/selectors, and
    native-evidence requirement in its focus packet.
@@ -43,14 +44,24 @@ owners. `$averlo:systemize-composition` owns that later decision boundary.
    flattening the page into a route component or global stylesheet.
    Decompose the source before choosing block types: each independently bounded
    semantic source section maps to one registered block, one renderer, and one
-   stable section selector. The accumulated page is a comparison gate, never a
-   registered section of its own. Preserve an excluded header through the shared
-   shell and implement an evidenced footer only through that shell boundary;
-   never reproduce either inside a content renderer.
+   stable section selector. If two source landmarks have separate comparison
+   cases, they must have separate blocks and renderers even when they share a
+   background or continuous visual treatment. The accumulated page is a
+   comparison gate, never a registered section of its own. Preserve the header
+   unchanged through the shared shell and implement an evidenced footer only
+   through that shell boundary; never reproduce either inside a content
+   renderer.
 2. Reuse an existing visual owner only when its current Storybook contract
    already matches the source role's purpose and complete observable signature.
    Do not add, extend, rename, merge, retire, retheme, or change defaults for a
-   shared owner in this workflow.
+   shared design-system owner in this workflow. This prohibition includes
+   `Logo`, Button, Text, Section, and any other Storybook-backed owner. Before
+   editing, remove their implementation and Storybook files from the planned
+   change set. Exact source logos and marks remain constituent assets used by
+   the local section or footer presentation until Systemize Composition decides
+   whether to promote them. An evidenced footer may change through its shared
+   shell owner, but that does not authorize mutation of nested design-system
+   owners or of the header.
 3. When no current visual owner fits, keep the fidelity recipe local to the
    correct route, renderer, section, or shell presentation boundary. This is a
    bounded source-realization exception, not a new public API or a claim that
@@ -64,6 +75,38 @@ owners. `$averlo:systemize-composition` owns that later decision boundary.
 5. Keep stable selectors around each matrix case. Preserve shell and section
    boundaries so comparison and later systemization can isolate the actual
    owner instead of treating the whole page as one image.
+
+## Maintain task-local checkpoint continuity
+
+Create and maintain a runtime working plan with exactly one active checkpoint:
+
+1. Preview and source authority.
+2. Decomposition and authority locks.
+3. Font and asset preflight.
+4. Native implementation.
+5. Per-scope Visual Parity baseline.
+6. Complete correction sweep.
+7. Accumulated gate, responsive review, repository checks, and human checkpoint.
+
+The plan owns progress only for the current task. Keep source cases, authority
+locks, and the current checkpoint in the existing ignored Visual Parity focus
+packet; do not create a Compose checklist file or any separate durable
+coordination artifact.
+
+Refresh only the owning material before entering each checkpoint: source intake
+and Visual Parity framing for checkpoint 1; the routed section-construction,
+marketing architecture, route, and content-source concerns for checkpoint 2;
+source intake and media delivery for checkpoint 3; the current Section
+Storybook contract and applicable routed concerns for checkpoint 4; Visual
+Parity, its matrix, and its focus packet for checkpoints 5 and 6; and Preview
+plus focused repository verification for checkpoint 7. Invoke Repository
+Workflows once and Visual Parity only in its documented `frame` and `verify`
+modes; refreshing a reference is not another workflow invocation.
+
+After context compaction or a continuation, reload the focus packet, matrix,
+active runtime checkpoint, and that checkpoint's owning references before
+editing. Rebuild the runtime plan from those facts when the active task no
+longer exposes it.
 
 ## Complete one measured review pass
 
