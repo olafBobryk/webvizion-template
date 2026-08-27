@@ -577,8 +577,50 @@ test("Systemize automatic execution reconciles every candidate before stopping",
 		/checkpoint cannot be reached while a domain is omitted/u,
 	);
 	assert.match(systemize, /high-confidence row was never attempted/u);
-	assert.match(metadata, /attempting every high-confidence row/u);
+	assert.match(metadata, /attempting every executable high-confidence row/u);
 	assert.match(metadata, /accounting for every discovered candidate/u);
+	for (const domain of [
+		"typography",
+		"primitive actions",
+		"action compounds",
+		"identity",
+		"media",
+		"routes and links",
+		"repeated layout and Section axes",
+		"tokens and defaults",
+		"shell and footer presentation",
+		"temporary wrappers or renderer boundaries",
+	]) {
+		assert.match(
+			systemize,
+			new RegExp(domain.replaceAll(" ", "\\s+"), "u"),
+			`missing automatic manifest domain: ${domain}`,
+		);
+	}
+	assert.match(systemize, /Write `none` plus the inspected evidence/u);
+	assert.match(systemize, /compressed or catch-all row is incomplete/u);
+	assert.match(
+		systemize,
+		/Keep ownership confidence separate from whether an attempt is currently\s+executable/u,
+	);
+	assert.match(
+		systemize,
+		/missing exact asset[\s\S]*cannot\s+lower that ownership conclusion/u,
+	);
+	assert.match(
+		systemize,
+		/never relabel it\s+medium\/low to make the checkpoint appear reconciled/u,
+	);
+	assert.match(
+		systemize,
+		/failed first implementation shape is not a\s+veto while the governing concern supplies another conforming shape/u,
+	);
+	assert.match(
+		systemize,
+		/Do not call Systemize complete when any required check fails/u,
+	);
+	assert.match(metadata, /every required owner domain/u);
+	assert.match(metadata, /blocked high row or failed verifier as incomplete/u);
 	assert.doesNotMatch(
 		systemize,
 		/manifest\.md|action-manifest\.json|implementation ledger/iu,

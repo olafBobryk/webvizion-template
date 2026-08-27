@@ -60,6 +60,11 @@ duplicating their contracts here.
    owner, and typography references before implementation. This manifest is
    transient reasoning and handoff evidence: do not write a manifest file,
    workflow record, component annotation, or durable status document.
+   Enumerate rows explicitly for typography; primitive actions; action
+   compounds; identity; media; routes and links; repeated layout and Section
+   axes; tokens and defaults; shell and footer presentation; and temporary
+   wrappers or renderer boundaries. Write `none` plus the inspected evidence
+   when a domain has no candidate; a compressed or catch-all row is incomplete.
 4. Invoke the linked `$averlo:repository-workflows` once for the complete
    change unit. Select every applicable UI ownership, catalogue, composition,
    marketing/shell, media, route, and interaction workflow and load their
@@ -160,6 +165,12 @@ duplicating their contracts here.
    particular, expected effects on inherited shell or header consumers, broad
    inherited consumer reach, and a choice between continued local duplication
    and the prescribed owner migration are not confidence vetoes.
+   Keep ownership confidence separate from whether an attempt is currently
+   executable. A missing exact asset, unavailable external input, or required
+   preflight dependency may block a high-confidence migration, but it cannot
+   lower that ownership conclusion. Record the concrete blocker on the high row
+   and leave the handoff explicitly incomplete for that row; never relabel it
+   medium/low to make the checkpoint appear reconciled.
 9. Classify a renderer or section-boundary split/merge as `medium` by default.
    Present its semantic and maintenance benefit for human direction instead of
    automatically rewriting accepted local topology. After approval, apply the
@@ -190,6 +201,10 @@ accessibility, or behavioral contracts, restore only that attempt, preserve its
 evidence, downgrade it from automatic acceptance, and request human direction.
 Do not restore or accept an attempt solely because its pixels changed or stayed
 the same; explain relevant visual consequences in the handoff.
+Before downgrading on a failed repository contract, trace the failure through
+the already-routed concern and try its prescribed compliant representation or
+resolver boundary when one exists. A failed first implementation shape is not a
+veto while the governing concern supplies another conforming shape.
 
 A high-confidence action-manifest row cannot be omitted, deferred, or
 reclassified before its isolated attempt merely because the change is broad,
@@ -207,6 +222,12 @@ classification. The checkpoint cannot be reached while a domain is omitted, a
 high-confidence row was never attempted, or a high-confidence result was
 silently reframed as a human decision. Keep this reconciliation in the runtime
 plan and handoff only; do not persist it as workflow state.
+
+Run every required focused and aggregate verifier against the final automatic
+state. Do not call Systemize complete when any required check fails, even when
+the failure predates the migrations or appears unrelated. Either remediate an
+in-scope repository-contract candidate or stop at an acknowledged incomplete
+checkpoint that names the failing command and evidence.
 
 ## Preserve human decisions
 
