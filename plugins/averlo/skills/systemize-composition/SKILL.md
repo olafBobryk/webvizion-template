@@ -72,6 +72,11 @@ duplicating their contracts here.
    replacement, or merge-retire in that owner. A mismatching inherited visual
    recipe is a replacement candidate, not justification for leaving overlapping
    work local or inventing a parallel primitive.
+   Importing or structurally wrapping with an owner does not settle its visual
+   ownership. Inspect the owner's props and every repeated caller class, asset,
+   or wrapper axis. An audit cannot call that owner already correct while
+   consumers still duplicate typography, action treatment, identity, spacing,
+   color, radius, or other axes that its responsibility should absorb.
    Independently reviewable sections, shell regions, states, or consumers count
    as independent scopes even when they belong to one page. Route concentration
    may lower confidence, but it cannot erase a repeated candidate or its central
@@ -91,9 +96,11 @@ duplicating their contracts here.
    variant axis: migrate each action segment through Button, then let the higher
    compound compose them without adding a second interactive root. Evaluate the
    inherited primary Button recipe and the higher compound as separate migration
-   candidates. Do not substitute an icon-only action owner for a labelled primary
-   action merely because both contain the same directional symbol, and do not
-   render duplicate controls for one action.
+   candidates. When the accepted repeated role is the instance's primary action,
+   recommend the evidenced primary Button recipe replacement even when the
+   compound itself remains non-automatic. Do not substitute an icon-only action
+   owner for a labelled primary action merely because both contain the same
+   directional symbol, and do not render duplicate controls for one action.
 5. Also inspect whether an accepted registered renderer groups multiple coherent
    semantic or interaction roles that could be split or merged. Such grouping is
    not retroactively a Compose failure when it formed one honest source/parity
@@ -103,11 +110,15 @@ duplicating their contracts here.
 6. Apply the same axis discipline to foundations. Compare every repeated full
    typography signature and purpose with all `Text` values; recommend an existing
    value, inherited-default replacement, or source-neutral opt-in variant instead
-   of deferring the entire question to font ownership. Inspect repeated Section
-   axes independently so global horizontal gutters do not absorb local vertical
-   rhythm or max width. Surface repeated colors, radii, and spacing across
-   independent scopes as token/default candidates even when their page-level
-   reach keeps them non-automatic.
+   of deferring the entire question to font ownership. The final audit must name
+   each repeated signature's proposed `Text` value and the duplicated caller
+   recipe it would retire, even when global font adoption remains a separate
+   human decision. Inspect repeated Section axes independently so global
+   horizontal gutters do not absorb local vertical rhythm or max width. When
+   consumers repeat an owner-domain gutter through caller `px`, recommend that
+   exact axis for `Section` and name the local classes it would retire. Surface
+   repeated colors, radii, and spacing across independent scopes as token/default
+   candidates even when their page-level reach keeps them non-automatic.
 7. For each candidate, state the source evidence, current local recipe,
    inherited-versus-prior-product evidence, plausible owners reviewed,
    recommended owner/default/variant/token/compound action, affected consumers,

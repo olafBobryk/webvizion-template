@@ -279,6 +279,18 @@ test("Systemize routes atoms through owner domains before proposing compounds", 
 		systemize,
 		/mismatching inherited visual\s+recipe is a replacement candidate/u,
 	);
+	assert.match(
+		systemize,
+		/Importing or structurally wrapping with an owner does not settle its visual\s+ownership/u,
+	);
+	assert.match(
+		systemize,
+		/every repeated caller class, asset,\s+or wrapper axis/u,
+	);
+	assert.match(
+		systemize,
+		/cannot call that owner already correct while\s+consumers still duplicate/u,
+	);
 	assert.match(systemize, /Replace an inherited default/u);
 	assert.match(systemize, /add an opt-in\s+variant/u);
 	assert.match(systemize, /promote a token only for its exact/u);
@@ -300,13 +312,21 @@ test("Systemize routes atoms through owner domains before proposing compounds", 
 	);
 	assert.match(
 		systemize,
-		/icon-only\s+action owner for a labelled primary\s+action/u,
+		/recommend the evidenced primary Button recipe replacement/u,
+	);
+	assert.match(
+		systemize,
+		/icon-only action\s+owner for a labelled primary action/u,
 	);
 	assert.match(confidence, /Default replacement/u);
 	assert.match(confidence, /Compound/u);
 	assert.match(
 		confidence,
 		/relationship-owned multi-segment layout stays above the constituent primitive/u,
+	);
+	assert.match(
+		confidence,
+		/repeated primary action must evaluate the primary Button recipe separately/u,
 	);
 	assert.match(
 		confidence,
@@ -336,11 +356,21 @@ test("Systemize treats repeated page scopes as evidence without conflating axes"
 		systemize,
 		/existing\s+value, inherited-default replacement, or source-neutral opt-in variant/u,
 	);
+	assert.match(
+		systemize,
+		/final audit must name\s+each repeated signature's proposed `Text` value/u,
+	);
+	assert.match(systemize, /duplicated caller\s+recipe it would retire/u);
 	assert.match(systemize, /repeated Section\s+axes independently/u);
 	assert.match(
 		systemize,
-		/global horizontal gutters do not absorb local vertical\s+rhythm or max width/u,
+		/global\s+horizontal gutters do not absorb local vertical rhythm or max width/u,
 	);
+	assert.match(
+		systemize,
+		/consumers repeat an owner-domain gutter through caller `px`/u,
+	);
+	assert.match(systemize, /recommend that\s+exact axis for `Section`/u);
 	assert.match(systemize, /repeated colors, radii, and spacing/u);
 	assert.match(
 		confidence,
@@ -349,6 +379,10 @@ test("Systemize treats repeated page scopes as evidence without conflating axes"
 	assert.match(
 		confidence,
 		/one page may prevent automatic acceptance, but it does not make a repeated role\s+invisible/u,
+	);
+	assert.match(
+		confidence,
+		/Using an owner structurally is not proof that its visual axes are owned/u,
 	);
 });
 

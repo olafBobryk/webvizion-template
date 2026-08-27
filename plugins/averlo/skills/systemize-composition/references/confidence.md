@@ -26,6 +26,11 @@ as independent scopes even when they share one route. Evidence concentrated in
 one page may prevent automatic acceptance, but it does not make a repeated role
 invisible or justify omitting a non-automatic central migration.
 
+Using an owner structurally is not proof that its visual axes are owned. Repeated
+caller classes, assets, and wrappers inside that owner's semantic responsibility
+remain migration evidence. Confidence applies to the proposed axis-level change;
+it cannot convert an unresolved duplicated axis into an already-correct result.
+
 ## Classification
 
 ### High
@@ -46,6 +51,8 @@ Action-specific evidence includes:
 - **Default replacement:** the accepted source evidences the canonical instance
   role for that owner; the current recipe is inherited scaffolding rather than a
   conflicting prior product decision; every affected default consumer is known.
+  A repeated primary action must evaluate the primary Button recipe separately
+  from any higher compound that arranges it.
 - **New owner:** the role recurs across independent scopes or consumers; no
   existing owner or composition covers it; its responsibility and minimal API
   are coherent without product, route, section, brand, or source naming.
