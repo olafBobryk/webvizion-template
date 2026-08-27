@@ -8,7 +8,6 @@ measurement block after the Target capture. Store it at
 ```markdown
 Phase: frame | verify
 Workflow owner: compose | systemize-composition | animate | direct-review
-Thread identity: <current Codex session/thread ID or not applicable>
 Focus: section | page | shell | site | component
 Target: <route, selector, or Storybook story>
 Target identity: <repository revision or dirty identity plus capture SHA-256>
@@ -29,9 +28,6 @@ Excluded regions: <source region → retained Target authority>
 Accumulated gate: <case ID → included content and shell cases → Target selector or crop>
 Cases in order: <case IDs and scope labels>
 Matrix: <.codex/visual-parity/<task>/matrix.json>
-Section boundary: <none | closed case ID>
-Next case: <case ID | none>
-Continuation token: <unique token | none>
 
 Mechanical assessment:
 - Assessment: <.codex/visual-parity/<task>/assessment/summary.json>
@@ -54,11 +50,12 @@ checkpoint. Use `accepted` or `continue-requested` only after the user explicitl
 provides that response; an agent must not infer either state from reaching or
 reporting a checkpoint.
 
-`Section boundary`, `Next case`, and `Continuation token` are optional Compose
-recovery fields. Populate them only after the active case has closed and another
-ordered case is ready. They authorize one automatic continuation for the same
-thread. Clear the consumed boundary by making the named next case active. They
-are not lifecycle status, a workflow ledger, or evidence that `/compact` ran.
+Compose updates `Active case` directly when an ordered section closes and keeps
+working in the same invocation. The packet does not carry thread IDs, section-
+boundary tokens, continuation prompts, or compaction instructions. It remains
+recovery evidence for the active case rather than a continuation controller.
+It is not lifecycle status, a workflow ledger, or a composition progress
+record.
 
 Use a native route plus a stable selector for section evidence. A Storybook
 fixture proves only that fixture. A changed viewport, selector, state, DPR,

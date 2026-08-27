@@ -7,7 +7,8 @@ description: Build or correct a native source-backed section, page, shell, or si
 
 Realize and review one authoritative source section at a time. Finish the
 active section's implementation and visual correction before loading or
-building the next section. Composition may organize local implementation, but
+building the next section, then continue directly to the next ordered case in
+the same invocation. Composition may organize local implementation, but
 it does not decide or mutate shared design-system owners.
 `$averlo:systemize-composition` owns that later decision boundary.
 
@@ -137,25 +138,25 @@ repair would cross a protected authority boundary, end at an honestly
 unfinished human checkpoint with the active case and evidence intact. Do not
 advance to later cases.
 
-## Continue between section boundaries
+## Advance between section boundaries
 
 When a case closes and another ordered case remains, update the ignored focus
-packet with the closed case, next case, and a unique continuation token, then
-end the current model response. The plugin's scoped Stop hook consumes that
-token once and supplies a new continuation prompt naming
-`$averlo:compose` and the next case. The hook is a convenience boundary, not a
-workflow owner and not composition state.
+packet by making the next ordered case active, then immediately continue within
+the same model response. Do not stop for user input, end the response, invoke a
+Stop hook, emit a continuation token, or request `/compact` at an ordinary
+section boundary.
 
-On the continuation, clear the consumed boundary by making the named next case
-active, then reload the focus packet, matrix row, this skill, and that case's
-owning references before editing. Do not rely on remembered page-level Figma
-context. This is a focused continuation boundary; never claim that `/compact`
-ran. Codex may compact natively when necessary. Do not add a goal, composition
-record, checklist file, app-server controller, or durable attempt ledger.
+Before editing the newly active case, reload the focus packet, its matrix row,
+this skill, and only that case's owning references. Do not rely on remembered
+page-level Figma context. The workflow must not depend on compaction or a new
+turn to preserve section focus. Do not add a goal, composition
+record, checklist file, app-server controller, durable attempt ledger, or
+other continuation mechanism.
 
-The hook must remain inert when the packet does not match the current thread,
-the workflow owner is not Compose, the token was already consumed, a blocker is
-present, no next case exists, or the final human checkpoint has begun.
+Only two conditions may end an invocation before the final human-review
+checkpoint: the active case has a concrete external or authority blocker, or
+the runtime itself interrupts the turn. A closed section with another ordered
+case is never a terminal condition.
 
 ## Close the accumulated review
 
@@ -165,8 +166,8 @@ After every scoped content and included shell case has closed:
    source and Target regions. A full source frame compared with a
    header-hidden Target is invalid.
 2. Inspect the accumulated source, Target, overlay, and heatmap at native scale.
-   If a concrete drift belongs to an earlier case, make that case active again,
-   issue a new continuation token, and correct it before remeasuring the gate.
+   If a concrete drift belongs to an earlier case, make that case active again
+   and correct it immediately before remeasuring the gate.
 3. After the accumulated gate closes, capture Target-only responsive findings
    at the packet's declared widths and run focused repository checks. Do not
    fabricate source parity for widths Figma did not supply.

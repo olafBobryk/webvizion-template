@@ -1,7 +1,5 @@
 import assert from "node:assert/strict";
-import { spawn } from "node:child_process";
 import fs from "node:fs/promises";
-import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 
@@ -14,39 +12,6 @@ async function readSkill(name, relativePath = "SKILL.md") {
 async function assertMissingSkill(name) {
 	await assert.rejects(fs.access(path.join(skillsRoot, name, "SKILL.md")), {
 		code: "ENOENT",
-	});
-}
-
-async function runComposeStopHook({ cwd, pluginData, sessionId }) {
-	const hookPath = path.join(
-		process.cwd(),
-		"plugins/averlo/hooks/compose-stop-hook.mjs",
-	);
-	return new Promise((resolve, reject) => {
-		const child = spawn(process.execPath, [hookPath], {
-			env: { ...process.env, PLUGIN_DATA: pluginData },
-			stdio: ["pipe", "pipe", "pipe"],
-		});
-		let stdout = "";
-		let stderr = "";
-		child.stdout.on("data", (chunk) => (stdout += chunk));
-		child.stderr.on("data", (chunk) => (stderr += chunk));
-		child.on("error", reject);
-		child.on("close", (code) => {
-			if (code !== 0) {
-				reject(new Error(`hook exited ${code}: ${stderr}`));
-				return;
-			}
-			resolve(JSON.parse(stdout || "{}"));
-		});
-		child.stdin.end(
-			JSON.stringify({
-				hook_event_name: "Stop",
-				session_id: sessionId,
-				cwd,
-				stop_hook_active: false,
-			}),
-		);
 	});
 }
 
@@ -96,98 +61,21 @@ test("Compose frames stable section sources and requests exact section context",
 	assert.match(focusPacket, /exact source frame node\/bounds → stable reference PNG/u);
 });
 
-test("Compose Stop hook continues only a new matching section token", async () => {
-	const temporaryRoot = await fs.mkdtemp(path.join(os.tmpdir(), "averlo-compose-hook-"));
-	const pluginData = path.join(temporaryRoot, "plugin-data");
-	const taskRoot = path.join(temporaryRoot, ".codex", "visual-parity", "pearl");
-	await fs.mkdir(taskRoot, { recursive: true });
-	await fs.writeFile(
-		path.join(taskRoot, "focus.md"),
-		[
-			"Workflow owner: compose",
-			"Thread identity: thr-compose-test",
-			"Section boundary: hero",
-			"Next case: fund",
-			"Continuation token: hero-to-fund-1",
-			"- Incompletion: none",
-			"Human review: pending",
-			"",
-		].join("\n"),
+test("Compose has no hook-driven section continuation", async () => {
+	const manifest = await fs.readFile(
+		path.join(process.cwd(), "plugins/averlo/.codex-plugin/plugin.json"),
 		"utf8",
 	);
-
-	const first = await runComposeStopHook({
-		cwd: temporaryRoot,
-		pluginData,
-		sessionId: "thr-compose-test",
-	});
-	assert.equal(first.decision, "block");
-	assert.match(first.reason, /Continue \$averlo:compose with case fund/u);
-
-	const duplicate = await runComposeStopHook({
-		cwd: temporaryRoot,
-		pluginData,
-		sessionId: "thr-compose-test",
-	});
-	assert.deepEqual(duplicate, {});
-
-	const unrelated = await runComposeStopHook({
-		cwd: temporaryRoot,
-		pluginData,
-		sessionId: "thr-unrelated",
-	});
-	assert.deepEqual(unrelated, {});
-
-	await fs.writeFile(
-		path.join(taskRoot, "focus.md"),
-		[
-			"Workflow owner: compose",
-			"Thread identity: thr-compose-test",
-			"Section boundary: fund",
-			"Next case: leases",
-			"Continuation token: fund-to-leases-1",
-			"- Incompletion: required source bounds unavailable",
-			"Human review: pending",
-			"",
-		].join("\n"),
-		"utf8",
+	await assert.rejects(
+		fs.access(path.join(process.cwd(), "plugins/averlo/hooks/hooks.json")),
+		{ code: "ENOENT" },
 	);
-	const blocked = await runComposeStopHook({
-		cwd: temporaryRoot,
-		pluginData,
-		sessionId: "thr-compose-test",
-	});
-	assert.deepEqual(blocked, {});
-
-	await fs.writeFile(
-		path.join(taskRoot, "focus.md"),
-		[
-			"Workflow owner: systemize-composition",
-			"Thread identity: thr-compose-test",
-			"Section boundary: fund",
-			"Next case: leases",
-			"Continuation token: unrelated-token",
-			"- Incompletion: none",
-			"Human review: pending",
-			"",
-		].join("\n"),
-		"utf8",
+	await assert.rejects(
+		fs.access(
+			path.join(process.cwd(), "plugins/averlo/hooks/compose-stop-hook.mjs"),
+		),
+		{ code: "ENOENT" },
 	);
-	const otherWorkflow = await runComposeStopHook({
-		cwd: temporaryRoot,
-		pluginData,
-		sessionId: "thr-compose-test",
-	});
-	assert.deepEqual(otherWorkflow, {});
-});
-
-test("plugin hook discovery is default-scoped without a manifest override", async () => {
-	const [hooks, manifest] = await Promise.all([
-		fs.readFile(path.join(process.cwd(), "plugins/averlo/hooks/hooks.json"), "utf8"),
-		fs.readFile(path.join(process.cwd(), "plugins/averlo/.codex-plugin/plugin.json"), "utf8"),
-	]);
-	assert.match(hooks, /"Stop"/u);
-	assert.match(hooks, /compose-stop-hook\.mjs/u);
 	assert.doesNotMatch(manifest, /"hooks"/u);
 });
 
@@ -452,21 +340,26 @@ test("Compose maintains section recovery evidence without a second workflow reco
 		readSkill("visual-parity", "references/focus-packet.md"),
 	]);
 
-	for (const field of [
+	assert.match(focusPacket, /Active case:/u);
+	for (const retiredField of [
 		"Thread identity:",
-		"Active case:",
 		"Section boundary:",
 		"Next case:",
 		"Continuation token:",
 	]) {
 		assert.ok(
-			focusPacket.includes(field),
-			`missing recovery field: ${field}`,
+			!focusPacket.includes(retiredField),
+			`retired continuation field remains: ${retiredField}`,
 		);
 	}
-	assert.match(compose, /reload the focus packet, matrix row/u);
+	assert.match(compose, /reload the focus packet, its matrix row/u);
+	assert.match(compose, /immediately continue within\s+the same model response/u);
+	assert.match(compose, /A closed section with another ordered\s+case is never a terminal condition/u);
+	assert.match(compose, /Do not stop for user input, end the response/u);
+	assert.doesNotMatch(compose, /plugin's scoped Stop hook/u);
+	assert.doesNotMatch(compose, /unique continuation token/u);
 	assert.match(compose, /Do not add a goal, composition\s+record, checklist file/u);
-	assert.match(compose, /never claim that `\/compact`\s+ran/u);
+	assert.match(compose, /request `\/compact`/u);
 	assert.match(focusPacket, /recovery evidence/u);
 	assert.match(
 		focusPacket,
