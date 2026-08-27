@@ -50,7 +50,12 @@ uncertain, or mixed without changing the ownership conclusion.
 - **Layout:** when the same owner-domain axis recurs across independently
   reviewable sections, migrate that exact axis through the existing owner with
   high confidence. Sharing one route does not reduce confidence. Preserve
-  unevidenced adjacent axes locally.
+  unevidenced adjacent axes locally. If replacing the inherited default would
+  affect an unevidenced or explicitly preserved current-product consumer, add a
+  source-neutral opt-in value to the existing owner and migrate the accepted
+  consumers with high confidence. Do not present default replacement, opt-in
+  ownership, and continued local duplication as equally unresolved choices when
+  the opt-in shape fully satisfies the evidence.
 - **Tokens:** promote an exact value with high confidence when it repeats across
   independent scopes in the same semantic role and the inherited token is
   scaffolding. Split identical literals that serve different semantic roles;

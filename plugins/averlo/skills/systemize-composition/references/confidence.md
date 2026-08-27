@@ -57,6 +57,8 @@ Action-specific evidence includes:
 - **Extension:** the existing owner domain is unambiguous; the addition is
   source-neutral and non-duplicative; affected consumers opt in or have fully
   evidenced compatibility; exhaustive owner teaching evidence is defined.
+  A fully specified opt-in existing-owner value resolves rather than creates
+  ambiguity when changing the default would touch an unevidenced consumer.
 - **Default replacement:** the accepted source evidences the canonical instance
   role for that owner; the current recipe is inherited scaffolding rather than a
   conflicting prior product decision; every affected default consumer is known.

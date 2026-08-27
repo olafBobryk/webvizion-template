@@ -300,6 +300,10 @@ test("Systemize routes atoms through owner domains before proposing compounds", 
 	assert.match(systemize, /propose a compound owner only/u);
 	assert.match(
 		systemize,
+		/do\s+not manufacture a medium-confidence default-versus-variant decision/u,
+	);
+	assert.match(
+		systemize,
 		/One user\s+action remains one interactive root and one tab stop/u,
 	);
 	assert.match(systemize, /Button-owned visual segments/u);
@@ -435,6 +439,14 @@ test("Systemize exhaustively replaces evidenced existing-owner domains", async (
 	);
 	assert.match(
 		evidencedOwners,
+		/add a\s+source-neutral opt-in value to the existing owner and migrate the accepted\s+consumers with high confidence/u,
+	);
+	assert.match(
+		evidencedOwners,
+		/Do not present default replacement, opt-in\s+ownership, and continued local duplication as equally unresolved choices/u,
+	);
+	assert.match(
+		evidencedOwners,
 		/Split identical literals that serve different semantic roles/u,
 	);
 	assert.match(
@@ -452,6 +464,10 @@ test("Systemize exhaustively replaces evidenced existing-owner domains", async (
 	assert.match(
 		confidence,
 		/independently reviewable scopes can be sufficient on one page/u,
+	);
+	assert.match(
+		confidence,
+		/fully specified opt-in existing-owner value resolves rather than creates\s+ambiguity/u,
 	);
 	assert.doesNotMatch(systemize, /every repeated full\s+typography/iu);
 	assert.doesNotMatch(

@@ -89,6 +89,9 @@ duplicating their contracts here.
    variant for an additional evidenced role; promote a token only for its exact
    repeated cross-owner axis; and propose a compound owner only when the
    relationship adds coherent responsibility beyond its constituent owners.
+   When an exact source-neutral opt-in value resolves an evidenced existing-owner
+   axis without changing an unevidenced current-product consumer, choose it; do
+   not manufacture a medium-confidence default-versus-variant decision.
    Keep source copy, one-off geometry, contextual assets, and choreography local
    unless they independently satisfy shared ownership.
 4. Preserve interaction semantics while decomposing visual compounds. One user
