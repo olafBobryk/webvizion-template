@@ -10,6 +10,13 @@ system without treating the agent's ownership judgment as unquestionable.
 Explicit invocation authorizes analysis and high-confidence automatic work; it
 does not authorize unresolved medium- or low-confidence shared changes.
 
+In a generated instance, inherited template visuals are replaceable scaffolding,
+not product design authority. A complete inherited Storybook contract proves the
+owner's responsibility and current API; it does not make that owner's visual
+recipe a fidelity constraint. Accepted source evidence should move matching
+roles toward their central instance owners while previously systemized product
+work remains protected.
+
 Systemize Composition packages [Repository Workflows](../repository-workflows/SKILL.md)
 and [Visual Parity](../visual-parity/SKILL.md) as mandatory subordinate
 contracts. Read each linked `SKILL.md` completely when its workflow first
@@ -24,40 +31,82 @@ duplicating their contracts here.
    composition at the requested Target. Read the linked
    `$averlo:visual-parity` focus packet and
    [the confidence router](references/confidence.md).
-2. Inventory candidates before deciding whether before/after evidence is useful.
+2. Establish owner provenance from the generated repository itself. Find its
+   reachable initialization commit, compare each candidate owner's initial tree
+   with the current committed and working-tree state, and inspect that path's
+   history. Never create a fresh template for this comparison. An unchanged
+   owner is inherited scaffolding. A changed or newly added owner may contain
+   prior product systemization; inspect its current code, Storybook contract,
+   consumers, history, and applicable human decisions before recommending an
+   overwrite. If initialization history is missing or ambiguous, report
+   provenance uncertainty and route the concrete proposal to human review.
+   Do not add provenance comments, annotations, or another ledger.
+3. Inventory candidates before deciding whether before/after evidence is useful.
    Plan-only analysis does not require capture work. When a selected migration
    benefits from `integration-parity` evidence, use the linked
    `$averlo:visual-parity` only for its relevant scopes and treat the resulting
    measurements as descriptive, temporary evidence rather than product source
    authority or a durable page copy.
-3. Invoke the linked `$averlo:repository-workflows` once for the complete
+   A plan-only or explicitly non-automatic invocation recommends candidates at
+   every confidence level but applies none.
+4. Invoke the linked `$averlo:repository-workflows` once for the complete
    change unit. Select every applicable UI ownership, catalogue, composition,
    marketing/shell, media, route, and interaction workflow and load their
    concern union once.
 
 ## Inventory and route ownership
 
-1. Inventory local typography, controls, links, marks, media treatments, shell
-   presentation, repeated layout roles, tokens, defaults, and temporary visual
-   wrappers. Also inspect whether an accepted registered renderer groups
-   multiple coherent semantic or interaction roles that could be split or
-   merged. Such grouping is not retroactively a Compose failure when it formed
-   one honest source/parity case. Compare each candidate with governing policy,
-   documented Storybook owners, complete public signatures, current consumers,
-   and prior human decisions in `docs/design-system/decisions/` when they exist.
-2. For each candidate, state the source evidence, current local recipe,
-   plausible owners reviewed, proposed action, affected consumers, public API
-   impact, responsive/behavioral evidence, and required proof.
+1. Inventory local typography signatures, controls, links, identity and
+   contextual marks, media treatments, shell and footer presentation, repeated
+   layout roles, tokens, defaults, and temporary visual wrappers. Account for
+   every domain in the final audit as a migration candidate, already-correct
+   ownership, genuinely contextual work, or insufficient evidence. Do not
+   silently omit a domain merely because its candidates are not automatic.
+2. Decompose each candidate before assigning ownership:
+   - identify semantic, interactive, visual, and token-level atoms;
+   - route each atom to the lowest existing owner whose responsibility contains
+     that role;
+   - then inspect whether a repeated relationship among those atoms owns a
+     coherent source-neutral compound, layout, or behavior.
+   An existing owner-domain match must resolve through reuse, extension, default
+   replacement, or merge-retire in that owner. A mismatching inherited visual
+   recipe is a replacement candidate, not justification for leaving overlapping
+   work local or inventing a parallel primitive.
+3. Choose the migration shape deliberately. Replace an inherited default when
+   the accepted source evidences the canonical instance role; add an opt-in
+   variant for an additional repeated role; promote a token only for its exact
+   repeated cross-owner axis; and propose a compound owner only when the
+   relationship adds coherent responsibility beyond its constituent owners.
+   Keep source copy, one-off geometry, contextual assets, and choreography local
+   unless they independently satisfy shared ownership.
+4. Preserve interaction semantics while decomposing visual compounds. One user
+   action remains one interactive root and one tab stop even when it has several
+   Button-owned visual segments. A repeated segmented action may gain a shared
+   source-neutral compound around those roles. Do not substitute an icon-only
+   action owner for a labelled primary action merely because both contain the
+   same directional symbol, and do not render duplicate controls for one action.
+5. Also inspect whether an accepted registered renderer groups multiple coherent
+   semantic or interaction roles that could be split or merged. Such grouping is
+   not retroactively a Compose failure when it formed one honest source/parity
+   case. Compare each candidate with governing policy, documented Storybook
+   owners, complete public signatures, current consumers, provenance, and prior
+   human decisions in `docs/design-system/decisions/` when they exist.
+6. For each candidate, state the source evidence, current local recipe,
+   inherited-versus-prior-product evidence, plausible owners reviewed,
+   recommended owner/default/variant/token/compound action, affected consumers,
+   public API impact, responsive/behavioral evidence, superseded inherited and
+   local recipes to retire, unresolved conflict or human decision, and required
+   proof.
    When relevant, explain that its visual effect may be render-preserving,
    intentionally changing, uncertain, or different between consumers. This is
    contextual awareness, not a visual-effect status, schema, or acceptance
    strategy. Do not assume either preservation or change merely because a role
    becomes shared.
-3. Classify the proposal as `high`, `medium`, or `low` using the confidence
+7. Classify the proposal as `high`, `medium`, or `low` using the confidence
    router. Action names never determine confidence by themselves: reuse,
-   extension, new ownership, merge-retire, and token/default changes all require
-   evidence proportional to their architectural reach.
-4. Classify a renderer or section-boundary split/merge as `medium` by default.
+   extension, new ownership, compounds, merge-retire, and token/default changes
+   all require evidence proportional to their architectural reach.
+8. Classify a renderer or section-boundary split/merge as `medium` by default.
    Present its semantic and maintenance benefit for human direction instead of
    automatically rewriting accepted local topology. After approval, apply the
    boundary change through the routed repository concerns and run focused route
@@ -73,11 +122,14 @@ duplicating their contracts here.
   alongside the relevant expected or uncertain visual effects. A pixel
   difference alone neither accepts nor rejects a systemization.
 - **Medium confidence:** do not edit the unresolved shared boundary. Present one
-  concrete recommendation, alternatives considered, the missing decision, and
-  expected consumer impact for human direction.
-- **Low confidence:** preserve the current local boundary and report the source
-  or ownership conflict. Do not invent an owner merely to eliminate a local
-  recipe.
+  concrete central migration, alternatives considered, owners and recipes it
+  would replace or retire, the missing decision, and expected consumer impact
+  for human direction.
+- **Low confidence:** preserve the current local boundary while reporting the
+  source or ownership conflict and the concrete migration that would follow if
+  that conflict were resolved. Do not invent an owner merely to eliminate a
+  genuinely contextual local recipe. Existing owner overlap cannot resolve as
+  local solely because the inherited owner currently looks different.
 
 If an automatic attempt fails its owner, consumer, API, Storybook, repository,
 accessibility, or behavioral contracts, restore only that attempt, preserve its

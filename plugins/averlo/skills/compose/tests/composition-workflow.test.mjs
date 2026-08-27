@@ -225,6 +225,127 @@ test("Systemize Composition separates ownership confidence from visual outcomes"
 	);
 });
 
+test("Systemize replaces inherited scaffolding while protecting prior product work", async () => {
+	const [systemize, confidence] = await Promise.all([
+		readSkill("systemize-composition"),
+		readSkill("systemize-composition", "references/confidence.md"),
+	]);
+
+	assert.match(
+		systemize,
+		/inherited template visuals are replaceable scaffolding/u,
+	);
+	assert.match(
+		systemize,
+		/does not make that owner's visual\s+recipe a fidelity constraint/u,
+	);
+	assert.match(systemize, /reachable initialization commit/u);
+	assert.match(
+		systemize,
+		/initial tree\s+with the current committed and working-tree state/u,
+	);
+	assert.match(systemize, /Never create a fresh template/u);
+	assert.match(systemize, /unchanged\s+owner is inherited scaffolding/u);
+	assert.match(
+		systemize,
+		/changed or newly added owner may contain\s+prior product systemization/u,
+	);
+	assert.match(systemize, /provenance uncertainty/u);
+	assert.match(
+		systemize,
+		/Do not add provenance comments, annotations, or another ledger/u,
+	);
+	assert.match(confidence, /Instance provenance/u);
+	assert.match(confidence, /initialization commit and path history/u);
+	assert.match(confidence, /conflicting prior product work/u);
+});
+
+test("Systemize routes atoms through owner domains before proposing compounds", async () => {
+	const [systemize, confidence] = await Promise.all([
+		readSkill("systemize-composition"),
+		readSkill("systemize-composition", "references/confidence.md"),
+	]);
+
+	assert.match(
+		systemize,
+		/Decompose each candidate before assigning ownership/u,
+	);
+	assert.match(systemize, /route each atom to the lowest existing owner/u);
+	assert.match(
+		systemize,
+		/existing owner-domain match must resolve through reuse, extension, default\s+replacement, or merge-retire/u,
+	);
+	assert.match(
+		systemize,
+		/mismatching inherited visual\s+recipe is a replacement candidate/u,
+	);
+	assert.match(systemize, /Replace an inherited default/u);
+	assert.match(systemize, /add an opt-in\s+variant/u);
+	assert.match(systemize, /promote a token only for its exact/u);
+	assert.match(systemize, /propose a compound owner only/u);
+	assert.match(
+		systemize,
+		/One user\s+action remains one interactive root and one tab stop/u,
+	);
+	assert.match(systemize, /Button-owned visual segments/u);
+	assert.match(
+		systemize,
+		/icon-only\s+action owner for a labelled primary action/u,
+	);
+	assert.match(confidence, /Default replacement/u);
+	assert.match(confidence, /Compound/u);
+	assert.match(
+		confidence,
+		/one\s+interactive root rather than duplicated controls/u,
+	);
+});
+
+test("Systemize audits every domain and makes non-automatic recommendations actionable", async () => {
+	const systemize = await readSkill("systemize-composition");
+
+	for (const domain of [
+		"typography signatures",
+		"controls",
+		"links",
+		"identity and contextual marks",
+		"media treatments",
+		"shell and footer presentation",
+		"repeated layout roles",
+		"tokens",
+		"defaults",
+		"temporary visual wrappers",
+	]) {
+		assert.match(
+			systemize,
+			new RegExp(domain.replaceAll(" ", "\\s+"), "u"),
+			`missing inventory domain: ${domain}`,
+		);
+	}
+	assert.match(systemize, /Account for\s+every domain in the final audit/u);
+	assert.match(systemize, /Do not\s+silently omit a domain/u);
+	assert.match(
+		systemize,
+		/explicitly non-automatic invocation recommends candidates at\s+every confidence level but applies none/u,
+	);
+	assert.match(
+		systemize,
+		/recommended owner\/default\/variant\/token\/compound action/u,
+	);
+	assert.match(
+		systemize,
+		/superseded inherited and\s+local recipes to retire/u,
+	);
+	assert.match(systemize, /concrete central migration/u);
+	assert.match(
+		systemize,
+		/Existing owner overlap cannot resolve as\s+local solely because/u,
+	);
+	assert.doesNotMatch(
+		systemize,
+		/per-consumer table|visual-effect table|composition record/iu,
+	);
+});
+
 test("durable design-system documents contain human decisions, not lifecycle state", async () => {
 	const systemize = await readSkill("systemize-composition");
 
