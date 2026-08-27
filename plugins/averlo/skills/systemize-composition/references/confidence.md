@@ -23,8 +23,9 @@ cannot compensate for missing evidence in another.
 
 Treat independently reviewable sections, shell regions, states, and consumers
 as independent scopes even when they share one route. Evidence concentrated in
-one page may prevent automatic acceptance, but it does not make a repeated role
-invisible or justify omitting a non-automatic central migration.
+one page does not lower confidence for a role moving into its existing unchanged
+semantic owner. Independent recurrence remains required when claiming a new
+shared owner, compound, or cross-owner token.
 
 Using an owner structurally is not proof that its visual axes are owned. Repeated
 caller classes, assets, and wrappers inside that owner's semantic responsibility
@@ -35,8 +36,9 @@ A higher composition never substitutes for its constituent owner decisions. A
 repeated labelled action therefore receives a distinct `Button` default-or-
 variant recommendation as well as any compound recommendation. Canonical
 identity evidence likewise receives a distinct `Logo` default-or-variant
-recommendation. External preservation locks lower confidence or require review;
-they are not proof of prior product ownership and cannot make either row vanish.
+replacement. External preservation locks identify affected consumers or
+sequencing; they are not proof of prior product ownership and do not lower owner
+confidence.
 
 ## Classification
 
@@ -74,8 +76,16 @@ Action-specific evidence includes:
 - **Token/default:** the source is authoritative for that exact global axis;
   every affected consumer and generated profile is known; adjacent axes are not
   silently conflated with the proposed ownership decision. Repetition across
-  independent scopes must still be recommended for human review when one-page
-  evidence is insufficient for automatic global acceptance.
+  independently reviewable scopes can be sufficient on one page. Lower
+  confidence only when the semantic role or affected current-product consumers
+  remain unresolved.
+
+Existing-owner migrations use domain-specific evidence from
+[evidenced owner replacement](evidenced-owners.md) and
+[typography systemization](typography.md). An accepted text role does not need
+repetition to belong to `Text`. Exact accepted identity does not need every
+legacy Logo variant before foreign inherited branding can be retired. Missing
+template breadth is not a product-ownership conflict.
 
 ### Medium
 
@@ -105,8 +115,10 @@ The following always prevent automatic acceptance:
 - product or instance meaning is being mistaken for a reusable variant;
 - a changed or newly added owner may contain conflicting prior product work and
   that intent has not been resolved from current evidence or human direction;
-- source evidence does not cover an affected semantic, behavioral, responsive,
-  loading, or media contract;
+- source evidence does not cover an affected current-product semantic,
+  behavioral, responsive, loading, or media contract; unsupported inherited
+  template-only visual variants must be retired or left unavailable rather than
+  treated as authority;
 - affected consumers have not been enumerated;
 - a public rename or breaking migration lacks a complete compatibility plan;
 - required owner, catalogue, profile, or accessibility checks fail.

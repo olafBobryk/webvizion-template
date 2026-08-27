@@ -292,7 +292,10 @@ test("Systemize routes atoms through owner domains before proposing compounds", 
 		/cannot call that owner already correct while\s+consumers still duplicate/u,
 	);
 	assert.match(systemize, /Replace an inherited default/u);
-	assert.match(systemize, /add an opt-in\s+variant/u);
+	assert.match(
+		systemize,
+		/add an opt-in\s+variant for an additional evidenced role/u,
+	);
 	assert.match(systemize, /promote a token only for its exact/u);
 	assert.match(systemize, /propose a compound owner only/u);
 	assert.match(
@@ -312,7 +315,7 @@ test("Systemize routes atoms through owner domains before proposing compounds", 
 	);
 	assert.match(
 		systemize,
-		/recommend the\s+evidenced primary `Button` recipe replacement/u,
+		/classify the evidenced primary recipe replacement as\s+high confidence/u,
 	);
 	assert.match(
 		systemize,
@@ -346,72 +349,125 @@ test("Systemize routes atoms through owner domains before proposing compounds", 
 	);
 });
 
-test("Systemize treats repeated page scopes as evidence without conflating axes", async () => {
-	const [systemize, confidence] = await Promise.all([
-		readSkill("systemize-composition"),
-		readSkill("systemize-composition", "references/confidence.md"),
-	]);
+test("Systemize exhaustively replaces evidenced existing-owner domains", async () => {
+	const [systemize, confidence, evidencedOwners, typography, metadata] =
+		await Promise.all([
+			readSkill("systemize-composition"),
+			readSkill("systemize-composition", "references/confidence.md"),
+			readSkill("systemize-composition", "references/evidenced-owners.md"),
+			readSkill("systemize-composition", "references/typography.md"),
+			readSkill("systemize-composition", "agents/openai.yaml"),
+		]);
 
 	assert.match(
 		systemize,
-		/Independently reviewable sections, shell regions, states, or consumers count\s+as independent scopes/u,
+		/\[evidenced owner replacement\]\(references\/evidenced-owners\.md\)/u,
 	);
 	assert.match(
 		systemize,
-		/Route concentration\s+may lower confidence, but it cannot erase a repeated candidate/u,
+		/\[typography systemization\]\(references\/typography\.md\)/u,
 	);
 	assert.match(
 		systemize,
-		/every repeated full\s+typography signature and purpose/u,
+		/Every accepted\s+text role must map exhaustively through `Text`/u,
 	);
 	assert.match(
-		systemize,
-		/existing\s+value, inherited-default replacement, or source-neutral opt-in variant/u,
+		typography,
+		/Enumerate every rendered text node in the accepted focus/u,
 	);
 	assert.match(
-		systemize,
-		/final audit must name\s+each repeated signature's proposed `Text` value/u,
-	);
-	assert.match(systemize, /duplicated caller\s+recipe it would retire/u);
-	assert.match(systemize, /repeated Section\s+axes independently/u);
-	assert.match(
-		systemize,
-		/global\s+horizontal gutters do not absorb local vertical rhythm or max width/u,
+		typography,
+		/Repetition determines whether two nodes share a\s+variant; it never determines whether a node belongs to `Text`/u,
 	);
 	assert.match(
-		systemize,
-		/consumers repeat an owner-domain gutter through caller `px`/u,
-	);
-	assert.match(systemize, /recommend that\s+exact axis for `Section`/u);
-	assert.match(systemize, /repeated colors, radii, and spacing/u);
-	assert.match(
-		systemize,
-		/distinguish the canonical wordmark or primary\s+mark from contextual marks/u,
+		typography,
+		/role that\s+appears once still receives a source-neutral `Text` value/u,
 	);
 	assert.match(
-		systemize,
-		/concrete inherited `Logo` default\s+replacement or opt-in variant recommendation/u,
+		typography,
+		/replace the inherited scale as one high-confidence owner migration/u,
 	);
 	assert.match(
-		systemize,
-		/preservation lock from another workflow is\s+not prior product systemization/u,
+		typography,
+		/retire unsupported or superseded\s+inherited values rather than preserving a parallel template scale/u,
+	);
+	assert.match(
+		typography,
+		/no migrated consumer retains typography\s+overrides in `className`/u,
+	);
+	assert.match(typography, /actual face and weight calibrated during Compose/u);
+	assert.match(
+		evidencedOwners,
+		/One\s+route is sufficient for an existing owner-domain migration/u,
+	);
+	assert.match(
+		evidencedOwners,
+		/stale Compose packet may remain recovery evidence,\s+but it does not override a current explicit acceptance/u,
+	);
+	assert.match(
+		evidencedOwners,
+		/mere invocation without\s+either form of acceptance is not enough/u,
+	);
+	assert.match(
+		evidencedOwners,
+		/Do not preserve a foreign template recipe as fallback/u,
+	);
+	assert.match(
+		evidencedOwners,
+		/foreign\s+inherited `Logo` geometry must not remain the instance default/u,
+	);
+	assert.match(
+		evidencedOwners,
+		/missing product wordmark is an asset\/preflight blocker for that variant, not a\s+reason to preserve template branding/u,
+	);
+	assert.match(
+		evidencedOwners,
+		/not a\s+reason to preserve template branding or lower the replacement recommendation\s+from high confidence/u,
+	);
+	assert.match(evidencedOwners, /header lock from Compose is not a Logo veto/u);
+	assert.match(
+		evidencedOwners,
+		/replace the inherited primary recipe\s+with high confidence/u,
+	);
+	assert.match(
+		evidencedOwners,
+		/Sharing one route does not reduce confidence/u,
+	);
+	assert.match(
+		evidencedOwners,
+		/Split identical literals that serve different semantic roles/u,
+	);
+	assert.match(
+		evidencedOwners,
+		/accepted shared-shell presentation belongs to the existing shell\s+owner and replaces untouched inherited presentation/u,
 	);
 	assert.match(
 		confidence,
-		/independently reviewable sections, shell regions, states, and consumers/u,
+		/one page does not lower confidence for a role moving into its existing unchanged\s+semantic owner/u,
 	);
 	assert.match(
 		confidence,
-		/one page may prevent automatic acceptance, but it does not make a repeated role\s+invisible/u,
+		/External preservation locks identify affected consumers or\s+sequencing/u,
 	);
 	assert.match(
 		confidence,
-		/Using an owner structurally is not proof that its visual axes are owned/u,
+		/independently reviewable scopes can be sufficient on one page/u,
 	);
-	assert.match(
+	assert.doesNotMatch(systemize, /every repeated full\s+typography/iu);
+	assert.doesNotMatch(
 		confidence,
-		/Canonical\s+identity evidence likewise receives a distinct `Logo` default-or-variant\s+recommendation/u,
+		/one page may prevent automatic acceptance/iu,
 	);
+	assert.doesNotMatch(
+		confidence,
+		/External preservation locks lower confidence/iu,
+	);
+	assert.doesNotMatch(
+		evidencedOwners,
+		/preserve the current owner until canonical identity is confirmed/iu,
+	);
+	assert.match(metadata, /exhaustively replace inherited template recipes/u);
+	assert.match(metadata, /every text role and exact identity asset/u);
 });
 
 test("Systemize audits every domain and makes non-automatic recommendations actionable", async () => {

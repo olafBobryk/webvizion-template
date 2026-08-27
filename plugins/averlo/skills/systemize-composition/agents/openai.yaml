@@ -1,6 +1,6 @@
 interface:
   display_name: "Averlo · Systemize Composition"
   short_description: "Promote reviewed composition roles with confidence"
-  default_prompt: "Use $averlo:systemize-composition to replace inherited template recipes with accepted composition roles through their central instance owners, protect prior product systemization, and surface every non-automatic migration for human review."
+  default_prompt: "Use $averlo:systemize-composition to exhaustively replace inherited template recipes with accepted composition roles through their central instance owners, including every text role and exact identity asset, while protecting prior product systemization and surfacing genuine ownership conflicts for human review."
 policy:
   allow_implicit_invocation: false

@@ -30,7 +30,10 @@ duplicating their contracts here.
 1. Require a schema-v2 `.template-profile.json` receipt and a current native
    composition at the requested Target. Read the linked
    `$averlo:visual-parity` focus packet and
-   [the confidence router](references/confidence.md).
+   [the confidence router](references/confidence.md),
+   [evidenced owner replacement](references/evidenced-owners.md), and
+   [typography systemization](references/typography.md). Read all three
+   references completely before classifying candidates.
 2. Establish owner provenance from the generated repository itself. Find its
    reachable initialization commit, compare each candidate owner's initial tree
    with the current committed and working-tree state, and inspect that path's
@@ -79,11 +82,11 @@ duplicating their contracts here.
    color, radius, or other axes that its responsibility should absorb.
    Independently reviewable sections, shell regions, states, or consumers count
    as independent scopes even when they belong to one page. Route concentration
-   may lower confidence, but it cannot erase a repeated candidate or its central
-   migration recommendation.
+   does not lower confidence for migration into an existing unmodified owner;
+   recurrence and reach remain evidence for new owners, compounds, and tokens.
 3. Choose the migration shape deliberately. Replace an inherited default when
    the accepted source evidences the canonical instance role; add an opt-in
-   variant for an additional repeated role; promote a token only for its exact
+   variant for an additional evidenced role; promote a token only for its exact
    repeated cross-owner axis; and propose a compound owner only when the
    relationship adds coherent responsibility beyond its constituent owners.
    Keep source copy, one-off geometry, contextual assets, and choreography local
@@ -101,36 +104,26 @@ duplicating their contracts here.
    treatment replaces the inherited primary `Button` recipe, extends `Button`
    with an opt-in variant, or lacks enough authority for either. A higher compound
    recommendation never satisfies or suppresses this primitive-owner row. When
-   the accepted repeated role is the instance's primary action, recommend the
-   evidenced primary `Button` recipe replacement even when its consumer reach or
-   the compound itself keeps application non-automatic. Do not substitute an
-   icon-only action owner for a labelled primary action merely because both
-   contain the same directional symbol, and do not render duplicate controls for
-   one action.
+   the accepted repeated role is the instance's primary action and `Button` is
+   inherited scaffolding, classify the evidenced primary recipe replacement as
+   high confidence. Broad effects on inherited consumers do not lower it. Do not
+   substitute an icon-only action owner for a labelled primary action merely
+   because both contain the same directional symbol, and do not render duplicate
+   controls for one action.
 5. Also inspect whether an accepted registered renderer groups multiple coherent
    semantic or interaction roles that could be split or merged. Such grouping is
    not retroactively a Compose failure when it formed one honest source/parity
    case. Compare each candidate with governing policy, documented Storybook
    owners, complete public signatures, current consumers, provenance, and prior
    human decisions in `docs/design-system/decisions/` when they exist.
-6. Apply the same axis discipline to foundations. Compare every repeated full
-   typography signature and purpose with all `Text` values; recommend an existing
-   value, inherited-default replacement, or source-neutral opt-in variant instead
-   of deferring the entire question to font ownership. The final audit must name
-   each repeated signature's proposed `Text` value and the duplicated caller
-   recipe it would retire, even when global font adoption remains a separate
-   human decision. Inspect repeated Section axes independently so global
-   horizontal gutters do not absorb local vertical rhythm or max width. When
-   consumers repeat an owner-domain gutter through caller `px`, recommend that
-   exact axis for `Section` and name the local classes it would retire. Surface
-   repeated colors, radii, and spacing across independent scopes as token/default
-   candidates even when their page-level reach keeps them non-automatic.
-   Treat identity the same way: distinguish the canonical wordmark or primary
-   mark from contextual marks, then provide a concrete inherited `Logo` default
-   replacement or opt-in variant recommendation whenever accepted identity
-   evidence overlaps that owner. A preservation lock from another workflow is
-   not prior product systemization and cannot erase the proposal; it limits
-   automatic application, names an affected consumer, and requires human review.
+6. Apply the required typography and evidenced-owner references. Every accepted
+   text role must map exhaustively through `Text`; recurrence controls variant
+   deduplication, not ownership. Reconcile the complete inherited Text scale and
+   retire caller typography recipes. Apply the same replacement precedence to
+   identity, actions, repeated layout axes, exact semantic tokens, and shared
+   shell presentation. Missing breadth or an intentional change to inherited
+   consumers cannot preserve foreign template visuals. Keep only genuinely
+   contextual roles and unevidenced adjacent axes local.
 7. For each candidate, state the source evidence, current local recipe,
    inherited-versus-prior-product evidence, plausible owners reviewed,
    recommended owner/default/variant/token/compound action, affected consumers,
