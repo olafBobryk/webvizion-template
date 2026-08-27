@@ -532,6 +532,59 @@ test("Systemize audits every domain and makes non-automatic recommendations acti
 	);
 });
 
+test("Systemize automatic execution reconciles every candidate before stopping", async () => {
+	const [systemize, metadata] = await Promise.all([
+		readSkill("systemize-composition"),
+		readSkill("systemize-composition", "agents/openai.yaml"),
+	]);
+
+	assert.match(systemize, /task-local action manifest in the runtime\s+plan/u);
+	assert.match(systemize, /before the first product edit/u);
+	assert.match(
+		systemize,
+		/every discovered candidate one row\s+naming its domain/u,
+	);
+	assert.match(
+		systemize,
+		/Reconcile those rows against the confidence, evidenced-\s*owner, and typography references/u,
+	);
+	assert.match(
+		systemize,
+		/pre-edit action manifest must account for\s+every domain and every independently discovered candidate/u,
+	);
+	assert.match(
+		systemize,
+		/alternative migration shapes as evaluated and rejected/u,
+	);
+	assert.match(
+		systemize,
+		/expected effects on inherited shell or header consumers/u,
+	);
+	assert.match(
+		systemize,
+		/high-confidence action-manifest row cannot be omitted, deferred, or\s+reclassified before its isolated attempt/u,
+	);
+	assert.match(
+		systemize,
+		/Downgrade it only after the attempt reveals one named\s+automatic-action veto or a failed required contract/u,
+	);
+	assert.match(
+		systemize,
+		/Do not turn an expected replacement\s+of foreign identity in an inherited header/u,
+	);
+	assert.match(
+		systemize,
+		/checkpoint cannot be reached while a domain is omitted/u,
+	);
+	assert.match(systemize, /high-confidence row was never attempted/u);
+	assert.match(metadata, /attempting every high-confidence row/u);
+	assert.match(metadata, /accounting for every discovered candidate/u);
+	assert.doesNotMatch(
+		systemize,
+		/manifest\.md|action-manifest\.json|implementation ledger/iu,
+	);
+});
+
 test("durable design-system documents contain human decisions, not lifecycle state", async () => {
 	const systemize = await readSkill("systemize-composition");
 

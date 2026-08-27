@@ -52,6 +52,14 @@ duplicating their contracts here.
    authority or a durable page copy.
    A plan-only or explicitly non-automatic invocation recommends candidates at
    every confidence level but applies none.
+   For an automatic invocation, put a task-local action manifest in the runtime
+   plan before the first product edit. Give every discovered candidate one row
+   naming its domain, evidenced role or axis, provenance, recommended owner and
+   migration shape, confidence, affected consumers, intended attempt, and any
+   pre-existing veto. Reconcile those rows against the confidence, evidenced-
+   owner, and typography references before implementation. This manifest is
+   transient reasoning and handoff evidence: do not write a manifest file,
+   workflow record, component annotation, or durable status document.
 4. Invoke the linked `$averlo:repository-workflows` once for the complete
    change unit. Select every applicable UI ownership, catalogue, composition,
    marketing/shell, media, route, and interaction workflow and load their
@@ -65,6 +73,10 @@ duplicating their contracts here.
    every domain in the final audit as a migration candidate, already-correct
    ownership, genuinely contextual work, or insufficient evidence. Do not
    silently omit a domain merely because its candidates are not automatic.
+   In an automatic invocation, the pre-edit action manifest must account for
+   every domain and every independently discovered candidate, including
+   repository-contract remediation. A domain heading without its concrete
+   owner or remediation rows is not complete inventory.
 2. Decompose each candidate before assigning ownership:
    - identify semantic, interactive, visual, and token-level atoms;
    - route each atom to the lowest existing owner whose responsibility contains
@@ -142,6 +154,12 @@ duplicating their contracts here.
    router. Action names never determine confidence by themselves: reuse,
    extension, new ownership, compounds, merge-retire, and token/default changes
    all require evidence proportional to their architectural reach.
+   When the loaded references establish deterministic owner precedence, treat
+   alternative migration shapes as evaluated and rejected rather than using
+   their mere existence to invent a medium-confidence ownership choice. In
+   particular, expected effects on inherited shell or header consumers, broad
+   inherited consumer reach, and a choice between continued local duplication
+   and the prescribed owner migration are not confidence vetoes.
 9. Classify a renderer or section-boundary split/merge as `medium` by default.
    Present its semantic and maintenance benefit for human direction instead of
    automatically rewriting accepted local topology. After approval, apply the
@@ -172,6 +190,23 @@ accessibility, or behavioral contracts, restore only that attempt, preserve its
 evidence, downgrade it from automatic acceptance, and request human direction.
 Do not restore or accept an attempt solely because its pixels changed or stayed
 the same; explain relevant visual consequences in the handoff.
+
+A high-confidence action-manifest row cannot be omitted, deferred, or
+reclassified before its isolated attempt merely because the change is broad,
+visually consequential, affects inherited consumers, or takes more work than
+another candidate. Downgrade it only after the attempt reveals one named
+automatic-action veto or a failed required contract; restore that isolated
+attempt and record the concrete evidence. Do not turn an expected replacement
+of foreign identity in an inherited header, or an evidenced primary-action
+replacement plus its independently repeated compound, into a new human choice.
+
+Before the automatic human-review checkpoint, reconcile every action-manifest
+row as applied, restored-and-downgraded with the exact veto or failed contract,
+already correct, or pending because it was medium/low from the pre-edit
+classification. The checkpoint cannot be reached while a domain is omitted, a
+high-confidence row was never attempted, or a high-confidence result was
+silently reframed as a human decision. Keep this reconciliation in the runtime
+plan and handoff only; do not persist it as workflow state.
 
 ## Preserve human decisions
 
