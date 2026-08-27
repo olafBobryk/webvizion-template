@@ -27,6 +27,13 @@ Download expiring design-tool asset URLs during implementation and retain their
 exact bytes under the owning marketing asset boundary. The URL is provenance,
 not a production source. Preload only the image proven to be the route's LCP.
 
+When a legitimate runtime or framework boundary requires departing from an
+exemptable delivery default, place one
+`averlo-media-exception-next-line <rule> -- <rationale>` annotation immediately
+before the affected use. One annotation exempts one reported rule once. Treat
+the annotation as a reviewable local decision, not a file-level opt-out. Never
+annotate ordinary static imagery merely to avoid importing or resolving it.
+
 ## Hard boundaries
 
 - Do not ship expiring Figma, localhost MCP, temporary export, or task-artifact
@@ -41,6 +48,8 @@ not a production source. Preload only the image proven to be the route's LCP.
   relationships into a section renderer.
 - Do not treat decorative media as CMS content by default or content imagery as
   decorative merely to avoid authored alternative text.
+- Do not attempt to exempt expiring Figma/MCP URLs, task artifacts, or flattened
+  reference captures; those rules are non-waivable.
 
 ## Repository context
 
@@ -61,7 +70,8 @@ Read only the media boundary being changed:
   preload selection.
 - Verify that no expiring design-tool URL or flattened reference capture appears
   in product source or the rendered target.
-- Run npm run verify:marketing-sections for registered section changes and npm
-  run verify:site-layout for shared shell media changes.
+- Run `npm run verify:marketing-media` while diagnosing media ownership and
+  delivery. Run `npm run verify:marketing` before handing off a complete
+  marketing change so section, shell, and media contracts are checked together.
 - Run the applicable Payload page or layout verifier when provider-backed media
   normalization changes.

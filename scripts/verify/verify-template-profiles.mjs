@@ -286,6 +286,30 @@ async function assertGeneratedSurfaceContract(outputRoot, profileCase) {
 	}
 
 	if (expectedFamilies.has("marketing")) {
+		for (const scriptName of [
+			"verify:marketing",
+			"verify:marketing-media",
+			"verify:marketing-sections",
+			"verify:site-layout",
+		]) {
+			if (typeof generatedPackage.scripts?.[scriptName] !== "string") {
+				throw new Error(
+					`${profileCase.profileId}/${profileCase.content} is missing ${scriptName}.`,
+				);
+			}
+		}
+		for (const verifierPath of [
+			"scripts/verify/verify-marketing.mjs",
+			"scripts/verify/verify-marketing-media-policy.mjs",
+			"scripts/verify/verify-marketing-section-policy.ts",
+			"scripts/verify/verify-marketing-site-layout.ts",
+		]) {
+			if (!(await pathExists(path.join(outputRoot, verifierPath)))) {
+				throw new Error(
+					`${profileCase.profileId}/${profileCase.content} is missing ${verifierPath}.`,
+				);
+			}
+		}
 		const fallbackSource = await fs.readFile(
 			path.join(outputRoot, "src/lib/marketing-content/fallback.ts"),
 			"utf8",
@@ -425,6 +449,7 @@ async function assertGeneratedDocumentation(outputRoot, profileCase) {
 		"$averlo:systemize-composition",
 		"$averlo:animate",
 		"$averlo:visual-parity",
+		"npm run verify:marketing",
 	]) {
 		if (!agentInstructions.replace(/\s+/gu, " ").includes(requiredPolicy)) {
 			throw new Error(

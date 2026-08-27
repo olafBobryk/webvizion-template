@@ -36,8 +36,7 @@ export const fullProfile = {
 		forbiddenPackages: [],
 		commands: [
 			"npm run verify:static",
-			"npm run verify:marketing-sections",
-			"npm run verify:site-layout",
+			"npm run verify:marketing",
 			"npm run build",
 			"npm run verify:smoke",
 		],

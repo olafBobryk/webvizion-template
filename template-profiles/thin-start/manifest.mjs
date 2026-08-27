@@ -128,8 +128,7 @@ export const thinStartProfile = {
 		sourceInventory: "template-assembly/thin-start-src-files.json",
 		verificationCommands: [
 			"npm run verify:static",
-			"npm run verify:marketing-sections",
-			"npm run verify:site-layout",
+			"npm run verify:marketing",
 			"npm run build",
 			"npm run verify:smoke",
 		],

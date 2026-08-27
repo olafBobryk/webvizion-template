@@ -522,6 +522,7 @@ async function writeProjectDocs(
 			"- Marketing is the public-site implementation area.",
 			"- `.template-profile.json` determines which areas exist. Use the matching repository workflow and nearest `AGENTS.md` for their structure.",
 			"- Resolve provider-specific records and metadata in server-side resolvers or adapters before data reaches the frontend contract.",
+			"- In a marketing-capable project, run `npm run verify:marketing` for the composed section, shell, and media contract; use its focused child commands only for diagnosis.",
 			"",
 			"## Design System",
 			"",

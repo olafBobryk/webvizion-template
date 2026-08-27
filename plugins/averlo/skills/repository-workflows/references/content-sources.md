@@ -63,7 +63,9 @@ Read only the selected content mode and source boundary:
 
 ## Verification
 
-- Run npm run verify:site-layout for source-neutral layout and link contracts.
+- Use `npm run verify:site-layout` while diagnosing source-neutral layout and
+  link contracts, then run `npm run verify:marketing` before handing off a
+  complete marketing change.
 - Run npm run verify:payload-site-layout and
   npm run payload:verify:site-layout for Payload normalization, seed, or
   readback changes.

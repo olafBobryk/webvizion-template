@@ -1,9 +1,15 @@
 "use client";
 
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
 import { Skeleton, Tooltip } from "@/components/ui/misc";
 import { Button } from "@/components/ui/primitives/Button";
 import { Text } from "@/components/ui/primitives/Text";
+import assemblyPreview from "../../../../../public/template-services/assembly.png";
+import demoPreview from "../../../../../public/template-services/demo.png";
+import demoPrimitivesPreview from "../../../../../public/template-services/demo-primitives.png";
+import fullStartPreview from "../../../../../public/template-services/full-start.png";
+import repositoryFootprintPreview from "../../../../../public/template-services/repository-footprint.png";
+import thinStartPreview from "../../../../../public/template-services/thin-start.png";
 import type {
 	HomeHeroServiceItem,
 	TemplateServiceSurfaceId,
@@ -12,26 +18,26 @@ import type {
 type RenderedSurface = {
 	height: number;
 	name: string;
-	src?: string;
+	src?: StaticImageData;
 	width: number;
 };
 
 const renderedSurfaces: Record<TemplateServiceSurfaceId, RenderedSurface> = {
 	demo: {
 		name: "Demo Index",
-		src: "/template-services/demo.png",
+		src: demoPreview,
 		width: 1280,
 		height: 1596,
 	},
 	demoPrimitives: {
 		name: "UI Primitives",
-		src: "/template-services/demo-primitives.png",
+		src: demoPrimitivesPreview,
 		width: 1280,
 		height: 2183,
 	},
 	assembly: {
 		name: "Positive assembly plan",
-		src: "/template-services/assembly.png",
+		src: assemblyPreview,
 		width: 920,
 		height: 1200,
 	},
@@ -42,19 +48,19 @@ const renderedSurfaces: Record<TemplateServiceSurfaceId, RenderedSurface> = {
 	},
 	thinStart: {
 		name: "Thin start homepage hero",
-		src: "/template-services/thin-start.png",
+		src: thinStartPreview,
 		width: 1280,
 		height: 930,
 	},
 	repositoryFootprint: {
 		name: "Repository footprint",
-		src: "/template-services/repository-footprint.png",
+		src: repositoryFootprintPreview,
 		width: 1280,
 		height: 900,
 	},
 	fullStart: {
 		name: "Full start dashboard",
-		src: "/template-services/full-start.png",
+		src: fullStartPreview,
 		width: 1020,
 		height: 900,
 	},
@@ -85,6 +91,7 @@ function RealSurface({ surfaceId }: { surfaceId: TemplateServiceSurfaceId }) {
 				className="h-auto w-full rounded-lg"
 				height={surface.height}
 				loading="eager"
+				placeholder="blur"
 				sizes="(min-width: 1280px) 220px, 150px"
 				src={surface.src}
 				width={surface.width}

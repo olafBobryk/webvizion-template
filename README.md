@@ -185,6 +185,7 @@ measured or optimized against real page-scroll evidence; see
 | `npm run storybook:stop`                | Stop only a Storybook server launched by the coordinator.                            |
 | `npm run measure:storybook-performance` | Capture a cold-cache developer-catalog baseline from the managed Storybook instance. |
 | `npm run verify:static`                 | Run static policy, formatting, and type checks.                                      |
+| `npm run verify:marketing`              | Verify composed marketing section, shell, and media contracts.                       |
 | `npm run verify:profiles`               | Materialize and verify every profile.                                                |
 | `npm run verify:create-averlo`          | Pack and smoke-test the public initializer without publishing it.                    |
 | `npm run build`                         | Create the production Next.js build.                                                 |

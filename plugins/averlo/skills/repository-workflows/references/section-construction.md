@@ -103,10 +103,9 @@ Read only the paths that exist and apply:
 
 ## Verification
 
-- Run `npm run verify:route-surfaces` and `npm run verify:marketing-sections`
-  after creating or moving a public marketing page. Run
-  `npm run verify:marketing-sections` after restructuring, registering, or
-  removing a section.
+- Run `npm run verify:route-surfaces` after creating or moving a public
+  marketing page. Use `npm run verify:marketing-sections` while diagnosing
+  section topology, then run `npm run verify:marketing` before handoff.
 - Verify the destination is registered and its page lives under the marketing
   route family; a successful preview at an unowned App Router path is a
   structural failure.

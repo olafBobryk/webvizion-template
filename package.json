@@ -34,6 +34,8 @@
 		"verify:skill-references": "node --test scripts/verify/verify-skill-references.test.mjs && node scripts/verify/verify-skill-references.mjs",
 		"verify:route-surfaces": "tsx scripts/verify/verify-route-surfaces.ts",
 		"verify:route-metadata": "tsx scripts/verify/verify-route-metadata.ts",
+		"verify:marketing": "node scripts/verify/verify-marketing.mjs",
+		"verify:marketing-media": "node scripts/verify/verify-marketing-media-policy.mjs",
 		"verify:marketing-sections": "tsx scripts/verify/verify-marketing-section-policy.ts",
 		"verify:site-layout": "tsx scripts/verify/verify-marketing-site-layout.ts",
 		"verify:payload-site-layout": "tsx scripts/verify/verify-payload-site-layout-source.ts",

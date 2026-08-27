@@ -74,11 +74,12 @@ Read only the marketing boundary being changed:
 
 ## Verification
 
-- Run npm run verify:route-surfaces and npm run verify:marketing-sections after
-  adding or moving a public marketing page. Run npm run
-  verify:marketing-sections after adding, moving, renaming, or removing a
-  registered section.
-- Run npm run verify:site-layout for shared shell or public navigation changes.
+- Run `npm run verify:route-surfaces` after adding or moving a public marketing
+  page. Run `npm run verify:marketing` before handing off a complete marketing
+  change.
+- Use `npm run verify:marketing-sections`, `npm run verify:site-layout`, and
+  `npm run verify:marketing-media` only as focused diagnostic commands for
+  their owning boundary.
 - Verify route pages delegate layout, names remain product-neutral, intermediate
   folders preserve the leaf convention, and section styling remains Tailwind
   first.

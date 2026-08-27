@@ -183,24 +183,27 @@ assert.equal(
 );
 
 if (hasMarketing) {
-	assert.equal(
-		typeof packageJson.scripts?.["verify:marketing-sections"],
-		"string",
-		"Marketing instances must retain the focused verify:marketing-sections command.",
-	);
-	const marketingResult = spawnSync(
-		npmCommand,
-		["run", "verify:marketing-sections"],
-		{
-			cwd: root,
-			stdio: "inherit",
-		},
-	);
+	for (const script of [
+		"verify:marketing",
+		"verify:marketing-media",
+		"verify:marketing-sections",
+		"verify:site-layout",
+	]) {
+		assert.equal(
+			typeof packageJson.scripts?.[script],
+			"string",
+			`Marketing instances must retain the ${script} command.`,
+		);
+	}
+	const marketingResult = spawnSync(npmCommand, ["run", "verify:marketing"], {
+		cwd: root,
+		stdio: "inherit",
+	});
 	if (marketingResult.error) throw marketingResult.error;
 	assert.equal(
 		marketingResult.status,
 		0,
-		"Canonical marketing section verification failed.",
+		"Composed marketing verification failed.",
 	);
 }
 
