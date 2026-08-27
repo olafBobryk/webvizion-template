@@ -21,6 +21,11 @@ Assess every proposal across all of these dimensions:
 Confidence is the lowest supported dimension. Strong evidence in one dimension
 cannot compensate for missing evidence in another.
 
+Treat independently reviewable sections, shell regions, states, and consumers
+as independent scopes even when they share one route. Evidence concentrated in
+one page may prevent automatic acceptance, but it does not make a repeated role
+invisible or justify omitting a non-automatic central migration.
+
 ## Classification
 
 ### High
@@ -46,13 +51,17 @@ Action-specific evidence includes:
   are coherent without product, route, section, brand, or source naming.
 - **Compound:** constituent atoms are first assigned to their lowest coherent
   owners; the repeated relationship adds source-neutral layout or behavior; one
-  user action remains one interactive root rather than duplicated controls.
+  user action remains one interactive root rather than duplicated controls. A
+  relationship-owned multi-segment layout stays above the constituent primitive
+  instead of becoming an oversized primitive variant.
 - **Merge-retire:** observable contracts are equivalent or compatibly
   migratable; one survivor is unambiguous; every consumer and removal edge is
   known.
 - **Token/default:** the source is authoritative for that exact global axis;
   every affected consumer and generated profile is known; adjacent axes are not
-  silently conflated with the proposed ownership decision.
+  silently conflated with the proposed ownership decision. Repetition across
+  independent scopes must still be recommended for human review when one-page
+  evidence is insufficient for automatic global acceptance.
 
 ### Medium
 

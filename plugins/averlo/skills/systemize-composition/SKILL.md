@@ -72,6 +72,10 @@ duplicating their contracts here.
    replacement, or merge-retire in that owner. A mismatching inherited visual
    recipe is a replacement candidate, not justification for leaving overlapping
    work local or inventing a parallel primitive.
+   Independently reviewable sections, shell regions, states, or consumers count
+   as independent scopes even when they belong to one page. Route concentration
+   may lower confidence, but it cannot erase a repeated candidate or its central
+   migration recommendation.
 3. Choose the migration shape deliberately. Replace an inherited default when
    the accepted source evidences the canonical instance role; add an opt-in
    variant for an additional repeated role; promote a token only for its exact
@@ -82,16 +86,29 @@ duplicating their contracts here.
 4. Preserve interaction semantics while decomposing visual compounds. One user
    action remains one interactive root and one tab stop even when it has several
    Button-owned visual segments. A repeated segmented action may gain a shared
-   source-neutral compound around those roles. Do not substitute an icon-only
-   action owner for a labelled primary action merely because both contain the
-   same directional symbol, and do not render duplicate controls for one action.
+   source-neutral compound above those roles. When the relationship owns the
+   multi-segment layout, do not hide that responsibility inside the primitive's
+   variant axis: migrate each action segment through Button, then let the higher
+   compound compose them without adding a second interactive root. Evaluate the
+   inherited primary Button recipe and the higher compound as separate migration
+   candidates. Do not substitute an icon-only action owner for a labelled primary
+   action merely because both contain the same directional symbol, and do not
+   render duplicate controls for one action.
 5. Also inspect whether an accepted registered renderer groups multiple coherent
    semantic or interaction roles that could be split or merged. Such grouping is
    not retroactively a Compose failure when it formed one honest source/parity
    case. Compare each candidate with governing policy, documented Storybook
    owners, complete public signatures, current consumers, provenance, and prior
    human decisions in `docs/design-system/decisions/` when they exist.
-6. For each candidate, state the source evidence, current local recipe,
+6. Apply the same axis discipline to foundations. Compare every repeated full
+   typography signature and purpose with all `Text` values; recommend an existing
+   value, inherited-default replacement, or source-neutral opt-in variant instead
+   of deferring the entire question to font ownership. Inspect repeated Section
+   axes independently so global horizontal gutters do not absorb local vertical
+   rhythm or max width. Surface repeated colors, radii, and spacing across
+   independent scopes as token/default candidates even when their page-level
+   reach keeps them non-automatic.
+7. For each candidate, state the source evidence, current local recipe,
    inherited-versus-prior-product evidence, plausible owners reviewed,
    recommended owner/default/variant/token/compound action, affected consumers,
    public API impact, responsive/behavioral evidence, superseded inherited and
@@ -102,11 +119,11 @@ duplicating their contracts here.
    contextual awareness, not a visual-effect status, schema, or acceptance
    strategy. Do not assume either preservation or change merely because a role
    becomes shared.
-7. Classify the proposal as `high`, `medium`, or `low` using the confidence
+8. Classify the proposal as `high`, `medium`, or `low` using the confidence
    router. Action names never determine confidence by themselves: reuse,
    extension, new ownership, compounds, merge-retire, and token/default changes
    all require evidence proportional to their architectural reach.
-8. Classify a renderer or section-boundary split/merge as `medium` by default.
+9. Classify a renderer or section-boundary split/merge as `medium` by default.
    Present its semantic and maintenance benefit for human direction instead of
    automatically rewriting accepted local topology. After approval, apply the
    boundary change through the routed repository concerns and run focused route

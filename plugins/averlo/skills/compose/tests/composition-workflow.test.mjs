@@ -288,15 +288,67 @@ test("Systemize routes atoms through owner domains before proposing compounds", 
 		/One user\s+action remains one interactive root and one tab stop/u,
 	);
 	assert.match(systemize, /Button-owned visual segments/u);
+	assert.match(systemize, /source-neutral compound above those roles/u);
 	assert.match(
 		systemize,
-		/icon-only\s+action owner for a labelled primary action/u,
+		/do not hide that responsibility inside the primitive's\s+variant axis/u,
+	);
+	assert.match(systemize, /migrate each action segment through Button/u);
+	assert.match(
+		systemize,
+		/inherited primary Button recipe and the higher compound as separate migration\s+candidates/u,
+	);
+	assert.match(
+		systemize,
+		/icon-only\s+action owner for a labelled primary\s+action/u,
 	);
 	assert.match(confidence, /Default replacement/u);
 	assert.match(confidence, /Compound/u);
 	assert.match(
 		confidence,
+		/relationship-owned multi-segment layout stays above the constituent primitive/u,
+	);
+	assert.match(
+		confidence,
 		/one\s+interactive root rather than duplicated controls/u,
+	);
+});
+
+test("Systemize treats repeated page scopes as evidence without conflating axes", async () => {
+	const [systemize, confidence] = await Promise.all([
+		readSkill("systemize-composition"),
+		readSkill("systemize-composition", "references/confidence.md"),
+	]);
+
+	assert.match(
+		systemize,
+		/Independently reviewable sections, shell regions, states, or consumers count\s+as independent scopes/u,
+	);
+	assert.match(
+		systemize,
+		/Route concentration\s+may lower confidence, but it cannot erase a repeated candidate/u,
+	);
+	assert.match(
+		systemize,
+		/every repeated full\s+typography signature and purpose/u,
+	);
+	assert.match(
+		systemize,
+		/existing\s+value, inherited-default replacement, or source-neutral opt-in variant/u,
+	);
+	assert.match(systemize, /repeated Section\s+axes independently/u);
+	assert.match(
+		systemize,
+		/global horizontal gutters do not absorb local vertical\s+rhythm or max width/u,
+	);
+	assert.match(systemize, /repeated colors, radii, and spacing/u);
+	assert.match(
+		confidence,
+		/independently reviewable sections, shell regions, states, and consumers/u,
+	);
+	assert.match(
+		confidence,
+		/one page may prevent automatic acceptance, but it does not make a repeated role\s+invisible/u,
 	);
 });
 
