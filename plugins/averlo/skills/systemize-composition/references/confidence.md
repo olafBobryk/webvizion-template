@@ -31,6 +31,13 @@ caller classes, assets, and wrappers inside that owner's semantic responsibility
 remain migration evidence. Confidence applies to the proposed axis-level change;
 it cannot convert an unresolved duplicated axis into an already-correct result.
 
+A higher composition never substitutes for its constituent owner decisions. A
+repeated labelled action therefore receives a distinct `Button` default-or-
+variant recommendation as well as any compound recommendation. Canonical
+identity evidence likewise receives a distinct `Logo` default-or-variant
+recommendation. External preservation locks lower confidence or require review;
+they are not proof of prior product ownership and cannot make either row vanish.
+
 ## Classification
 
 ### High

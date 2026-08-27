@@ -96,11 +96,17 @@ duplicating their contracts here.
    variant axis: migrate each action segment through Button, then let the higher
    compound compose them without adding a second interactive root. Evaluate the
    inherited primary Button recipe and the higher compound as separate migration
-   candidates. When the accepted repeated role is the instance's primary action,
-   recommend the evidenced primary Button recipe replacement even when the
-   compound itself remains non-automatic. Do not substitute an icon-only action
-   owner for a labelled primary action merely because both contain the same
-   directional symbol, and do not render duplicate controls for one action.
+   candidates. For every repeated labelled action, the final audit must state as
+   its own primitive-owner recommendation whether the evidenced label and segment
+   treatment replaces the inherited primary `Button` recipe, extends `Button`
+   with an opt-in variant, or lacks enough authority for either. A higher compound
+   recommendation never satisfies or suppresses this primitive-owner row. When
+   the accepted repeated role is the instance's primary action, recommend the
+   evidenced primary `Button` recipe replacement even when its consumer reach or
+   the compound itself keeps application non-automatic. Do not substitute an
+   icon-only action owner for a labelled primary action merely because both
+   contain the same directional symbol, and do not render duplicate controls for
+   one action.
 5. Also inspect whether an accepted registered renderer groups multiple coherent
    semantic or interaction roles that could be split or merged. Such grouping is
    not retroactively a Compose failure when it formed one honest source/parity
@@ -119,6 +125,12 @@ duplicating their contracts here.
    exact axis for `Section` and name the local classes it would retire. Surface
    repeated colors, radii, and spacing across independent scopes as token/default
    candidates even when their page-level reach keeps them non-automatic.
+   Treat identity the same way: distinguish the canonical wordmark or primary
+   mark from contextual marks, then provide a concrete inherited `Logo` default
+   replacement or opt-in variant recommendation whenever accepted identity
+   evidence overlaps that owner. A preservation lock from another workflow is
+   not prior product systemization and cannot erase the proposal; it limits
+   automatic application, names an affected consumer, and requires human review.
 7. For each candidate, state the source evidence, current local recipe,
    inherited-versus-prior-product evidence, plausible owners reviewed,
    recommended owner/default/variant/token/compound action, affected consumers,

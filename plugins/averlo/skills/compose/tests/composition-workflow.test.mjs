@@ -312,7 +312,15 @@ test("Systemize routes atoms through owner domains before proposing compounds", 
 	);
 	assert.match(
 		systemize,
-		/recommend the evidenced primary Button recipe replacement/u,
+		/recommend the\s+evidenced primary `Button` recipe replacement/u,
+	);
+	assert.match(
+		systemize,
+		/For every repeated labelled action, the final audit must state as\s+its own primitive-owner recommendation/u,
+	);
+	assert.match(
+		systemize,
+		/higher compound\s+recommendation never satisfies or suppresses this primitive-owner row/u,
 	);
 	assert.match(
 		systemize,
@@ -327,6 +335,10 @@ test("Systemize routes atoms through owner domains before proposing compounds", 
 	assert.match(
 		confidence,
 		/repeated primary action must evaluate the primary Button recipe separately/u,
+	);
+	assert.match(
+		confidence,
+		/repeated labelled action therefore receives a distinct `Button` default-or-\s*variant recommendation/u,
 	);
 	assert.match(
 		confidence,
@@ -373,6 +385,18 @@ test("Systemize treats repeated page scopes as evidence without conflating axes"
 	assert.match(systemize, /recommend that\s+exact axis for `Section`/u);
 	assert.match(systemize, /repeated colors, radii, and spacing/u);
 	assert.match(
+		systemize,
+		/distinguish the canonical wordmark or primary\s+mark from contextual marks/u,
+	);
+	assert.match(
+		systemize,
+		/concrete inherited `Logo` default\s+replacement or opt-in variant recommendation/u,
+	);
+	assert.match(
+		systemize,
+		/preservation lock from another workflow is\s+not prior product systemization/u,
+	);
+	assert.match(
 		confidence,
 		/independently reviewable sections, shell regions, states, and consumers/u,
 	);
@@ -383,6 +407,10 @@ test("Systemize treats repeated page scopes as evidence without conflating axes"
 	assert.match(
 		confidence,
 		/Using an owner structurally is not proof that its visual axes are owned/u,
+	);
+	assert.match(
+		confidence,
+		/Canonical\s+identity evidence likewise receives a distinct `Logo` default-or-variant\s+recommendation/u,
 	);
 });
 
