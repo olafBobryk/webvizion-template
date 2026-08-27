@@ -1,6 +1,6 @@
 {
 	"name": "averlo",
-	"version": "0.1.0+codex.20260827065547",
+	"version": "0.1.0+codex.20260827152758",
 	"description": "Repository workflows for native source composition, human-reviewed systemization, motion, and reusable Averlo Next application patterns.",
 	"author": {
 		"name": "Olaf Bobryk",
@@ -37,7 +37,7 @@
 			"Review this route surface registry",
 			"Backport approved Storybook stories into the Averlo template",
 			"Compose this source-backed surface for measured human review",
-			"Systemize this accepted composition without changing its render",
+			"Systemize this accepted composition while explaining its visual effects",
 			"Animate this accepted static surface"
 		]
 	}

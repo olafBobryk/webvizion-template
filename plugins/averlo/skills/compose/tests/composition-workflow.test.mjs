@@ -176,23 +176,33 @@ test("Compose owns section-scoped native review without shared-owner mutation", 
 	);
 });
 
-test("Systemize Composition routes confidence and accepts automatic work only at zero", async () => {
+test("Systemize Composition separates ownership confidence from visual outcomes", async () => {
 	const [systemize, confidence] = await Promise.all([
 		readSkill("systemize-composition"),
 		readSkill("systemize-composition", "references/confidence.md"),
 	]);
 
-	assert.match(systemize, /`integration-parity` cases/u);
-	assert.match(systemize, /target-before capture and SHA-256/u);
+	assert.match(systemize, /Plan-only analysis does not require capture work/u);
+	assert.match(systemize, /render-preserving/u);
+	assert.match(systemize, /intentionally changing/u);
+	assert.match(systemize, /uncertain/u);
+	assert.match(systemize, /different between consumers/u);
+	assert.match(systemize, /not a visual-effect status, schema/u);
 	assert.match(
 		systemize,
 		/Classify the proposal as `high`, `medium`, or `low`/u,
 	);
 	assert.match(systemize, /\*\*High confidence:\*\* automatically attempt/u);
-	assert.match(systemize, /`changedPixels: 0`/u);
+	assert.match(
+		systemize,
+		/pixel\s+difference alone neither accepts nor rejects/u,
+	);
 	assert.match(systemize, /\*\*Medium confidence:\*\* do not edit/u);
 	assert.match(systemize, /\*\*Low confidence:\*\* preserve/u);
-	assert.match(systemize, /restore only\s+that attempt/u);
+	assert.match(systemize, /fails its owner, consumer, API, Storybook/u);
+	assert.doesNotMatch(systemize, /Freeze the accepted target/u);
+	assert.doesNotMatch(systemize, /changedPixels:\s*0/u);
+	assert.doesNotMatch(systemize, /visual contract|per-consumer table/iu);
 	for (const action of [
 		"reuse",
 		"extension",
@@ -203,7 +213,16 @@ test("Systemize Composition routes confidence and accepts automatic work only at
 		assert.match(confidence, new RegExp(action, "iu"));
 	}
 	assert.match(confidence, /lowest supported dimension/u);
-	assert.match(confidence, /target-before\/target-after case is nonzero/u);
+	assert.match(confidence, /visual preservation is not assumed/u);
+	assert.match(
+		confidence,
+		/pixel\s+difference is not an ownership-confidence verdict/u,
+	);
+	assert.doesNotMatch(confidence, /zero changed target-to-target pixels/u);
+	assert.doesNotMatch(
+		confidence,
+		/target-before\/target-after case is nonzero/u,
+	);
 });
 
 test("durable design-system documents contain human decisions, not lifecycle state", async () => {
@@ -420,7 +439,7 @@ test("Systemize reviews accepted local renderer boundaries without redefining Co
 		systemize,
 		/renderer or section-boundary split\/merge as `medium` by default/u,
 	);
-	assert.match(systemize, /focused route and marketing-section checks/u);
+	assert.match(systemize, /focused route\s+and marketing-section checks/u);
 	assert.match(systemize, /purely local renderer-boundary decision/u);
 	assert.match(
 		systemize,
@@ -548,6 +567,11 @@ test("Visual Parity stays mechanical across both composition workflows", async (
 	}
 	assert.match(visualParity, /never edits product code/u);
 	assert.match(visualParity, /never decides a verdict/u);
+	assert.match(visualParity, /Zero changed pixels reports identical captures/u);
+	assert.match(
+		visualParity,
+		/without deciding whether it was\s+intended or acceptable/u,
+	);
 	assert.match(visualParity, /`native-invalid`/u);
 	assert.doesNotMatch(visualParity, /active plane|peer skill|goal lifecycle/iu);
 });

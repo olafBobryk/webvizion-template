@@ -13,9 +13,9 @@ Assess every proposal across all of these dimensions:
 | Source role | Complete purpose and visual signature, including relevant states, responsive behavior, and independent recurrence when reuse is claimed. |
 | Owner choice | Governing policy and Storybook evidence identify one coherent owner; plausible competing owners have evidence-based rejection. |
 | API shape | The proposed import, props, variants, tokens, defaults, and compatibility behavior are source-neutral and fully specified. |
-| Consumer reach | Current and generated-profile consumers are enumerated; unrelated behavior or appearance is not silently changed. |
+| Consumer reach | Current and generated-profile consumers are enumerated; possible behavioral and visual consequences are understood well enough to describe, including when their exact effect is uncertain. |
 | Semantic behavior | Semantics, accessibility, interaction, loading, media, and responsive contracts affected by the change are known and preserved. |
-| Proof | Affected scopes can be captured deterministically, compared with their frozen target-before images, and checked through the relevant repository and Storybook verifiers. |
+| Proof | The relevant owner, consumer, repository, and Storybook checks are known; before/after captures remain optional descriptive evidence when useful. |
 
 Confidence is the lowest supported dimension. Strong evidence in one dimension
 cannot compensate for missing evidence in another.
@@ -26,8 +26,9 @@ cannot compensate for missing evidence in another.
 
 Every dimension is complete, no veto below applies, and the proposed action can
 be implemented without another product or ownership choice. High confidence
-authorizes an isolated automatic attempt, not acceptance in advance. Acceptance
-still requires zero changed target-to-target pixels and passing contracts.
+authorizes an isolated automatic attempt, not acceptance in advance. Applicable
+contracts must still pass, but visual preservation is not assumed and a pixel
+difference is not an ownership-confidence verdict.
 
 Action-specific evidence includes:
 
@@ -43,8 +44,8 @@ Action-specific evidence includes:
   migratable; one survivor is unambiguous; every consumer and removal edge is
   known.
 - **Token/default:** the source is authoritative for that exact global axis;
-  every affected consumer and generated profile is in the evidence boundary;
-  adjacent unevidenced axes remain unchanged.
+  every affected consumer and generated profile is known; adjacent axes are not
+  silently conflated with the proposed ownership decision.
 
 ### Medium
 
@@ -58,8 +59,8 @@ Recommend one concrete path and wait before editing the unresolved boundary.
 
 Authority conflicts, hidden states are unavailable, consumer reach is unknown,
 the proposal is contextual rather than source-neutral, required behavior would
-be weakened, or deterministic render-preserving proof is unavailable. Preserve
-the local implementation and report the conflict.
+be weakened, or required contract proof is unavailable. Preserve the local
+implementation and report the conflict.
 
 ## Automatic-action vetoes
 
@@ -69,10 +70,8 @@ The following always prevent automatic acceptance:
 - product or instance meaning is being mistaken for a reusable variant;
 - source evidence does not cover an affected semantic, behavioral, responsive,
   loading, or media contract;
-- unrelated consumers would change without explicit evidence;
+- affected consumers have not been enumerated;
 - a public rename or breaking migration lacks a complete compatibility plan;
-- the target-before capture is stale, incomparable, or not native;
-- any affected target-before/target-after case is nonzero;
 - required owner, catalogue, profile, or accessibility checks fail.
 
 When a veto appears during an automatic attempt, restore that attempt and route

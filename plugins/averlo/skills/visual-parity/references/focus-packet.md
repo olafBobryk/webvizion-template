@@ -11,7 +11,7 @@ Workflow owner: compose | systemize-composition | animate | direct-review
 Focus: section | page | shell | site | component
 Target: <route, selector, or Storybook story>
 Target identity: <repository revision or dirty identity plus capture SHA-256>
-Source authority: <immutable Figma/export, frozen accepted Target, or none>
+Source authority: <immutable Figma/export, earlier Target evidence, or none>
 Authority boundaries: <included regions and excluded region → retained authority>
 Authority equivalence: <case ID → source included bounds/crop ↔ Target selector/bounds; excluded pixels absent from both>
 Authority locks: <preserved header, unchanged shared design-system owners, and allowed local/shell boundaries>

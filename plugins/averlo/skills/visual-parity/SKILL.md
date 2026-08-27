@@ -1,12 +1,12 @@
 ---
 name: visual-parity
-description: Capture and mechanically compare a generated Averlo surface against an authoritative source or a frozen target baseline. Use explicitly for reproducible source-parity, render-preserving integration, responsive-system-fit, or static motion-endpoint evidence; do not implement product UI or decide workflow completion.
+description: Capture and mechanically compare a generated Averlo surface against an authoritative source or earlier target evidence. Use explicitly for reproducible source-parity, descriptive before/after integration, responsive-system-fit, or static motion-endpoint evidence; do not implement product UI or decide workflow completion.
 ---
 
 # Averlo · Visual Parity
 
 Own reproducible capture and raw pixel evidence. `$averlo:compose` interprets
-source-parity measurements, `$averlo:systemize-composition` interprets frozen
+source-parity measurements, `$averlo:systemize-composition` interprets
 target-before/target-after measurements, and `$averlo:animate` interprets
 static endpoint evidence. This skill never edits product code, assigns their
 workflow status, or decides whether a human should accept a result.
@@ -17,7 +17,7 @@ workflow status, or decides whether a human should accept a result.
    template; this workflow measures generated instances.
 2. Choose one comparison purpose:
    - `source-parity`: immutable source image versus current Target;
-   - `integration-parity`: frozen accepted Target versus current Target;
+   - `integration-parity`: earlier Target evidence versus current Target;
    - `responsive-system-fit`: current Target at a named width without a claimed
      source score;
    - `static-endpoint`: accepted motion-off Target versus a motion endpoint.
@@ -73,14 +73,17 @@ workflow status, or decides whether a human should accept a result.
   state, viewport, DPR, font state, and motion condition.
 - Responsive cases without supplied source frames report Target findings, not
   invented parity scores.
-- An integration baseline is target-before evidence, never product source
-  authority. It passes mechanically only at zero changed pixels.
+- An integration baseline is descriptive target-before evidence, never product
+  source authority. Zero changed pixels reports identical captures; a nonzero
+  result reports the measured difference without deciding whether it was
+  intended or acceptable.
 - A static-endpoint comparison proves only its named settled endpoint, not
   intermediate motion quality.
 - Native evidence is independent of the pixel comparator and can veto a zero
   measurement. Preserve source/DOM evidence and the flattened-reference check
   with every current assessment.
 
-Run `frame` before the owning workflow edits the Target and `verify` after the
-current capture. A stale frame receipt, a mismatched Target identity, or a
-receipt missing native evidence cannot support a current review claim.
+When an owning workflow requests before/after evidence, run `frame` before its
+Target edit and `verify` after the current capture. A stale frame receipt, a
+mismatched Target identity, or a receipt missing native evidence cannot support
+a current review claim.
