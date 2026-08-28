@@ -112,9 +112,17 @@ duplicating their contracts here.
    variant for an additional evidenced role; promote a token only for its exact
    repeated cross-owner axis; and propose a compound owner only when the
    relationship adds coherent responsibility beyond its constituent owners.
-   When an exact source-neutral opt-in value resolves an evidenced existing-owner
-   axis without changing an unevidenced current-product consumer, choose it; do
-   not manufacture a medium-confidence default-versus-variant decision.
+   Stable semantic owner APIs are compatibility boundaries; inherited visual
+   recipes are not. When an unchanged template caller already names the correct
+   semantic default or variant, leave that call site intact and replace the
+   recipe centrally so the caller inherits the accepted instance system. Do not
+   add a parallel value merely to preserve the template caller's old appearance,
+   and do not require a caller-by-caller migration for an in-place recipe change.
+   Edit a caller only when it names the wrong semantic role, uses a breaking API
+   that independently must change, or contains a local visual override that
+   bypasses the owner. An exact source-neutral opt-in value is appropriate only
+   for a genuinely additional role or to protect evidenced conflicting prior
+   product work; unchanged inherited consumers never justify it.
    Keep source copy, one-off geometry, contextual assets, and choreography local
    unless they independently satisfy shared ownership.
 4. Preserve interaction semantics while decomposing visual compounds. One user
@@ -144,12 +152,13 @@ duplicating their contracts here.
    human decisions in `docs/design-system/decisions/` when they exist.
 6. Apply the required typography and evidenced-owner references. Every accepted
    text role must map exhaustively through `Text`; recurrence controls variant
-   deduplication, not ownership. Reconcile the complete inherited Text scale and
-   retire caller typography recipes. Apply the same replacement precedence to
-   identity, actions, repeated layout axes, exact semantic tokens, and shared
-   shell presentation. Missing breadth or an intentional change to inherited
-   consumers cannot preserve foreign template visuals. Keep only genuinely
-   contextual roles and unevidenced adjacent axes local.
+   deduplication, not ownership. Reconcile the accepted hierarchy onto stable
+   existing Text identifiers before adding values, replace their recipes in
+   place, and retire caller-owned typography recipes. Apply the same replacement
+   precedence to identity, actions, repeated layout axes, exact semantic tokens,
+   and shared shell presentation. Missing breadth or an intentional change to
+   inherited consumers cannot preserve foreign template visuals. Keep only
+   genuinely contextual roles and unevidenced adjacent axes local.
 7. For each candidate, state the source evidence, current local recipe,
    inherited-versus-prior-product evidence, plausible owners reviewed,
    recommended owner/default/variant/token/compound action, affected consumers,
@@ -194,10 +203,12 @@ duplicating their contracts here.
 ## Apply or request a decision
 
 - **Required automatic:** attempt the prescribed existing-owner or repository-
-  owner migration. Update owners, consumers, contracts, and Storybook/catalogue
-  evidence together; retire the superseded local or inherited recipe and run
-  focused checks. The agent may not substitute a new parallel owner, a local
-  recipe, or a human recommendation for this route.
+  owner migration. Update the owner, accepted-composition consumers that bypass
+  it, contracts, and Storybook/catalogue evidence together; retire the
+  superseded local or inherited recipe and run focused checks. Do not rewrite
+  unchanged template callers that already use the correct semantic API: they
+  must inherit the new central recipe. The agent may not substitute a new
+  parallel owner, variant, local recipe, or human recommendation for this route.
 - **Automatic blocked:** do not fabricate the missing input. Name the settled
   owner and intended migration, record the concrete blocker, keep the overall
   handoff incomplete, and continue every other executable row.

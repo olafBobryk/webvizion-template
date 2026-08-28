@@ -42,19 +42,25 @@ uncertain, or mixed without changing the ownership conclusion.
   missing product wordmark is an asset/preflight blocker for that variant, not a
   reason to preserve template branding or turn the replacement into a human
   recommendation. A header lock from Compose is not a Logo veto;
-  Systemize enumerates the header as an intentionally affected consumer.
+  Systemize enumerates the header as an intentionally affected consumer. Keep
+  correct existing `Logo` call sites intact so `full` and `mark` inherit their
+  exact replacement recipes. Reconcile each variant independently: an available
+  exact mark proceeds while a missing exact full wordmark blocks only `full`.
 - **Actions:** when accepted evidence establishes the instance primary action
   and `Button` is inherited scaffolding, replace the inherited primary recipe as
-  required automatic work. Separately migrate any fully evidenced repeated
-  relationship among Button-owned segments through a source-neutral compound;
-  the compound never absorbs the primitive decision or creates another
-  interactive root. Incomplete compound evidence remains a human-review
-  proposal without weakening the required primitive migration.
+  required automatic work. Existing correct `primary` callers inherit that
+  recipe without call-site migration. Do not add a parallel primitive action
+  variant merely to preserve their prior appearance. Separately migrate any
+  fully evidenced repeated relationship among Button-owned segments through a
+  source-neutral compound; the compound never absorbs the primitive decision or
+  creates another interactive root. Incomplete compound evidence remains a
+  human-review proposal without weakening the required primitive migration.
 - **Layout:** when the same owner-domain axis recurs across independently
   reviewable sections, migrate that exact axis through the existing owner as
   required automatic work. Sharing one route does not create ambiguity. Preserve
-  unevidenced adjacent axes locally. If replacing the inherited default would
-  affect an unevidenced or explicitly preserved current-product consumer, add a
+  unevidenced adjacent axes locally. Effects on unchanged inherited callers are
+  intentional inheritance, not a reason to add an axis or value. If replacing
+  the inherited default would conflict with evidenced prior product work, add a
   source-neutral opt-in value to the existing owner and migrate the accepted
   consumers automatically. Do not present default replacement, opt-in
   ownership, and continued local duplication as equally unresolved choices when

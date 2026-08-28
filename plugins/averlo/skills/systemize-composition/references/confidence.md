@@ -67,11 +67,13 @@ Action-specific evidence includes:
 - **Extension:** the existing owner domain is unambiguous; the addition is
   source-neutral and non-duplicative; affected consumers opt in or have fully
   evidenced compatibility; exhaustive owner teaching evidence is defined.
-  A fully specified opt-in existing-owner value resolves rather than creates
-  ambiguity when changing the default would touch an unevidenced consumer.
+  An unchanged inherited caller is not evidence for extension: if it already
+  names the correct semantic role, it must inherit the replacement recipe.
 - **Default replacement:** the accepted source evidences the canonical instance
   role for that owner; the current recipe is inherited scaffolding rather than a
-  conflicting prior product decision; every affected default consumer is known.
+  conflicting prior product decision; every affected default consumer is known
+  for impact analysis. Correct inherited callers do not need migration or visual
+  preservation; the stable semantic API lets them inherit the new recipe.
   A repeated primary action must evaluate the primary Button recipe separately
   from any higher compound that arranges it.
 - **New owner:** the role recurs across independent scopes or consumers; no

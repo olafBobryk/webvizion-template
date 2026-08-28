@@ -28,14 +28,27 @@ history. When the owner is unchanged inherited scaffolding and the accepted
 composition supplies the current product scale:
 
 - replace the inherited scale as one required automatic owner migration;
-- map every accepted role to an exact `Text` value;
-- redefine compatible inherited values and retire unsupported or superseded
-  inherited values rather than preserving a parallel template scale;
+- map every accepted role onto the closest stable semantic `Text` identifier
+  before introducing any additional value;
+- replace the recipes behind compatible inherited identifiers in place. When
+  more than one stable identifier remains necessary for API compatibility, they
+  may resolve to the same accepted product recipe; do not preserve parallel
+  foreign visual recipes;
+- add a value only for a genuinely additional accepted hierarchy role that
+  cannot truthfully map to an existing semantic identifier;
 - migrate every accepted text consumer to `Text` and remove caller-owned font
   family, size, weight, line-height, tracking, casing, decoration, and
   glyph-treatment recipes;
-- enumerate and intentionally migrate other inherited-template consumers whose
-  appearance changes through the new instance scale.
+- enumerate other inherited-template consumers whose appearance will change,
+  but do not edit callers that already use the correct semantic `Text` API.
+  Their automatic inheritance of the new instance scale is the intended result,
+  including template utility surfaces that have no independent design source.
+
+Existing call-site compatibility means preserving semantic variant names, not
+preserving their old pixels. A new opt-in variant is not a compatibility device
+for shielding inherited callers from the accepted scale. Change a template
+caller only when its semantic role is wrong, it bypasses `Text`, or it carries a
+local typography override that defeats the central recipe.
 
 An accepted role does not need cross-route recurrence to replace or extend its
 existing semantic owner. Broad effects on inherited-template consumers are
@@ -51,9 +64,11 @@ over the accepted native result.
 
 ## Prove the migration
 
-Update the `Text` public type, catalogue, exhaustive Storybook scale, skeleton
-coverage, and all affected consumers together. Verify that every accepted text
-node resolves through `Text` and that no migrated consumer retains typography
-overrides in `className`. Run focused catalogue, Storybook, type, route, shell,
-and responsive checks. Visual Parity evidence may describe before/after effects;
-it does not decide ownership or confidence.
+Update the `Text` recipe, public type when genuinely extended, catalogue,
+exhaustive Storybook scale, and skeleton coverage together. Verify that every
+accepted text node resolves through `Text`, that no migrated accepted consumer
+retains typography overrides in `className`, and that unchanged template callers
+continue compiling against their stable semantic identifiers while inheriting
+the new recipes. Run focused catalogue, Storybook, type, route, shell, and
+responsive checks. Visual Parity evidence may describe before/after effects; it
+does not decide ownership or confidence.

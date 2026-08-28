@@ -310,7 +310,7 @@ test("Systemize routes atoms through owner domains before proposing compounds", 
 	assert.match(systemize, /propose a compound owner only/u);
 	assert.match(
 		systemize,
-		/do\s+not manufacture a medium-confidence default-versus-variant decision/u,
+		/opt-in value is appropriate only\s+for a genuinely additional role or to protect evidenced conflicting prior\s+product work/u,
 	);
 	assert.match(
 		systemize,
@@ -403,11 +403,11 @@ test("Systemize exhaustively replaces evidenced existing-owner domains", async (
 	);
 	assert.match(
 		typography,
-		/retire unsupported or superseded\s+inherited values rather than preserving a parallel template scale/u,
+		/map every accepted role onto the closest stable semantic `Text` identifier/u,
 	);
 	assert.match(
 		typography,
-		/no migrated consumer retains typography\s+overrides in `className`/u,
+		/do not edit callers that already use the correct semantic `Text` API/u,
 	);
 	assert.match(typography, /actual face and weight calibrated during Compose/u);
 	assert.match(
@@ -477,7 +477,7 @@ test("Systemize exhaustively replaces evidenced existing-owner domains", async (
 	);
 	assert.match(
 		confidence,
-		/fully specified opt-in existing-owner value resolves rather than creates\s+ambiguity/u,
+		/unchanged inherited caller is not evidence for extension/u,
 	);
 	assert.doesNotMatch(systemize, /every repeated full\s+typography/iu);
 	assert.doesNotMatch(
@@ -496,6 +496,66 @@ test("Systemize exhaustively replaces evidenced existing-owner domains", async (
 	assert.match(
 		metadata,
 		/established Text, Logo, Button, repeated compound, Section-axis, media, route, and link ownership/u,
+	);
+});
+
+test("Systemize replaces central recipes without migrating correct template callers", async () => {
+	const [systemize, confidence, evidencedOwners, typography, metadata] =
+		await Promise.all([
+			readSkill("systemize-composition"),
+			readSkill("systemize-composition", "references/confidence.md"),
+			readSkill("systemize-composition", "references/evidenced-owners.md"),
+			readSkill("systemize-composition", "references/typography.md"),
+			readSkill("systemize-composition", "agents/openai.yaml"),
+		]);
+
+	assert.match(systemize, /Stable semantic owner APIs are compatibility boundaries/u);
+	assert.match(systemize, /leave that call site intact and replace the\s+recipe centrally/u);
+	assert.match(systemize, /do not require a caller-by-caller migration/u);
+	assert.match(
+		systemize,
+		/Edit a caller only when it names the wrong semantic role, uses a breaking API\s+that independently must change, or contains a local visual override/u,
+	);
+	assert.match(
+		systemize,
+		/unchanged inherited consumers never justify it/u,
+	);
+	assert.match(
+		typography,
+		/preserving semantic variant names, not\s+preserving their old pixels/u,
+	);
+	assert.match(
+		typography,
+		/new opt-in variant is not a compatibility device\s+for shielding inherited callers/u,
+	);
+	assert.match(
+		typography,
+		/unchanged template callers\s+continue compiling against their stable semantic identifiers while inheriting\s+the new recipes/u,
+	);
+	assert.match(
+		evidencedOwners,
+		/Existing correct `primary` callers inherit that\s+recipe without call-site migration/u,
+	);
+	assert.match(
+		evidencedOwners,
+		/Do not add a parallel primitive action\s+variant merely to preserve their prior appearance/u,
+	);
+	assert.match(
+		evidencedOwners,
+		/Keep\s+correct existing `Logo` call sites intact/u,
+	);
+	assert.match(
+		evidencedOwners,
+		/Reconcile each variant independently/u,
+	);
+	assert.match(
+		confidence,
+		/Correct inherited callers do not need migration or visual\s+preservation/u,
+	);
+	assert.match(metadata, /Preserve stable semantic APIs, not inherited pixels/u);
+	assert.doesNotMatch(
+		typography,
+		/enumerate and intentionally migrate other inherited-template consumers/iu,
 	);
 });
 
