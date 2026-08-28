@@ -48,6 +48,12 @@ duplicating their contracts here.
    overwrite. If initialization history is missing or ambiguous, report
    provenance uncertainty and route the concrete proposal to human review.
    Do not add provenance comments, annotations, or another ledger.
+   Historical agent plans, audit recommendations, task summaries, and memory are
+   discovery context only. They are not human decisions and cannot preserve an
+   inherited recipe or execution route. Re-evaluate them against the accepted
+   composition, current owner provenance, explicit caller direction, and actual
+   decision documents on every invocation; the current skill contract wins when
+   an older recommendation conflicts with it.
 3. Inventory candidates before deciding whether before/after evidence is useful.
    Plan-only analysis does not require capture work. When a selected migration
    benefits from `integration-parity` evidence, use the linked
@@ -123,6 +129,12 @@ duplicating their contracts here.
    bypasses the owner. An exact source-neutral opt-in value is appropriate only
    for a genuinely additional role or to protect evidenced conflicting prior
    product work; unchanged inherited consumers never justify it.
+   Before the first owner edit, map every existing public identifier for that
+   owner to an accepted recipe, a compatible alias of an accepted recipe, or a
+   named `automatic blocked` prerequisite. Do not add a public identifier until
+   this replacement map is complete. An untouched inherited recipe is not a
+   valid mapping, and a stable identifier used by a template caller is not a
+   reason to create an opt-in parallel value.
    Keep source copy, one-off geometry, contextual assets, and choreography local
    unless they independently satisfy shared ownership.
 4. Preserve interaction semantics while decomposing visual compounds. One user
@@ -140,8 +152,10 @@ duplicating their contracts here.
    recommendation never satisfies or suppresses this primitive-owner row. When
    the accepted repeated role is the instance's primary action and `Button` is
    inherited scaffolding, route the evidenced primary recipe replacement as
-   required automatic. Broad effects on inherited consumers do not lower it. Do not
-   substitute an icon-only action owner for a labelled primary action merely
+   required automatic. The compound must consume `Button`'s replaced `primary`
+   role; it may not add a compound-named primitive variant as an escape hatch.
+   Broad effects on inherited consumers do not lower it. Do not substitute an
+   icon-only action owner for a labelled primary action merely
    because both contain the same directional symbol, and do not render duplicate
    controls for one action.
 5. Also inspect whether an accepted registered renderer groups multiple coherent
@@ -181,6 +195,12 @@ duplicating their contracts here.
    rows are ownership conclusions, not recommendations. Choose default versus
    opt-in shape from canonical-versus-additional role evidence, then attempt the
    migration automatically.
+   A workflow preservation lock on an unchanged template consumer—including a
+   header lock from Compose—does not convert that consumer into prior product
+   design evidence. The caller keeps its semantic props and intentionally
+   inherits the new owner recipe. Only changed owner/caller history, accepted
+   source evidence for that consumer, an explicit current instruction, or a
+   human decision document can establish conflicting prior product work.
    Route a required row as `automatic blocked` only when a named external input
    or prerequisite makes implementation impossible. Missing exact assets,
    unavailable external input, or a required preflight dependency cannot turn a

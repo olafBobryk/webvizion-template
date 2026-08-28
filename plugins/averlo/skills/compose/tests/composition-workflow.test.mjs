@@ -557,6 +557,48 @@ test("Systemize replaces central recipes without migrating correct template call
 		typography,
 		/enumerate and intentionally migrate other inherited-template consumers/iu,
 	);
+	assert.match(
+		systemize,
+		/Historical agent plans, audit recommendations, task summaries, and memory are\s+discovery context only/u,
+	);
+	assert.match(systemize, /current skill contract wins/u);
+	assert.match(
+		systemize,
+		/map every existing public identifier for that\s+owner/u,
+	);
+	assert.match(
+		systemize,
+		/Do not add a public identifier until\s+this replacement map is complete/u,
+	);
+	assert.match(
+		systemize,
+		/header lock from Compose—does not convert that consumer into prior product\s+design evidence/u,
+	);
+	assert.match(
+		typography,
+		/Do not create a parallel\s+family of product-, source-, style-, or editorial-prefixed values/u,
+	);
+	assert.match(
+		evidencedOwners,
+		/compound must invoke the replaced\s+`primary` role/u,
+	);
+	assert.match(
+		evidencedOwners,
+		/must not add `segmented`, `compound`, or another relationship-\s*named value to Button's primitive variant axis/u,
+	);
+	assert.match(
+		evidencedOwners,
+		/make the accepted canonical\s+value that axis's default/u,
+	);
+	assert.match(
+		confidence,
+		/Historical agent recommendations, memory, and plan-only audit outcomes are not\s+human decisions/u,
+	);
+	assert.match(metadata, /every inherited public identifier must be remapped/u);
+	assert.match(
+		metadata,
+		/compound must consume the replaced Button primary role/u,
+	);
 });
 
 test("Systemize audits every domain and makes non-automatic recommendations actionable", async () => {

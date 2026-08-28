@@ -53,8 +53,11 @@ uncertain, or mixed without changing the ownership conclusion.
   variant merely to preserve their prior appearance. Separately migrate any
   fully evidenced repeated relationship among Button-owned segments through a
   source-neutral compound; the compound never absorbs the primitive decision or
-  creates another interactive root. Incomplete compound evidence remains a
-  human-review proposal without weakening the required primitive migration.
+  creates another interactive root. The compound must invoke the replaced
+  `primary` role and must not add `segmented`, `compound`, or another relationship-
+  named value to Button's primitive variant axis. Incomplete compound evidence
+  remains a human-review proposal without weakening the required primitive
+  migration.
 - **Layout:** when the same owner-domain axis recurs across independently
   reviewable sections, migrate that exact axis through the existing owner as
   required automatic work. Sharing one route does not create ambiguity. Preserve
@@ -65,6 +68,11 @@ uncertain, or mixed without changing the ownership conclusion.
   consumers automatically. Do not present default replacement, opt-in
   ownership, and continued local duplication as equally unresolved choices when
   the opt-in shape fully satisfies the evidence.
+  When separating an evidenced horizontal axis from an existing combined
+  padding API requires a new source-neutral axis, make the accepted canonical
+  value that axis's default and refactor the old combined recipe around it.
+  Do not make accepted consumers opt into a product-style gutter while inherited
+  callers keep the old default.
 - **Tokens:** promote an exact value automatically when it repeats across
   independent scopes in the same semantic role and the inherited token is
   scaffolding. Split identical literals that serve different semantic roles;

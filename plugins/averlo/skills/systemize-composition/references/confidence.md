@@ -50,6 +50,11 @@ replacement. External preservation locks identify affected consumers or
 sequencing; they are not proof of prior product ownership and do not lower owner
 confidence.
 
+Historical agent recommendations, memory, and plan-only audit outcomes are not
+human decisions or confidence evidence. Recompute ownership from current source,
+provenance, consumers, contracts, explicit caller direction, and committed human
+decision documents.
+
 ## Classification
 
 ### High

@@ -30,6 +30,10 @@ composition supplies the current product scale:
 - replace the inherited scale as one required automatic owner migration;
 - map every accepted role onto the closest stable semantic `Text` identifier
   before introducing any additional value;
+- map every existing public identifier before adding one: redefine it with an
+  accepted hierarchy recipe, alias it to another accepted recipe when its stable
+  name remains useful, or mark its exact missing evidence `automatic blocked`;
+  never leave its inherited foreign recipe in place;
 - replace the recipes behind compatible inherited identifiers in place. When
   more than one stable identifier remains necessary for API compatibility, they
   may resolve to the same accepted product recipe; do not preserve parallel
@@ -49,6 +53,14 @@ preserving their old pixels. A new opt-in variant is not a compatibility device
 for shielding inherited callers from the accepted scale. Change a template
 caller only when its semantic role is wrong, it bypasses `Text`, or it carries a
 local typography override that defeats the central recipe.
+
+When the accepted composition supplies a complete instance hierarchy, an
+unchanged inherited scale is replaced as a whole. Do not create a parallel
+family of product-, source-, style-, or editorial-prefixed values while the
+existing public hierarchy still carries foreign recipes. A genuinely additional
+role may extend the scale only after the complete inherited identifier map is
+resolved and the agent names why no existing semantic identifier can represent
+that role.
 
 An accepted role does not need cross-route recurrence to replace or extend its
 existing semantic owner. Broad effects on inherited-template consumers are
