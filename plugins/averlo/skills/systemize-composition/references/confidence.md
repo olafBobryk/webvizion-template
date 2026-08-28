@@ -1,8 +1,17 @@
 # Systemization confidence
 
-Confidence answers one question: may this proposed shared-system change proceed
-without another human ownership decision? It is categorical evidence, not a
-numeric score and not a measure of how attractive the change seems.
+Confidence answers one question for candidates whose ownership remains
+unresolved after established-owner precedence: may this proposed shared-system
+change proceed without another human ownership decision? It is categorical
+evidence, not a numeric score and not a measure of how attractive the change
+seems.
+
+Do not confidence-score an accepted role that already belongs to an established
+semantic or repository owner. `Text`, canonical `Logo`, canonical primary
+`Button`, fully evidenced repeated action compounds, repeated exact `Section`
+axes, media delivery, routes, and links use Systemize's deterministic execution
+routes. Confidence applies only to genuinely new ownership or unresolved
+product intent; it cannot downgrade a settled owner into human review.
 
 ## Evidence dimensions
 
@@ -18,7 +27,8 @@ Assess every proposal across all of these dimensions:
 | Instance provenance | The current owner is compared with the generated repository's initialization commit and path history; unchanged inherited scaffolding is distinguished from changed or newly added product work. |
 | Proof | The relevant owner, consumer, repository, and Storybook checks are known; before/after captures remain optional descriptive evidence when useful. |
 
-Confidence is the lowest supported dimension. Strong evidence in one dimension
+For candidates that reach this router, confidence is the lowest supported
+dimension. Strong evidence in one dimension
 cannot compensate for missing evidence in another.
 
 Treat independently reviewable sections, shell regions, states, and consumers
@@ -125,5 +135,8 @@ The following always prevent automatic acceptance:
 - a public rename or breaking migration lacks a complete compatibility plan;
 - required owner, catalogue, profile, or accessibility checks fail.
 
-When a veto appears during an automatic attempt, restore that attempt and route
-the proposal to human review.
+When a veto appears during a confidence-routed automatic attempt, restore that
+attempt and route the proposal to human review. A veto does not apply to a
+deterministic required migration merely because the same owner has broad
+inherited reach; required migrations remain blocked and incomplete when their
+prescribed implementations cannot pass.

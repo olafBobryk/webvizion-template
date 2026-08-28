@@ -12,8 +12,9 @@ an existing human decision. A stale Compose packet may remain recovery evidence,
 but it does not override a current explicit acceptance; mere invocation without
 either form of acceptance is not enough.
 When that role belongs to an existing owner that is unchanged inherited
-scaffolding, migrating the evidenced role through that owner is high-confidence
-by default when its signature, consumers, and required behavior are known. One
+scaffolding, migrating the evidenced role through that owner is required
+automatic work when its signature, consumers, and required behavior are known;
+do not send it through confidence classification. One
 route is sufficient for an existing owner-domain migration; independent
 recurrence is required only to justify a new shared owner, a compound, or a
 cross-owner token.
@@ -39,24 +40,26 @@ uncertain, or mixed without changing the ownership conclusion.
   contextual marks local. Retire unsupported inherited identity variants or
   acquire the exact required asset before an affected product consumer ships. A
   missing product wordmark is an asset/preflight blocker for that variant, not a
-  reason to preserve template branding or lower the replacement recommendation
-  from high confidence. A header lock from Compose is not a Logo veto;
+  reason to preserve template branding or turn the replacement into a human
+  recommendation. A header lock from Compose is not a Logo veto;
   Systemize enumerates the header as an intentionally affected consumer.
 - **Actions:** when accepted evidence establishes the instance primary action
-  and `Button` is inherited scaffolding, replace the inherited primary recipe
-  with high confidence. Separately propose any repeated relationship among
-  Button-owned segments as a compound; the compound never absorbs the primitive
-  decision or creates another interactive root.
+  and `Button` is inherited scaffolding, replace the inherited primary recipe as
+  required automatic work. Separately migrate any fully evidenced repeated
+  relationship among Button-owned segments through a source-neutral compound;
+  the compound never absorbs the primitive decision or creates another
+  interactive root. Incomplete compound evidence remains a human-review
+  proposal without weakening the required primitive migration.
 - **Layout:** when the same owner-domain axis recurs across independently
-  reviewable sections, migrate that exact axis through the existing owner with
-  high confidence. Sharing one route does not reduce confidence. Preserve
+  reviewable sections, migrate that exact axis through the existing owner as
+  required automatic work. Sharing one route does not create ambiguity. Preserve
   unevidenced adjacent axes locally. If replacing the inherited default would
   affect an unevidenced or explicitly preserved current-product consumer, add a
   source-neutral opt-in value to the existing owner and migrate the accepted
-  consumers with high confidence. Do not present default replacement, opt-in
+  consumers automatically. Do not present default replacement, opt-in
   ownership, and continued local duplication as equally unresolved choices when
   the opt-in shape fully satisfies the evidence.
-- **Tokens:** promote an exact value with high confidence when it repeats across
+- **Tokens:** promote an exact value automatically when it repeats across
   independent scopes in the same semantic role and the inherited token is
   scaffolding. Split identical literals that serve different semantic roles;
   do not use literal equality alone as token evidence.
@@ -66,8 +69,13 @@ uncertain, or mixed without changing the ownership conclusion.
   on other inherited shell consumers are intentional consequences, not a reason
   to retain the template shell recipe.
 - **Media:** constituent asset delivery remains repository-contract remediation,
-  not a competing design-system owner. Report and verify it separately without
-  lowering otherwise complete owner migrations.
+  not a competing design-system owner. Apply the routed repository correction
+  automatically, report and verify it separately, and do not lower otherwise
+  complete owner migrations.
+- **Routes and links:** route-owned destinations, framework link usage, and
+  public route contracts are repository ownership, not design-system judgment.
+  Apply their evidenced corrections automatically; only an unresolved product
+  destination or behavior is a human choice.
 
 For every domain, distinguish a genuinely contextual role from an unevidenced
 template variant. Contextual accepted work may stay local. Foreign inherited

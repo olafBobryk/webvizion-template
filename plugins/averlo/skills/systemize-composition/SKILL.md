@@ -7,8 +7,10 @@ description: Analyze an accepted local composition, review its local renderer bo
 
 Turn a human-accepted visual realization into a more coherent instance design
 system without treating the agent's ownership judgment as unquestionable.
-Explicit invocation authorizes analysis and high-confidence automatic work; it
-does not authorize unresolved medium- or low-confidence shared changes.
+Explicit invocation declares the accepted composition canonical for every role
+and axis it evidences. It authorizes deterministic existing-owner migrations
+and high-confidence automatic work; it does not authorize genuinely ambiguous
+shared ownership choices.
 
 In a generated instance, inherited template visuals are replaceable scaffolding,
 not product design authority. A complete inherited Storybook contract proves the
@@ -33,7 +35,9 @@ duplicating their contracts here.
    [the confidence router](references/confidence.md),
    [evidenced owner replacement](references/evidenced-owners.md), and
    [typography systemization](references/typography.md). Read all three
-   references completely before classifying candidates.
+   references completely before routing candidates. Existing-owner precedence
+   is evaluated before confidence; the confidence router cannot reopen a settled
+   owner domain.
 2. Establish owner provenance from the generated repository itself. Find its
    reachable initialization commit, compare each candidate owner's initial tree
    with the current committed and working-tree state, and inspect that path's
@@ -55,9 +59,11 @@ duplicating their contracts here.
    For an automatic invocation, put a task-local action manifest in the runtime
    plan before the first product edit. Give every discovered candidate one row
    naming its domain, evidenced role or axis, provenance, recommended owner and
-   migration shape, confidence, affected consumers, intended attempt, and any
-   pre-existing veto. Reconcile those rows against the confidence, evidenced-
-   owner, and typography references before implementation. This manifest is
+   migration shape, execution route, affected consumers, intended attempt, and
+   any pre-existing blocker. The execution route is `required automatic`,
+   `automatic by confidence`, `automatic blocked`, or `human review`. Reconcile
+   those rows against the evidenced-owner and typography references before
+   consulting confidence for any unresolved row. This manifest is
    transient reasoning and handoff evidence: do not write a manifest file,
    workflow record, component annotation, or durable status document.
    Enumerate rows explicitly for typography; primitive actions; action
@@ -125,8 +131,8 @@ duplicating their contracts here.
    with an opt-in variant, or lacks enough authority for either. A higher compound
    recommendation never satisfies or suppresses this primitive-owner row. When
    the accepted repeated role is the instance's primary action and `Button` is
-   inherited scaffolding, classify the evidenced primary recipe replacement as
-   high confidence. Broad effects on inherited consumers do not lower it. Do not
+   inherited scaffolding, route the evidenced primary recipe replacement as
+   required automatic. Broad effects on inherited consumers do not lower it. Do not
    substitute an icon-only action owner for a labelled primary action merely
    because both contain the same directional symbol, and do not render duplicate
    controls for one action.
@@ -155,22 +161,29 @@ duplicating their contracts here.
    contextual awareness, not a visual-effect status, schema, or acceptance
    strategy. Do not assume either preservation or change merely because a role
    becomes shared.
-8. Classify the proposal as `high`, `medium`, or `low` using the confidence
-   router. Action names never determine confidence by themselves: reuse,
-   extension, new ownership, compounds, merge-retire, and token/default changes
-   all require evidence proportional to their architectural reach.
-   When the loaded references establish deterministic owner precedence, treat
-   alternative migration shapes as evaluated and rejected rather than using
-   their mere existence to invent a medium-confidence ownership choice. In
-   particular, expected effects on inherited shell or header consumers, broad
-   inherited consumer reach, and a choice between continued local duplication
-   and the prescribed owner migration are not confidence vetoes.
-   Keep ownership confidence separate from whether an attempt is currently
-   executable. A missing exact asset, unavailable external input, or required
-   preflight dependency may block a high-confidence migration, but it cannot
-   lower that ownership conclusion. Record the concrete blocker on the high row
-   and leave the handoff explicitly incomplete for that row; never relabel it
-   medium/low to make the checkpoint appear reconciled.
+8. Route established owner domains without confidence scoring. A candidate is
+   `required automatic` when accepted evidence maps it to an existing semantic
+   owner and provenance shows untouched inherited scaffolding or an already-
+   compatible product owner. This includes every accepted text role through
+   `Text`; the canonical identity through `Logo`; the canonical primary action
+   through `Button`; a fully evidenced repeated action relationship through its
+   source-neutral compound; repeated exact `Section` axes through `Section`; and
+   media, route, and link corrections through their repository owners. These
+   rows are ownership conclusions, not recommendations. Choose default versus
+   opt-in shape from canonical-versus-additional role evidence, then attempt the
+   migration automatically.
+   Route a required row as `automatic blocked` only when a named external input
+   or prerequisite makes implementation impossible. Missing exact assets,
+   unavailable external input, or a required preflight dependency cannot turn a
+   settled owner into a confidence question. Keep the handoff incomplete for
+   that row and continue other executable rows.
+   Consult the confidence router only for a genuinely new owner or an unresolved
+   ownership choice: multiple plausible semantic owners, conflicting prior
+   product systemization, ambiguous cross-owner token meaning, incomplete new-
+   compound evidence, or accepted renderer topology that requires a split or
+   merge. High confidence routes to `automatic by confidence`; medium or low
+   routes to `human review`. Expected effects on inherited consumers, broad
+   inherited reach, visual difference, and amount of work are never ambiguity.
 9. Classify a renderer or section-boundary split/merge as `medium` by default.
    Present its semantic and maintenance benefit for human direction instead of
    automatically rewriting accepted local topology. After approval, apply the
@@ -180,6 +193,14 @@ duplicating their contracts here.
 
 ## Apply or request a decision
 
+- **Required automatic:** attempt the prescribed existing-owner or repository-
+  owner migration. Update owners, consumers, contracts, and Storybook/catalogue
+  evidence together; retire the superseded local or inherited recipe and run
+  focused checks. The agent may not substitute a new parallel owner, a local
+  recipe, or a human recommendation for this route.
+- **Automatic blocked:** do not fabricate the missing input. Name the settled
+  owner and intended migration, record the concrete blocker, keep the overall
+  handoff incomplete, and continue every other executable row.
 - **High confidence:** automatically attempt the migration as one isolated
   change. Update owners, consumers, contracts, and Storybook/catalogue evidence
   together; remove the superseded local or inherited recipe and run the focused
@@ -196,9 +217,13 @@ duplicating their contracts here.
   genuinely contextual local recipe. Existing owner overlap cannot resolve as
   local solely because the inherited owner currently looks different.
 
-If an automatic attempt fails its owner, consumer, API, Storybook, repository,
-accessibility, or behavioral contracts, restore only that attempt, preserve its
-evidence, downgrade it from automatic acceptance, and request human direction.
+If a confidence-routed automatic attempt fails its owner, consumer, API,
+Storybook, repository, accessibility, or behavioral contracts, restore only
+that attempt, preserve its evidence, and request human direction.
+If a required-automatic attempt fails, do not downgrade its settled ownership.
+Trace the failure through the routed concern, try every prescribed compliant
+representation or resolver boundary, and then leave the required row
+`automatic blocked` with the exact failed contract if none succeeds.
 Do not restore or accept an attempt solely because its pixels changed or stayed
 the same; explain relevant visual consequences in the handoff.
 Before downgrading on a failed repository contract, trace the failure through
@@ -206,22 +231,27 @@ the already-routed concern and try its prescribed compliant representation or
 resolver boundary when one exists. A failed first implementation shape is not a
 veto while the governing concern supplies another conforming shape.
 
-A high-confidence action-manifest row cannot be omitted, deferred, or
-reclassified before its isolated attempt merely because the change is broad,
+A required-automatic or high-confidence action-manifest row cannot be omitted,
+deferred, or reclassified before its isolated attempt merely because the change is broad,
 visually consequential, affects inherited consumers, or takes more work than
-another candidate. Downgrade it only after the attempt reveals one named
-automatic-action veto or a failed required contract; restore that isolated
-attempt and record the concrete evidence. Do not turn an expected replacement
+another candidate. A confidence-routed row may return to human review only
+after the attempt reveals one named automatic-action veto. A required row stays
+required and becomes blocked after its compliant alternatives fail. Do not turn an expected replacement
 of foreign identity in an inherited header, or an evidenced primary-action
 replacement plus its independently repeated compound, into a new human choice.
 
 Before the automatic human-review checkpoint, reconcile every action-manifest
-row as applied, restored-and-downgraded with the exact veto or failed contract,
-already correct, or pending because it was medium/low from the pre-edit
-classification. The checkpoint cannot be reached while a domain is omitted, a
-high-confidence row was never attempted, or a high-confidence result was
-silently reframed as a human decision. Keep this reconciliation in the runtime
-plan and handoff only; do not persist it as workflow state.
+row as applied, automatic-blocked with the exact blocker or failed contract,
+restored-to-human-review with the exact confidence veto, already correct, or
+pending human review from the pre-edit classification. The checkpoint cannot be
+reached while a domain is omitted, an executable automatic row was never
+attempted, or a settled owner was silently reframed as a human decision. Keep
+this reconciliation in the runtime plan and handoff only; do not persist it as
+workflow state.
+
+Automatic work remains an uncommitted review candidate. Do not commit it or
+write a durable decision document before the human checkpoint unless the caller
+explicitly asks to accept and ship the result.
 
 Run every required focused and aggregate verifier against the final automatic
 state. Do not call Systemize complete when any required check fails, even when

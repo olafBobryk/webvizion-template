@@ -27,7 +27,7 @@ Compare `Text`, its catalogue, and its consumers with repository initialization
 history. When the owner is unchanged inherited scaffolding and the accepted
 composition supplies the current product scale:
 
-- replace the inherited scale as one high-confidence owner migration;
+- replace the inherited scale as one required automatic owner migration;
 - map every accepted role to an exact `Text` value;
 - redefine compatible inherited values and retire unsupported or superseded
   inherited values rather than preserving a parallel template scale;
@@ -40,9 +40,10 @@ composition supplies the current product scale:
 An accepted role does not need cross-route recurrence to replace or extend its
 existing semantic owner. Broad effects on inherited-template consumers are
 descriptive consequences of replacement, not an ownership-confidence veto.
-Lower confidence only when `Text` or an affected consumer contains conflicting
-prior product work, multiple product type hierarchies compete, or the accepted
-render does not expose the role's required responsive or behavioral evidence.
+Route to human review only when `Text` or an affected consumer contains
+conflicting prior product work, multiple product type hierarchies compete, or
+the accepted render does not expose the role's required responsive or
+behavioral evidence. Do not confidence-score the ordinary accepted role.
 
 Use the actual face and weight calibrated during Compose. A nominal design-tool
 weight that renders differently from the supplied font file is not authoritative

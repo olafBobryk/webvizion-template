@@ -190,8 +190,10 @@ test("Systemize Composition separates ownership confidence from visual outcomes"
 	assert.match(systemize, /not a visual-effect status, schema/u);
 	assert.match(
 		systemize,
-		/Classify the proposal as `high`, `medium`, or `low`/u,
+		/Consult the confidence router only for a genuinely new owner or an unresolved\s+ownership choice/u,
 	);
+	assert.match(systemize, /\*\*Required automatic:\*\* attempt/u);
+	assert.match(systemize, /\*\*Automatic blocked:\*\*/u);
 	assert.match(systemize, /\*\*High confidence:\*\* automatically attempt/u);
 	assert.match(
 		systemize,
@@ -199,7 +201,10 @@ test("Systemize Composition separates ownership confidence from visual outcomes"
 	);
 	assert.match(systemize, /\*\*Medium confidence:\*\* do not edit/u);
 	assert.match(systemize, /\*\*Low confidence:\*\* preserve/u);
-	assert.match(systemize, /fails its owner, consumer, API, Storybook/u);
+	assert.match(
+		systemize,
+		/confidence-routed automatic attempt fails its owner, consumer, API,\s+Storybook/u,
+	);
 	assert.doesNotMatch(systemize, /Freeze the accepted target/u);
 	assert.doesNotMatch(systemize, /changedPixels:\s*0/u);
 	assert.doesNotMatch(systemize, /visual contract|per-consumer table/iu);
@@ -212,7 +217,12 @@ test("Systemize Composition separates ownership confidence from visual outcomes"
 	]) {
 		assert.match(confidence, new RegExp(action, "iu"));
 	}
-	assert.match(confidence, /lowest supported dimension/u);
+	assert.match(confidence, /lowest supported\s+dimension/u);
+	assert.match(
+		confidence,
+		/Do not confidence-score an accepted role that already belongs to an established\s+semantic or repository owner/u,
+	);
+	assert.match(confidence, /cannot downgrade a settled owner into human review/u);
 	assert.match(confidence, /visual preservation is not assumed/u);
 	assert.match(
 		confidence,
@@ -319,7 +329,7 @@ test("Systemize routes atoms through owner domains before proposing compounds", 
 	);
 	assert.match(
 		systemize,
-		/classify the evidenced primary recipe replacement as\s+high confidence/u,
+		/route the evidenced primary recipe replacement as\s+required automatic/u,
 	);
 	assert.match(
 		systemize,
@@ -389,7 +399,7 @@ test("Systemize exhaustively replaces evidenced existing-owner domains", async (
 	);
 	assert.match(
 		typography,
-		/replace the inherited scale as one high-confidence owner migration/u,
+		/replace the inherited scale as one required automatic owner migration/u,
 	);
 	assert.match(
 		typography,
@@ -426,20 +436,20 @@ test("Systemize exhaustively replaces evidenced existing-owner domains", async (
 	);
 	assert.match(
 		evidencedOwners,
-		/not a\s+reason to preserve template branding or lower the replacement recommendation\s+from high confidence/u,
+		/not a\s+reason to preserve template branding or turn the replacement into a human\s+recommendation/u,
 	);
 	assert.match(evidencedOwners, /header lock from Compose is not a Logo veto/u);
 	assert.match(
 		evidencedOwners,
-		/replace the inherited primary recipe\s+with high confidence/u,
+		/replace the inherited primary recipe as\s+required automatic work/u,
 	);
 	assert.match(
 		evidencedOwners,
-		/Sharing one route does not reduce confidence/u,
+		/Sharing one route does not create ambiguity/u,
 	);
 	assert.match(
 		evidencedOwners,
-		/add a\s+source-neutral opt-in value to the existing owner and migrate the accepted\s+consumers with high confidence/u,
+		/add a\s+source-neutral opt-in value to the existing owner and migrate the accepted\s+consumers automatically/u,
 	);
 	assert.match(
 		evidencedOwners,
@@ -483,7 +493,10 @@ test("Systemize exhaustively replaces evidenced existing-owner domains", async (
 		/preserve the current owner until canonical identity is confirmed/iu,
 	);
 	assert.match(metadata, /exhaustively replace inherited template recipes/u);
-	assert.match(metadata, /every text role and exact identity asset/u);
+	assert.match(
+		metadata,
+		/established Text, Logo, Button, repeated compound, Section-axis, media, route, and link ownership/u,
+	);
 });
 
 test("Systemize audits every domain and makes non-automatic recommendations actionable", async () => {
@@ -546,7 +559,7 @@ test("Systemize automatic execution reconciles every candidate before stopping",
 	);
 	assert.match(
 		systemize,
-		/Reconcile those rows against the confidence, evidenced-\s*owner, and typography references/u,
+		/Reconcile\s+those rows against the evidenced-owner and typography references before\s+consulting confidence/u,
 	);
 	assert.match(
 		systemize,
@@ -554,19 +567,19 @@ test("Systemize automatic execution reconciles every candidate before stopping",
 	);
 	assert.match(
 		systemize,
-		/alternative migration shapes as evaluated and rejected/u,
+		/Choose default versus\s+opt-in shape from canonical-versus-additional role evidence/u,
 	);
 	assert.match(
 		systemize,
-		/expected effects on inherited shell or header consumers/u,
+		/Expected effects on inherited consumers/u,
 	);
 	assert.match(
 		systemize,
-		/high-confidence action-manifest row cannot be omitted, deferred, or\s+reclassified before its isolated attempt/u,
+		/required-automatic or high-confidence action-manifest row cannot be omitted,\s+deferred, or reclassified before its isolated attempt/u,
 	);
 	assert.match(
 		systemize,
-		/Downgrade it only after the attempt reveals one named\s+automatic-action veto or a failed required contract/u,
+		/required row stays\s+required and becomes blocked after its compliant alternatives fail/u,
 	);
 	assert.match(
 		systemize,
@@ -574,11 +587,11 @@ test("Systemize automatic execution reconciles every candidate before stopping",
 	);
 	assert.match(
 		systemize,
-		/checkpoint cannot be reached while a domain is omitted/u,
+		/checkpoint cannot be\s+reached while a domain is omitted/u,
 	);
-	assert.match(systemize, /high-confidence row was never attempted/u);
-	assert.match(metadata, /attempting every executable high-confidence row/u);
-	assert.match(metadata, /accounting for every discovered candidate/u);
+	assert.match(systemize, /executable automatic row was never\s+attempted/u);
+	assert.match(metadata, /attempt every executable automatic row/u);
+	assert.match(metadata, /every required owner domain/u);
 	for (const domain of [
 		"typography",
 		"primitive actions",
@@ -601,15 +614,15 @@ test("Systemize automatic execution reconciles every candidate before stopping",
 	assert.match(systemize, /compressed or catch-all row is incomplete/u);
 	assert.match(
 		systemize,
-		/Keep ownership confidence separate from whether an attempt is currently\s+executable/u,
+		/Route a required row as `automatic blocked` only when a named external input\s+or prerequisite makes implementation impossible/u,
 	);
 	assert.match(
 		systemize,
-		/missing exact asset[\s\S]*cannot\s+lower that ownership conclusion/u,
+		/Missing exact assets[\s\S]*cannot turn a\s+settled owner into a confidence question/u,
 	);
 	assert.match(
 		systemize,
-		/never relabel it\s+medium\/low to make the checkpoint appear reconciled/u,
+		/settled owner was silently reframed as a human decision/u,
 	);
 	assert.match(
 		systemize,
@@ -619,8 +632,8 @@ test("Systemize automatic execution reconciles every candidate before stopping",
 		systemize,
 		/Do not call Systemize complete when any required check fails/u,
 	);
-	assert.match(metadata, /every required owner domain/u);
-	assert.match(metadata, /blocked high row or failed verifier as incomplete/u);
+	assert.match(metadata, /keep blocked required rows incomplete/u);
+	assert.match(systemize, /Automatic work remains an uncommitted review candidate/u);
 	assert.doesNotMatch(
 		systemize,
 		/manifest\.md|action-manifest\.json|implementation ledger/iu,

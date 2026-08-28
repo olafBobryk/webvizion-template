@@ -12,7 +12,8 @@ After it selects the applicable workflows and concern contracts, do not invoke
 the overlapping design-system, skeleton, entity, or surface skills again for
 the same change unit. `$averlo:compose` owns native source-backed realization
 and measured human review passes. `$averlo:systemize-composition` explicitly
-owns confidence-routed shared design-system decisions, `$averlo:animate`
+owns deterministic established-owner replacement plus confidence-routed
+ambiguous shared design-system decisions, `$averlo:animate`
 explicitly owns motion, and `$averlo:visual-parity` supplies reproducible
 evidence to all three. These operational workflows may invoke the router and
 Figma skills as subordinate steps.
